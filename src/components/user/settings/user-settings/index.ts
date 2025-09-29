@@ -1,0 +1,12 @@
+// export { DangerZoneSettings } from "./DangerZoneSettings";
+// export { PermissionsSettings } from "./PermissionSettings";
+// export { TeamSettings } from "./TeamSettings";
+export { UserGeneralSettings } from "./GeneralSettings";
+export { ActivityLogsSettings } from "./ActivityLogSettings";
+export { UserPreferencesSettings as UserAppearanceSettings } from "./UserAppearanceSettings";
+export { IntegrationsSettings } from "./IntegrationSettings";
+export { UserSecuritySettings } from "./UserSecuritySettings";
+export { UserNotificationSettings as NotificationSettings } from "./UserNotificationSettings";
+export { DataControlsSettings } from "./DataControlSettings";
+export { ProjectSettingsBreadcrumb } from "./ProjectSettingsBreadcrumb";
+export { UserSettingsSidebar } from "./UserSettingsSidebar";
