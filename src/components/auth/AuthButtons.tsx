@@ -53,7 +53,7 @@ export function SocialButtons({
 }) {
   const onProviderSelect = (provider: SocialProvider) => {
     window.open(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/${provider}`,
+      `${BASE_URL}/auth/${provider}`,
       "_blank"
     );
   };
