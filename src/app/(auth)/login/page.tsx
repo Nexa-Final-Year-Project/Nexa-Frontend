@@ -33,7 +33,6 @@ const LoginPage = () => {
       animate="visible"
       className="w-full max-w-md"
     >
-      HELLO
       <AuthCard title="Welcome back" subtitle="Sign in to your account">
         <div className="space-y-4">
           <SocialButtons className="my-4" />

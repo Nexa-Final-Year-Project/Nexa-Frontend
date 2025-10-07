@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-const HOST = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000/api";
+
+const BASE_URL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL : process.env.NEXT_PUBLIC_PROD_BACKEND_URL;
+const HOST = BASE_URL;
 export const baseApi = createApi({
   reducerPath: "hmsApi",
   baseQuery: fetchBaseQuery({

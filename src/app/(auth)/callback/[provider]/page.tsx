@@ -22,7 +22,7 @@ export default function OAuthCallbackPage() {
   const searchParams = useSearchParams();
   const { setUser } = useAuthStore();
   const { next, setNext } = useAuthRedirect();
-
+  
   useEffect(() => {
     const token = searchParams.get("token");
 
