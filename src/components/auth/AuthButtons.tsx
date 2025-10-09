@@ -9,7 +9,7 @@ import {
 import { motion } from "framer-motion";
 
 
-const BASE_URL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL : process.env.NEXT_PUBLIC_PROD_BACKEND_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL;
 export function SocialButton({
   provider,
   onClick,
