@@ -8,7 +8,7 @@ import {
   TeamSearchAndInvite,
   TeamMemberList,
   InviteMemberModal,
-} from "./team";
+} from "@/components/project-settings/team";
 
 interface TeamSettingsProps {
   project: Project;
@@ -43,6 +43,7 @@ export const TeamSettings = ({ project, members }: TeamSettingsProps) => {
         <CardContent className="p-0">
           <TeamMemberList
             members={filteredMembers}
+            projectId={project._id}
             searchQuery={searchQuery}
             onInviteClick={() => setInviteMemberModalOpen(true)}
           />

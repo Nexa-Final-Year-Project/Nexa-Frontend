@@ -120,9 +120,9 @@ export const useProjects = () => {
   );
 
   const sendProjectInvite = useCallback(
-    async (projectId: string, memberEmail: string) => {
+    async (projectId: string, memberEmail: string, role: string) => {
       try {
-        await sendInvite({ projectId, memberEmail }).unwrap();
+        await sendInvite({ projectId, memberEmail, role }).unwrap();
         toast.success("Invitation sent successfully");
       } catch (error) {
         console.error("Failed to send invitation:", error);
@@ -133,21 +133,27 @@ export const useProjects = () => {
     [sendInvite]
   );
 
-  const acceptProjectInvite = useCallback(
-    async (token: string) => {
-      try {
-        const { data } = await acceptInvite({ token }).unwrap();
-        addProject(data);
-        toast.success("Invitation accepted successfully");
-        return data;
-      } catch (error) {
-        console.error("Failed to accept invitation:", error);
-        toast.error("Failed to accept invitation");
-        throw error;
-      }
-    },
-    [acceptInvite, addProject]
-  );
+ const acceptProjectInvite = useCallback(
+  async (token: string) => {
+    try {
+      console.log("Accepting invite with token:", token);
+      
+      // ✅ Pass token directly, not as object
+      const response = await acceptInvite(token).unwrap();
+      
+      console.log("Invite acceptance response:", response);
+      
+      // Handle response...
+      toast.success(response.message || "Invitation accepted successfully");
+      return response;
+    } catch (error) {
+      console.error("Failed to accept invitation:", error);
+      toast.error("Failed to accept invitation");
+      throw error;
+    }
+  },
+  [acceptInvite, addProject, fetchProjectById]
+);
 
   return {
     projects,

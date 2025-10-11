@@ -8,12 +8,14 @@ import { useDeleteProjectMemberMutation } from "@/api/project/member/memberApi";
 
 interface TeamMemberListProps {
   members: ProjectMember[];
+  projectId: string;
   searchQuery: string;
   onInviteClick: () => void;
 }
 
 export const TeamMemberList = ({
   members,
+  projectId,
   searchQuery,
   onInviteClick,
 }: TeamMemberListProps) => {
@@ -44,7 +46,7 @@ export const TeamMemberList = ({
         <TeamMemberItem
           key={member.memberId._id}
           member={member}
-          onRemove={() => deleteProjectMember(member.memberId._id)}
+          onRemove={() => deleteProjectMember({ projectId, memberId: member.memberId._id })}
         />
       ))}
     </ul>

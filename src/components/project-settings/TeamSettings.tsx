@@ -43,6 +43,7 @@ export const TeamSettings = ({ project, members }: TeamSettingsProps) => {
         <CardContent className="p-0">
           <TeamMemberList
             members={filteredMembers}
+            projectId={project._id}
             searchQuery={searchQuery}
             onInviteClick={() => setInviteMemberModalOpen(true)}
           />

@@ -11,15 +11,16 @@ export const projectMemberApi = baseApi.injectEndpoints({
     }),
     updateProjectMember: builder.mutation({
       query: (projectMember) => ({
-        url: `/projectMembers/${projectMember.id}`,
+        url: `/projectMember/${projectMember.id}`,
         method: "PUT",
         body: projectMember,
       }),
     }),
     deleteProjectMember: builder.mutation({
-      query: (id) => ({
-        url: `/projectMember/${id}`,
+      query: ({ projectId, memberId }) => ({
+        url: `/projectMember/${projectId}`,
         method: "DELETE",
+        body: { memberId },
       }),
     }),
   }),

@@ -50,7 +50,7 @@ const LoginPage = () => {
           />
         </div>
       </AuthCard>
-    </motion.div>
+      </motion.div>
   );
 };
 

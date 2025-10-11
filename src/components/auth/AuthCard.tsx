@@ -32,6 +32,6 @@ export const AuthCard = ({
         </div>
         {children}
       </Card>
-    </AnimatedDiv>
+     </AnimatedDiv>
   );
 };

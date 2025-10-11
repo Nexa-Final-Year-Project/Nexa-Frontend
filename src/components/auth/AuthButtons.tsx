@@ -9,7 +9,7 @@ import {
 import { motion } from "framer-motion";
 
 
-const BASE_URL = process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export function SocialButton({
   provider,
   onClick,
@@ -38,7 +38,7 @@ export function SocialButton({
       >
         <span className="text-sm font-medium">{label}</span>
       </Button>
-    </motion.div>
+     </motion.div>
   );
 }
 
