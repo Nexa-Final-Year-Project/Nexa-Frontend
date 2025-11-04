@@ -25,6 +25,7 @@ const LoginPage = () => {
       console.error("Registration failed:", error);
     }
   };
+  // 💡 The submit button text should be "Submit" for the login form
 
   return (
     <motion.div
