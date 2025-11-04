@@ -40,7 +40,6 @@ export function NavUser({
   } | null;
 }) {
   const { isMobile } = useSidebar();
-  console.log("User in NavUser:", user);
 
   // Defensive fallbacks so component doesn't crash when user is null (e.g. after logout)
   const displayName = user?.name ?? "Guest";
@@ -64,7 +63,7 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-full">
+              <Avatar className="h-9 w-9 rounded-full flex-shrink-0">
                 {photo ? (
                   <AvatarImage src={photo} alt={displayName} />
                 ) : (
@@ -73,9 +72,13 @@ export function NavUser({
                   </AvatarFallback>
                 )}
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{displayName}</span>
-                <span className="truncate text-xs">{displayEmail}</span>
+              <div className="flex flex-col flex-1 min-w-0 ml-3">
+                <span className="truncate font-medium text-sm">
+                  {displayName}
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  {displayEmail}
+                </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -87,8 +90,8 @@ export function NavUser({
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-full">
+              <div className="flex items-center gap-3 px-2 py-2 text-left text-sm">
+                <Avatar className="h-10 w-10 rounded-full flex-shrink-0">
                   {photo ? (
                     <AvatarImage src={photo} alt={displayName} />
                   ) : (
@@ -97,9 +100,13 @@ export function NavUser({
                     </AvatarFallback>
                   )}
                 </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{displayName}</span>
-                  <span className="truncate text-xs">{displayEmail}</span>
+                <div className="flex flex-col flex-1 min-w-0">
+                  <span className="truncate font-medium text-sm">
+                    {displayName}
+                  </span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    {displayEmail}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField } from "./FormField";
 import type { FormField as FormFieldType } from "@/types/form";
+import { useTheme } from "next-themes";
 
 export const Form = ({
   fields,
@@ -18,6 +19,7 @@ export const Form = ({
   initialValues: Record<string, any>;
   submitButtonText?: string;
 }) => {
+  const { theme } = useTheme();
   const form = useForm({ initialValues });
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +33,10 @@ export const Form = ({
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} className="space-y-6">
+    <form
+      onSubmit={form.onSubmit(handleSubmit)}
+      className={`space-y-6 ${theme === "light" ? "text-black" : "text-white"}`}
+    >
       {fields.map((field) => (
         <FormField key={field.name} field={field} form={form} />
       ))}

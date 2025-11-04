@@ -1,4 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button/Button";
+import { useTheme } from "next-themes";
 import {
   Dialog,
   DialogClose,
@@ -21,9 +24,9 @@ interface ModalProps {
   title: string;
   description?: string;
   formFields?: FormField[];
-  initialValues?: Record<string, any>;
+  initialValues?: Record<string, unknown>;
   submitButtonText?: string;
-  onSubmit?: (values: any) => void;
+  onSubmit?: (values: Record<string, unknown>) => void;
   showHeader?: boolean;
   showFooter?: boolean;
   footerContent?: ReactNode;
@@ -61,6 +64,8 @@ export function Modal({
   open,
   onOpenChange,
 }: ModalProps) {
+  const { theme } = useTheme();
+  const titleColorClass = theme === "light" ? "text-black" : "text-white";
   // When using controlled mode, we shouldn't render the trigger at all
   const shouldRenderTrigger = !hideTrigger && open === undefined;
 
@@ -78,7 +83,7 @@ export function Modal({
       <DialogContent className={sizeClasses[size]}>
         {showHeader && (
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className={titleColorClass}>{title}</DialogTitle>
             {description && (
               <DialogDescription>{description}</DialogDescription>
             )}

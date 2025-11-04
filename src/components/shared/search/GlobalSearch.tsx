@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ type SearchResult = {
 
 const FILTERS: EntityType[] = ["Task", "Project", "User", "ActivityLog"];
 
-const ICONS: Record<EntityType, JSX.Element> = {
+const ICONS: Record<EntityType, React.ReactNode> = {
   Task: <ListChecks className="w-4 h-4 text-blue-500" />,
   Project: <FolderKanban className="w-4 h-4 text-green-500" />,
   User: <User className="w-4 h-4 text-purple-500" />,
@@ -150,14 +150,14 @@ export default function GlobalSearch() {
   };
 
   return (
-    <div className="relative w-full max-w-xl">
+    <div className="relative w-full max-w-xl mx-auto flex flex-col items-center">
       {/* Search input */}
-      <div className="flex items-center bg-white border rounded-full shadow-sm px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+      <div className="flex items-center bg-white border rounded-full shadow-sm px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500 w-full sm:w-3/4">
         <Search className="w-4 h-4 text-gray-400" />
         <Input
           ref={inputRef}
           placeholder="Search tasks, projects, users..."
-          className="border-0 focus-visible:ring-0 focus:outline-none text-sm ml-2"
+          className="border-0 focus-visible:ring-0 focus:outline-none text-sm ml-2 w-full"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -165,13 +165,13 @@ export default function GlobalSearch() {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-2 mt-2 flex-wrap">
+      <div className="flex gap-3 mt-4 flex-wrap justify-center">
         {FILTERS.map((f) => (
           <Button
             key={f}
             variant={activeFilters.includes(f) ? "default" : "outline"}
             size="sm"
-            className="rounded-full text-xs"
+            className="rounded-full text-xs cursor-pointer"
             onClick={() => toggleFilter(f)}
           >
             {ICONS[f]} <span className="ml-1">{f}</span>
@@ -222,7 +222,7 @@ export default function GlobalSearch() {
                   {ICONS[type as EntityType]} {type}
                 </div>
                 <div className="space-y-1">
-                  {items.map((item, idx) => {
+                  {items.map((item) => {
                     const globalIndex = results.findIndex(
                       (r) => r.id === item.id
                     );

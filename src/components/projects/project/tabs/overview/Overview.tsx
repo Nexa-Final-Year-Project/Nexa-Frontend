@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button/Button";
 import { useTasks } from "@/hooks/tasks/useTasks";
 import TaskGeneratorModal from "@/components/shared/models/TaskGeneratorModal";
+import { useTheme } from "next-themes";
 
 const Overview = ({
   tasks,
@@ -26,6 +27,7 @@ const Overview = ({
   tasks: Task[];
   projectId: string;
 }) => {
+  const { theme } = useTheme();
   // Memoize to avoid recalculating on every render
   const stats = useMemo(() => {
     const totalTasks = tasks.length;
@@ -86,7 +88,13 @@ const Overview = ({
   return (
     <div>
       <div className=" flex justify-between items-center mb-6">
-        <h1 className="text-2xl text-white font-bold">Project Overview</h1>
+        <h1
+          className={`text-2xl font-bold ${
+            theme === "light" ? "text-black" : "text-white"
+          }`}
+        >
+          Project Overview
+        </h1>
         <Button
           variant="outline"
           size="sm"

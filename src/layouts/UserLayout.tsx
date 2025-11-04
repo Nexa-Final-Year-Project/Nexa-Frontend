@@ -19,6 +19,7 @@ import {
 import ProfileDropdown from "../components/user/profile/ProfileDropdown";
 import { useAuthStore } from "../store/auth/authStore";
 import { useModalStore } from "../store/modal/modalStore";
+import { useTheme } from "next-themes";
 
 export default function UserLayout({
   children,
@@ -27,6 +28,7 @@ export default function UserLayout({
 }) {
   const { user } = useAuthStore();
   const { openModal } = useModalStore();
+  const { theme } = useTheme();
 
   return (
     <SidebarProvider>
@@ -74,7 +76,11 @@ export default function UserLayout({
                 onClick={() => openModal("project.create")}
                 size="sm"
               >
-                <PlusIcon className="w-4 h-4" />
+                <PlusIcon
+                  className={`w-4 h-4 ${
+                    theme === "light" ? "text-black" : "text-white"
+                  }`}
+                />
                 <span className="hidden md:inline dark:text-white ml-2">
                   Create
                 </span>

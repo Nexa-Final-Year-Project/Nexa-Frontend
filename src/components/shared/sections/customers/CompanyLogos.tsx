@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatedDiv } from "../../AnimatedDiv";
+import { useTheme } from "next-themes";
 
 const logos = [
   {
@@ -30,6 +31,8 @@ const logos = [
 ];
 
 export const CompanyLogos = () => {
+  const { theme } = useTheme();
+
   return (
     <>
       <AnimatedDiv variant="fade" direction="up" delay={0.1}>
@@ -38,7 +41,11 @@ export const CompanyLogos = () => {
             <div className="w-full border-t border-glass-border" />
           </div>
           <div className="relative flex justify-center">
-            <span className="glass-card-sm text-white px-4 mt-8 text-sm font-medium">
+            <span
+              className={`glass-card-sm px-4 mt-8 text-sm font-medium ${
+                theme === "light" ? "text-black" : "text-white"
+              }`}
+            >
               TRUSTED BY INDUSTRY LEADERS
             </span>
           </div>

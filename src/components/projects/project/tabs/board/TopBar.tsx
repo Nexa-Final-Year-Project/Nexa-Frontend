@@ -37,7 +37,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             />
             <input
               type="search"
-              placeholder="Search tasks..."
+              placeholder="Search tasks"
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
               className="w-full rounded-full border border-primary py-2 pl-10 pr-4 text-sm placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary transition"

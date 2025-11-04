@@ -4,6 +4,7 @@ import { AnimatedDiv } from "@/components/shared/AnimatedDiv";
 import { Card } from "../ui/card/Card";
 // import { cn } from "@/lib/utils/utils";
 import Logo from "@/components/shared/Logo";
+import { useTheme } from "next-themes";
 // import { Card } from '@/_components/ui/card';
 
 type AuthCardProps = {
@@ -13,6 +14,7 @@ type AuthCardProps = {
 };
 
 export const AuthCard = ({ title, subtitle, children }: AuthCardProps) => {
+  const { theme } = useTheme();
   return (
     <AnimatedDiv variant="fade" direction="up" className="max-w-md w-full ">
       <Card className=" p-8 space-y-6 shadow-lg">
@@ -21,8 +23,14 @@ export const AuthCard = ({ title, subtitle, children }: AuthCardProps) => {
         </div>
 
         <div className="space-y-2 text-center ">
-          <h1 className="text-2xl font-bold dark:text-white">{title}</h1>
-          <p className="text-sm dark:text-white">{subtitle}</p>
+          <h1 className="text-2xl font-bold ">{title}</h1>
+          <p
+            className={`text-sm ${
+              theme === "light" ? "text-black" : "text-white"
+            }`}
+          >
+            {subtitle}
+          </p>
         </div>
         {children}
       </Card>

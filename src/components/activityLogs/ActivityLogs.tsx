@@ -140,28 +140,32 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
 
                   {/* Expanded details */}
                   {isExpanded && (
-                    <div className="mt-2 p-2 bg-gray-50 rounded text-xs">
-                      <div className="font-medium mb-1">Changes:</div>
+                    <div className="mt-2 p-3 rounded-lg text-xs bg-gray-50 border border-gray-200 text-gray-700 dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-200">
+                      <div className="font-medium mb-2 text-sm text-gray-800 dark:text-gray-100">
+                        Changes:
+                      </div>
 
                       {changes.length > 0 ? (
                         <div className="space-y-1.5">
                           {changes.map((change, i) => (
                             <div key={i} className="flex items-center">
-                              <span className="font-medium text-gray-700 capitalize mr-1">
+                              <span className="font-medium text-gray-700 capitalize mr-1 dark:text-gray-200">
                                 {change.field}:
                               </span>
-                              <span className="line-through text-red-500 mr-1">
+                              <span className="line-through text-red-600 mr-1 dark:text-red-400">
                                 {String(change.oldVal) || "empty"}
                               </span>
-                              <span className="text-gray-400 mx-1">→</span>
-                              <span className="text-green-600 font-medium">
+                              <span className="text-gray-400 mx-1 dark:text-gray-400">
+                                →
+                              </span>
+                              <span className="text-green-700 font-medium dark:text-green-400">
                                 {String(change.newVal) || "empty"}
                               </span>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <div className="text-gray-500 italic">
+                        <div className="text-gray-500 italic dark:text-gray-400">
                           No detailed changes recorded
                         </div>
                       )}

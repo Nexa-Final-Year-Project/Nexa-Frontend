@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../Logo";
+import { useTheme } from "next-themes";
 
 const footerLinks = [
   {
@@ -30,6 +31,8 @@ const footerLinks = [
 ];
 
 const Footer = () => {
+  const { theme } = useTheme();
+
   return (
     <div className="container mx-auto p-12">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -63,7 +66,9 @@ const Footer = () => {
             direction="up"
             delay={0.1 * index}
             duration={0.75}
-            className="space-y-4 text-white"
+            className={`space-y-4 text-sm ${
+              theme === "light" ? "text-black" : "text-white"
+            }`}
           >
             <h3 className="text-lg font-semibold mb-4">{column.title}</h3>
             <ul className="space-y-3">
@@ -89,7 +94,13 @@ const Footer = () => {
           duration={0.75}
           className="space-y-4"
         >
-          <h3 className="text-lg font-semibold text-white mb-4 ">Contact Us</h3>
+          <h3
+            className={`text-lg font-semibold mb-4 ${
+              theme === "light" ? "text-black" : "text-white"
+            }`}
+          >
+            Contact Us
+          </h3>
           <address className="text-gray-400 not-italic space-y-3">
             <div className="flex items-start">
               <svg

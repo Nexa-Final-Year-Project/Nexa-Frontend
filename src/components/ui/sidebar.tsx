@@ -266,7 +266,10 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-7", className)}
+      className={cn(
+        "size-7 text-sidebar-foreground dark:text-white",
+        className
+      )}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
@@ -297,6 +300,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
         "hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full",
         "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
         "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
+        "text-sidebar-foreground dark:text-white",
         className
       )}
       {...props}
