@@ -38,9 +38,11 @@ const LoginPage = () => {
           <SocialButtons className="my-4" />
           <AuthDivider />
           <AuthForm
+            className="dark:text-white"
             fields={LOGIN_FIELDS}
             onSubmit={handleSubmit}
-            submitButtonText="Continue Playing!"
+            // 💡 Set the correct text to "Submit"
+            submitButtonText="Submit"
           />
 
           <AuthFooter
@@ -50,7 +52,7 @@ const LoginPage = () => {
           />
         </div>
       </AuthCard>
-      </motion.div>
+    </motion.div>
   );
 };
 

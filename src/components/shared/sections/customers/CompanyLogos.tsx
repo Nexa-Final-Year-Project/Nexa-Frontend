@@ -34,11 +34,11 @@ export const CompanyLogos = () => {
     <>
       <AnimatedDiv variant="fade" direction="up" delay={0.1}>
         <div className="relative">
-          <div className="absolute inset-0 flex items-center">
+          <div className="absolute mb-14 inset-0 flex items-center">
             <div className="w-full border-t border-glass-border" />
           </div>
           <div className="relative flex justify-center">
-            <span className="glass-card-sm px-4 text-muted text-sm font-medium">
+            <span className="glass-card-sm text-white px-4 mt-8 text-sm font-medium">
               TRUSTED BY INDUSTRY LEADERS
             </span>
           </div>

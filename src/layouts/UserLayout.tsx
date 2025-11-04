@@ -1,13 +1,14 @@
 "use client";
-import { AppSidebar } from "@/components/shared/sidebar/Sidebar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+// Corrected relative imports from '../../...' to '../...'
+import { AppSidebar } from "../components/shared/sidebar/Sidebar";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Separator } from "../components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
+} from "../components/ui/sidebar";
 import {
   BellIcon,
   MenuIcon,
@@ -15,9 +16,9 @@ import {
   SearchIcon,
   UserIcon,
 } from "lucide-react";
-import ProfileDropdown from "@/components/user/profile/ProfileDropdown";
-import { useAuthStore } from "@/store/auth/authStore";
-import { useModalStore } from "@/store/modal/modalStore";
+import ProfileDropdown from "../components/user/profile/ProfileDropdown";
+import { useAuthStore } from "../store/auth/authStore";
+import { useModalStore } from "../store/modal/modalStore";
 
 export default function UserLayout({
   children,
@@ -74,7 +75,9 @@ export default function UserLayout({
                 size="sm"
               >
                 <PlusIcon className="w-4 h-4" />
-                <span className="hidden md:inline ml-2">Create</span>
+                <span className="hidden md:inline dark:text-white ml-2">
+                  Create
+                </span>
               </Button>
             </div>
 

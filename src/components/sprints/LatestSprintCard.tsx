@@ -27,17 +27,29 @@ export const LatestSprintCard = ({
           <Badge variant="secondary" className="mb-2">
             Latest Sprint
           </Badge>
-          <CardTitle>{sprint.name}</CardTitle>
+          <CardTitle className="dark:text-[#4a3f54] text-2xl uppercase font-mono">
+            {sprint.name}
+          </CardTitle>
           <p className="text-sm text-muted-foreground mt-1">
             {sprint.goals?.join(", ") || "No goals specified"}
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="lg" onClick={onConfigure}>
-            <Settings className="h-5 w-5 mr-2" />
+          <Button
+            variant="outline"
+            size="lg"
+            className="dark:text-amber-50 cursor-pointer"
+            onClick={onConfigure}
+          >
+            <Settings className="h-5 w-5 mr-2 dark:text-gray-300" />
             Configure
           </Button>
-          <Button variant="outline" size="lg" onClick={onDelete}>
+          <Button
+            variant="outline"
+            size="lg"
+            className="dark:text-red-500 cursor-pointer"
+            onClick={onDelete}
+          >
             <Trash className=" text-red-500" size={28} />
           </Button>
         </div>
@@ -47,7 +59,7 @@ export const LatestSprintCard = ({
       <div className="space-y-4">
         <div className="flex items-center space-x-4">
           <Calendar className="h-5 w-5 text-muted-foreground" />
-          <span>
+          <span className="dark:text-gray-300">
             {format(parseISO(sprint.startDate), "MMM d")} -{" "}
             {format(parseISO(sprint.endDate), "MMM d")}
           </span>
@@ -55,8 +67,10 @@ export const LatestSprintCard = ({
 
         <div>
           <div className="flex justify-between text-sm mb-1">
-            <span>Progress</span>
-            <span>{calculateProgress(sprint._id)}%</span>
+            <span className="dark:text-gray-400">Progress</span>
+            <span className="dark:text-gray-300">
+              {calculateProgress(sprint._id)}%
+            </span>
           </div>
           <Progress value={calculateProgress(sprint._id)} />
         </div>

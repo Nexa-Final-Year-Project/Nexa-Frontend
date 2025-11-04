@@ -44,6 +44,7 @@ const RegisterPage = () => {
           />
           <AuthDivider />
           <AuthForm
+            className="dark:text-white"
             fields={EMAIL_VERIFICATION_FIELDS}
             onSubmit={handleSubmit}
             submitButtonText="Start Playing!"

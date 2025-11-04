@@ -97,10 +97,10 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center flex-wrap">
-                      <span className="text-sm font-medium text-gray-900 mr-1.5">
+                      <span className="text-sm font-semibold text-gray-900 dark:text-gray-300 mr-1.5">
                         {actionText}
                       </span>
-                      <span className="text-sm text-gray-700">
+                      <span className="text-sm text-gray-700 dark:text-gray-400 mr-1.5">
                         {log.entityType.toLowerCase()}
                       </span>
                       {log.task && (

@@ -21,10 +21,12 @@ export const ColumnHeader = ({
           className="h-2 w-2 rounded-full"
           style={{ backgroundColor: column.color }}
         />
-        <span className="uppercase text-sm font-medium">
+        <span className="uppercase text-sm dark:text-gray-100 font-mono font-medium">
           {column.name}
           {taskCount > 0 && (
-            <span className="ml-1 text-xs text-gray-400">{taskCount}</span>
+            <span className="ml-1 text-xs text-gray-400">
+              {" : " + taskCount}
+            </span>
           )}
         </span>
       </div>

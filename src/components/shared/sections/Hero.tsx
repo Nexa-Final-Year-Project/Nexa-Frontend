@@ -1,15 +1,17 @@
 import { Button } from "@/components/ui/button/Button";
 import Link from "next/link";
 import React from "react";
+
 const Hero = () => {
   return (
-    <section className="max-w-6xl mx-auto  h-screen flex flex-col items-center">
-      <div className=" max-w-4xl mx-auto text-center mt-32">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 primary-text-neon ">
+    // 💡 Changed pt-24 to pt-16 to reduce the top margin and move content up.
+    <section className="max-w-6xl mx-auto pt-16">
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="text-4xl text-white md:text-6xl font-bold mb-6 primary-text-neon ">
           Project Management{" "}
           <span className="text-gradient-stone">Evolved</span>
         </h1>
-        <p className="text-lg md:text-xl mb-8 opacity-80 max-w-2xl mx-auto">
+        <p className="text-lg text-white md:text-xl mb-8 opacity-80 max-w-2xl mx-auto">
           Collaborate, track, and deliver projects faster with our intuitive
           management platform.
         </p>

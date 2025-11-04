@@ -144,8 +144,12 @@ const TasksCalendar = ({
       <CalendarProvider initialMonth={defaultMonth} initialYear={defaultYear}>
         <CalendarDate>
           <CalendarDatePicker>
-            <CalendarMonthPicker />
-            <CalendarYearPicker end={latestYear} start={earliestYear} />
+            <CalendarMonthPicker className="justify-center" />
+            <CalendarYearPicker
+              className="justify-center"
+              end={latestYear}
+              start={earliestYear}
+            />
           </CalendarDatePicker>
           <CalendarDatePagination />
         </CalendarDate>

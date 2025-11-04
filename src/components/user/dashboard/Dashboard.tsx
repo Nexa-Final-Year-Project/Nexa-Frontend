@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="section-heading">For You</h1>
+      <h1 className="section-heading dark:text-white">For You</h1>
       <hr />
       <RecentProjectList projects={projects} />
       <div className="flex flex-col gap-4 py-10">

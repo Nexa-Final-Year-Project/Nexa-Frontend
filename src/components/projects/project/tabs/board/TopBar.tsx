@@ -58,12 +58,12 @@ export const TopBar: React.FC<TopBarProps> = ({
         <button
           onClick={onOpenFilters}
           aria-label="Open filters"
-          className="relative flex items-center gap-2 rounded-full border border-primary bg-transparent px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/10 transition"
+          className="relative flex cursor-pointer items-center gap-2 rounded-full border border-primary bg-transparent px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10"
         >
           <Sliders size={18} />
           Filters
           {activeFilterCount > 0 && (
-            <span className="absolute -top-1 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">
+            <span className="absolute -right-2 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">
               {activeFilterCount}
             </span>
           )}

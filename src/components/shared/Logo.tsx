@@ -40,7 +40,7 @@ const Logo = ({
   gap = "space-x-3",
   className = "",
   imageClass = "",
-  textClass = "font-bold bg-gradient-stone",
+  textClass = "font-bold bg-gradient-stone text-white",
   taglineClass = "text-sm text-muted-foreground",
 }: LogoProps) => {
   // Handle size prop (number or string)

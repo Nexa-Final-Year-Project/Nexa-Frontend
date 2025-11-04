@@ -86,7 +86,7 @@ const Overview = ({
   return (
     <div>
       <div className=" flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Project Overview</h1>
+        <h1 className="text-2xl text-white font-bold">Project Overview</h1>
         <Button
           variant="outline"
           size="sm"

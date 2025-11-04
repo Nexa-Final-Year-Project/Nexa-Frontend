@@ -13,7 +13,7 @@ const CTA = () => {
             <span className="block">Ready to try NEXA?</span>
             <span className="block">Get started for free today.</span>
           </h2>
-          <p className="mt-4 text-lg leading-6 text-primary-foreground/80">
+          <p className="mt-4 text-lg leading-6 text-primary-foreground/90">
             Join over 10 million people who use Slack to connect their teams.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">

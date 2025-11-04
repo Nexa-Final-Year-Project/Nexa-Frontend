@@ -4,6 +4,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+
 .mantine-DateInput-dropdown {
   z-index: 1000 !important;
 }
@@ -17,24 +18,31 @@
     /* Light theme */
     --background-start: 210 20% 95%;
     --background-end: 210 15% 85%;
-    --background: linear-gradient(
-      to bottom,
-      hsl(var(--background-start)),
-      hsl(var(--background-end))
-    );
-    --foreground: 240 10% 3.9%; /* Dark text */
+    --background: linear-gradient(to bottom,
+        hsl(var(--background-start)),
+        hsl(var(--background-end)));
+    --foreground: 240 10% 3.9%;
+    /* Dark text */
 
     /* Neon glass colors */
-    --primary: 263 70% 58%; /* Purple */
-    --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 201 96% 55%; /* Blue */
-    --secondary-foreground: 0 0% 100%; /* White */
+    --primary: 263 70% 58%;
+    /* Purple */
+    --primary-foreground: 0 0% 100%;
+    /* White */
+    --secondary: 201 96% 55%;
+    /* Blue */
+    --secondary-foreground: 0 0% 100%;
+    /* White */
 
     /* Your custom colors from image */
-    --tome-pants: 333 44% 23%; /* 542135 */
-    --neumonum-pink: 337 14% 50%; /* 8F727D */
-    --stone-cable: #292d49; /* 292D49 */
-    --dark-pants: 308 28% 17%; /* 37213B */
+    --tome-pants: 333 44% 23%;
+    /* 542135 */
+    --neumonum-pink: 337 14% 50%;
+    /* 8F727D */
+    --stone-cable: #292d49;
+    /* 292D49 */
+    --dark-pants: 308 28% 17%;
+    /* 37213B */
     --gradient-stone-cable: linear-gradient(to bottom, #1c2541, #4a3f54);
 
     /* Glass morphism variables */
@@ -49,19 +57,20 @@
     /* Dark theme */
     --background-start: 240 5% 15%;
     --background-end: 240 5% 8%;
-    --background: linear-gradient(
-      to bottom,
-      hsl(var(--background-start)),
-      hsl(var(--background-end))
-    ) !important;
-    --foreground: 240 10% 98%; /* Light text */
+    --background: linear-gradient(to bottom,
+        hsl(var(--background-start)),
+        hsl(var(--background-end))) !important;
+    --foreground: 240 10% 98%;
+    /* Light text */
 
     /* Neon glass colors */
     /* More intense neon colors in dark mode */
     --primary: 263 85% 65%;
     --secondary: 201 100% 60%;
-    --primary-foreground: 240 10% 98%; /* Light text */
-    --secondary-foreground: 240 10% 98%; /* Light text */
+    --primary-foreground: 240 10% 98%;
+    /* Light text */
+    --secondary-foreground: 240 10% 98%;
+    /* Light text */
 
     /* Dark mode glass */
     --glass: 240 5% 15% / 0.3;
@@ -72,11 +81,13 @@
 }
 
 @layer components {
+
   /* Section Headings */
   .section-heading {
     @apply font-bold text-3xl sm:text-2xl md:text-2xl lg:text-3xl;
     color: hsl(var(--secondary-foreground));
   }
+
   /* Primary Text */
   .text-primary {
     color: hsl(var(--foreground));
@@ -84,15 +95,18 @@
     &-neon {
       color: hsl(var(--primary));
       font-weight: bold;
-      font-size: 1.25rem; /* text-xl */
+      font-size: 1.25rem;
+      /* text-xl */
       text-shadow: 0 0 8px hsl(var(--primary) / 0.5);
 
       @screen sm {
-        font-size: 1.5rem; /* text-2xl */
+        font-size: 1.5rem;
+        /* text-2xl */
       }
 
       @screen md {
-        font-size: 1.875rem; /* text-3xl */
+        font-size: 1.875rem;
+        /* text-3xl */
       }
     }
   }
@@ -102,7 +116,8 @@
     color: hsl(var(--secondary));
 
     &-neon {
-      font-weight: 600; /* font-semibold */
+      font-weight: 600;
+      /* font-semibold */
       font-size: clamp(1rem, 1.75vw, 1.75rem);
       text-shadow: 0 0 6px hsl(var(--secondary) / 0.4),
         0 0 12px hsl(var(--secondary) / 0.2);
@@ -114,14 +129,17 @@
     color: hsl(var(--neumonum-pink) / 0.8);
 
     &-neon {
-      font-size: 1rem; /* text-base */
+      font-size: 1rem;
+      /* text-base */
 
       @screen sm {
-        font-size: 1.125rem; /* text-lg */
+        font-size: 1.125rem;
+        /* text-lg */
       }
 
       @screen md {
-        font-size: 1.25rem; /* text-xl */
+        font-size: 1.25rem;
+        /* text-xl */
       }
     }
   }
@@ -149,9 +167,11 @@
     &-sm {
       @apply px-3 py-1 text-sm;
     }
+
     &-lg {
       @apply px-7 py-3 text-lg;
     }
+
     &-xl {
       @apply px-8 py-4 text-xl;
     }
@@ -163,12 +183,11 @@
   }
 
   .glass-card {
-    @apply transition-all duration-300 ease-in-out backdrop-blur-xl rounded-xl; /* Removed overflow-hidden */
-    background: linear-gradient(
-      135deg,
-      hsl(var(--glass)),
-      hsl(var(--glass-highlight))
-    );
+    @apply transition-all duration-300 ease-in-out backdrop-blur-xl rounded-xl;
+    /* Removed overflow-hidden */
+    background: linear-gradient(135deg,
+        hsl(var(--glass)),
+        hsl(var(--glass-highlight)));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--glass-shadow);
     /* transform: scale(1) translateY(0);
@@ -183,16 +202,20 @@
     &-sm {
       @apply max-w-xs;
     }
+
     &-lg {
       @apply max-w-3xl;
     }
+
     &-xl {
       @apply max-w-4xl;
     }
+
     &-full {
       @apply max-w-full;
     }
   }
+
   .glass-card [data-radix-popper-content-wrapper],
   .glass-card [data-state="open"] {
     overflow: visible !important;
@@ -234,12 +257,15 @@
     &-sm {
       text-shadow: 0 0 4px currentColor;
     }
+
     &-md {
       text-shadow: 0 0 8px currentColor;
     }
+
     &-lg {
       text-shadow: 0 0 12px currentColor;
     }
+
     &-xl {
       text-shadow: 0 0 16px currentColor;
     }
@@ -307,7 +333,7 @@ body {
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.92 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -378,6 +404,7 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

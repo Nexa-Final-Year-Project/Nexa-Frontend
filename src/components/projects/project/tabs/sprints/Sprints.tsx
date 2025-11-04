@@ -92,16 +92,16 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Sprints Overview</h1>
+        <h1 className="text-2xl dark:text-white font-bold">Sprints Overview</h1>
         <Button
           variant="outline"
           size="sm"
-          className="flex items-center !text-sm !p-2"
+          className="flex dark:text-white cursor-pointer items-center !text-sm !p-2"
           onClick={() => {
             setOpenPlanningDialog(true);
           }}
         >
-          <Sparkle className="w-4 h-4 mr-2" />
+          <Sparkle className="w-4 h-4 mr-2 dark:text-white" />
           Plan Sprints
         </Button>
       </div>
@@ -124,7 +124,10 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle>Sprints</CardTitle>
-            <Button onClick={() => setIsCreateDialogOpen(true)}>
+            <Button
+              className="cursor-pointer"
+              onClick={() => setIsCreateDialogOpen(true)}
+            >
               <Plus className="h-4 w-4 mr-2" />
               New Sprint
             </Button>
@@ -132,7 +135,7 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
         </CardHeader>
         <CardContent>
           {!sprints?.length ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center dark:text-white py-8 text-muted-foreground">
               No sprints found for this project
             </div>
           ) : (

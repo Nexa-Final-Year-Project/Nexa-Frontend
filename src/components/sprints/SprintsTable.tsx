@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState, useMemo } from "react";
@@ -205,7 +207,7 @@ export const SprintsTable = ({
         <div className="flex items-center">
           <ReusableDropdownMenu
             trigger={
-              <Button variant="ghost" className="p-1">
+              <Button variant="ghost" className="p-1 cursor-pointer">
                 <Settings className="h-4 w-4" />
               </Button>
             }

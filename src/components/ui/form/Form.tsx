@@ -2,6 +2,7 @@
 
 import { useForm } from "@mantine/form"; // or swap with react-hook-form
 import { useState } from "react";
+// Assuming "@/components/ui/button" is the component where you want the cursor style
 import { Button } from "@/components/ui/button";
 import { FormField } from "./FormField";
 import type { FormField as FormFieldType } from "@/types/form";
@@ -10,12 +11,12 @@ export const Form = ({
   fields,
   onSubmit,
   initialValues,
-  submitText = "Submit",
+  submitButtonText = "Submit",
 }: {
   fields: FormFieldType[];
   onSubmit: (values: Record<string, any>) => Promise<void>;
   initialValues: Record<string, any>;
-  submitText?: string;
+  submitButtonText?: string;
 }) => {
   const form = useForm({ initialValues });
   const [loading, setLoading] = useState(false);
@@ -34,9 +35,17 @@ export const Form = ({
       {fields.map((field) => (
         <FormField key={field.name} field={field} form={form} />
       ))}
-      <Button type="submit" disabled={loading}>
-        {loading ? "Saving..." : submitText}
-      </Button>
+
+      <div className="flex justify-center pt-2">
+        <Button
+          type="submit"
+          disabled={loading}
+          // Added cursor-pointer class to ensure the button is clickable
+          className="max-w-sm w-full cursor-pointer"
+        >
+          {loading ? "Saving..." : submitButtonText}
+        </Button>
+      </div>
     </form>
   );
 };

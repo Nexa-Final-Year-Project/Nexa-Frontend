@@ -8,8 +8,16 @@ import {
 } from "@/lib/constants/auth/providersConstants";
 import { motion } from "framer-motion";
 
+const resolveBaseUrl = () => {
+  // const local = process.env.NEXT_PUBLIC_BACKEND_URL;
+  // const prod = process.env.NEXT_PUBLIC_PROD_BACKEND_URL;
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  if (typeof window !== "undefined") {
+    return url || `${window.location.origin}/api`;
+  }
+  return url || "";
+};
 export function SocialButton({
   provider,
   onClick,
@@ -23,7 +31,7 @@ export function SocialButton({
   if (!providerConfig) {
     return null;
   }
-  const { Icon, label, brandColor, textColor = "#000" } = providerConfig;
+  const { Icon, label, brandColor } = providerConfig;
 
   return (
     <motion.div whileTap={{ scale: 0.98 }} className="w-full">
@@ -38,7 +46,7 @@ export function SocialButton({
       >
         <span className="text-sm font-medium">{label}</span>
       </Button>
-     </motion.div>
+    </motion.div>
   );
 }
 
@@ -52,10 +60,10 @@ export function SocialButtons({
   direction?: "vertical" | "horizontal";
 }) {
   const onProviderSelect = (provider: SocialProvider) => {
-    window.open(
-      `${BASE_URL}/auth/${provider}`,
-      "_blank"
-    );
+    const BASE_URL = resolveBaseUrl().replace(/\/$/, "");
+    const oauthUrl = `${BASE_URL}/auth/${provider}`;
+    // navigate current tab to backend oauth endpoint
+    window.location.href = oauthUrl;
   };
   const handleClick = (provider: SocialProvider) => {
     onProviderSelect(provider);

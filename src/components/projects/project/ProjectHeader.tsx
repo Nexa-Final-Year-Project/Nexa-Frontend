@@ -10,10 +10,13 @@ const ProjectHeader = ({ name }: ProjectHeaderProps) => {
   const { user } = useAuthStore();
   return (
     <div className="flex flex-col gap-1 mb-4">
-      <Link className="text-sm text-muted-foreground" href={`/u/${user?.id}/p`}>
+      <Link
+        className="text-2xl font-semibold text-muted-foreground dark:text-emerald-500 text-center hover:underline"
+        href={`/u/${user?.id}/p`}
+      >
         Projects
       </Link>
-      <h1 className="text-lg font-semibold">{name}</h1>
+      <h1 className="text-lg font-semibold dark:text-white">{name}</h1>
     </div>
   );
 };

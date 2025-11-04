@@ -93,8 +93,10 @@ export default function TasksChart({ tasks }: { tasks: Task[] }) {
                 className="w-4 h-4 rounded-full mr-2"
                 style={{ backgroundColor: status.fill }}
               />
-              <span className="text-sm font-medium">{status.name}:</span>
-              <span className="ml-auto font-semibold">
+              <span className="text-sm font-medium dark:text-gray-300">
+                {status.name}:
+              </span>
+              <span className="ml-auto font-semibold dark:text-white">
                 {status.value} ({Math.round((status.value / totalTasks) * 100)}
                 %)
               </span>

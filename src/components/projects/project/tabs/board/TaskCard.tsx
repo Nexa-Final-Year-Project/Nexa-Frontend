@@ -72,7 +72,23 @@ export const TaskCard = ({
   };
 
   return (
-    <div className=" !cursor-pointer group">
+    <div
+      className="!cursor-pointer group"
+      onClick={() => {
+        if (!isEditing && handleEditTaskModal) handleEditTaskModal(task);
+      }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (
+          !isEditing &&
+          handleEditTaskModal &&
+          (e.key === "Enter" || e.key === " ")
+        ) {
+          handleEditTaskModal(task);
+        }
+      }}
+    >
       <div className="flex flex-col gap-2 items-start p-2">
         <div className="flex items-center justify-between w-full">
           <PriorityBadge
@@ -104,10 +120,7 @@ export const TaskCard = ({
           ) : (
             <div className="flex items-center gap-1">
               <p className="font-medium text-sm">{task?.title}</p>
-              <Pencil
-                className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 cursor-pointer"
-                onClick={onStartEdit}
-              />
+              {/* Pencil edit icon removed */}
             </div>
           )}
         </div>
@@ -127,14 +140,15 @@ export const TaskCard = ({
               {task?.type}
             </div>
           </div>
-          {/* {task?.createdBy && (
-            <Avatar className="h-6 w-6">
+          {/* Assigned Team Member Avatar */}
+          {task?.assignedUsers && task.assignedUsers.length > 0 && (
+            <Avatar className="h-6 w-6 mr-2">
               <AvatarImage
-                src={task?.createdBy?.avatar?.url}
-                alt={task?.createdBy?.name}
+                src={task.assignedUsers[0]?.avatar?.url}
+                alt={task.assignedUsers[0]?.name || "Assignee"}
               />
             </Avatar>
-          )} */}
+          )}
           <AssignTasksPanel
             members={members}
             taskId={task?._id}

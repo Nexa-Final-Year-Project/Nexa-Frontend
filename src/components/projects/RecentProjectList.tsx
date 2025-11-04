@@ -23,12 +23,14 @@ const RecentProjectList = ({ projects }: { projects: Project[] }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Recent Projects</h2>
+        <h2 className="text-lg font-semibold dark:text-white">
+          Recent Projects
+        </h2>
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="cursor-pointer">
-                <EllipsisVerticalIcon className="w-4 h-4" />
+                <EllipsisVerticalIcon className="w-4 h-4 cursor-pointer" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="cursor-pointer">

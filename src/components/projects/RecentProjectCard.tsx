@@ -24,12 +24,15 @@ const RecentProjectCard = ({
   return (
     <Card>
       <div className="flex justify-end">
-        <Button onClick={() => handleViewAllProject(project._id)}>
+        <Button
+          className="cursor-pointer "
+          onClick={() => handleViewAllProject(project._id)}
+        >
           <SquareArrowOutUpRight className="w-4 h-4" />
         </Button>
       </div>
       <CardHeader>
-        <CardTitle>{project.name}</CardTitle>
+        <CardTitle className="dark:text-white">{project.name}</CardTitle>
       </CardHeader>
       <CardContent className=" text-muted-foreground">
         {project.description}

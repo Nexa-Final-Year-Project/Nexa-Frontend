@@ -27,7 +27,7 @@ export const TeamSearchAndInvite = ({
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-      <Button className="shrink-0" onClick={onInviteClick}>
+      <Button className="shrink-0 cursor-pointer" onClick={onInviteClick}>
         <Plus className="w-4 h-4 mr-2" />
         Invite
       </Button>

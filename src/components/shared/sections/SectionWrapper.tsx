@@ -26,7 +26,7 @@ const SectionWrapper = <P extends object>(
             variant="fade"
             direction="up"
             delay={0.1}
-            className="bg-gradient-stone-cable p-4 rounded-full w-fit m-auto mb-4 text-center text-primary-foreground"
+            className="bg-gradient-stone-cable p-4 rounded-2xl w-fit m-auto mb-4 text-center text-primary-foreground"
           >
             <h2 className="text-base  font-semibold tracking-wide uppercase">
               {title}
@@ -43,7 +43,9 @@ const SectionWrapper = <P extends object>(
             delay={0.3}
             className="text-stoneGradient"
           >
-            <p className="mt-4 max-w-2xl  lg:mx-auto">{description}</p>
+            <p className="mt-4 max-w-2xl lg:mx-auto text-foreground/70 dark:text-white">
+              {description}
+            </p>
           </AnimatedDiv>
         </div>
 

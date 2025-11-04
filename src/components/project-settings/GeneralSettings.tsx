@@ -114,7 +114,7 @@ export const GeneralSettings = ({
                 <ImageIcon className="w-4 h-4 mr-2" />
                 Change Avatar
               </Button>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground font-mono inline-block px-2.5">
                 JPG, GIF or PNG. Max size of 5MB.
               </p>
             </div>

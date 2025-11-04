@@ -49,7 +49,7 @@ export const TopStatCard = ({
       </div>
 
       {/* Main Value */}
-      <div className="text-2xl font-bold">{value}</div>
+      <div className="text-2xl font-bold dark:text-white">{value}</div>
 
       {/* Sparkline */}
       {chartData && chartData.length > 0 && (

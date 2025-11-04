@@ -309,7 +309,7 @@ const Board = ({
               {!addingColumn && (
                 <div className="flex items-center justify-start gap-2 p-2">
                   <Button
-                    className="mt-2 text-sm gap-2 justify-start"
+                    className="mt-2 text-sm dark:text-gray-100 gap-2 justify-start cursor-pointer"
                     variant="outline"
                     onClick={() => setAddingColumn(column.id)}
                   >

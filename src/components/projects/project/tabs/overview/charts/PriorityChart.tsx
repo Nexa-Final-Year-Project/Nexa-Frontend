@@ -95,8 +95,10 @@ const PriorityChart = ({ tasks }: { tasks: Task[] }) => {
                   className="w-3 h-3 rounded-full mr-2"
                   style={{ backgroundColor: item.fill }}
                 />
-                <span className="text-sm font-medium">{item.type}:</span>
-                <span className="ml-auto font-semibold">
+                <span className="text-sm font-medium dark:text-gray-300">
+                  {item.type}:
+                </span>
+                <span className="ml-auto font-semibold dark:text-white">
                   {item.count} ({Math.round((item.count / totalTasks) * 100)}%)
                 </span>
               </div>

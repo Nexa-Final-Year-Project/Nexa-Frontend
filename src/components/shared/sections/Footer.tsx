@@ -63,7 +63,7 @@ const Footer = () => {
             direction="up"
             delay={0.1 * index}
             duration={0.75}
-            className="space-y-4"
+            className="space-y-4 text-white"
           >
             <h3 className="text-lg font-semibold mb-4">{column.title}</h3>
             <ul className="space-y-3">
@@ -89,7 +89,7 @@ const Footer = () => {
           duration={0.75}
           className="space-y-4"
         >
-          <h3 className="text-lg font-semibold  mb-4 ">Contact Us</h3>
+          <h3 className="text-lg font-semibold text-white mb-4 ">Contact Us</h3>
           <address className="text-gray-400 not-italic space-y-3">
             <div className="flex items-start">
               <svg

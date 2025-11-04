@@ -43,7 +43,7 @@ export const ProjectSettingsSidebar = ({
     {
       id: "general",
       label: "General",
-      icon: <Settings className="w-4 h-4 mr-2" />,
+      icon: <Settings className="w-4 h-4 mr-2 dark:text-white" />,
       category: "Project",
     },
     // {
@@ -57,7 +57,7 @@ export const ProjectSettingsSidebar = ({
     {
       id: "members",
       label: "Members",
-      icon: <Users className="w-4 h-4 mr-2" />,
+      icon: <Users className="w-4 h-4 mr-2 dark:text-white" />,
       category: "Team",
     },
     // {
@@ -71,19 +71,19 @@ export const ProjectSettingsSidebar = ({
     {
       id: "permissions-tasks",
       label: "Tasks",
-      icon: <ClipboardList className="w-4 h-4 mr-2" />,
+      icon: <ClipboardList className="w-4 h-4 mr-2 dark:text-white" />,
       category: "Permissions",
     },
     {
       id: "permissions-project",
       label: "Project",
-      icon: <ClipboardList className="w-4 h-4 mr-2" />,
+      icon: <ClipboardList className="w-4 h-4 mr-2 dark:text-white" />,
       category: "Permissions",
     },
     {
       id: "permissions-access",
       label: "Access Control",
-      icon: <Lock className="w-4 h-4 mr-2" />,
+      icon: <Lock className="w-4 h-4 mr-2 dark:text-white" />,
       category: "Permissions",
     },
 
@@ -111,7 +111,7 @@ export const ProjectSettingsSidebar = ({
     {
       id: "danger",
       label: "Delete Project",
-      icon: <Trash2 className="w-4 h-4 mr-2" />,
+      icon: <Trash2 className="w-4 h-4 mr-2 dark:text-white" />,
       category: "Danger Zone",
       destructive: true,
     },
@@ -150,9 +150,9 @@ export const ProjectSettingsSidebar = ({
                       variant={
                         activeSection === item.id ? "secondary" : "ghost"
                       }
-                      className={`w-full justify-start px-4 py-2 cursor-pointer ${
+                      className={`w-full justify-start px-4 py-2 dark:text-white cursor-pointer ${
                         item.destructive
-                          ? "text-destructive hover:text-destructive"
+                          ? "text-destructive hover:text-destructive dark:text-red-400"
                           : ""
                       }`}
                       onClick={() => {
