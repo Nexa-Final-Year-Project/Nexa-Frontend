@@ -11,6 +11,7 @@ import { SocialButtons } from "@/components/auth/AuthButtons";
 import { AuthDivider } from "@/components/auth/AuthDivider";
 import { useRegisterUserMutation } from "@/api/auth/authApi";
 
+// Login page component
 const LoginPage = () => {
   const [registerUser] = useRegisterUserMutation();
 
