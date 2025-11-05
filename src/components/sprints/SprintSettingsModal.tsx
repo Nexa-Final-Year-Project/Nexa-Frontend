@@ -33,7 +33,7 @@ export const SprintSettingsModal: React.FC<SprintSettingsModalProps> = ({
   useEffect(() => {
     if (sprint) {
       form.setValues({
-        name: sprint.name || "",
+        name: sprint.name || sprint.sprintName || "",
         goals: sprint.goals || [],
         startDate: sprint.startDate || "",
         endDate: sprint.endDate || "",
@@ -75,7 +75,9 @@ export const SprintSettingsModal: React.FC<SprintSettingsModalProps> = ({
             </div>
             <div className="flex items-center space-x-2">
               <Users className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">Project: {sprint.project}</span>
+              <span className="text-sm">
+                Project: {sprint.project || sprint.projectId}
+              </span>
             </div>
           </div>
         </div>

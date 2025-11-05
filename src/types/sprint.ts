@@ -5,5 +5,6 @@ export type Sprint = {
   startDate: string;
   endDate: string;
   project: string;
+  projectId?: string;
   goals: Array<string>;
 };
