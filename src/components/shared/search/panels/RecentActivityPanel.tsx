@@ -18,8 +18,9 @@ const RecentActivityPanel = ({ trigger }: { trigger: React.ReactNode }) => {
   const [showAll, setShowAll] = React.useState(false);
 
   React.useEffect(() => {
+    // Backend expects the query param name `user` (not `userId`), so send that.
     if (user?.id) {
-      fetchAllActivityLogs({ userId: user.id });
+      fetchAllActivityLogs({ user: user.id });
     }
   }, [user?.id, fetchAllActivityLogs]);
 

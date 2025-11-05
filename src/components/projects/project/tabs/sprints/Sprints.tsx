@@ -36,7 +36,6 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
     createSprint,
     updateSprint,
     deleteSprint,
-    generateSprints: planSprints,
   } = useSprints();
 
   // Helpers
@@ -184,11 +183,6 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
         <SprintPlannerModal
           isOpen={openPlanningDialog}
           onClose={() => setOpenPlanningDialog(false)}
-          handleSubmit={(data) => {
-            planSprints(data.description, projectId, data?.name || "");
-            setOpenPlanningDialog(false);
-          }}
-          sprints={sprints}
         />
       )}
     </div>

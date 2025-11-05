@@ -64,20 +64,17 @@ export const useSprints = (projectId?: string) => {
     [createSprintApi, addSprint, updateSprint, removeSprint]
   );
 
-  // Generate sprints using AI
+  // Generate sprints using AI for a given projectId
   const generateSprints = useCallback(
-    async (projectDescription: string, projectId: string, sprintId: string) => {
+    async (projectId: string) => {
       setLoading(true);
       setError(null);
 
       try {
-        const response = await generateSprintsByAIApi({
-          description: projectDescription,
-          projectId,
-          sprintId,
-        }).unwrap();
-        // response.forEach((sprint: Sprint) => addSprint(sprint));
-        await fetchSprints(); // Refresh sprints after generation
+        // API expects projectId in the URL — pass the id string directly
+        const response = await generateSprintsByAIApi(projectId).unwrap();
+        // Refresh sprints after generation
+        await fetchSprints();
         toast.success("Sprints generated successfully");
 
         return response;
@@ -88,7 +85,7 @@ export const useSprints = (projectId?: string) => {
         setLoading(false);
       }
     },
-    [generateSprintsByAIApi, addSprint]
+    [generateSprintsByAIApi, fetchSprints]
   );
 
   // Update an existing sprint

@@ -28,11 +28,15 @@ export const sprintApi = baseApi.injectEndpoints({
       }),
     }),
     planSprintsByAI: builder.mutation({
-      query: (data) => ({
-        url: "/sprints/plan",
-        method: "POST",
-        body: data,
-      }),
+      // Accept either a projectId string or an object { projectId }
+      query: (data) => {
+        const projectId = typeof data === "string" ? data : (data?.projectId || "");
+        return {
+          url: `/sprints/plan/${projectId}`,
+          method: "POST",
+          // keep body empty; backend expects projectId in URL
+        };
+      },
     }),
     updateSprint: builder.mutation({
       query: (sprint) => ({

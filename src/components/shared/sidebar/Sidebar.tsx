@@ -3,25 +3,17 @@
 import * as React from "react";
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
   Clock,
   Command,
   Frame,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
   Rocket,
-  Settings2,
-  SquareTerminal,
   Star,
-  Users,
 } from "lucide-react";
 
 import { NavMain } from "@/components/ui/navbar/nav-main";
 import { NavProjects } from "@/components/ui/navbar/nav-projects";
 import { NavUser } from "@/components/ui/navbar/nav-user";
-import { TeamSwitcher } from "@/components/ui/navbar/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -107,12 +99,12 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { projects, isLoading } = useProjects(); // ✅ Fetch real projects
   const { user } = useAuthStore();
-  console.log("User from store:", user);
   // Map API projects to the format expected by NavProjects
   const formattedProjects =
     projects?.map((project: Project) => ({
       name: project.name,
       _id: project._id,
+      description: project.description || "",
       url: `/u/${user?.id}/p/${project?._id}`, // 🔗 dynamic project route
       icon: Frame, // you can later make this dynamic if your project has a type/icon
     })) || [];

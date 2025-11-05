@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useModalStore } from "@/store/modal/modalStore";
 import Link from "next/link";
-import { useAuthStore } from "@/store/auth/authStore";
+// import { useAuthStore } from "@/store/auth/authStore"; // not used here
 import { Project } from "@/types/project";
 
 export function NavProjects({
@@ -36,7 +36,6 @@ export function NavProjects({
 }) {
   const { isMobile } = useSidebar();
   const { openModal } = useModalStore();
-  const { user } = useAuthStore();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -51,7 +50,7 @@ export function NavProjects({
       </SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
+          <SidebarMenuItem key={item._id}>
             <SidebarMenuButton asChild>
               <a href={item.url}>
                 <item.icon />
