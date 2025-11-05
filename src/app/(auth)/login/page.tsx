@@ -14,6 +14,7 @@ import { useRegisterUserMutation } from "@/api/auth/authApi";
 const LoginPage = () => {
   const [registerUser] = useRegisterUserMutation();
 
+  // Handle form submission
   const handleSubmit = async (values: Record<string, any>) => {
     try {
       const { email } = values;
