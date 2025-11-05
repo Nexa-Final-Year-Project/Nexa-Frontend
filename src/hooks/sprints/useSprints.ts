@@ -29,7 +29,6 @@ export const useSprints = (projectId?: string) => {
     if (!projectId) return;
     try {
       const { data } = await fetchSprintsByProject(projectId).unwrap();
-      console.log("Fetched sprints:", data);
       setSprints(data?.sprints || []);
       return data;
     } catch (error) {
@@ -73,8 +72,10 @@ export const useSprints = (projectId?: string) => {
       try {
         // API expects projectId in the URL — pass the id string directly
         const response = await generateSprintsByAIApi(projectId).unwrap();
+        setSprints(response.sprints);
+        // setSprints((prevSprints) => [...prevSprints, ...response.sprints]);
         // Refresh sprints after generation
-        await fetchSprints();
+        // await fetchSprints();/
         toast.success("Sprints generated successfully");
 
         return response;

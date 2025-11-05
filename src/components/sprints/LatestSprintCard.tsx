@@ -28,7 +28,7 @@ export const LatestSprintCard = ({
             Latest Sprint
           </Badge>
           <CardTitle className="dark:text-[#4a3f54] text-2xl uppercase font-mono">
-            {sprint.name}
+            {sprint.name || sprint.sprintName}
           </CardTitle>
           <p className="text-sm text-muted-foreground mt-1">
             {sprint.goals?.join(", ") || "No goals specified"}

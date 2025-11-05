@@ -74,36 +74,36 @@ export const SprintsTable = ({
 }) => {
   const [filters, setFilters] = useState<any>({});
   /* -------------- Filtering -------------------- */
-  const filteredSprints = useMemo(() => {
-    return sprints.filter((sprint) => {
-      const sprintStatus = getSprintStatus(sprint);
+  // const filteredSprints = useMemo(() => {
+  //   return sprints?.filter((sprint) => {
+  //     const sprintStatus = getSprintStatus(sprint);
 
-      // Status filter
-      const inStatus =
-        !filters.status || filters.status === "all"
-          ? true
-          : sprintStatus === filters.status;
+  //     // Status filter
+  //     const inStatus =
+  //       !filters.status || filters.status === "all"
+  //         ? true
+  //         : sprintStatus === filters.status;
 
-      // Search filter
-      const inSearch = filters.search
-        ? sprint.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-          sprint.goals?.some((g) =>
-            g.toLowerCase().includes(filters.search.toLowerCase())
-          )
-        : true;
+  //     // Search filter
+  //     const inSearch = filters.search
+  //       ? sprint.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+  //         sprint.goals?.some((g) =>
+  //           g.toLowerCase().includes(filters.search.toLowerCase())
+  //         )
+  //       : true;
 
-      // Date filter
-      const inDateRange =
-        filters.start && filters.end
-          ? isWithinInterval(parseISO(sprint.startDate), {
-              start: filters.start,
-              end: filters.end,
-            })
-          : true;
+  //     // Date filter
+  //     const inDateRange =
+  //       filters.start && filters.end
+  //         ? isWithinInterval(parseISO(sprint.startDate), {
+  //             start: filters.start,
+  //             end: filters.end,
+  //           })
+  //         : true;
 
-      return inStatus && inSearch && inDateRange;
-    });
-  }, [sprints, filters]);
+  //     return inStatus && inSearch && inDateRange;
+  //   });
+  // }, [sprints, filters]);
 
   /* -------------------- Dropdown Items -------------------- */
   const dropdownItems = (sprint: SprintType) => [
@@ -141,7 +141,7 @@ export const SprintsTable = ({
       width: "15%",
       render: (row: SprintType) => (
         <div className="flex items-center gap-2">
-          <span className="font-medium">{row.name}</span>
+          <span className="font-medium">{row.name || row.sprintName}</span>
         </div>
       ),
     },
@@ -256,7 +256,7 @@ export const SprintsTable = ({
       {/* Table */}
       <EditableTable<SprintType>
         columns={columns}
-        data={filteredSprints}
+        data={sprints}
         onChange={(updated) => {
           console.log("Updated sprints:", updated);
         }}

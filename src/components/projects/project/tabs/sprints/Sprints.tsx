@@ -32,11 +32,7 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
   const [selectedSprint, setSelectedSprint] = useState<SprintType | null>(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openPlanningDialog, setOpenPlanningDialog] = useState(false);
-  const {
-    createSprint,
-    updateSprint,
-    deleteSprint,
-  } = useSprints();
+  const { createSprint, updateSprint, deleteSprint } = useSprints();
 
   // Helpers
   const getSprintTasks = (sprintId: string) =>
@@ -78,15 +74,7 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
     }
   };
 
-  const latestSprint = sprints?.length
-    ? sprints.reduce(
-        (latest, sprint) =>
-          !latest || isAfter(parseISO(sprint.endDate), parseISO(latest.endDate))
-            ? sprint
-            : latest,
-        null as SprintType | null
-      )
-    : null;
+  const latestSprint = sprints?.length > 0 && sprints[0];
 
   return (
     <div className="p-6 space-y-6">
