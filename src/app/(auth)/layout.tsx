@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: "Project management tool authentication",
 };
 
+// This layout is used for all authentication-related pages
 export default function AuthLayout({
   children,
 }: {
