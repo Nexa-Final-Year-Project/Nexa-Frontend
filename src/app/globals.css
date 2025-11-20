@@ -283,6 +283,19 @@ body {
   font-family: "Salesforce Sans", system-ui, -apple-system, sans-serif !important;
 }
 
+/* Utility to hide scrollbars while keeping scroll functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
 /* Toast title text */
 [data-sonner-toast] [data-title] {
   color: var(--foreground) !important;

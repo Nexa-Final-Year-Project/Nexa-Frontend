@@ -19,13 +19,18 @@ import { Button } from "@/components/ui/button/Button";
 import { useTasks } from "@/hooks/tasks/useTasks";
 import TaskGeneratorModal from "@/components/shared/models/TaskGeneratorModal";
 import { useTheme } from "next-themes";
+import { Project } from "@/types/project";
 
 const Overview = ({
   tasks,
   projectId,
+  project,
+  members,
 }: {
   tasks: Task[];
   projectId: string;
+  project?: Project | null;
+  members?: any[];
 }) => {
   const { theme } = useTheme();
   // Memoize to avoid recalculating on every render
@@ -131,7 +136,13 @@ const Overview = ({
       <TaskGeneratorModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        handleSubmit={(data) => generateTasks(data.description, projectId)}
+        projectId={projectId}
+        projectName={project?.name}
+        projectType="Web App"
+        project={project}
+        handleSubmit={(data) =>
+          generateTasks(data.description, projectId, data.config, members || [])
+        }
       />
     </div>
   );

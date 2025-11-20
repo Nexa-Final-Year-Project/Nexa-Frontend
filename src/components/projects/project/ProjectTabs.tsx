@@ -41,7 +41,14 @@ const projectTabs = (
       id: "overview",
       label: "Overview",
       icon: HomeIcon,
-      content: <Overview tasks={tasks} projectId={projectId} />,
+      content: (
+        <Overview
+          tasks={tasks}
+          projectId={projectId}
+          project={project}
+          members={members}
+        />
+      ),
     },
     {
       id: "sprints",

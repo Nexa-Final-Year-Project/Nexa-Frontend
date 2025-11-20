@@ -9,17 +9,12 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "../components/ui/sidebar";
-import {
-  BellIcon,
-  MenuIcon,
-  PlusIcon,
-  SearchIcon,
-  UserIcon,
-} from "lucide-react";
+import { MenuIcon, PlusIcon, SearchIcon, UserIcon } from "lucide-react";
 import ProfileDropdown from "../components/user/profile/ProfileDropdown";
 import { useAuthStore } from "../store/auth/authStore";
 import { useModalStore } from "../store/modal/modalStore";
 import { useTheme } from "next-themes";
+import { useInitializeNotifications } from "@/hooks/notifications/useInitializeNotifications";
 
 export default function UserLayout({
   children,
@@ -29,6 +24,7 @@ export default function UserLayout({
   const { user } = useAuthStore();
   const { openModal } = useModalStore();
   const { theme } = useTheme();
+  useInitializeNotifications();
 
   return (
     <SidebarProvider>
@@ -89,11 +85,6 @@ export default function UserLayout({
 
             {/* Right section - Notifications and profile */}
             <div className="flex items-center gap-2 md:gap-4 pr-2 md:pr-12">
-              {/* Notification bell - hidden on smallest screens */}
-              <Button variant="ghost" size="icon" className="hidden xs:flex">
-                <BellIcon className="w-4 h-4" />
-              </Button>
-
               <ProfileDropdown user={user} />
             </div>
           </div>

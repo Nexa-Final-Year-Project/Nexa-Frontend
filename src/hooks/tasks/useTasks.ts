@@ -56,7 +56,7 @@ export const useTasks = (projectId?: string) => {
         return response;
       } catch (err) {
         removeTask(tempId);
-        setError(err);
+        setError(err instanceof Error ? err : new Error(String(err)));
         toast.error("Failed to create task");
         throw err;
       } finally {
@@ -68,14 +68,21 @@ export const useTasks = (projectId?: string) => {
 
   // Generate tasks using AI
   const generateTasks = useCallback(
-    async (projectDescription: string, projectId: string) => {
+    async (
+      projectDescription: string,
+      projectId: string,
+      config?: Record<string, any>,
+      teamMembers?: any[]
+    ) => {
       setLoading(true);
       setError(null);
 
       try {
         const response = await generateTasksByAIApi({
           description: projectDescription,
-          project: projectId,
+          projectId,
+          config,
+          team: teamMembers || [],
         }).unwrap();
         // response.forEach((task: Task) => addTask(task));
         await fetchTasks(); // Refresh tasks after generation
@@ -89,7 +96,7 @@ export const useTasks = (projectId?: string) => {
         setLoading(false);
       }
     },
-    [generateTasksByAIApi, addTask]
+    [generateTasksByAIApi, addTask, fetchTasks]
   );
 
   // Update an existing task
