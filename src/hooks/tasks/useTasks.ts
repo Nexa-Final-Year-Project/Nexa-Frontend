@@ -9,6 +9,8 @@ import {
   useLazyGetTasksByUserIdQuery,
   useAssignTaskMutation,
 } from "@/api/task/taskApi";
+import { useRouter } from "next/navigation";
+import { useAddNotification } from "@/store/notifications/notificationStore";
 import { useTaskStore } from "@/store/tasks/taskStore";
 import type { Task } from "@/types/task";
 import toast from "@/lib/customToast";
@@ -27,6 +29,9 @@ export const useTasks = (projectId?: string) => {
   const [error, setError] = useState<Error | null>(null);
 
   const { tasks, setTasks, addTask, removeTask, updateTask } = useTaskStore();
+  const addNotification = useAddNotification();
+  const router = useRouter();
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "/";
 
   const fetchTasks = useCallback(async () => {
     if (!projectId) return;
@@ -86,7 +91,79 @@ export const useTasks = (projectId?: string) => {
         }).unwrap();
         // response.forEach((task: Task) => addTask(task));
         await fetchTasks(); // Refresh tasks after generation
-        toast.success("Tasks generated successfully");
+
+        // Prepare report link and notification
+        const reportId = (response && (response.reportId || response.data?.reportId || response?.reportId)) || null;
+        const actionUrl = `${pathname}?tab=task-generation-reports${reportId ? `&open=${reportId}` : ""}`;
+
+        // Persist report locally so the reports page can show it immediately even
+        // if the backend reports listing isn't available yet.
+        try {
+          const existing = JSON.parse(localStorage.getItem("generationReports") || "[]");
+          // Avoid duplicating same reportId
+          const has = reportId ? existing.some((r: any) => r.reportId === reportId) : false;
+          const payloadToSave = {
+            ...response,
+            displayTitle:
+              response?.displayTitle ||
+              `Auto Report • ${response?.meta?.backlogSummary?.split('.')?.[0] || projectId} • ${response?.suggestionsCreated || response?.meta?.suggestionsCreated || '?'} suggestions`,
+          };
+          if (!has) {
+            localStorage.setItem("generationReports", JSON.stringify([payloadToSave, ...existing]));
+          }
+        } catch (e) {
+          // noop
+        }
+
+        // Add in-app notification so user can access reports later
+        try {
+          addNotification({
+            _id: `genreport-${Date.now()}`,
+            title: "Tasks Generated Successfully (Pending Review)",
+            message: response?.message || "AI run saved as GenerationReport (pending review by PM)",
+            actionUrl,
+            senderName: "AI",
+            read: false,
+            avatarUrl: "",
+            type: "info",
+          } as any);
+        } catch (e) {
+          // noop
+        }
+
+        // Show toast with one action (View Report).
+        toast.success("Tasks Generated Successfully (Pending Review)", {
+          action: {
+            label: "View Report",
+            onClick: () => {
+              try {
+                if (router && reportId) {
+                  router.push(`${actionUrl}`);
+                } else if (reportId) {
+                  window.location.href = actionUrl;
+                } else if (router) {
+                  router.push(`${pathname}?tab=task-generation-reports`);
+                } else {
+                  window.location.href = `${pathname}?tab=task-generation-reports`;
+                }
+              } catch (e) {
+                // noop
+              }
+            },
+          },
+          duration: 8000,
+        });
+
+        // Immediately navigate to reports tab and open the report if possible
+        try {
+          if (router && reportId) {
+            router.push(`${actionUrl}`);
+          } else if (reportId) {
+            window.location.href = actionUrl;
+          }
+        } catch (e) {
+          // noop
+        }
 
         return response;
       } catch (err) {

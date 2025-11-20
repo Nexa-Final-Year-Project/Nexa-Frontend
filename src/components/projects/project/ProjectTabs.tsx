@@ -15,8 +15,10 @@ import { TabsListReusable } from "@/components/tabs/TabsList";
 import { TabItemReusable } from "@/components/tabs/TabsItem";
 import Overview from "./tabs/overview/Overview";
 import Board from "./tabs/board/Board";
+import TaskGenerationReports from "./tabs/reports/TaskGenerationReports";
 import { useLazyGetProjectByIdQuery } from "@/api/project/projectApi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useLazyGetTaskByProjectIdQuery } from "@/api/task/taskApi";
 import { useTaskActions, useTaskStore } from "@/store/tasks/taskStore";
 import { Task } from "@/types/task";
@@ -95,6 +97,14 @@ const projectTabs = (
       icon: SettingsIcon,
       content: <ProjectSettings project={project || null} members={members} />,
     },
+    {
+      id: "task-generation-reports",
+      label: "Task Generation Reports",
+      icon: LineChartIcon,
+      content: (
+        <TaskGenerationReports projectId={projectId} members={members} />
+      ),
+    },
   ];
 };
 
@@ -107,6 +117,10 @@ export function ProjectTabs({
   members: ProjectMember[];
   project: Project | null;
 }) {
+  // Use Next's reactive search params so we can respond to router.push updates
+  const searchParams = useSearchParams();
+  const paramTab = (searchParams && searchParams.get("tab")) || "overview";
+
   const [fetchTasksByProjectId, { data }] = useLazyGetTaskByProjectIdQuery();
   const [fetchSprintsByProject, { data: sprintsData }] =
     useLazyGetSprintByProjectIdQuery();
@@ -148,8 +162,15 @@ export function ProjectTabs({
     sprints
   );
 
+  const [activeTab, setActiveTab] = useState<string>(paramTab);
+
+  useEffect(() => {
+    // whenever the URL changes the paramTab will update via useSearchParams
+    setActiveTab(paramTab);
+  }, [paramTab]);
+
   return (
-    <Tabs defaultValue="overview">
+    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v)}>
       <TabsListReusable tabs={tabs} />
       <TabItemReusable tabs={tabs} />
     </Tabs>
