@@ -31,7 +31,8 @@ export const useTasks = (projectId?: string) => {
   const { tasks, setTasks, addTask, removeTask, updateTask } = useTaskStore();
   const addNotification = useAddNotification();
   const router = useRouter();
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "/";
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "/";
 
   const fetchTasks = useCallback(async () => {
     if (!projectId) return;
@@ -93,23 +94,43 @@ export const useTasks = (projectId?: string) => {
         await fetchTasks(); // Refresh tasks after generation
 
         // Prepare report link and notification
-        const reportId = (response && (response.reportId || response.data?.reportId || response?.reportId)) || null;
-        const actionUrl = `${pathname}?tab=task-generation-reports${reportId ? `&open=${reportId}` : ""}`;
+        const reportId =
+          (response &&
+            (response.reportId ||
+              response.data?.reportId ||
+              response?.reportId)) ||
+          null;
+        const actionUrl = `${pathname}?tab=task-generation-reports${
+          reportId ? `&open=${reportId}` : ""
+        }`;
 
         // Persist report locally so the reports page can show it immediately even
         // if the backend reports listing isn't available yet.
         try {
-          const existing = JSON.parse(localStorage.getItem("generationReports") || "[]");
+          const existing = JSON.parse(
+            localStorage.getItem("generationReports") || "[]"
+          );
           // Avoid duplicating same reportId
-          const has = reportId ? existing.some((r: any) => r.reportId === reportId) : false;
+          const has = reportId
+            ? existing.some((r: any) => r.reportId === reportId)
+            : false;
           const payloadToSave = {
             ...response,
             displayTitle:
               response?.displayTitle ||
-              `Auto Report • ${response?.meta?.backlogSummary?.split('.')?.[0] || projectId} • ${response?.suggestionsCreated || response?.meta?.suggestionsCreated || '?'} suggestions`,
+              `Auto Report • ${
+                response?.meta?.backlogSummary?.split(".")?.[0] || projectId
+              } • ${
+                response?.suggestionsCreated ||
+                response?.meta?.suggestionsCreated ||
+                "?"
+              } suggestions`,
           };
           if (!has) {
-            localStorage.setItem("generationReports", JSON.stringify([payloadToSave, ...existing]));
+            localStorage.setItem(
+              "generationReports",
+              JSON.stringify([payloadToSave, ...existing])
+            );
           }
         } catch (e) {
           // noop
@@ -120,7 +141,9 @@ export const useTasks = (projectId?: string) => {
           addNotification({
             _id: `genreport-${Date.now()}`,
             title: "Tasks Generated Successfully (Pending Review)",
-            message: response?.message || "AI run saved as GenerationReport (pending review by PM)",
+            message:
+              response?.message ||
+              "AI run saved as GenerationReport (pending review by PM)",
             actionUrl,
             senderName: "AI",
             read: false,
