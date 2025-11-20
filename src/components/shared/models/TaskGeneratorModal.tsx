@@ -79,6 +79,13 @@ const TaskGeneratorModal: React.FC<TaskGeneratorModalProps> = ({
       required: false,
     } as FormFieldType,
     {
+      name: "teamRoles",
+      label: "Team Roles (comma-separated)",
+      type: "text",
+      placeholder: "e.g., Frontend, Backend, AI Engineer, DevOps",
+      required: false,
+    } as FormFieldType,
+    {
       name: "complexityLevel",
       label: "Complexity Level",
       type: "select",
@@ -116,6 +123,7 @@ const TaskGeneratorModal: React.FC<TaskGeneratorModalProps> = ({
     initialValues: {
       description: "",
       techStack: "",
+      teamRoles: "",
       complexityLevel: "Advanced",
       preferredTaskCount: 40,
       includeBugTasks: false,
@@ -150,11 +158,17 @@ const TaskGeneratorModal: React.FC<TaskGeneratorModalProps> = ({
         ? formData.techStack.split(",").map((t: string) => t.trim())
         : [];
 
+      // Parse comma-separated team roles
+      const teamRoles = formData.teamRoles
+        ? formData.teamRoles.split(",").map((r: string) => r.trim())
+        : [];
+
       const config: Partial<TaskGeneratorConfig> = {
         projectName,
         projectType,
         mainModules,
         techStack,
+        teamRoles,
         complexityLevel: formData.complexityLevel || "Advanced",
         preferredTaskCount: formData.preferredTaskCount || 40,
         includeBugTasks: formData.includeBugTasks || false,
