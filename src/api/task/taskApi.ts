@@ -33,7 +33,7 @@ export const taskApi = baseApi.injectEndpoints({
         body: task,
       }),
     }),
-    generateTasksByAI: builder.mutation({
+     generateTasksByAI: builder.mutation({
       query: ({ description, projectId, config, team }) => {
         const authToken = localStorage.getItem("authToken");
 
@@ -66,6 +66,7 @@ export const taskApi = baseApi.injectEndpoints({
         };
       },
     }),
+// Update Task 
     updateTask: builder.mutation({
       query: (task) => ({
         url: `/tasks/${task.id}`,
