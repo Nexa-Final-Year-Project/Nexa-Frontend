@@ -99,15 +99,29 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { projects, isLoading } = useProjects(); // ✅ Fetch real projects
   const { user } = useAuthStore();
-  // Map API projects to the format expected by NavProjects
-  const formattedProjects =
-    projects?.map((project: Project) => ({
-      name: project.name,
-      _id: project._id,
-      description: project.description || "",
-      url: `/u/${user?.id}/p/${project?._id}`, // 🔗 dynamic project route
-      icon: Frame, // you can later make this dynamic if your project has a type/icon
-    })) || [];
+  // Normalize projects (API may return an object or array). Ensure we always pass an array into NavProjects.
+  let projectList: Project[] = [];
+  if (Array.isArray(projects)) {
+    projectList = projects;
+  } else if (projects && Array.isArray((projects as any).projects)) {
+    projectList = (projects as any).projects;
+  } else if (projects && Array.isArray((projects as any).data)) {
+    // some endpoints return { data: [...] }
+    projectList = (projects as any).data;
+  } else if (projects) {
+    // unexpected shape — log once for debugging and fall back to empty
+    // eslint-disable-next-line no-console
+    console.warn("AppSidebar: `projects` is not an array. Received:", projects);
+    projectList = [];
+  }
+
+  const formattedProjects = projectList.map((project: Project) => ({
+    name: project.name,
+    _id: project._id,
+    description: project.description || "",
+    url: `/u/${user?.id}/p/${project?._id}`,
+    icon: Frame,
+  }));
 
   return (
     <Sidebar collapsible="icon" {...props}>

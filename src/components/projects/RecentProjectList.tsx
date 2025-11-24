@@ -12,7 +12,7 @@ import {
 import { DropdownMenuContent } from "../ui/dropdown-menu/dropdown-menu";
 import { usePathAppender } from "@/hooks/usePathAppender";
 
-const RecentProjectList = ({ projects }: { projects: Project[] }) => {
+const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
   const [open, setOpen] = useState(false);
   const appendToPath = usePathAppender();
 
@@ -46,13 +46,13 @@ const RecentProjectList = ({ projects }: { projects: Project[] }) => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {projects?.slice(0, 4).map((project) => (
+        {Array.isArray(projects) ? projects.slice(0, 4).map((project) => (
           <RecentProjectCard
             key={project._id}
             project={project}
             members={project?.members || []}
           />
-        ))}
+        )) : null}
       </div>
     </div>
   );

@@ -14,17 +14,28 @@ const DashboardProjectList = ({
   showStarred?: boolean;
 }) => {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+
+  // Normalize incoming projects to an array to avoid runtime errors when backend
+  // or store returns an object shape.
+  const projectList: Project[] = Array.isArray(projects)
+    ? projects
+    : projects && Array.isArray((projects as any).projects)
+    ? (projects as any).projects
+    : projects && Array.isArray((projects as any).data)
+    ? (projects as any).data
+    : [];
+
   useEffect(() => {
     setFilteredProjects(
-      projects.filter((project) => (showStarred ? project.starred : true))
+      projectList.filter((project) => (showStarred ? project.starred : true))
     );
-  }, [projects, showStarred]);
+  }, [projectList, showStarred]);
   const path = usePathname();
   const currentPath = path.split("/").pop();
   return (
     <div className="flex flex-col gap-4">
       {filteredProjects
-        .slice(0, showAll ? projects.length : 4)
+        .slice(0, showAll ? projectList.length : 4)
         .map((project) => (
           <Link
             href={`${currentPath}/p/${project._id}`}
@@ -48,7 +59,7 @@ const DashboardProjectList = ({
             <div className="flex flex-col items-start">
               <h3>{project.name}</h3>
               <p className="text-sm text-muted-foreground">
-                {project.description.slice(0, 50)}...
+                {String(project.description || "").slice(0, 50)}...
               </p>
             </div>
           </Link>
