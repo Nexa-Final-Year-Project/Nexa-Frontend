@@ -46,13 +46,17 @@ const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {Array.isArray(projects) ? projects.slice(0, 4).map((project) => (
-          <RecentProjectCard
-            key={project._id}
-            project={project}
-            members={project?.members || []}
-          />
-        )) : null}
+        {Array.isArray(projects)
+          ? projects
+              .slice(0, 4)
+              .map((project) => (
+                <RecentProjectCard
+                  key={project._id}
+                  project={project}
+                  members={project?.members || []}
+                />
+              ))
+          : null}
       </div>
     </div>
   );
