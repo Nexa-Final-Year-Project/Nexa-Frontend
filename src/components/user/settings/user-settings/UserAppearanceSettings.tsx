@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Sun, Moon, Monitor, Bell } from "lucide-react";
+import { Sun, Moon, Monitor, Bell, Check, Mail, Smartphone } from "lucide-react";
 
 interface UserPreferencesSettingsProps {
   preferences: {
@@ -21,96 +20,142 @@ export const UserPreferencesSettings = ({
   const themeOptions = [
     {
       label: "Light",
-      value: "light",
-      icon: <Sun className="w-5 h-5 text-yellow-500" />,
-      description: "Bright and clean interface",
+      value: "light" as const,
+      icon: <Sun className="w-5 h-5" />,
+      description: "Bright & clean interface",
+      gradient: "from-amber-400 to-orange-500",
     },
     {
       label: "Dark",
-      value: "dark",
-      icon: <Moon className="w-5 h-5 text-gray-800" />,
-      description: "Dark mode for low-light environments",
+      value: "dark" as const,
+      icon: <Moon className="w-5 h-5" />,
+      description: "Easy on the eyes",
+      gradient: "from-indigo-400 to-purple-500",
     },
     {
       label: "System",
-      value: "system",
-      icon: <Monitor className="w-5 h-5 text-blue-500" />,
-      description: "Follows your device preference",
+      value: "system" as const,
+      icon: <Monitor className="w-5 h-5" />,
+      description: "Follows device settings",
+      gradient: "from-blue-400 to-cyan-500",
+    },
+  ];
+
+  const notificationOptions = [
+    {
+      key: "email",
+      label: "Email Notifications",
+      description: "Receive updates via email",
+      icon: <Mail className="w-5 h-5" />,
+    },
+    {
+      key: "push",
+      label: "Push Notifications",
+      description: "Get instant notifications",
+      icon: <Smartphone className="w-5 h-5" />,
     },
   ];
 
   return (
-    <Card className="!border-0 !shadow-none">
-      <CardHeader className="pb-0">
-        <CardTitle className="text-2xl font-bold">Preferences</CardTitle>
-        <p className="text-sm text-gray-500 mt-1">
-          Customize your app appearance and notifications.
-        </p>
-      </CardHeader>
-
-      <CardContent className="space-y-10">
-        {/* Theme Selector */}
-        <div>
-          <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
-            <Sun className="w-5 h-5 text-yellow-500" /> Theme
-          </h3>
-          <div className="flex flex-col sm:flex-row gap-4">
-            {themeOptions.map((option) => {
-              const isActive = preferences.theme === option.value;
-              return (
-                <button
-                  key={option.value}
-                  onClick={() => onThemeChange(option.value)}
-                  className={`flex flex-col items-start gap-1 p-4 rounded-lg border transition cursor-pointer
-                    ${
-                      isActive
-                        ? "border-blue-600 bg-blue-50 shadow"
-                        : "border-gray-200 hover:bg-gray-50"
-                    }`}
-                >
-                  <div className="flex items-center gap-2">
-                    {option.icon}
-                    <span className="font-medium text-gray-900">
-                      {option.label}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500">{option.description}</p>
-                </button>
-              );
-            })}
-          </div>
+    <div className="p-8 space-y-10">
+      {/* Theme Selector Section */}
+      <div>
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-amber-400 to-orange-600" />
+          <h2 className="text-xl font-bold text-white">Appearance</h2>
         </div>
+        <p className="text-sm text-white/40 ml-4 mb-6">
+          Customize how the app looks on your device
+        </p>
 
-        {/* Notifications */}
-        <div>
-          <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
-            <Bell className="w-5 h-5 text-blue-500" /> Notifications
-          </h3>
-          <div className="flex flex-col gap-3">
-            {Object.entries(preferences.notifications).map(([key, value]) => (
-              <div
-                key={key}
-                className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition shadow-sm"
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {themeOptions.map((option) => {
+            const isActive = preferences.theme === option.value;
+            return (
+              <button
+                key={option.value}
+                onClick={() => onThemeChange(option.value)}
+                className={`
+                  group relative p-5 rounded-2xl text-left transition-all duration-300 cursor-pointer
+                  ${isActive
+                    ? "bg-white/[0.08] border-2 border-white/[0.15]"
+                    : "bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.1]"
+                  }
+                `}
               >
-                <div>
-                  <span className="capitalize font-medium text-gray-900">
-                    {key} Notifications
-                  </span>
-                  <p className="text-xs text-gray-500">
-                    {key === "email"
-                      ? "Receive notifications via email"
-                      : "Receive push notifications on your device"}
-                  </p>
+                {/* Check indicator */}
+                {isActive && (
+                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                    <Check className="w-3 h-3 text-white" />
+                  </div>
+                )}
+
+                {/* Icon */}
+                <div className={`
+                  w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all duration-300
+                  ${isActive
+                    ? `bg-gradient-to-br ${option.gradient} text-white shadow-lg`
+                    : "bg-white/[0.06] text-white/50 group-hover:text-white/70"
+                  }
+                `}>
+                  {option.icon}
+                </div>
+
+                <h3 className={`font-semibold mb-1 transition-colors ${isActive ? "text-white" : "text-white/70"}`}>
+                  {option.label}
+                </h3>
+                <p className="text-xs text-white/40">{option.description}</p>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+
+      {/* Notifications Section */}
+      <div>
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-blue-400 to-blue-600" />
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            Notifications
+          </h2>
+        </div>
+        <p className="text-sm text-white/40 ml-4 mb-6">
+          Choose how you want to be notified
+        </p>
+
+        <div className="space-y-3">
+          {notificationOptions.map((option) => {
+            const value = preferences.notifications[option.key as keyof typeof preferences.notifications];
+            return (
+              <div
+                key={option.key}
+                className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`
+                    w-10 h-10 rounded-xl flex items-center justify-center transition-colors
+                    ${value ? "bg-emerald-500/20 text-emerald-400" : "bg-white/[0.06] text-white/40"}
+                  `}>
+                    {option.icon}
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">{option.label}</p>
+                    <p className="text-xs text-white/40">{option.description}</p>
+                  </div>
                 </div>
                 <Switch
                   checked={value}
-                  onCheckedChange={(v) => onNotificationToggle(key, v)}
+                  onCheckedChange={(v) => onNotificationToggle(option.key, v)}
+                  className="data-[state=checked]:bg-emerald-500"
                 />
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

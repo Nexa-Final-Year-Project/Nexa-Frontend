@@ -1,8 +1,8 @@
 import { Modal } from "@/components/ui/modal/Modal";
-import { Button } from "@/components/ui/button/Button";
+import { Button } from "@/components/ui/button";
 import { useForm } from "@mantine/form";
 import React, { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Loader2, Sparkles } from "lucide-react";
 import { FormField as FormFieldComponent } from "@/components/ui/form/FormField";
 import { FormField as FormFieldType } from "@/types/form";
 import { Project } from "@/types/project";
@@ -30,7 +30,7 @@ interface TaskGeneratorModalProps {
     description: string;
     config: Partial<TaskGeneratorConfig>;
     projectId: string;
-  }) => void;
+  }) => Promise<void> | void;
 }
 
 const COMMON_MODULES = [
@@ -175,17 +175,21 @@ const TaskGeneratorModal: React.FC<TaskGeneratorModalProps> = ({
         includeTestCases: formData.includeTestCases || false,
       };
 
-      handleSubmit({
+      // Wait for generation to complete
+      await handleSubmit({
         description: formData.description,
         config,
         projectId,
       });
 
-      // Reset state on close
+      // Reset state and close only after successful generation
       setSelectedModules([]);
       setUseCustomModules(false);
       setCustomModulesText("");
       onClose();
+    } catch (error) {
+      console.error("Task generation failed:", error);
+      // Don't close on error - let user retry
     } finally {
       setLoading(false);
     }
@@ -331,13 +335,23 @@ const TaskGeneratorModal: React.FC<TaskGeneratorModalProps> = ({
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-center pt-2">
+        <div className="flex justify-center pt-4 pb-2">
           <Button
             type="submit"
             disabled={loading || selectedModules.length === 0}
-            className="max-w-sm w-full cursor-pointer"
+            className="w-full max-w-md h-11 text-base font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
-            {loading ? "Generating..." : "Generate Tasks"}
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Generating Tasks...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-5 h-5 mr-2" />
+                Generate Tasks
+              </>
+            )}
           </Button>
         </div>
       </form>

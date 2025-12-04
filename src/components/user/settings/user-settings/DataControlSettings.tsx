@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Database, Download, Archive, HardDrive } from "lucide-react";
 import {
   ArchivedProjectsSection,
   AutoArchiveSection,
@@ -44,30 +44,54 @@ export const DataControlsSettings = ({
   onClearCache,
 }: DataControlsSettingsProps) => {
   return (
-    <Card className="!border-0 !shadow-none">
-      <CardHeader className="pb-0">
-        <CardTitle className="text-2xl font-bold">Data & Controls</CardTitle>
-        <p className="text-sm text-gray-500 mt-1">
-          Manage your account data, storage, and archived items.
+    <div className="p-8 space-y-10">
+      {/* Header */}
+      <div>
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-violet-400 to-violet-600" />
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <Database className="w-5 h-5 text-white/60" />
+            Data & Controls
+          </h2>
+        </div>
+        <p className="text-sm text-white/40 ml-4 mb-6">
+          Manage your account data, storage, and archived items
         </p>
-      </CardHeader>
-      <CardContent className="space-y-10">
+      </div>
+
+      {/* Export Data */}
+      <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-5">
         <ExportDataSection onExportData={onExportData} />
+      </div>
+
+      {/* Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+
+      {/* Auto Archive */}
+      <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-5">
         <AutoArchiveSection
           autoArchive={autoArchive}
           archiveDuration={archiveDuration}
           onToggle={onToggleAutoArchive}
           onChangeDuration={onChangeArchiveDuration}
         />
+      </div>
+
+      {/* Archived Projects */}
+      <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-5">
         <ArchivedProjectsSection
           archivedProjectsCount={archivedProjects.length}
         />
+      </div>
+
+      {/* Storage */}
+      <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-5">
         <StorageSection
           storageUsed={storageUsed}
           storageLimit={storageLimit}
           onClearCache={onClearCache}
         />
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

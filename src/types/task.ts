@@ -6,6 +6,7 @@ export type Task = {
   status: TaskStatus;
   priority: TaskPriority;
   project: string;
+  sprint?: string;
   dueDate?: Date;
   createdBy?: {
     _id: string;

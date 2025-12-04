@@ -229,19 +229,34 @@ export const SprintsTable = ({
   return (
     <div className="space-y-4">
       {/* Filter Panel Trigger */}
-      <div className="flex justify-between items-center">
-        <input
-          type="text"
-          placeholder="Search sprints..."
-          className="border px-3 py-1 rounded"
-          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-        />
+      <div className="flex justify-between items-center gap-4">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+          <input
+            type="text"
+            placeholder="Search sprints..."
+            className="
+              w-full pl-10 pr-4 py-2.5 rounded-xl
+              bg-neutral-900/40 border border-white/[0.06]
+              text-white text-sm placeholder:text-white/30
+              focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20
+              hover:border-white/[0.1] hover:bg-neutral-900/50
+              transition-all duration-300
+            "
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          />
+        </div>
         <Button
           variant="outline"
           onClick={() => setFilterOpen(true)}
-          className="flex items-center cursor-pointer"
+          className="
+            flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer
+            bg-neutral-900/40 border-white/[0.06] text-white/70
+            hover:bg-violet-500/10 hover:border-violet-500/30 hover:text-white
+            transition-all duration-300
+          "
         >
-          <FilterIcon className="h-4 w-4 mr-2" />
+          <FilterIcon className="h-4 w-4" />
           Filters
         </Button>
       </div>
@@ -254,13 +269,15 @@ export const SprintsTable = ({
         applyFilters={applyFilters}
       />
       {/* Table */}
-      <EditableTable<SprintType>
-        columns={columns}
-        data={sprints}
-        onChange={(updated) => {
-          console.log("Updated sprints:", updated);
-        }}
-      />
+      <div className="bg-neutral-900/40 border border-white/[0.06] rounded-2xl overflow-hidden backdrop-blur-sm">
+        <EditableTable<SprintType>
+          columns={columns}
+          data={sprints}
+          onChange={(updated) => {
+            console.log("Updated sprints:", updated);
+          }}
+        />
+      </div>
     </div>
   );
 };

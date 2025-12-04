@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Form } from "@/components/ui/form/Form";
 import type { FormField as FormFieldType } from "@/types/form";
 import {
@@ -8,9 +7,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar/avatar";
-import { Button } from "@/components/ui/button";
-import { ImageIcon } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import { ImageIcon, Upload, User as UserIcon } from "lucide-react";
 import { ImageUploader } from "@/components/ui/image/ImageUploader";
 
 interface UserGeneralSettingsProps {
@@ -56,41 +53,83 @@ export const UserGeneralSettings = ({
   ];
 
   return (
-    <Card className="!shadow-none !border-0">
-      <CardContent className="space-y-8">
-        {/* Profile Information */}
-        <div className="text-left">
-          <h2 className="text-2xl font-bold">Profile Information</h2>
-          <p className="text-sm text-muted-foreground my-3">
-            Update your personal information
-          </p>
+    <div className="p-8 space-y-10">
+      {/* Profile Avatar Section */}
+      <div className="text-left">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-blue-400 to-blue-600" />
+          <h2 className="text-xl font-bold text-white">Profile Photo</h2>
+        </div>
+        <p className="text-sm text-white/40 ml-4 mb-6">
+          This is your public avatar
+        </p>
 
-          {/* Profile Avatar */}
-          <div className="text-left my-4">
-            <ImageUploader
-              shape="circle"
-              aspectRatio={1}
-              initialImage={user?.photoURL}
-              onChange={(file, url) => console.log("Avatar updated", file, url)}
-            />
-
-            {/* <div className="flex items-center gap-6">
-              <Avatar className="h-16 w-16">
-                <AvatarImage src={user.photoURL} />
-                <AvatarFallback className="text-xl">
-                  {user.name?.charAt(0).toUpperCase()}
+        <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-6">
+          <div className="flex items-center gap-8">
+            {/* Avatar Display */}
+            <div className="relative group">
+              <Avatar className="h-24 w-24 rounded-2xl border-2 border-white/[0.08] shadow-lg">
+                <AvatarImage src={user?.photoURL} className="rounded-2xl" />
+                <AvatarFallback className="text-3xl rounded-2xl bg-gradient-to-br from-neutral-800 to-neutral-900 text-white/80 font-semibold">
+                  {user?.name?.charAt(0).toUpperCase() || <UserIcon className="w-10 h-10" />}
                 </AvatarFallback>
               </Avatar>
-            </div> */}
+              <div className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+                <Upload className="w-6 h-6 text-white/80" />
+              </div>
+            </div>
+
+            {/* Upload Info */}
+            <div className="flex-1 space-y-4">
+              <div>
+                <h3 className="text-sm font-medium text-white mb-1">Upload a new photo</h3>
+                <p className="text-xs text-white/40">
+                  Recommended: Square image, at least 256x256px
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button className="
+                  flex items-center gap-2 px-4 py-2.5 rounded-xl
+                  bg-white/[0.06] border border-white/[0.08]
+                  text-sm font-medium text-white/80
+                  hover:bg-white/[0.1] hover:border-white/[0.12]
+                  transition-all duration-200 cursor-pointer
+                ">
+                  <ImageIcon className="w-4 h-4" />
+                  Choose File
+                </button>
+                <span className="text-xs text-white/30">
+                  JPG, PNG or GIF • Max 5MB
+                </span>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+
+      {/* Profile Information Section */}
+      <div className="text-left">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-emerald-400 to-emerald-600" />
+          <h2 className="text-xl font-bold text-white">Profile Information</h2>
+        </div>
+        <p className="text-sm text-white/40 ml-4 mb-6">
+          Update your personal information
+        </p>
+
+        <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-6">
           <Form
             fields={generalFields}
             onSubmit={onSubmit}
             initialValues={initialValues}
-            submitText="Save Changes"
+            submitButtonText="Save Changes"
           />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

@@ -52,6 +52,12 @@ export default function OAuthCallbackPage() {
         // Persist locally
         localStorage.setItem("authToken", idToken);
         localStorage.setItem("userData", JSON.stringify(userData));
+        
+        // Store token expiry time
+        if (decoded.exp) {
+          const expiryTime = decoded.exp * 1000; // Convert to milliseconds
+          useAuthStore.getState().setTokenExpiry(expiryTime);
+        }
 
         setUser(userData);
         if (next) {

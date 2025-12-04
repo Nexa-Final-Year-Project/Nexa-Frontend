@@ -1,18 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { CardContent } from "@/components/ui/card";
+"use client";
+
 import {
   Settings,
   Users,
-  Shield,
   Trash2,
-  Bell,
-  Plug,
-  Activity,
-  Key,
   Lock,
-  Eye,
-  UserX,
   ClipboardList,
+  ChevronRight,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -37,87 +31,46 @@ export const ProjectSettingsSidebar = ({
   activeCategory,
   setActiveCategory,
 }: SidebarProps) => {
-  // Define sidebar items in a structured array
   const sidebarItems: SidebarItem[] = [
-    // Project category
     {
       id: "general",
       label: "General",
-      icon: <Settings className="w-4 h-4 mr-2 dark:text-white" />,
+      icon: <Settings className="w-4 h-4" />,
       category: "Project",
     },
-    // {
-    //   id: "appearance",
-    //   label: "Appearance",
-    //   icon: <Eye className="w-4 h-4 mr-2" />,
-    //   category: "Project",
-    // },
-
-    // Team category
     {
       id: "members",
       label: "Members",
-      icon: <Users className="w-4 h-4 mr-2 dark:text-white" />,
+      icon: <Users className="w-4 h-4" />,
       category: "Team",
     },
-    // {
-    //   id: "invitations",
-    //   label: "Invitations",
-    //   icon: <UserX className="w-4 h-4 mr-2" />,
-    //   category: "Team",
-    // },
-
-    // Permissions category (with nested items)
     {
       id: "permissions-tasks",
       label: "Tasks",
-      icon: <ClipboardList className="w-4 h-4 mr-2 dark:text-white" />,
+      icon: <ClipboardList className="w-4 h-4" />,
       category: "Permissions",
     },
     {
       id: "permissions-project",
       label: "Project",
-      icon: <ClipboardList className="w-4 h-4 mr-2 dark:text-white" />,
+      icon: <ClipboardList className="w-4 h-4" />,
       category: "Permissions",
     },
     {
       id: "permissions-access",
       label: "Access Control",
-      icon: <Lock className="w-4 h-4 mr-2 dark:text-white" />,
+      icon: <Lock className="w-4 h-4" />,
       category: "Permissions",
     },
-
-    // System category
-    // {
-    //   id: "integrations",
-    //   label: "Integrations",
-    //   icon: <Plug className="w-4 h-4 mr-2" />,
-    //   category: "System",
-    // },
-    // {
-    //   id: "notifications",
-    //   label: "Notifications",
-    //   icon: <Bell className="w-4 h-4 mr-2" />,
-    //   category: "System",
-    // },
-    // {
-    //   id: "activity",
-    //   label: "Activity Logs",
-    //   icon: <Activity className="w-4 h-4 mr-2" />,
-    //   category: "System",
-    // },
-
-    // Danger Zone category
     {
       id: "danger",
       label: "Delete Project",
-      icon: <Trash2 className="w-4 h-4 mr-2 dark:text-white" />,
+      icon: <Trash2 className="w-4 h-4" />,
       category: "Danger Zone",
       destructive: true,
     },
   ];
 
-  // Group items by category
   const categorizedItems = sidebarItems.reduce((acc, item) => {
     if (!acc[item.category!]) {
       acc[item.category!] = [];
@@ -128,49 +81,86 @@ export const ProjectSettingsSidebar = ({
 
   return (
     <div className="w-full md:w-72 flex-shrink-0">
-      <div className="md:sticky md:top-6 !bg-transparent !border-none">
-        <CardContent className="p-0 text-left">
-          <nav className="space-y-8">
+      <div className="md:sticky md:top-6">
+        <div className="rounded-2xl bg-neutral-900/40 dark:bg-neutral-900/40 border border-white/[0.06] p-4 backdrop-blur-sm">
+          <nav className="space-y-6">
             {Object.entries(categorizedItems).map(([category, items]) => (
               <div key={category}>
-                <p className="px-4 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  {category}
-                </p>
+                <div className="flex items-center gap-2 px-3 mb-3">
+                  <div className={`w-1.5 h-1.5 rounded-full ${
+                    category === "Danger Zone" ? "bg-rose-500" : "bg-emerald-500"
+                  }`} />
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
+                    {category}
+                  </span>
+                </div>
 
-                <div
-                  className={
-                    items.some((item) => item.nested)
-                      ? "space-y-1 pl-2 border-l ml-2"
-                      : "space-y-1"
-                  }
-                >
-                  {items.map((item) => (
-                    <Button
-                      key={item.id}
-                      variant={
-                        activeSection === item.id ? "secondary" : "ghost"
-                      }
-                      className={`w-full justify-start px-4 py-2 dark:text-white cursor-pointer ${
-                        item.destructive
-                          ? "text-destructive hover:text-destructive dark:text-red-400"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        setActiveSection(item.id);
-                        if (setActiveCategory && item.category !== undefined) {
-                          setActiveCategory(item.category);
-                        }
-                      }}
-                    >
-                      {item.icon}
-                      {item.label}
-                    </Button>
-                  ))}
+                <div className="space-y-1">
+                  {items.map((item) => {
+                    const isActive = activeSection === item.id;
+                    
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setActiveSection(item.id);
+                          if (setActiveCategory && item.category !== undefined) {
+                            setActiveCategory(item.category);
+                          }
+                        }}
+                        className={`
+                          group w-full flex items-center justify-between px-3 py-2.5 rounded-xl
+                          transition-all duration-200 cursor-pointer text-left
+                          ${isActive 
+                            ? item.destructive
+                              ? "bg-rose-500/10 border border-rose-500/20"
+                              : "bg-white/[0.08] border border-white/[0.08]"
+                            : "border border-transparent hover:bg-white/[0.04]"
+                          }
+                        `}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`
+                            flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200
+                            ${isActive
+                              ? item.destructive
+                                ? "bg-rose-500/20 text-rose-400"
+                                : "bg-white/10 text-white"
+                              : item.destructive
+                                ? "bg-rose-500/10 text-rose-400/60 group-hover:text-rose-400"
+                                : "bg-white/[0.04] text-white/50 group-hover:text-white/80"
+                            }
+                          `}>
+                            {item.icon}
+                          </div>
+                          <span className={`
+                            text-sm font-medium transition-colors duration-200
+                            ${isActive
+                              ? item.destructive ? "text-rose-400" : "text-white"
+                              : item.destructive
+                                ? "text-rose-400/60 group-hover:text-rose-400"
+                                : "text-white/60 group-hover:text-white/90"
+                            }
+                          `}>
+                            {item.label}
+                          </span>
+                        </div>
+                        
+                        <ChevronRight className={`
+                          w-4 h-4 transition-all duration-200
+                          ${isActive
+                            ? item.destructive ? "text-rose-400/60" : "text-white/40"
+                            : "text-white/20 opacity-0 group-hover:opacity-100"
+                          }
+                        `} />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             ))}
           </nav>
-        </CardContent>
+        </div>
       </div>
     </div>
   );

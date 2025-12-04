@@ -6,7 +6,7 @@ import toast from "@/lib/customToast";
 import { ProjectSettingsSidebar } from "@/components/project-settings/ProjectSettingsSidebar";
 import { GeneralSettings } from "@/components/project-settings/GeneralSettings";
 import { TeamSettings } from "@/components/project-settings/TeamSettings";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Settings } from "lucide-react";
 import {
   ActivityLogsSettings,
   AppearanceSettings,
@@ -26,7 +26,11 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
   const { updateProject } = useProjects();
 
   if (!project) {
-    return <div>Project not found</div>;
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-white/40 text-lg">Project not found</div>
+      </div>
+    );
   }
 
   const handleUpdateProject = async (values: Record<string, any>) => {
@@ -39,33 +43,22 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
     visibility: project.visibility || "private",
   };
 
-  // Map sections to their respective categories
   const sectionCategories: Record<string, string> = {
-    // Project category
     general: "Project",
     appearance: "Project",
-
-    // Team category
     members: "Team",
     invitations: "Team",
-
-    // Permissions category
     "permissions-tasks": "Permissions",
     "permissions-project": "Permissions",
     "permissions-access": "Permissions",
-
-    // System category
     integrations: "System",
     notifications: "System",
     activity: "System",
-
-    // Danger Zone category
     danger: "Danger Zone",
   };
 
   const handleSectionChange = (sectionId: string) => {
     setActiveSection(sectionId);
-    // Update the active category based on the selected section
     const category = sectionCategories[sectionId] || "Project";
     setActiveCategory(category);
   };
@@ -85,7 +78,7 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
       case "members":
         return <TeamSettings project={project} members={members} />;
       case "invitations":
-        return <div className="p-6">Invitations Settings - Coming Soon</div>;
+        return <div className="p-6 text-white/40">Invitations Settings - Coming Soon</div>;
       case "permissions-tasks":
         return <PermissionsSettings tab="tasks" />;
       case "permissions-project":
@@ -110,19 +103,27 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Breadcrumb */}
-      <nav className="flex items-center text-sm text-muted-foreground mb-6">
-        <span className="text-foreground font-bold text-2xl">Settings</span>
-        <ChevronRight className="w-4 h-4 mx-2" />
-        <span className="hover:text-foreground cursor-pointer">
-          {activeCategory}
-        </span>
-        <ChevronRight className="w-4 h-4 mx-2" />
-        <span className="text-foreground font-medium capitalize">
-          {activeSection.replace(/-/g, " ")}
-        </span>
-      </nav>
+    <div className="min-h-screen">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-neutral-900/60 border border-white/[0.06] backdrop-blur-sm">
+            <Settings className="w-6 h-6 text-white/80" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Settings</h1>
+            <div className="flex items-center text-sm text-white/40 mt-1">
+              <span className="hover:text-white/60 cursor-pointer transition-colors">
+                {activeCategory}
+              </span>
+              <ChevronRight className="w-3.5 h-3.5 mx-1.5 text-white/20" />
+              <span className="text-white/60 capitalize">
+                {activeSection.replace(/-/g, " ")}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
         <ProjectSettingsSidebar
@@ -133,7 +134,7 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
         />
 
         <div className="flex-1">
-          <div className="bg-background rounded-lg border-l p-6">
+          <div className="rounded-2xl bg-neutral-900/40 dark:bg-neutral-900/40 border border-white/[0.06] backdrop-blur-sm overflow-hidden">
             {renderActiveSection()}
           </div>
         </div>

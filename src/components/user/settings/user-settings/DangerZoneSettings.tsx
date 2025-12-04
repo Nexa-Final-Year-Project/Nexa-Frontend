@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Trash2, AlertTriangle } from "lucide-react";
+import { Trash2, AlertTriangle, RotateCcw } from "lucide-react";
 
 interface DangerZoneSettingsProps {
   onDeleteAccount?: () => void;
@@ -15,56 +13,87 @@ export const DangerZoneSettings: React.FC<DangerZoneSettingsProps> = ({
   onResetData,
 }) => {
   return (
-    <Card className="!border-0 !shadow-none">
-      <CardHeader className="pb-0">
-        <CardTitle className="text-2xl font-bold flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-red-500" /> Danger Zone
-        </CardTitle>
-        <p className="text-sm text-gray-500 mt-1">
-          Actions in this section are irreversible. Please proceed with caution.
+    <div className="p-8 space-y-10">
+      {/* Danger Zone Header */}
+      <div>
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-rose-400 to-rose-600" />
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-rose-400" />
+            Danger Zone
+          </h2>
+        </div>
+        <p className="text-sm text-white/40 ml-4 mb-6">
+          Actions in this section are irreversible. Please proceed with extreme caution.
         </p>
-      </CardHeader>
 
-      <CardContent className="space-y-6">
-        {/* Delete Account */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-lg border hover:bg-gray-50 transition shadow-sm">
-          <div>
-            <span className="font-medium text-gray-900">Delete Account</span>
-            <p className="text-xs text-gray-500">
-              Permanently delete your account and all associated data. This
-              action cannot be undone.
-            </p>
+        <div className="space-y-4">
+          {/* Reset Data */}
+          <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-amber-500/20 transition-colors p-5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                  <RotateCcw className="w-5 h-5 text-amber-400" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white mb-1">Reset All Data</h3>
+                  <p className="text-sm text-white/40">
+                    Reset all your app data to default settings. This will not delete your account but will clear all preferences and history.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={onResetData}
+                className="
+                  flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+                  bg-amber-500/10 border border-amber-500/20
+                  text-sm font-medium text-amber-400
+                  hover:bg-amber-500/20 hover:border-amber-500/30
+                  transition-all duration-200 cursor-pointer
+                  flex-shrink-0
+                "
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reset Data
+              </button>
+            </div>
           </div>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={onDeleteAccount}
-            className="mt-2 sm:mt-0"
-          >
-            <Trash2 className="w-4 h-4 mr-1" /> Delete Account
-          </Button>
-        </div>
 
-        {/* Reset Data */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-lg border hover:bg-gray-50 transition shadow-sm">
-          <div>
-            <span className="font-medium text-gray-900">Reset Data</span>
-            <p className="text-xs text-gray-500">
-              Reset all your app data to default settings. This will not delete
-              your account.
-            </p>
+          {/* Delete Account */}
+          <div className="rounded-xl bg-rose-500/[0.03] border border-rose-500/10 hover:border-rose-500/20 transition-colors p-5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center flex-shrink-0">
+                  <Trash2 className="w-5 h-5 text-rose-400" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white mb-1">Delete Account</h3>
+                  <p className="text-sm text-white/40">
+                    Permanently delete your account and all associated data. This action cannot be undone and all your projects will be lost.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={onDeleteAccount}
+                className="
+                  flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+                  bg-rose-500/10 border border-rose-500/20
+                  text-sm font-medium text-rose-400
+                  hover:bg-rose-500/20 hover:border-rose-500/30
+                  shadow-[0_0_20px_rgba(244,63,94,0.15)]
+                  hover:shadow-[0_0_30px_rgba(244,63,94,0.25)]
+                  transition-all duration-200 cursor-pointer
+                  flex-shrink-0
+                "
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete Account
+              </button>
+            </div>
           </div>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={onResetData}
-            className="mt-2 sm:mt-0"
-          >
-            <Trash2 className="w-4 h-4 mr-1" /> Reset Data
-          </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

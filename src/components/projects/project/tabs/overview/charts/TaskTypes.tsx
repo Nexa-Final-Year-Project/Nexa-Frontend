@@ -11,7 +11,7 @@ const TASK_TYPE_COLORS = {
   Bug: "#EF4444", // red
   Improvement: "#10B981", // green
   Documentation: "#F59E0B", // orange
-  Other: "#94A3B8", // slate-400
+  Other: "#94A3B8", // gray-400
 };
 
 const TYPE_ICONS = {
@@ -19,7 +19,7 @@ const TYPE_ICONS = {
   Bug: <Bug className="w-3.5 h-3.5 text-red-500" />,
   Improvement: <TrendingUp className="w-3.5 h-3.5 text-green-500" />,
   Documentation: <BookText className="w-3.5 h-3.5 text-amber-500" />,
-  Other: <FileQuestion className="w-3.5 h-3.5 text-slate-400" />,
+  Other: <FileQuestion className="w-3.5 h-3.5 text-gray-400" />,
 };
 
 export const TaskTypes = ({ tasks }: { tasks: Task[] }) => {

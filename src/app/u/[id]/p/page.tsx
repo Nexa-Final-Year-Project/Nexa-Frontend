@@ -12,10 +12,17 @@ import {
   Trash2,
   Eye,
   ArchiveRestore,
+  FolderKanban,
+  Plus,
+  ArrowLeft,
 } from "lucide-react";
 import { ReusableDropdownMenu } from "@/components/ui/dropdown/ReusableDropdownMenu";
 import { Button } from "@/components/ui/button";
 import CustomLink from "@/components/shared/customlink/CustomLink";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const items = (projectId: string) => {
   return [
@@ -166,6 +173,10 @@ export default function ProjectsPage() {
     order: "desc",
   });
   const [projectData, setProjectData] = useState(projects || []);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  const params = useParams();
 
   const handleTableChange = (updatedProjects: Project[]) => {
     setProjectData(updatedProjects);
@@ -179,14 +190,104 @@ export default function ProjectsPage() {
   }, [projects?.length]);
 
   return (
-    <div className="p-6">
-      <h1 className="mb-4 text-2xl font-bold">Projects</h1>
-      <EditableTable
-        columns={columns}
-        data={projectData || []}
-        loading={isLoading}
-        onChange={handleTableChange}
-      />
+    <div className={cn(
+      "relative p-6",
+      isDark ? "bg-transparent" : "bg-neutral-50"
+    )}>
+      {/* Background ambient effects */}
+      {isDark && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[100px]" />
+        </div>
+      )}
+
+      {/* Page Header */}
+      <div className="flex flex-col gap-6 mb-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {/* Back Button */}
+            <Link
+              href={`/u/${params.id}`}
+              className={cn(
+                "p-2.5 rounded-xl border transition-all",
+                isDark 
+                  ? "bg-white/[0.04] border-white/[0.06] hover:bg-white/[0.06]"
+                  : "bg-white border-neutral-200 hover:bg-neutral-50 shadow-sm"
+              )}
+            >
+              <ArrowLeft className={cn(
+                "w-5 h-5",
+                isDark ? "text-white/60" : "text-neutral-500"
+              )} />
+            </Link>
+            
+            <div className={cn(
+              "w-12 h-12 rounded-xl border flex items-center justify-center",
+              isDark 
+                ? "bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                : "bg-gradient-to-br from-emerald-50 to-cyan-50 border-emerald-200"
+            )}>
+              <FolderKanban className="w-6 h-6 text-emerald-500" />
+            </div>
+            <div>
+              <h1 className={cn(
+                "text-2xl font-bold tracking-tight",
+                isDark ? "text-white" : "text-neutral-900"
+              )}>Projects</h1>
+              <p className={cn(
+                "text-sm mt-0.5",
+                isDark ? "text-white/40" : "text-neutral-500"
+              )}>Manage and organize all your projects</p>
+            </div>
+          </div>
+          
+          {/* Create Project Button */}
+          <Button
+            className="
+              flex items-center gap-2
+              px-5 py-2.5 h-auto
+              text-sm font-medium text-white
+              bg-gradient-to-r from-emerald-600 to-cyan-600
+              border border-emerald-500/30
+              rounded-xl cursor-pointer
+              hover:shadow-[0_0_25px_rgba(16,185,129,0.3)]
+              transition-all duration-300
+              group
+            "
+          >
+            <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
+            New Project
+          </Button>
+        </div>
+
+        {/* Decorative divider */}
+        <div className="relative h-px">
+          <div className={cn(
+            "absolute inset-0 bg-gradient-to-r from-transparent to-transparent",
+            isDark ? "via-white/[0.08]" : "via-neutral-200"
+          )} />
+          <div className={cn(
+            "absolute left-0 w-20 h-px bg-gradient-to-r to-transparent",
+            isDark ? "from-emerald-500/50" : "from-emerald-400"
+          )} />
+        </div>
+      </div>
+
+      {/* Table Container */}
+      <div className={cn(
+        "rounded-2xl overflow-hidden backdrop-blur-sm border",
+        isDark 
+          ? "bg-neutral-900/30 border-white/[0.06]"
+          : "bg-white border-neutral-200 shadow-sm"
+      )}>
+        <EditableTable
+          columns={columns}
+          data={projectData || []}
+          loading={isLoading}
+          onChange={handleTableChange}
+        />
+      </div>
     </div>
   );
 }

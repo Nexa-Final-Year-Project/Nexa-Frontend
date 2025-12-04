@@ -54,11 +54,11 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
     return (
       <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-start py-2 animate-pulse">
-            <div className="h-5 w-5 rounded bg-gray-200 mr-3 mt-0.5"></div>
+          <div key={i} className="flex items-start py-3 px-4 animate-pulse bg-white/[0.02] rounded-xl border border-white/[0.04]">
+            <div className="h-10 w-10 rounded-xl bg-white/[0.05] mr-4"></div>
             <div className="flex-1">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-4 bg-white/[0.05] rounded-lg w-3/4 mb-2"></div>
+              <div className="h-3 bg-white/[0.05] rounded-lg w-1/2"></div>
             </div>
           </div>
         ))}
@@ -67,7 +67,15 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
 
   if (error && !logs)
     return (
-      <div className="text-red-500 text-sm p-2 bg-red-50 rounded">
+      <div className="
+        flex items-center gap-3
+        text-rose-400 text-sm p-4
+        bg-rose-500/10 border border-rose-500/20
+        rounded-xl
+      ">
+        <div className="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center">
+          <Trash2 className="w-4 h-4" />
+        </div>
         Error loading activity logs: {error.message}
       </div>
     );
@@ -86,27 +94,38 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
           return (
             <div
               key={log._id}
-              className="border-b border-gray-100 pb-2 last:border-b-0"
+              className="
+                relative overflow-hidden
+                border-b border-white/[0.04] pb-3
+                last:border-b-0
+                group/log
+              "
             >
               <div className="flex items-start">
                 {/* Action Icon */}
-                <div className={`p-1.5 rounded-md mr-3 mt-0.5 ${actionColor}`}>
+                <div className={`
+                  p-2.5 rounded-xl mr-4 mt-0.5
+                  ${actionColor}
+                  border border-white/[0.06]
+                  transition-transform duration-300
+                  group-hover/log:scale-105
+                `}>
                   {actionIcon}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center flex-wrap">
-                      <span className="text-sm font-semibold text-gray-900 dark:text-gray-300 mr-1.5">
+                      <span className="text-sm font-semibold text-white/90 mr-1.5">
                         {actionText}
                       </span>
-                      <span className="text-sm text-gray-700 dark:text-gray-400 mr-1.5">
+                      <span className="text-sm text-white/50 mr-1.5">
                         {log.entityType.toLowerCase()}
                       </span>
                       {log.task && (
                         <div className="flex items-center ml-1.5">
                           {getEntityIcon("task")}
-                          <span className="text-sm text-gray-600 ml-1">
+                          <span className="text-sm text-white/60 ml-1">
                             "{log.task.title}"
                           </span>
                         </div>
@@ -114,7 +133,7 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
                       {log.project && (
                         <div className="flex items-center ml-1.5">
                           {getEntityIcon("project")}
-                          <span className="text-sm text-gray-600 ml-1">
+                          <span className="text-sm text-white/60 ml-1">
                             "{log.project.name}"
                           </span>
                         </div>
@@ -123,7 +142,12 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
 
                     <button
                       onClick={() => toggleLogExpansion(log._id)}
-                      className="text-gray-400 hover:text-gray-600 ml-2 flex items-center text-xs"
+                      className="
+                        text-white/30 hover:text-white/60
+                        ml-2 p-1.5 rounded-lg
+                        hover:bg-white/[0.05]
+                        transition-all duration-200 cursor-pointer
+                      "
                     >
                       {isExpanded ? (
                         <ChevronDown size={14} />
@@ -133,39 +157,43 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
                     </button>
                   </div>
 
-                  <div className="flex items-center text-xs text-gray-500 mt-1">
-                    <Clock size={12} className="mr-1" />
+                  <div className="flex items-center text-xs text-white/40 mt-1.5">
+                    <Clock size={12} className="mr-1.5" />
                     {formatDate(log.timestamp)}
                   </div>
 
                   {/* Expanded details */}
                   {isExpanded && (
-                    <div className="mt-2 p-3 rounded-lg text-xs bg-gray-50 border border-gray-200 text-gray-700 dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-200">
-                      <div className="font-medium mb-2 text-sm text-gray-800 dark:text-gray-100">
+                    <div className="
+                      mt-3 p-4 rounded-xl text-xs
+                      bg-white/[0.02] border border-white/[0.06]
+                      text-white/70
+                    ">
+                      <div className="font-medium mb-3 text-sm text-white/80">
                         Changes:
                       </div>
 
                       {changes.length > 0 ? (
-                        <div className="space-y-1.5">
+                        <div className="space-y-2">
                           {changes.map((change, i) => (
                             <div key={i} className="flex items-center">
-                              <span className="font-medium text-gray-700 capitalize mr-1 dark:text-gray-200">
+                              <span className="font-medium text-white/60 capitalize mr-2">
                                 {change.field}:
                               </span>
-                              <span className="line-through text-red-600 mr-1 dark:text-red-400">
+                              <span className="line-through text-rose-400/70 mr-2">
                                 {String(change.oldVal) || "empty"}
                               </span>
-                              <span className="text-gray-400 mx-1 dark:text-gray-400">
+                              <span className="text-white/30 mx-1">
                                 →
                               </span>
-                              <span className="text-green-700 font-medium dark:text-green-400">
+                              <span className="text-emerald-400 font-medium ml-2">
                                 {String(change.newVal) || "empty"}
                               </span>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <div className="text-gray-500 italic dark:text-gray-400">
+                        <div className="text-white/40 italic">
                           No detailed changes recorded
                         </div>
                       )}
@@ -179,11 +207,15 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
       </div>
 
       {sortedLogs.length === 0 && (
-        <div className="py-6 text-center">
-          <div className="bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2">
-            <Calendar className="h-5 w-5 text-gray-400" />
+        <div className="py-8 text-center">
+          <div className="
+            w-12 h-12 rounded-xl
+            bg-white/[0.03] border border-white/[0.06]
+            flex items-center justify-center mx-auto mb-3
+          ">
+            <Calendar className="h-5 w-5 text-white/30" />
           </div>
-          <p className="text-sm text-gray-500">No activity yet</p>
+          <p className="text-sm text-white/40">No activity yet</p>
         </div>
       )}
     </div>
@@ -214,38 +246,38 @@ function getActionDetails(action: string) {
     case "created":
       return {
         actionText: "Created",
-        actionIcon: <Plus size={size} className="text-white" />,
-        actionColor: "bg-green-500",
+        actionIcon: <Plus size={size} className="text-emerald-400" />,
+        actionColor: "bg-emerald-500/20",
       };
     case "updated":
       return {
         actionText: "Updated",
-        actionIcon: <Edit3 size={size} className="text-white" />,
-        actionColor: "bg-blue-500",
+        actionIcon: <Edit3 size={size} className="text-violet-400" />,
+        actionColor: "bg-violet-500/20",
       };
     case "deleted":
       return {
         actionText: "Deleted",
-        actionIcon: <Trash2 size={size} className="text-white" />,
-        actionColor: "bg-red-500",
+        actionIcon: <Trash2 size={size} className="text-rose-400" />,
+        actionColor: "bg-rose-500/20",
       };
     case "moved":
       return {
         actionText: "Moved",
-        actionIcon: <Move size={size} className="text-white" />,
-        actionColor: "bg-yellow-500",
+        actionIcon: <Move size={size} className="text-amber-400" />,
+        actionColor: "bg-amber-500/20",
       };
     case "completed":
       return {
         actionText: "Completed",
-        actionIcon: <CheckSquare size={size} className="text-white" />,
-        actionColor: "bg-purple-500",
+        actionIcon: <CheckSquare size={size} className="text-cyan-400" />,
+        actionColor: "bg-cyan-500/20",
       };
     default:
       return {
         actionText: action,
-        actionIcon: <Edit3 size={size} className="text-white" />,
-        actionColor: "bg-gray-500",
+        actionIcon: <Edit3 size={size} className="text-white/50" />,
+        actionColor: "bg-white/[0.05]",
       };
   }
 }
@@ -255,13 +287,13 @@ function getEntityIcon(entityType: string) {
 
   switch (entityType.toLowerCase()) {
     case "task":
-      return <CheckSquare size={size} className="text-gray-500 mr-1" />;
+      return <CheckSquare size={size} className="text-violet-400 mr-1" />;
     case "project":
-      return <Folder size={size} className="text-gray-500 mr-1" />;
+      return <Folder size={size} className="text-emerald-400 mr-1" />;
     case "document":
-      return <FileText size={size} className="text-gray-500 mr-1" />;
+      return <FileText size={size} className="text-cyan-400 mr-1" />;
     default:
-      return <FileText size={size} className="text-gray-500 mr-1" />;
+      return <FileText size={size} className="text-white/40 mr-1" />;
   }
 }
 

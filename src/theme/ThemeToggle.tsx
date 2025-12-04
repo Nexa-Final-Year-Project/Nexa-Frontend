@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const isDark = theme === "dark";
 
   useEffect(() => {
     setMounted(true);
@@ -14,22 +15,22 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="w-14 h-8 bg-gray-200 dark:bg-gray-700 rounded-full" />
+      <div className="w-14 h-8 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
     );
   }
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setTheme(isDark ? "light" : "dark");
   };
 
   return (
     <button
       onClick={toggleTheme}
-      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
       className={`
         w-14 h-8 flex items-center cursor-pointer rounded-full p-1 transition-colors
-        ${theme === "dark" ? "bg-gradient-stone-cable" : "bg-gray-200"}
-        focus:outline-none focus:ring-2 focus:ring-dark-pants-500
+        ${isDark ? "bg-neutral-700" : "bg-neutral-200"}
+        focus:outline-none focus:ring-2 focus:ring-neutral-400
       `}
     >
       <motion.div
@@ -41,16 +42,16 @@ export function ThemeToggle() {
         }}
         className={`
           h-6 w-6 rounded-full shadow-md flex items-center justify-center
-          ${theme === "dark" ? "bg-white" : "bg-yellow-200"}
+          ${isDark ? "bg-white" : "bg-amber-100"}
         `}
         style={{
-          x: theme === "dark" ? 26 : 0,
+          x: isDark ? 26 : 0,
         }}
       >
-        {theme === "dark" ? (
-          <MoonIcon className="w-3 h-3 text-stone-cable" />
+        {isDark ? (
+          <MoonIcon className="w-3 h-3 text-neutral-700" />
         ) : (
-          <SunIcon className="w-3 h-3 text-yellow-600" />
+          <SunIcon className="w-3 h-3 text-amber-600" />
         )}
       </motion.div>
     </button>

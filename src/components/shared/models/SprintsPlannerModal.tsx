@@ -5,6 +5,7 @@ import { useSprints } from "@/hooks/sprints/useSprints";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/shared/Spinner";
 import toast from "@/lib/customToast";
+import { Sparkles, FolderKanban, ChevronDown } from "lucide-react";
 
 interface SprintPlannerModalProps {
   isOpen: boolean;
@@ -56,105 +57,146 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
     }
   };
 
+  const selectedProject = projects?.find((p) => p._id === selectedProjectId);
+
   return (
     <Modal
       title="Sprint Planner"
       open={isOpen}
       onOpenChange={onClose}
-      size="md"
+      size="lg"
       hideTrigger
     >
-      <div className="space-y-4 py-2">
-        <label className="block text-sm font-medium">Project</label>
-        <div>
+      <div className="py-4 min-h-[400px] flex flex-col">
+        {/* Header Description */}
+        <div className="flex items-start gap-4 mb-6 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+          <div className="p-2.5 rounded-xl bg-emerald-500/10">
+            <Sparkles className="w-5 h-5 text-emerald-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-white mb-1">AI-Powered Sprint Generation</h3>
+            <p className="text-sm text-white/50">
+              Our AI will analyze your project's tasks, team capacity, and historical velocity 
+              to create an optimized sprint plan with balanced workload distribution.
+            </p>
+          </div>
+        </div>
+
+        {/* Project Selection */}
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-white mb-2">Select Project</label>
           <div className="relative" ref={comboboxRef}>
-            <input
-              type="text"
-              placeholder="Search or select a project..."
-              value={query || projects?.find((p) => p._id === selectedProjectId)?.name || ""}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setDropdownOpen(true);
-                setHighlightedIndex(0);
-              }}
-              onFocus={() => setDropdownOpen(true)}
-              onKeyDown={(e) => {
-                const filtered = (projects || []).filter((p) =>
-                  p.name.toLowerCase().includes((query || "").toLowerCase())
-                );
-                if (e.key === "ArrowDown") {
-                  e.preventDefault();
+            <div className="relative">
+              <FolderKanban className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                type="text"
+                placeholder="Search or select a project..."
+                value={query || selectedProject?.name || ""}
+                onChange={(e) => {
+                  setQuery(e.target.value);
                   setDropdownOpen(true);
-                  setHighlightedIndex((hi) => Math.min(hi + 1, filtered.length - 1));
-                } else if (e.key === "ArrowUp") {
-                  e.preventDefault();
-                  setHighlightedIndex((hi) => Math.max(hi - 1, 0));
-                } else if (e.key === "Enter") {
-                  e.preventDefault();
-                  const sel = filtered[highlightedIndex];
-                  if (sel) {
-                    setSelectedProjectId(sel._id);
-                    setQuery(sel.name);
+                  setHighlightedIndex(0);
+                }}
+                  onFocus={() => setDropdownOpen(true)}
+                onKeyDown={(e) => {
+                  const filtered = (projects || []).filter((p) =>
+                    p.name.toLowerCase().includes((query || "").toLowerCase())
+                  );
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    setDropdownOpen(true);
+                    setHighlightedIndex((hi) => Math.min(hi + 1, filtered.length - 1));
+                  } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    setHighlightedIndex((hi) => Math.max(hi - 1, 0));
+                  } else if (e.key === "Enter") {
+                    e.preventDefault();
+                    const sel = filtered[highlightedIndex];
+                    if (sel) {
+                      setSelectedProjectId(sel._id);
+                      setQuery(sel.name);
+                      setDropdownOpen(false);
+                    }
+                  } else if (e.key === "Escape") {
                     setDropdownOpen(false);
                   }
-                } else if (e.key === "Escape") {
-                  setDropdownOpen(false);
-                }
-              }}
-              className="w-full rounded-lg border px-3 py-2 shadow-sm bg-background focus:outline-none focus:ring-2 focus:ring-accent"
-            />
-
-            <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-muted-foreground">▾</div>
+                }}
+                className="w-full pl-10 pr-10 py-3 rounded-xl border border-white/[0.08] bg-neutral-900/60 text-white placeholder:text-white/30 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all"
+              />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+            </div>
 
             {dropdownOpen && (
-              <ul className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-popover p-1 shadow-lg">
+              <ul className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-white/[0.08] bg-neutral-900 p-1 shadow-xl">
                 {(projects || [])
                   .filter((p) =>
                     p.name.toLowerCase().includes((query || "").toLowerCase())
                   )
                   .map((p, idx) => {
                     const isHighlighted = idx === highlightedIndex;
+                    const isSelected = selectedProjectId === p._id;
                     return (
                       <li
                         key={p._id}
-                        data-selected={selectedProjectId === p._id}
+                        data-selected={isSelected}
                         onMouseDown={(ev) => {
-                          // use onMouseDown to avoid blur before click
                           ev.preventDefault();
                           setSelectedProjectId(p._id);
                           setQuery(p.name);
                           setDropdownOpen(false);
                         }}
                         onMouseEnter={() => setHighlightedIndex(idx)}
-                        className={`cursor-pointer rounded-md px-3 py-2 ${
-                          isHighlighted ? "bg-accent text-accent-foreground" : "hover:bg-accent/30"
-                        }`}
+                        className={`cursor-pointer rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                          isHighlighted ? "bg-emerald-500/20 text-white" : "text-white/70 hover:bg-white/[0.04]"
+                        } ${isSelected ? "bg-emerald-500/10 border-l-2 border-emerald-500" : ""}`}
                       >
-                        {p.name}
+                        <div className="flex items-center gap-2">
+                          <FolderKanban className="w-4 h-4 text-emerald-400" />
+                          {p.name}
+                        </div>
                       </li>
                     );
                   })}
                 {(projects || []).filter((p) => p.name.toLowerCase().includes((query || "").toLowerCase())).length === 0 && (
-                  <li className="px-3 py-2 text-sm text-muted-foreground">No projects found</li>
+                  <li className="px-3 py-2.5 text-sm text-white/40">No projects found</li>
                 )}
               </ul>
             )}
           </div>
+
+          {/* Selected Project Info */}
+          {selectedProject && (
+            <div className="mt-4 p-4 rounded-xl bg-neutral-900/40 border border-white/[0.06]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 flex items-center justify-center">
+                  <FolderKanban className="w-6 h-6 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="font-medium text-white">{selectedProject.name}</p>
+                  <p className="text-xs text-white/40">{selectedProject.description || "No description"}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="flex justify-center pt-4">
+        {/* Generate Button */}
+        <div className="pt-6 mt-auto">
           <Button
             onClick={handleGenerate}
             disabled={!selectedProjectId || loading}
-            className="max-w-sm w-full cursor-pointer"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             {loading ? (
-              <div className="flex items-center justify-center gap-2 w-full">
+              <div className="flex items-center justify-center gap-2">
                 <Spinner size="sm" />
-                Generating...
+                Generating Sprint Plan...
               </div>
             ) : (
-              "Generate Sprint Plan"
+              <div className="flex items-center justify-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Generate Sprint Plan
+              </div>
             )}
           </Button>
         </div>

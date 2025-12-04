@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAddNotification } from "@/store/notifications/notificationStore";
 import { useTaskStore } from "@/store/tasks/taskStore";
+import { useAuthStore } from "@/store/auth/authStore";
 import type { Task } from "@/types/task";
 import toast from "@/lib/customToast";
 
@@ -112,10 +113,23 @@ export const useTasks = (projectId?: string) => {
           );
           // Avoid duplicating same reportId
           const has = reportId
-            ? existing.some((r: any) => r.reportId === reportId)
+            ? existing.some((r: any) => r.reportId === reportId || r._id === reportId)
             : false;
+          
+          // Get current user for ownership
+          const { user } = useAuthStore.getState();
+          
           const payloadToSave = {
             ...response,
+            // Ensure we have the _id set from reportId
+            _id: reportId,
+            reportId: reportId,
+            projectId,
+            // Set owner info
+            ownerId: user?.id || null,
+            ownerEmail: user?.email || null,
+            createdAt: new Date().toISOString(),
+            status: "pending_review",
             displayTitle:
               response?.displayTitle ||
               `Auto Report • ${
@@ -131,6 +145,8 @@ export const useTasks = (projectId?: string) => {
               "generationReports",
               JSON.stringify([payloadToSave, ...existing])
             );
+            // Dispatch event to notify reports component
+            window.dispatchEvent(new Event("generationReports:changed"));
           }
         } catch (e) {
           // noop

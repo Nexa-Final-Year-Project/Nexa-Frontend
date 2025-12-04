@@ -11,6 +11,7 @@ import {
   CalendarYearPicker,
 } from "@/components/ui/kibo-ui/calendar";
 import { useEffect } from "react";
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 
 // Types
 interface Task {
@@ -21,7 +22,7 @@ interface Task {
   status: "Backlog" | "Todo" | "In Progress" | "Done" | "Cancelled";
   project: string;
   priority: "Low" | "Medium" | "High" | "Urgent";
-  dueDate: string; // ISO string
+  dueDate: string;
   createdAt: string;
   __v?: number;
 }
@@ -34,20 +35,20 @@ interface TasksCalendarProps {
   defaultYear?: number;
 }
 
-// Status colors mapping
+// Status colors mapping - dark theme optimized
 const STATUS_COLORS = {
-  Backlog: "#6B7280",
-  Todo: "#3B82F6",
-  "In Progress": "#F59E0B",
-  Done: "#10B981",
-  Cancelled: "#EF4444",
+  Backlog: { bg: "rgba(107, 114, 128, 0.8)", border: "rgba(107, 114, 128, 1)" },
+  Todo: { bg: "rgba(59, 130, 246, 0.8)", border: "rgba(59, 130, 246, 1)" },
+  "In Progress": { bg: "rgba(245, 158, 11, 0.8)", border: "rgba(245, 158, 11, 1)" },
+  Done: { bg: "rgba(16, 185, 129, 0.8)", border: "rgba(16, 185, 129, 1)" },
+  Cancelled: { bg: "rgba(239, 68, 68, 0.6)", border: "rgba(239, 68, 68, 1)" },
 };
 
 const PRIORITY_COLORS = {
   Low: "#10B981",
   Medium: "#F59E0B",
   High: "#EF4444",
-  Urgent: "#8B1A1A",
+  Urgent: "#DC2626",
 };
 
 // Default tasks for demonstration
@@ -110,7 +111,8 @@ const formatTaskForCalendar = (task: Task) => ({
   status: {
     id: task.status,
     name: task.status,
-    color: STATUS_COLORS[task.status] || "#6B7280",
+    color: STATUS_COLORS[task.status]?.bg || "rgba(107, 114, 128, 0.8)",
+    borderColor: STATUS_COLORS[task.status]?.border || "rgba(107, 114, 128, 1)",
   },
   priority: {
     id: task.priority,
@@ -134,44 +136,145 @@ const TasksCalendar = ({
   const earliestYear = propEarliestYear ?? calculatedEarliest;
   const latestYear = propLatestYear ?? calculatedLatest;
 
-  // Debugging
-  useEffect(() => {
-    console.log("Formatted tasks for calendar:", formattedTasks);
-  }, [formattedTasks]);
-
   return (
     <div className="tasks-calendar-container h-full">
-      <CalendarProvider initialMonth={defaultMonth} initialYear={defaultYear}>
-        <CalendarDate>
-          <CalendarDatePicker>
-            <CalendarMonthPicker className="justify-center" />
-            <CalendarYearPicker
-              className="justify-center"
-              end={latestYear}
-              start={earliestYear}
-            />
-          </CalendarDatePicker>
-          <CalendarDatePagination />
-        </CalendarDate>
-        <CalendarHeader />
-        <CalendarBody features={formattedTasks}>
-          {({ feature }) => (
-            <CalendarItem
-              feature={feature}
-              key={feature.id}
-              style={{
-                backgroundColor: feature.status.color,
-                color: "#fff",
-                padding: "4px 8px",
-                borderRadius: "4px",
-                fontSize: "0.875rem",
-                borderLeft: `4px solid ${feature.priority.color}`,
-              }}
-              title={`${feature.name}\nStatus: ${feature.status.name}\nPriority: ${feature.priority.name}`}
-            />
-          )}
-        </CalendarBody>
-      </CalendarProvider>
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-neutral-900/60 border border-white/[0.06] backdrop-blur-sm">
+            <CalendarIcon className="w-6 h-6 text-white/80" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Calendar</h1>
+            <p className="text-sm text-white/40">View your tasks on a timeline</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Calendar Container */}
+      <div className="rounded-2xl bg-neutral-900/40 border border-white/[0.06] backdrop-blur-sm overflow-hidden">
+        <CalendarProvider initialMonth={defaultMonth} initialYear={defaultYear}>
+          {/* Calendar Controls */}
+          <div className="p-4 border-b border-white/[0.06]">
+            <CalendarDate>
+              <div className="flex items-center justify-between">
+                <CalendarDatePicker>
+                  <div className="flex items-center gap-3">
+                    <CalendarMonthPicker 
+                      className="
+                        px-4 py-2 rounded-xl 
+                        bg-white/[0.04] border border-white/[0.06]
+                        text-white font-medium
+                        hover:bg-white/[0.08] hover:border-white/[0.1]
+                        transition-all duration-200 cursor-pointer
+                        [&>button]:bg-transparent [&>button]:border-none
+                        [&>button]:text-white [&>button]:font-medium
+                      " 
+                    />
+                    <CalendarYearPicker
+                      className="
+                        px-4 py-2 rounded-xl 
+                        bg-white/[0.04] border border-white/[0.06]
+                        text-white font-medium
+                        hover:bg-white/[0.08] hover:border-white/[0.1]
+                        transition-all duration-200 cursor-pointer
+                        [&>button]:bg-transparent [&>button]:border-none
+                        [&>button]:text-white [&>button]:font-medium
+                      "
+                      end={latestYear + 1}
+                      start={earliestYear}
+                    />
+                  </div>
+                </CalendarDatePicker>
+                <CalendarDatePagination 
+                  className="
+                    [&>button]:w-9 [&>button]:h-9 [&>button]:rounded-lg
+                    [&>button]:bg-white/[0.04] [&>button]:border [&>button]:border-white/[0.06]
+                    [&>button]:text-white/60
+                    [&>button:hover]:bg-white/[0.08] [&>button:hover]:text-white
+                    [&>button]:transition-all [&>button]:duration-200
+                  "
+                />
+              </div>
+            </CalendarDate>
+          </div>
+
+          {/* Calendar Header */}
+          <CalendarHeader 
+            className="
+              bg-white/[0.02] border-b border-white/[0.06]
+              [&>div]:text-white/40 [&>div]:text-xs [&>div]:font-semibold [&>div]:uppercase [&>div]:tracking-wider
+              [&>div]:py-3
+            "
+          />
+
+          {/* Calendar Body */}
+          <CalendarBody 
+            features={formattedTasks}
+            className="
+              [&>div]:border-white/[0.04]
+              [&_td]:border-white/[0.04]
+              [&_th]:border-white/[0.04]
+              min-h-[500px]
+            "
+          >
+            {({ feature }) => (
+              <CalendarItem
+                feature={feature}
+                key={feature.id}
+                className="
+                  group cursor-pointer transition-all duration-200
+                  hover:scale-[1.02] hover:shadow-lg hover:z-10
+                "
+                style={{
+                  backgroundColor: feature.status.color,
+                  color: "#fff",
+                  padding: "6px 10px",
+                  borderRadius: "8px",
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                  borderLeft: `3px solid ${feature.priority.color}`,
+                  backdropFilter: "blur(4px)",
+                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+                }}
+                title={`${feature.name}\nStatus: ${feature.status.name}\nPriority: ${feature.priority.name}`}
+              />
+            )}
+          </CalendarBody>
+        </CalendarProvider>
+
+        {/* Legend */}
+        <div className="p-4 border-t border-white/[0.06] bg-white/[0.01]">
+          <div className="flex flex-wrap items-center gap-6">
+            <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Status:</span>
+            <div className="flex flex-wrap items-center gap-4">
+              {Object.entries(STATUS_COLORS).map(([status, colors]) => (
+                <div key={status} className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-sm" 
+                    style={{ backgroundColor: colors.bg }}
+                  />
+                  <span className="text-xs text-white/60">{status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-6 mt-3">
+            <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Priority:</span>
+            <div className="flex flex-wrap items-center gap-4">
+              {Object.entries(PRIORITY_COLORS).map(([priority, color]) => (
+                <div key={priority} className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-sm" 
+                    style={{ backgroundColor: color }}
+                  />
+                  <span className="text-xs text-white/60">{priority}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

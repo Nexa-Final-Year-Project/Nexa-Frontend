@@ -2,7 +2,6 @@
 "use client";
 
 import React from "react";
-// ... (Your other imports)
 import { useAuthStore } from "@/store/auth/authStore";
 import { useRouter } from "next/navigation";
 import {
@@ -10,6 +9,8 @@ import {
   UserIcon,
   SettingsIcon,
   ShieldCheckIcon,
+  ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import {
   Avatar,
@@ -25,116 +26,149 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu/dropdown-menu";
 import { ThemeToggle } from "@/theme/ThemeToggle";
-import { User } from "@/types/auth"; // Assuming this is correct
+import { User } from "@/types/auth";
 
-// ✅ 1. Allow user to be null
 export default function ProfileDropdown({ user }: { user: User | null }) {
-  // ✅ 2. Use the new logout action
   const { logout } = useAuthStore();
   const router = useRouter();
 
-  // Defensive logic: If no user, show a fallback (e.g., a login link or just the UserIcon)
   if (!user) {
-    // This handles the split second when user is null, but the redirect hasn't happened.
     return (
-      <Avatar className="cursor-pointer" onClick={() => router.push("/login")}>
-        <AvatarFallback>
-          <UserIcon className="w-5 h-5" />
-        </AvatarFallback>
-      </Avatar>
+      <div 
+        className="w-10 h-10 rounded-xl bg-neutral-900/60 border border-white/[0.06] flex items-center justify-center cursor-pointer hover:bg-neutral-800/60 transition-colors"
+        onClick={() => router.push("/login")}
+      >
+        <UserIcon className="w-5 h-5 text-white/60" />
+      </div>
     );
   }
 
-  // ✅ 3. Updated handleLogout to use the store's complete cleanup
   const handleLogout = async () => {
-    // 1. Call your server logout API here (if you have one for clearing HTTP-only cookies)
-    // Example: await triggerLogout().unwrap();
-
-    // 2. Clear client-side state, persistence, and local tokens (using the store function)
     logout();
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
-
-    // 3. Redirect
     router.push("/login");
   };
 
-  // ✅ 4. Safely compute userLink (though not strictly necessary since we return early if user is null)
   const userLink = `/u/${user.id}`;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer">
-          <AvatarImage src={user.photoURL} alt={user.name} />
-          <AvatarFallback>
-            {user.name ? user.name.charAt(0).toUpperCase() : "U"}
-          </AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent align="end">
-        {/* Header (Already safe because of the early return) */}
-        <DropdownMenuLabel className="flex items-center gap-3 p-2">
-          {/* ... (Header content using user.name, user.email, etc.) ... */}
-          <Avatar className="h-9 w-9">
-            <AvatarImage src={user.photoURL} alt={user.name} />
-            <AvatarFallback>
+        <div className="relative group cursor-pointer">
+          <Avatar className="h-10 w-10 rounded-xl border-2 border-white/[0.08] transition-all duration-300 group-hover:border-white/[0.15] group-hover:shadow-lg">
+            <AvatarImage src={user.photoURL} alt={user.name} className="rounded-xl" />
+            <AvatarFallback className="rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-900 text-white/80 font-medium">
               {user.name ? user.name.charAt(0).toUpperCase() : "U"}
             </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col">
-            <p className="text-sm font-medium leading-none">{user.name}</p>
-            <p className="text-xs text-muted-foreground">{user.email}</p>
+          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-neutral-950" />
+        </div>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent 
+        align="end" 
+        className="w-72 p-0 bg-neutral-900/95 backdrop-blur-xl border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden"
+      >
+        {/* Header */}
+        <DropdownMenuLabel className="p-0">
+          <div className="relative p-4 bg-gradient-to-br from-white/[0.04] to-transparent">
+            {/* Decorative gradient */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-blue-500/5 rounded-full blur-2xl" />
+            
+            <div className="relative flex items-center gap-3">
+              <Avatar className="h-12 w-12 rounded-xl border-2 border-white/[0.1] shadow-lg">
+                <AvatarImage src={user.photoURL} alt={user.name} className="rounded-xl" />
+                <AvatarFallback className="rounded-xl bg-gradient-to-br from-neutral-700 to-neutral-800 text-white font-semibold text-lg">
+                  {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-white truncate">{user.name}</p>
+                <p className="text-xs text-white/40 truncate">{user.email}</p>
+                {user.role && (
+                  <div className="flex items-center gap-1 mt-1">
+                    <Sparkles className="w-3 h-3 text-amber-400" />
+                    <span className="text-[10px] font-medium text-amber-400/80 uppercase tracking-wider">
+                      {user.role}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
 
-        {/* Options */}
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => router.push(`${userLink}/profile`)}
-        >
-          <UserIcon className="w-4 h-4 mr-2" />
-          Profile
-        </DropdownMenuItem>
-
-        {/* ... (Settings, Admin Dashboard, Theme Toggle) ... */}
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => router.push(`${userLink}/settings`)}
-        >
-          <SettingsIcon className="w-4 h-4 mr-2" />
-          Settings
-        </DropdownMenuItem>
-
-        {user.role === "Admin" && (
+        {/* Menu Items */}
+        <div className="p-2 space-y-0.5">
           <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => router.push("/admin")}
+            className="group flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer text-white/70 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
+            onClick={() => router.push(`${userLink}/profile`)}
           >
-            <ShieldCheckIcon className="w-4 h-4 mr-2" />
-            Admin Dashboard
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center group-hover:bg-white/[0.08] transition-colors">
+                <UserIcon className="w-4 h-4" />
+              </div>
+              <span className="text-sm font-medium">Profile</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/40 transition-colors" />
           </DropdownMenuItem>
-        )}
 
-        <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="group flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer text-white/70 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
+            onClick={() => router.push(`${userLink}/settings`)}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center group-hover:bg-white/[0.08] transition-colors">
+                <SettingsIcon className="w-4 h-4" />
+              </div>
+              <span className="text-sm font-medium">Settings</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/40 transition-colors" />
+          </DropdownMenuItem>
 
-        <DropdownMenuItem className="flex justify-between items-center">
-          <span>Theme</span>
-          <ThemeToggle />
-        </DropdownMenuItem>
+          {user.role === "Admin" && (
+            <DropdownMenuItem
+              className="group flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer text-white/70 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
+              onClick={() => router.push("/admin")}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors">
+                  <ShieldCheckIcon className="w-4 h-4 text-amber-400" />
+                </div>
+                <span className="text-sm font-medium">Admin Dashboard</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/40 transition-colors" />
+            </DropdownMenuItem>
+          )}
+        </div>
 
-        <DropdownMenuSeparator />
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+
+        {/* Theme */}
+        <div className="p-2">
+          <div className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-white/[0.02]">
+            <span className="text-sm font-medium text-white/60">Theme</span>
+            <ThemeToggle />
+          </div>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
 
         {/* Logout */}
-        <DropdownMenuItem
-          className="cursor-pointer text-red-600"
-          onClick={handleLogout}
-        >
-          <LogOutIcon className="w-4 h-4 mr-2" />
-          Logout
-        </DropdownMenuItem>
+        <div className="p-2">
+          <DropdownMenuItem
+            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-rose-400/80 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-200"
+            onClick={handleLogout}
+          >
+            <div className="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center group-hover:bg-rose-500/20 transition-colors">
+              <LogOutIcon className="w-4 h-4" />
+            </div>
+            <span className="text-sm font-medium">Logout</span>
+          </DropdownMenuItem>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

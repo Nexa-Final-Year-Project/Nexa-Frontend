@@ -1,9 +1,13 @@
+"use client";
+
 import React from "react";
 import DropdownSearchPanel from "../DropdownSearchPanel";
 import { useActivityLogs } from "@/hooks/activityLogs/useActivityLogs";
 import { useAuthStore } from "@/store/auth/authStore";
 import ActivityLogs from "@/components/activityLogs/ActivityLogs";
 import { ActionType, EntityType, ActivityLog } from "@/types/activityLogs";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Clock, ChevronDown, ChevronUp, Filter } from "lucide-react";
 
 const RecentActivityPanel = ({ trigger }: { trigger: React.ReactNode }) => {
   const { activityLogs, fetchAllActivityLogs } = useActivityLogs();
@@ -16,6 +20,7 @@ const RecentActivityPanel = ({ trigger }: { trigger: React.ReactNode }) => {
     ""
   );
   const [showAll, setShowAll] = React.useState(false);
+  const [showFilters, setShowFilters] = React.useState(false);
 
   React.useEffect(() => {
     // Backend expects the query param name `user` (not `userId`), so send that.
@@ -43,74 +48,145 @@ const RecentActivityPanel = ({ trigger }: { trigger: React.ReactNode }) => {
   // Show only 3 logs initially, or all if showAll is true
   const displayedLogs = showAll ? filteredLogs : filteredLogs.slice(0, 3);
 
+  const hasActiveFilters = selectedAction || selectedEntity;
+
   return (
     <DropdownSearchPanel
       trigger={trigger}
       content={
-        <div className="p-2">
-          {/* Search Input */}
-          <div className="p-2 border-b flex flex-col gap-2">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search activity…"
-              className="w-full px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
-            />
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95, y: -10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: -10 }}
+          transition={{ duration: 0.15 }}
+          className="w-80"
+        >
+          {/* Header */}
+          <div className="p-3 border-b border-white/[0.06] flex items-center gap-2">
+            <Clock className="w-4 h-4 text-emerald-400" />
+            <span className="text-sm font-medium text-white">Recent Activity</span>
+            <span className="ml-auto text-xs text-white/40 bg-white/[0.06] px-2 py-0.5 rounded-full">
+              {filteredLogs.length}
+            </span>
+          </div>
 
-            {/* Filters */}
-            <div className="flex gap-2">
-              <select
-                value={selectedAction}
-                onChange={(e) =>
-                  setSelectedAction(e.target.value as ActionType | "")
-                }
-                className="w-1/2 px-2 py-1 text-sm border rounded-md"
-              >
-                <option value="">All Actions</option>
-                {Object.values(ActionType).map((action) => (
-                  <option key={String(action)} value={String(action)}>
-                    {String(action)}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={selectedEntity}
-                onChange={(e) =>
-                  setSelectedEntity(e.target.value as EntityType | "")
-                }
-                className="w-1/2 px-2 py-1 text-sm border rounded-md"
-              >
-                <option value="">All Entities</option>
-                {Object.values(EntityType).map((entity) => (
-                  <option key={String(entity)} value={String(entity)}>
-                    {String(entity)}
-                  </option>
-                ))}
-              </select>
+          {/* Search & Filters */}
+          <div className="p-3 border-b border-white/[0.06] space-y-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search activity…"
+                className="w-full pl-9 pr-3 py-2 text-sm bg-white/[0.03] border border-white/[0.06] rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-white/10 transition-colors"
+              />
             </div>
+
+            {/* Filter Toggle */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`flex items-center gap-2 text-xs transition-colors ${
+                hasActiveFilters ? "text-emerald-400" : "text-white/40 hover:text-white/60"
+              }`}
+            >
+              <Filter className="w-3.5 h-3.5" />
+              Filters
+              {hasActiveFilters && (
+                <span className="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded text-[10px]">
+                  Active
+                </span>
+              )}
+              <ChevronDown className={`w-3 h-3 ml-auto transition-transform ${showFilters ? "rotate-180" : ""}`} />
+            </button>
+
+            {/* Filters Expanded */}
+            <AnimatePresence>
+              {showFilters && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex gap-2 pt-2">
+                    <select
+                      value={selectedAction}
+                      onChange={(e) =>
+                        setSelectedAction(e.target.value as ActionType | "")
+                      }
+                      className="flex-1 px-3 py-2 text-xs bg-white/[0.03] border border-white/[0.06] rounded-lg text-white/70 focus:outline-none focus:border-white/10"
+                    >
+                      <option value="" className="bg-neutral-900">All Actions</option>
+                      {Object.values(ActionType).map((action) => (
+                        <option key={String(action)} value={String(action)} className="bg-neutral-900">
+                          {String(action)}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={selectedEntity}
+                      onChange={(e) =>
+                        setSelectedEntity(e.target.value as EntityType | "")
+                      }
+                      className="flex-1 px-3 py-2 text-xs bg-white/[0.03] border border-white/[0.06] rounded-lg text-white/70 focus:outline-none focus:border-white/10"
+                    >
+                      <option value="" className="bg-neutral-900">All Types</option>
+                      {Object.values(EntityType).map((entity) => (
+                        <option key={String(entity)} value={String(entity)} className="bg-neutral-900">
+                          {String(entity)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Logs */}
-          <div className="p-2 max-h-64 overflow-y-auto">
-            <ActivityLogs logs={displayedLogs} />
-
-            {/* Show more/less button */}
-            {filteredLogs.length > 3 && (
-              <div className="mt-2 pt-2 border-t border-gray-100">
-                <button
-                  onClick={() => setShowAll(!showAll)}
-                  className="text-xs text-blue-600 hover:text-blue-800 w-full text-center"
-                >
-                  {showAll ? "Show less" : `Show all (${filteredLogs.length})`}
-                </button>
+          <div className="p-2 max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            {displayedLogs.length === 0 ? (
+              <div className="py-8 px-4 text-center">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-3">
+                  <Clock className="w-6 h-6 text-emerald-400/40" />
+                </div>
+                <p className="text-sm text-white/50 mb-1">No activity found</p>
+                <p className="text-xs text-white/30">
+                  {searchTerm ? "Try a different search" : "Your activity will appear here"}
+                </p>
               </div>
+            ) : (
+              <ActivityLogs logs={displayedLogs} />
             )}
           </div>
-        </div>
+
+          {/* Show more/less button */}
+          {filteredLogs.length > 3 && (
+            <div className="p-2 border-t border-white/[0.06]">
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="flex items-center justify-center gap-2 w-full p-2 rounded-lg text-xs text-white/50 hover:text-white/70 hover:bg-white/[0.04] transition-colors"
+              >
+                {showAll ? (
+                  <>
+                    <ChevronUp className="w-3 h-3" />
+                    Show less
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-3 h-3" />
+                    Show all ({filteredLogs.length})
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </motion.div>
       }
       contentClassName="p-0"
-      position={{ side: "right", align: "center" }}
+      position={{ side: "right", align: "start" }}
     />
   );
 };

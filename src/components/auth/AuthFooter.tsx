@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button/Button";
+import { motion } from "framer-motion";
 
 type AuthFooterProps = {
   text: string;
@@ -18,11 +18,20 @@ export function AuthFooter({
   className,
 }: AuthFooterProps) {
   return (
-    <div className={`text-center text-sm ${className}`}>
-      <span className="text-muted-foreground">{text}</span>{" "}
-      <Link href={href} className="text-primary hover:text-primary/80">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.5 }}
+      className={`text-center text-sm pt-4 ${className}`}
+    >
+      <span className="text-white/50">{text}</span>{" "}
+      <Link 
+        href={href} 
+        className="text-violet-400 hover:text-violet-300 transition-colors font-medium relative group"
+      >
         {linkText}
+        <span className="absolute bottom-0 left-0 w-0 h-px bg-violet-400 group-hover:w-full transition-all duration-300" />
       </Link>
-    </div>
+    </motion.div>
   );
 }

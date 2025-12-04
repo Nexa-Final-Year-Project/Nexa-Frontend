@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Plus, Sparkle } from "lucide-react";
+import { Plus, Sparkle, LayoutGrid, List } from "lucide-react";
 import { format, parseISO, isAfter } from "date-fns";
 import { Task } from "@/types/task";
 import { Sprint as SprintType } from "@/types/sprint";
+import { ProjectMember } from "@/types/project";
 import toast from "@/lib/customToast";
 import { useSprints } from "@/hooks/sprints/useSprints";
 import {
@@ -17,21 +18,26 @@ import {
   SprintsTable,
 } from "@/components/sprints";
 import SprintPlannerModal from "@/components/shared/models/SprintsPlannerModal";
+import SprintPlanCard from "./SprintPlanCard";
+import SprintDetailModal from "./SprintDetailModal";
 
 /* -------------------- Props -------------------- */
 interface SprintsProps {
   projectId: string;
   tasks?: Task[];
   sprints: SprintType[];
+  members?: ProjectMember[];
 }
 
 /* -------------------- Main Component -------------------- */
-export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
+export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: SprintsProps) => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const [selectedSprint, setSelectedSprint] = useState<SprintType | null>(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openPlanningDialog, setOpenPlanningDialog] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
+  const [selectedDetailSprint, setSelectedDetailSprint] = useState<SprintType | null>(null);
   const { createSprint, updateSprint, deleteSprint } = useSprints();
 
   // Helpers
@@ -76,23 +82,58 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
 
   const latestSprint = sprints?.length > 0 && sprints[0];
 
+  // Check if sprint has AI planner data
+  const hasAIData = (sprint: SprintType) => {
+    return sprint.aiSummary || sprint.summary || sprint.selectedTasks?.length || sprint.capacity;
+  };
+
+  // Filter AI-planned sprints vs regular sprints
+  const aiPlannedSprints = sprints?.filter(hasAIData) || [];
+  const regularSprints = sprints?.filter(s => !hasAIData(s)) || [];
+
   return (
     <div className="p-6 space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl dark:text-white font-bold">Sprints Overview</h1>
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex dark:text-white cursor-pointer items-center !text-sm !p-2"
-          onClick={() => {
-            setOpenPlanningDialog(true);
-          }}
-        >
-          <Sparkle className="w-4 h-4 mr-2 dark:text-white" />
-          Plan Sprints
-        </Button>
+        <div className="flex items-center gap-3">
+          {/* View Toggle */}
+          <div className="flex items-center bg-neutral-900/50 border border-white/[0.06] rounded-lg p-1">
+            <button
+              onClick={() => setViewMode("grid")}
+              className={`p-1.5 rounded-md transition-colors ${
+                viewMode === "grid"
+                  ? "bg-white/[0.1] text-white"
+                  : "text-neutral-500 hover:text-neutral-300"
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setViewMode("table")}
+              className={`p-1.5 rounded-md transition-colors ${
+                viewMode === "table"
+                  ? "bg-white/[0.1] text-white"
+                  : "text-neutral-500 hover:text-neutral-300"
+              }`}
+            >
+              <List className="w-4 h-4" />
+            </button>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex dark:text-white cursor-pointer items-center !text-sm !p-2"
+            onClick={() => setOpenPlanningDialog(true)}
+          >
+            <Sparkle className="w-4 h-4 mr-2 dark:text-white" />
+            Plan Sprints
+          </Button>
+        </div>
       </div>
-      {latestSprint && (
+
+      {/* Latest Sprint Highlight (only if we have a latest sprint with AI data) */}
+      {latestSprint && hasAIData(latestSprint) && viewMode === "table" && (
         <LatestSprintCard
           sprint={latestSprint}
           calculateProgress={calculateSprintProgress}
@@ -107,25 +148,137 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
         />
       )}
 
-      <Card>
-        <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle>Sprints</CardTitle>
+      {/* Sprints Content */}
+      {!sprints?.length ? (
+        <div className="bg-neutral-900/40 border border-white/[0.06] rounded-2xl p-12">
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-2xl bg-neutral-800/50 border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
+              <Sparkle className="w-8 h-8 text-neutral-500" />
+            </div>
+            <h3 className="text-lg font-medium text-white/90 mb-2">No sprints yet</h3>
+            <p className="text-sm text-neutral-500 mb-6 max-w-sm mx-auto">
+              Create your first sprint manually or use AI to automatically plan optimal sprints based on your tasks and team capacity.
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <Button
+                variant="outline"
+                className="border-white/[0.1] text-white hover:bg-white/[0.05] cursor-pointer"
+                onClick={() => setIsCreateDialogOpen(true)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Manual Sprint
+              </Button>
+              <Button
+                className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                onClick={() => setOpenPlanningDialog(true)}
+              >
+                <Sparkle className="h-4 w-4 mr-2" />
+                AI Plan Sprint
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : viewMode === "grid" ? (
+        /* Grid View - AI Sprint Cards */
+        <div className="space-y-6">
+          {/* AI Planned Sprints */}
+          {aiPlannedSprints.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkle className="w-4 h-4 text-blue-400" />
+                <h2 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
+                  AI Planned Sprints
+                </h2>
+                <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-xs text-blue-400">
+                  {aiPlannedSprints.length}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {aiPlannedSprints.map((sprint) => (
+                  <SprintPlanCard
+                    key={sprint._id}
+                    sprint={sprint}
+                    members={members}
+                    onClick={() => setSelectedDetailSprint(sprint)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Regular Sprints */}
+          {regularSprints.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <h2 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
+                  Manual Sprints
+                </h2>
+                <span className="px-2 py-0.5 rounded-full bg-white/[0.05] text-xs text-neutral-400">
+                  {regularSprints.length}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {regularSprints.map((sprint) => (
+                  <div
+                    key={sprint._id}
+                    onClick={() => {
+                      setIsSettingsDialogOpen(true);
+                      setSelectedSprint(sprint);
+                    }}
+                    className="group bg-neutral-900/40 backdrop-blur-sm border border-white/[0.06] rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:bg-neutral-900/60 hover:border-white/[0.1]"
+                  >
+                    <h3 className="text-base font-semibold text-white/90 mb-2">{sprint.name}</h3>
+                    <p className="text-xs text-neutral-500 mb-3">
+                      {format(parseISO(sprint.startDate), "MMM d")} — {format(parseISO(sprint.endDate), "MMM d, yyyy")}
+                    </p>
+                    {sprint.goals?.length > 0 && (
+                      <div className="text-sm text-neutral-400 line-clamp-2">
+                        {sprint.goals[0]}
+                      </div>
+                    )}
+                    <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between">
+                      <span className="text-xs text-neutral-500">
+                        {getSprintTasks(sprint._id).length} tasks
+                      </span>
+                      <div className="text-xs text-neutral-500">
+                        {calculateSprintProgress(sprint._id)}% complete
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Actions */}
+          <div className="flex items-center justify-center gap-3 pt-4">
             <Button
-              className="cursor-pointer"
+              variant="outline"
+              size="sm"
+              className="border-white/[0.1] text-neutral-400 hover:text-white hover:bg-white/[0.05] cursor-pointer"
               onClick={() => setIsCreateDialogOpen(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
               New Sprint
             </Button>
           </div>
-        </CardHeader>
-        <CardContent>
-          {!sprints?.length ? (
-            <div className="text-center dark:text-white py-8 text-muted-foreground">
-              No sprints found for this project
+        </div>
+      ) : (
+        /* Table View */
+        <Card className="bg-neutral-900/40 border-white/[0.06]">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-white">All Sprints</CardTitle>
+              <Button
+                className="cursor-pointer"
+                onClick={() => setIsCreateDialogOpen(true)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                New Sprint
+              </Button>
             </div>
-          ) : (
+          </CardHeader>
+          <CardContent>
             <SprintsTable
               sprints={sprints}
               calculateProgress={calculateSprintProgress}
@@ -139,9 +292,9 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
                 setSelectedSprint(s);
               }}
             />
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Modals */}
       <SprintModal
@@ -173,6 +326,14 @@ export const Sprints = ({ projectId, tasks = [], sprints }: SprintsProps) => {
           onClose={() => setOpenPlanningDialog(false)}
         />
       )}
+
+      {/* Sprint Detail Modal */}
+      <SprintDetailModal
+        open={!!selectedDetailSprint}
+        onClose={() => setSelectedDetailSprint(null)}
+        sprint={selectedDetailSprint}
+        members={members}
+      />
     </div>
   );
 };

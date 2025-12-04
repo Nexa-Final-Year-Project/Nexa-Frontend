@@ -4,25 +4,25 @@ export const sprintApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getSprints: builder.query({
       query: () => ({
-        url: "/sprints",
+        url: "/sprint",
         method: "GET",
       }),
     }),
     getSprintByProjectId: builder.query({
       query: (projectId) => ({
-        url: `/sprints/${projectId}`,
+        url: `/sprint/${projectId}`,
         method: "GET",
       }),
     }),
     getSprintById: builder.query({
       query: (id) => ({
-        url: `/sprints/sprint/${id}`,
+        url: `/sprint/sprint/${id}`,
         method: "GET",
       }),
     }),
     createSprint: builder.mutation({
       query: (sprint) => ({
-        url: "/sprints",
+        url: "/sprint",
         method: "POST",
         body: sprint,
       }),
@@ -32,7 +32,7 @@ export const sprintApi = baseApi.injectEndpoints({
       query: (data) => {
         const projectId = typeof data === "string" ? data : (data?.projectId || "");
         return {
-          url: `/sprints/plan/${projectId}`,
+          url: `/sprint/plan/${projectId}`,
           method: "POST",
           // keep body empty; backend expects projectId in URL
         };
@@ -40,14 +40,14 @@ export const sprintApi = baseApi.injectEndpoints({
     }),
     updateSprint: builder.mutation({
       query: (sprint) => ({
-        url: `/sprints/${sprint.id}`,
+        url: `/sprint/${sprint.id}`,
         method: "PUT",
         body: sprint,
       }),
     }),
     deleteSprint: builder.mutation({
       query: (id) => ({
-        url: `/sprints/${id}`,
+        url: `/sprint/${id}`,
         method: "DELETE",
       }),
     }),

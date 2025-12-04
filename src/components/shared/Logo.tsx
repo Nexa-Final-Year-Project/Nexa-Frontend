@@ -43,14 +43,15 @@ const Logo = ({
   gap = "space-x-3",
   className = "",
   imageClass = "",
-  textClass = "font-bold bg-gradient-stone",
+  textClass = "font-bold",
   taglineClass = "text-sm text-muted-foreground",
 }: LogoProps) => {
   // Handle size prop (number or string)
   const sizeValue = typeof size === "number" ? `${size}px` : size;
   const sizeStyle = { width: sizeValue, height: sizeValue };
   const { theme } = useTheme();
-  const colorClass = theme === "light" ? "text-black" : "text-white";
+  const isDark = theme === "dark";
+  const colorClass = isDark ? "text-white" : "text-neutral-900";
 
   return (
     <Link

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Modal } from "../ui/modal/Modal";
 import { Project } from "@/types/project";
 import { SPRINT_FORM_FIELDS } from "@/lib/constants/sprints/sprints";
@@ -18,6 +18,14 @@ export const SprintModal: React.FC<SprintModalProps> = ({
   initialData,
   mode,
 }) => {
+  // Provide default values to prevent controlled/uncontrolled input errors
+  const defaultValues = useMemo(() => ({
+    name: initialData?.name || "",
+    startDate: initialData?.startDate || "",
+    endDate: initialData?.endDate || "",
+    goals: initialData?.goals || [],
+  }), [initialData]);
+
   return (
     <Modal
       open={open}
@@ -25,8 +33,8 @@ export const SprintModal: React.FC<SprintModalProps> = ({
       hideTrigger
       size="md"
       title={mode === "edit" ? "Edit Sprint" : "Create Sprint"}
-      initialValues={initialData || {}}
-      formFields={SPRINT_FORM_FIELDS} // Pass projects if needed
+      initialValues={defaultValues}
+      formFields={SPRINT_FORM_FIELDS}
       submitButtonText={mode === "edit" ? "Update Sprint" : "Create Sprint"}
       onSubmit={onSubmit}
     />

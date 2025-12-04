@@ -38,8 +38,8 @@ export const AnimatedDiv = ({
   return (
     <motion.div
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
+      animate="visible"
+      viewport={{ once: true, amount: 0.1 }}
       variants={getVariant()}
       className={className}
     >

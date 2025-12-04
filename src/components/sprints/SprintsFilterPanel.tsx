@@ -15,9 +15,9 @@ interface SprintsFilterPanelProps {
 }
 
 const statusColors: Record<string, string> = {
-  Current: "bg-blue-500 text-white hover:bg-blue-600",
-  Upcoming: "bg-yellow-500 text-white hover:bg-yellow-600",
-  Completed: "bg-green-500 text-white hover:bg-green-600",
+  Current: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/30",
+  Upcoming: "bg-amber-500/20 text-amber-300 border-amber-500/30 hover:bg-amber-500/30",
+  Completed: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/30",
 };
 
 const SprintsFilterPanel = ({
@@ -36,17 +36,17 @@ const SprintsFilterPanel = ({
       title="Sprint Filters"
     >
       {/* Status */}
-      <div className="space-y-2">
-        <h4 className="font-medium">Status</h4>
+      <div className="space-y-3">
+        <h4 className="font-medium text-white/80 text-sm">Status</h4>
         <div className="flex gap-2 flex-wrap">
           {["Current", "Upcoming", "Completed"].map((status) => (
             <Badge
               key={status}
               className={cn(
-                "cursor-pointer px-3 py-1 rounded-full",
+                "cursor-pointer px-3 py-1.5 rounded-lg border transition-all duration-200",
                 filters.status === status
                   ? statusColors[status]
-                  : "border hover:bg-gray-200 dark:hover:bg-gray-700"
+                  : "bg-white/[0.02] border-white/[0.06] text-white/60 hover:bg-white/[0.06] hover:text-white"
               )}
               onClick={() => setFilters({ ...filters, status })}
             >
@@ -57,8 +57,8 @@ const SprintsFilterPanel = ({
       </div>
 
       {/* Progress */}
-      <div className="space-y-2">
-        <h4 className="font-medium">Progress</h4>
+      <div className="space-y-3">
+        <h4 className="font-medium text-white/80 text-sm">Progress</h4>
         <Slider.Root
           value={filters.progress || [0, 100]}
           onValueChange={(val: number[]) =>
@@ -68,13 +68,13 @@ const SprintsFilterPanel = ({
           step={10}
           className="relative flex items-center select-none w-full h-5"
         >
-          <Slider.Track className="bg-gray-300 dark:bg-gray-700 relative grow rounded-full h-2">
-            <Slider.Range className="absolute bg-blue-500 rounded-full h-full" />
+          <Slider.Track className="bg-white/[0.06] relative grow rounded-full h-2">
+            <Slider.Range className="absolute bg-gradient-to-r from-violet-500 to-violet-400 rounded-full h-full shadow-[0_0_10px_rgba(139,92,246,0.4)]" />
           </Slider.Track>
-          <Slider.Thumb className="block w-4 h-4 bg-white border border-gray-400 rounded-full shadow" />
-          <Slider.Thumb className="block w-4 h-4 bg-white border border-gray-400 rounded-full shadow" />
+          <Slider.Thumb className="block w-4 h-4 bg-white rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-violet-500/30" />
+          <Slider.Thumb className="block w-4 h-4 bg-white rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-violet-500/30" />
         </Slider.Root>
-        <div className="flex justify-between text-xs text-gray-500">
+        <div className="flex justify-between text-xs text-white/40">
           <span>0%</span>
           <span>25%</span>
           <span>50%</span>
@@ -84,16 +84,21 @@ const SprintsFilterPanel = ({
       </div>
 
       {/* Date Range */}
-      <div className="space-y-2">
-        <h4 className="font-medium">Date Range</h4>
-        <div className="flex gap-2 mb-2">
+      <div className="space-y-3">
+        <h4 className="font-medium text-white/80 text-sm">Date Range</h4>
+        <div className="flex gap-2 mb-3">
           {["Today", "Past Week", "Past Month"].map((preset) => (
             <Button
               key={preset}
               size="sm"
               variant="outline"
+              className={cn(
+                "rounded-lg border-white/[0.06] text-white/60 bg-white/[0.02]",
+                "hover:bg-violet-500/10 hover:border-violet-500/30 hover:text-white",
+                "transition-all duration-200",
+                filters.datePreset === preset && "bg-violet-500/10 border-violet-500/30 text-white"
+              )}
               onClick={() => {
-                // Example: just mock
                 setFilters({ ...filters, datePreset: preset });
               }}
             >

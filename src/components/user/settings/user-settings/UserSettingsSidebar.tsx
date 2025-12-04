@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { CardContent } from "@/components/ui/card";
-import { Settings, Lock, Sun, Bell, Activity, Trash2 } from "lucide-react";
+import { Settings, Lock, Sun, Bell, Activity, Trash2, ChevronRight } from "lucide-react";
 
 interface SidebarProps {
   activeSection: string;
@@ -24,50 +22,45 @@ export const UserSettingsSidebar = ({
   setActiveCategory,
 }: SidebarProps) => {
   const sidebarItems: SidebarItem[] = [
-    // Account
     {
       id: "general",
       label: "General",
-      icon: <Settings className="w-4 h-4 mr-2" />,
+      icon: <Settings className="w-4 h-4" />,
       category: "Account",
     },
     {
       id: "security",
       label: "Security & Login",
-      icon: <Lock className="w-4 h-4 mr-2" />,
+      icon: <Lock className="w-4 h-4" />,
       category: "Account",
     },
-
-    // Preferences
     {
       id: "appearance",
       label: "Appearance",
-      icon: <Sun className="w-4 h-4 mr-2" />,
+      icon: <Sun className="w-4 h-4" />,
       category: "Preferences",
     },
     {
       id: "notifications",
       label: "Notifications",
-      icon: <Bell className="w-4 h-4 mr-2" />,
+      icon: <Bell className="w-4 h-4" />,
       category: "Preferences",
     },
     {
       id: "data-controls",
       label: "Data Controls",
-      icon: <Activity className="w-4 h-4 mr-2" />,
+      icon: <Activity className="w-4 h-4" />,
+      category: "Preferences",
     },
-
-    // Danger Zone
     {
       id: "delete-account",
       label: "Delete Account",
-      icon: <Trash2 className="w-4 h-4 mr-2" />,
+      icon: <Trash2 className="w-4 h-4" />,
       category: "Danger Zone",
       destructive: true,
     },
   ];
 
-  // Group items by category
   const categorizedItems = sidebarItems.reduce((acc, item) => {
     if (!acc[item.category]) acc[item.category] = [];
     acc[item.category].push(item);
@@ -76,46 +69,85 @@ export const UserSettingsSidebar = ({
 
   return (
     <div className="w-full md:w-72 flex-shrink-0">
-      <div className="md:sticky md:top-6 !bg-transparent !border-none">
-        <CardContent className="p-0 text-left">
-          <nav className="space-y-8">
+      <div className="md:sticky md:top-6">
+        <div className="rounded-2xl bg-neutral-900/40 dark:bg-neutral-900/40 border border-white/[0.06] p-4 backdrop-blur-sm">
+          <nav className="space-y-6">
             {Object.entries(categorizedItems).map(([category, items]) => (
               <div key={category}>
-                <p className="px-4 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  {category}
-                </p>
+                <div className="flex items-center gap-2 px-3 mb-3">
+                  <div className={`w-1.5 h-1.5 rounded-full ${
+                    category === "Danger Zone" ? "bg-rose-500" : 
+                    category === "Preferences" ? "bg-blue-500" : "bg-emerald-500"
+                  }`} />
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
+                    {category}
+                  </span>
+                </div>
 
                 <div className="space-y-1">
                   {items.map((item) => {
                     const isActive = activeSection === item.id;
+                    
                     return (
-                      <Button
+                      <button
                         key={item.id}
-                        variant={isActive ? "secondary" : "ghost"}
-                        className={`w-full justify-start px-4 py-2 text-left rounded-lg transition-colors
-                          ${
-                            item.destructive
-                              ? "text-destructive hover:text-destructive/90"
-                              : isActive
-                              ? "bg-blue-50 border-blue-600"
-                              : "hover:bg-gray-50"
-                          }`}
                         onClick={() => {
                           setActiveSection(item.id);
-                          if (setActiveCategory)
-                            setActiveCategory(item.category);
+                          if (setActiveCategory) setActiveCategory(item.category);
                         }}
+                        className={`
+                          group w-full flex items-center justify-between px-3 py-2.5 rounded-xl
+                          transition-all duration-200 cursor-pointer text-left
+                          ${isActive 
+                            ? item.destructive
+                              ? "bg-rose-500/10 border border-rose-500/20"
+                              : "bg-white/[0.08] border border-white/[0.08]"
+                            : "border border-transparent hover:bg-white/[0.04]"
+                          }
+                        `}
                       >
-                        {item.icon}
-                        <span className="ml-2">{item.label}</span>
-                      </Button>
+                        <div className="flex items-center gap-3">
+                          <div className={`
+                            flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200
+                            ${isActive
+                              ? item.destructive
+                                ? "bg-rose-500/20 text-rose-400"
+                                : "bg-white/10 text-white"
+                              : item.destructive
+                                ? "bg-rose-500/10 text-rose-400/60 group-hover:text-rose-400"
+                                : "bg-white/[0.04] text-white/50 group-hover:text-white/80"
+                            }
+                          `}>
+                            {item.icon}
+                          </div>
+                          <span className={`
+                            text-sm font-medium transition-colors duration-200
+                            ${isActive
+                              ? item.destructive ? "text-rose-400" : "text-white"
+                              : item.destructive
+                                ? "text-rose-400/60 group-hover:text-rose-400"
+                                : "text-white/60 group-hover:text-white/90"
+                            }
+                          `}>
+                            {item.label}
+                          </span>
+                        </div>
+                        
+                        <ChevronRight className={`
+                          w-4 h-4 transition-all duration-200
+                          ${isActive
+                            ? item.destructive ? "text-rose-400/60" : "text-white/40"
+                            : "text-white/20 opacity-0 group-hover:opacity-100"
+                          }
+                        `} />
+                      </button>
                     );
                   })}
                 </div>
               </div>
             ))}
           </nav>
-        </CardContent>
+        </div>
       </div>
     </div>
   );

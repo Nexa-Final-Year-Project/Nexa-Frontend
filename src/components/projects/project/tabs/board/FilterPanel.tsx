@@ -5,7 +5,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Sparkles, Filter, Users, Flag, CheckCircle } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 
 // Interface for the component props, remains unchanged.
@@ -82,11 +82,26 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   };
 
   // Helper component for rendering a section to avoid repetition.
-  const FilterSection = ({ title, items, selectedItems, onToggle }) => (
-    <section>
-      <h3 className="mb-3 text-sm font-semibold text-neutral-800 dark:text-neutral-100">
-        {title}
-      </h3>
+  const FilterSection = ({ title, icon: Icon, items, selectedItems, onToggle }) => (
+    <section className="
+      bg-white/[0.02] border border-white/[0.06]
+      rounded-xl p-4
+    ">
+      <div className="flex items-center gap-2 mb-3">
+        <Icon className="w-4 h-4 text-violet-400" />
+        <h3 className="text-sm font-semibold text-white">
+          {title}
+        </h3>
+        {selectedItems.length > 0 && (
+          <span className="
+            ml-auto px-2 py-0.5 rounded-md
+            bg-violet-500/20 text-violet-400
+            text-xs font-medium
+          ">
+            {selectedItems.length}
+          </span>
+        )}
+      </div>
       <div className="flex flex-wrap gap-2">
         {items.map((item) => {
           const id = typeof item === "object" ? item.id : item;
@@ -96,11 +111,16 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           return (
             <label
               key={id}
-              className={`flex cursor-pointer items-center justify-center rounded-full border px-4 py-1.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-black ${
-                isChecked
-                  ? "border-transparent bg-primary/20 text-primary dark:bg-primary/30"
-                  : "border-neutral-400/50 bg-black/5 text-neutral-700 hover:bg-black/10 dark:border-neutral-600/50 dark:bg-white/5 dark:text-neutral-300 dark:hover:bg-white/10"
-              }`}
+              className={`
+                flex cursor-pointer items-center justify-center
+                rounded-lg border px-4 py-2
+                text-sm font-medium
+                transition-all duration-200
+                ${isChecked
+                  ? "border-violet-500/50 bg-gradient-to-r from-violet-500/20 to-cyan-500/10 text-white shadow-[0_0_15px_rgba(139,92,246,0.2)]"
+                  : "border-white/[0.06] bg-white/[0.02] text-white/60 hover:bg-white/[0.05] hover:text-white/80 hover:border-white/[0.1]"
+                }
+              `}
             >
               <input
                 type="checkbox"
@@ -119,27 +139,61 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   return (
     <Dialog.Root open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[90vw] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/20 bg-white/60 p-6 shadow-2xl shadow-black/20 backdrop-blur-2xl focus:outline-none dark:bg-black/50 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md" />
+        <Dialog.Content className="
+          fixed left-1/2 top-1/2 z-50
+          w-[90vw] max-w-lg
+          -translate-x-1/2 -translate-y-1/2
+          rounded-2xl
+          bg-neutral-950/95 border border-white/[0.08]
+          p-6
+          shadow-[0_25px_80px_rgba(0,0,0,0.6)]
+          backdrop-blur-xl
+          focus:outline-none
+          data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
+          data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95
+        ">
+          {/* Background glow */}
+          <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[200px] bg-violet-500/10 rounded-full blur-[80px]" />
+          </div>
+          
           {/* Header */}
-          <div className="flex items-center justify-between pb-4">
-            <Dialog.Title className="text-lg font-semibold text-neutral-900 dark:text-neutral-50">
-              Filter Tasks
-            </Dialog.Title>
+          <div className="relative flex items-center justify-between pb-5 border-b border-white/[0.06]">
+            <div className="flex items-center gap-3">
+              <div className="
+                w-10 h-10 rounded-xl
+                bg-gradient-to-br from-violet-500/20 to-cyan-500/20
+                border border-violet-500/30
+                flex items-center justify-center
+              ">
+                <Filter className="w-5 h-5 text-violet-400" />
+              </div>
+              <Dialog.Title className="text-lg font-semibold text-white">
+                Filter Tasks
+              </Dialog.Title>
+            </div>
             <Dialog.Close asChild>
               <button
                 aria-label="Close filter panel"
-                className="rounded-full p-1.5 text-neutral-600 transition-colors hover:bg-black/10 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100"
+                className="
+                  p-2 rounded-xl cursor-pointer
+                  text-white/40 hover:text-white
+                  bg-white/[0.02] hover:bg-white/[0.05]
+                  border border-white/[0.06] hover:border-white/[0.1]
+                  transition-all duration-200
+                "
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </Dialog.Close>
           </div>
 
           {/* Filter Sections */}
-          <div className="custom-scrollbar max-h-[60vh] space-y-6 overflow-auto pr-2">
+          <div className="relative custom-scrollbar max-h-[55vh] space-y-4 overflow-auto py-5">
             <FilterSection
               title="Owners"
+              icon={Users}
               items={owners}
               selectedItems={localOwners}
               onToggle={(id) =>
@@ -148,6 +202,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             />
             <FilterSection
               title="Priorities"
+              icon={Flag}
               items={priorities}
               selectedItems={localPriorities}
               onToggle={(id) =>
@@ -156,6 +211,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             />
             <FilterSection
               title="Statuses"
+              icon={CheckCircle}
               items={statuses}
               selectedItems={localStatuses}
               onToggle={(id) =>
@@ -165,18 +221,35 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           </div>
 
           {/* Footer with actions */}
-          <div className="mt-6 flex justify-end gap-3 border-t border-black/10 pt-5 dark:border-white/10">
+          <div className="relative mt-4 flex justify-end gap-3 pt-5 border-t border-white/[0.06]">
             <button
               onClick={handleClearAll}
-              className="rounded-lg bg-black/5 px-5 py-2 text-sm font-semibold text-neutral-800 transition-colors hover:bg-black/10 dark:bg-white/5 dark:text-neutral-200 dark:hover:bg-white/10"
+              className="
+                px-5 py-2.5 rounded-xl cursor-pointer
+                text-sm font-medium text-white/60
+                bg-white/[0.03] border border-white/[0.06]
+                hover:bg-rose-500/10 hover:border-rose-500/30 hover:text-rose-400
+                transition-all duration-200
+              "
             >
               Clear All
             </button>
             <button
               onClick={handleApply}
-              className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:scale-[1.02] hover:bg-primary/90"
+              className="
+                flex items-center gap-2
+                px-6 py-2.5 rounded-xl cursor-pointer
+                text-sm font-semibold text-white
+                bg-gradient-to-r from-emerald-600 to-cyan-600
+                border border-emerald-500/30
+                shadow-[0_0_20px_rgba(16,185,129,0.3)]
+                hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]
+                hover:scale-[1.02]
+                transition-all duration-300
+              "
             >
-              Apply
+              <Sparkles className="w-4 h-4" />
+              Apply Filters
             </button>
           </div>
         </Dialog.Content>

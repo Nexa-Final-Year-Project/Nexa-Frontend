@@ -1,17 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import {
-  BadgeCheck,
   Bell,
   ChevronsUpDown,
   CreditCard,
   LogOut,
   Sparkles,
-  ExternalLink,
-  Trash2,
-  Check,
-  X,
+  Settings,
+  User,
+  Crown,
 } from "lucide-react";
 
 import {
@@ -34,67 +31,34 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import {
-  useNotifications,
-  useMarkAsRead,
-  useDeleteNotification,
-  useMarkAllAsRead,
-} from "@/store/notifications/notificationStore";
+import { useAuthStore } from "@/store/auth/authStore";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useTheme } from "next-themes";
 
 type NavUserProps = {
   user?: {
     name?: string | null;
     email?: string | null;
     photoURL?: string | null;
+    uid?: string | null;
   } | null;
 };
 
 export function NavUser(props: NavUserProps) {
   const { user } = props;
   const { isMobile } = useSidebar();
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
-
-  // Notification hooks
-  const notifications = useNotifications();
-  // derive unread count directly from notifications so UI always stays in sync
-  const unreadCount = notifications.filter((n) => !n.read).length;
-  const markAsRead = useMarkAsRead();
-  const deleteNotification = useDeleteNotification();
-  const markAllAsRead = useMarkAllAsRead();
   const router = useRouter();
-
-  // Filter unread notifications
-  const unreadNotifications = notifications.filter((n) => !n.read);
-
-  const handleNotificationClick = (notification: any) => {
-    if (!notification.read) {
-      markAsRead(notification._id);
-    }
-    if (notification.actionUrl) {
-      router.push(notification.actionUrl);
-    }
-  };
-
-  const getInitials = (name?: string) => {
-    if (!name) return "?";
-    return name
-      .split(" ")
-      .map((n: string) => n[0])
-      .join("")
-      .toUpperCase();
-  };
+  const { logout } = useAuthStore();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   // Defensive fallbacks so component doesn't crash when user is null (e.g. after logout)
   const displayName = user?.name ?? "Guest";
   const displayEmail = user?.email ?? "";
   const photo = user?.photoURL ?? undefined;
+  const userId = user?.uid ?? "";
 
   // compute initials for fallback avatar
   const initials = (displayName || "G")
@@ -104,6 +68,15 @@ export function NavUser(props: NavUserProps) {
     .join("")
     .toUpperCase();
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -111,235 +84,147 @@ export function NavUser(props: NavUserProps) {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer hover:bg-sidebar-accent/50 transition-colors"
+              className={`${
+                isDark 
+                  ? "data-[state=open]:bg-white/[0.06] hover:bg-white/[0.04]" 
+                  : "data-[state=open]:bg-neutral-100 hover:bg-neutral-50"
+              } transition-all duration-200 cursor-pointer group rounded-xl`}
             >
-              <Avatar className="h-9 w-9 rounded-full flex-shrink-0">
+              <Avatar className={`h-9 w-9 rounded-xl flex-shrink-0 ring-2 ${
+                isDark 
+                  ? "ring-white/[0.06] group-hover:ring-white/[0.15]" 
+                  : "ring-neutral-200 group-hover:ring-neutral-300"
+              } transition-all`}>
                 {photo ? (
                   <AvatarImage src={photo} alt={displayName} />
                 ) : (
-                  <AvatarFallback className="rounded-lg">
+                  <AvatarFallback className={`rounded-xl ${
+                    isDark 
+                      ? "bg-white/[0.08] text-white" 
+                      : "bg-neutral-200 text-neutral-700"
+                  } text-sm font-medium`}>
                     {initials}
                   </AvatarFallback>
                 )}
               </Avatar>
               <div className="flex flex-col flex-1 min-w-0 ml-3">
-                <span className="truncate font-medium text-sm">
+                <span className={`truncate font-medium text-sm ${isDark ? "text-white" : "text-neutral-900"}`}>
                   {displayName}
                 </span>
-                <span className="truncate text-xs text-muted-foreground">
+                <span className={`truncate text-xs ${isDark ? "text-white/40" : "text-neutral-500"}`}>
                   {displayEmail}
                 </span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsUpDown className={`ml-auto size-4 ${isDark ? "text-white/30 group-hover:text-white/50" : "text-neutral-400 group-hover:text-neutral-600"} transition-colors`} />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className={`w-64 rounded-2xl ${
+              isDark 
+                ? "bg-[#0c0c10]/95 border-white/[0.08]" 
+                : "bg-white border-neutral-200"
+            } backdrop-blur-xl shadow-2xl ${isDark ? "shadow-black/40" : "shadow-neutral-200/50"} p-2`}
             side={isMobile ? "bottom" : "right"}
             align="end"
-            sideOffset={4}
+            sideOffset={8}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-3 px-2 py-2 text-left text-sm">
-                <Avatar className="h-10 w-10 rounded-full flex-shrink-0">
+            <DropdownMenuLabel className="p-0 font-normal mb-2">
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex items-center gap-3 p-3 rounded-xl ${isDark ? "bg-white/[0.03]" : "bg-neutral-50"}`}
+              >
+                <Avatar className={`h-12 w-12 rounded-xl flex-shrink-0 ring-2 ${isDark ? "ring-white/[0.08]" : "ring-neutral-200"}`}>
                   {photo ? (
                     <AvatarImage src={photo} alt={displayName} />
                   ) : (
-                    <AvatarFallback className="rounded-lg">
+                    <AvatarFallback className={`rounded-xl ${isDark ? "bg-white/[0.08] text-white" : "bg-neutral-200 text-neutral-700"} font-medium`}>
                       {initials}
                     </AvatarFallback>
                   )}
                 </Avatar>
                 <div className="flex flex-col flex-1 min-w-0">
-                  <span className="truncate font-medium text-sm">
+                  <span className={`truncate font-semibold text-sm ${isDark ? "text-white" : "text-neutral-900"}`}>
                     {displayName}
                   </span>
-                  <span className="truncate text-xs text-muted-foreground">
+                  <span className={`truncate text-xs ${isDark ? "text-white/40" : "text-neutral-500"}`}>
                     {displayEmail}
                   </span>
+                  <span className="mt-1 inline-flex items-center gap-1 text-[10px] text-emerald-500 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    Free Plan
+                  </span>
                 </div>
-              </div>
+              </motion.div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
+              <Link href={`/u/${userId}/upgrade`}>
+                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
+                  isDark 
+                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
+                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                } focus:bg-transparent`}>
+                  <Crown className="w-4 h-4 mr-3 text-amber-500" />
+                  <span>Upgrade to Pro</span>
+                  <Sparkles className="w-3 h-3 ml-auto text-amber-500/50" />
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+
+            <DropdownMenuSeparator className={`${isDark ? "bg-white/[0.06]" : "bg-neutral-200"} my-2`} />
+
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              {/* Notifications Popover */}
-              <Popover
-                open={notificationsOpen}
-                onOpenChange={(next) => {
-                  // Only allow opening via the trigger/controlled flow.
-                  // Ignore close requests from outside clicks — popover will
-                  // only close when we explicitly call setNotificationsOpen(false).
-                  if (next) setNotificationsOpen(true);
-                }}
-              >
-                <PopoverTrigger asChild>
-                  <DropdownMenuItem
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      // Always open the popover when this menu item is selected.
-                      setNotificationsOpen(true);
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <div className="flex items-center gap-2 w-full">
-                      <Bell className="h-4 w-4" />
-                      <span className="flex-1">Notifications</span>
-                      {unreadCount > 0 && (
-                        <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                          {unreadCount > 9 ? "9+" : unreadCount}
-                        </span>
-                      )}
-                    </div>
-                  </DropdownMenuItem>
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-96 p-0 mr-4 rounded-2xl backdrop-blur-md bg-white/5 dark:bg-slate-900/50 border border-white/6 overflow-hidden transform -translate-y-3"
-                  align="start"
-                  side="right"
-                  sideOffset={8}
-                >
-                  <div className="flex flex-col max-h-[60vh] overflow-y-auto hide-scrollbar">
-                    {/* Header */}
-                    <div className="flex items-center justify-between px-4 py-3 border-b">
-                      <h3 className="font-semibold text-sm">Notifications</h3>
-                      <div className="flex gap-2 items-center">
-                        {unreadCount > 0 && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 w-6 p-0"
-                            onClick={() => markAllAsRead()}
-                            title="Mark all as read"
-                          >
-                            <Check className="h-4 w-4" />
-                          </Button>
-                        )}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={() => {
-                            router.push("/notifications");
-                            setNotificationsOpen(false);
-                          }}
-                          title="View all notifications"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                        {/* Close (X) */}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setNotificationsOpen(false);
-                          }}
-                          title="Close"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-
-                    {/* Notifications List */}
-                    <div className="overflow-y-auto hide-scrollbar">
-                      {unreadNotifications.length === 0 ? (
-                        <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                          No unread notifications
-                        </div>
-                      ) : (
-                        <div className="divide-y">
-                          {unreadNotifications
-                            .slice(0, 5)
-                            .map((notification) => (
-                              <div
-                                key={notification._id}
-                                className="px-4 py-3 hover:bg-muted/50 cursor-pointer transition-colors bg-blue-50 dark:bg-blue-950/20 border-l-2 border-blue-500"
-                                onClick={() =>
-                                  handleNotificationClick(notification)
-                                }
-                              >
-                                <div className="flex gap-3">
-                                  {/* Avatar */}
-                                  <Avatar className="h-8 w-8 flex-shrink-0">
-                                    <AvatarImage
-                                      src={notification.avatarUrl}
-                                      alt={notification.senderName}
-                                    />
-                                    <AvatarFallback>
-                                      {getInitials(notification.senderName)}
-                                    </AvatarFallback>
-                                  </Avatar>
-
-                                  {/* Content */}
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex justify-between items-start gap-2">
-                                      <p className="font-medium text-sm">
-                                        {notification.title}
-                                      </p>
-                                      <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-5 w-5 p-0 flex-shrink-0"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          deleteNotification(notification._id);
-                                        }}
-                                      >
-                                        <Trash2 className="h-3 w-3" />
-                                      </Button>
-                                    </div>
-                                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                                      {notification.message}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Footer */}
-                    {unreadNotifications.length > 5 && (
-                      <div className="px-4 py-2 border-t bg-muted/30 text-center">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-xs"
-                          onClick={() => {
-                            router.push("/notifications");
-                            setNotificationsOpen(false);
-                          }}
-                        >
-                          View all notifications
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </PopoverContent>
-              </Popover>
+              <Link href={`/u/${userId}/account`}>
+                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
+                  isDark 
+                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
+                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                } focus:bg-transparent`}>
+                  <User className={`w-4 h-4 mr-3 ${isDark ? "text-white/40" : "text-neutral-400"}`} />
+                  <span>Account</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href={`/u/${userId}/billing`}>
+                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
+                  isDark 
+                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
+                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                } focus:bg-transparent`}>
+                  <CreditCard className={`w-4 h-4 mr-3 ${isDark ? "text-white/40" : "text-neutral-400"}`} />
+                  <span>Billing</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/notifications">
+                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
+                  isDark 
+                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
+                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                } focus:bg-transparent`}>
+                  <Bell className={`w-4 h-4 mr-3 ${isDark ? "text-white/40" : "text-neutral-400"}`} />
+                  <span>Notifications</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/help">
+                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
+                  isDark 
+                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
+                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                } focus:bg-transparent`}>
+                  <Settings className={`w-4 h-4 mr-3 ${isDark ? "text-white/40" : "text-neutral-400"}`} />
+                  <span>Settings & Help</span>
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
+
+            <DropdownMenuSeparator className={`${isDark ? "bg-white/[0.06]" : "bg-neutral-200"} my-2`} />
+
+            <DropdownMenuItem 
+              onClick={handleLogout}
+              className="rounded-lg cursor-pointer py-2.5 text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 focus:bg-rose-500/10"
+            >
+              <LogOut className="w-4 h-4 mr-3" />
+              <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

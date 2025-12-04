@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Settings } from "lucide-react";
 import toast from "@/lib/customToast";
 
 import {
@@ -25,7 +25,13 @@ const UserSettings = ({ user }: UserSettingsProps) => {
   const [activeCategory, setActiveCategory] = useState("Profile");
   const { updateUser } = useAuthStore();
 
-  if (!user) return <div>User not found</div>;
+  if (!user) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-white/40 text-lg">User not found</div>
+      </div>
+    );
+  }
 
   const initialValues = {
     name: user.name,
@@ -105,7 +111,6 @@ const UserSettings = ({ user }: UserSettingsProps) => {
         );
       case "data-controls":
         return <DataControlsSettings />;
-      // return <div className="p-6">Activity Logs Coming Soon...</div>;
       case "delete-account":
         return <DangerZoneSettings />;
       default:
@@ -120,19 +125,27 @@ const UserSettings = ({ user }: UserSettingsProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 lg:p-8">
-      {/* Breadcrumb */}
-      <nav className="flex items-center text-sm text-muted-foreground mb-6">
-        <span className="text-foreground font-bold text-2xl">Settings</span>
-        <ChevronRight className="w-4 h-4 mx-2" />
-        <span className="hover:text-foreground cursor-pointer">
-          {activeCategory}
-        </span>
-        <ChevronRight className="w-4 h-4 mx-2" />
-        <span className="text-foreground font-medium capitalize">
-          {activeSection.replace(/-/g, " ")}
-        </span>
-      </nav>
+    <div className="min-h-screen p-4 lg:p-8">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-neutral-900/60 border border-white/[0.06] backdrop-blur-sm">
+            <Settings className="w-6 h-6 text-white/80" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Settings</h1>
+            <div className="flex items-center text-sm text-white/40 mt-1">
+              <span className="hover:text-white/60 cursor-pointer transition-colors">
+                {activeCategory}
+              </span>
+              <ChevronRight className="w-3.5 h-3.5 mx-1.5 text-white/20" />
+              <span className="text-white/60 capitalize">
+                {activeSection.replace(/-/g, " ")}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Sidebar */}
@@ -144,7 +157,7 @@ const UserSettings = ({ user }: UserSettingsProps) => {
 
         {/* Main Content */}
         <div className="flex-1">
-          <div className="bg-background rounded-lg border-l px-6">
+          <div className="rounded-2xl bg-neutral-900/40 dark:bg-neutral-900/40 border border-white/[0.06] backdrop-blur-sm overflow-hidden">
             {renderActiveSection()}
           </div>
         </div>

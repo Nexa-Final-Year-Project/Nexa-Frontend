@@ -2,14 +2,13 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
   Clock,
-  Command,
   Frame,
-  GalleryVerticalEnd,
-  Rocket,
   Star,
+  Keyboard,
+  HelpCircle,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 
 import { NavMain } from "@/components/ui/navbar/nav-main";
 import { NavProjects } from "@/components/ui/navbar/nav-projects";
@@ -22,37 +21,15 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { NavItem } from "@/components/ui/navbar/nav-item";
-import { useProjects } from "@/hooks/projects/useProjects"; // ✅ Import your hook
+import { useProjects } from "@/hooks/projects/useProjects";
 import { useAuthStore } from "@/store/auth/authStore";
 import { Project } from "@/types/project";
 import Logo from "../Logo";
 import RecentActivityPanel from "../search/panels/RecentActivityPanel";
+import StarredProjectsPanel from "../search/panels/StarredProjectsPanel";
 import Link from "next/link";
 
-// This is sample data except projects (which now come from API)
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/logo.png",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
       title: "Recent",
@@ -64,53 +41,27 @@ const data = {
     {
       title: "Starred",
       url: "#",
-      icon: Rocket,
-      items: [
-        { title: "Genesis", url: "#" },
-        { title: "Explorer", url: "#" },
-        { title: "Quantum", url: "#" },
-      ],
+      icon: Star,
+      isActive: false,
+      Component: StarredProjectsPanel,
     },
-    // {
-    //   title: "Teams",
-    //   url: "#",
-    //   icon: Users,
-    //   items: [
-    //     { title: "Introduction", url: "#" },
-    //     { title: "Get Started", url: "#" },
-    //     { title: "Tutorials", url: "#" },
-    //     { title: "Changelog", url: "#" },
-    //   ],
-    // },
-    // {
-    //   title: "Settings",
-    //   url: "#",
-    //   icon: Settings2,
-    //   items: [
-    //     { title: "General", url: "#" },
-    //     { title: "Team", url: "#" },
-    //     { title: "Billing", url: "#" },
-    //     { title: "Limits", url: "#" },
-    //   ],
-    // },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { projects, isLoading } = useProjects(); // ✅ Fetch real projects
+  const { projects, isLoading } = useProjects();
   const { user } = useAuthStore();
-  // Normalize projects (API may return an object or array). Ensure we always pass an array into NavProjects.
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   let projectList: Project[] = [];
   if (Array.isArray(projects)) {
     projectList = projects;
   } else if (projects && Array.isArray((projects as any).projects)) {
     projectList = (projects as any).projects;
   } else if (projects && Array.isArray((projects as any).data)) {
-    // some endpoints return { data: [...] }
     projectList = (projects as any).data;
   } else if (projects) {
-    // unexpected shape — log once for debugging and fall back to empty
-    // eslint-disable-next-line no-console
     console.warn("AppSidebar: `projects` is not an array. Received:", projects);
     projectList = [];
   }
@@ -124,25 +75,61 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }));
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        {/* <TeamSwitcher teams={data.teams} /> */}
-        <div className="p-4 pt-6 group-data-[collapsible=icon]:p-3 group-data-[collapsible=icon]:pt-4">
-          <Logo />
+    <Sidebar collapsible="icon" {...props} className={`border-r ${isDark ? "border-white/[0.06]" : "border-neutral-200"}`}>
+      {/* Clean background */}
+      <div className={`absolute inset-0 ${isDark ? "bg-[#0c0c10]" : "bg-white"} pointer-events-none`} />
+      
+      <SidebarHeader className="relative z-10">
+        <div className="p-4 pt-6 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:pt-4 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
+          {/* Original Logo component - links to home "/" */}
+          <Logo 
+            size={36}
+            textSize="text-xl"
+            gap="space-x-2.5"
+            className="hover:opacity-90 transition-opacity"
+          />
         </div>
       </SidebarHeader>
-      <SidebarContent>
-        <Link href={`/u/${user?.uid}`}>
-          <NavItem label="For You" icon={Star} />
+
+      <SidebarContent className="relative z-10 px-2 group-data-[collapsible=icon]:px-1">
+        {/* For You - Dashboard Link */}
+        <Link href={`/u/${user?.uid}`} className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
+          <NavItem 
+            label="For You" 
+            icon={Star} 
+            className="mb-1"
+          />
         </Link>
+
+        {/* Main Navigation */}
         <NavMain items={data.navMain} />
+
+        {/* Projects Section */}
         <NavProjects
-          projects={isLoading ? [] : formattedProjects} // show empty while loading
+          projects={isLoading ? [] : formattedProjects}
         />
+
+        {/* Bottom Quick Links */}
+        <div className={`mt-auto pt-4 border-t ${isDark ? "border-white/[0.06]" : "border-neutral-200"} mx-2 group-data-[collapsible=icon]:mx-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:items-center`}>
+          <Link href="/shortcuts" className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
+            <NavItem 
+              label="Keyboard Shortcuts" 
+              icon={Keyboard}
+            />
+          </Link>
+          <Link href="/help" className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
+            <NavItem 
+              label="Help & Support" 
+              icon={HelpCircle}
+            />
+          </Link>
+        </div>
       </SidebarContent>
-      <SidebarFooter>
+
+      <SidebarFooter className="relative z-10">
         <NavUser user={user} />
       </SidebarFooter>
+      
       <SidebarRail />
     </Sidebar>
   );

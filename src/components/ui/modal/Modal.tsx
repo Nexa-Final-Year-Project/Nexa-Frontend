@@ -80,9 +80,9 @@ export function Modal({
         </DialogTrigger>
       )}
 
-      <DialogContent className={sizeClasses[size]}>
+      <DialogContent className={`${sizeClasses[size]} max-h-[85vh] flex flex-col`}>
         {showHeader && (
-          <DialogHeader>
+          <DialogHeader className="flex-shrink-0">
             <DialogTitle className={titleColorClass}>{title}</DialogTitle>
             {description && (
               <DialogDescription>{description}</DialogDescription>
@@ -90,16 +90,17 @@ export function Modal({
           </DialogHeader>
         )}
 
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-4 overflow-y-auto flex-1 pr-2">
           {formFields ? (
             <Form
+              key={open ? "form-open" : "form-closed"}
               fields={formFields}
               onSubmit={(values) => {
                 onSubmit(values);
                 onOpenChange?.(false); // Close after submit
               }}
               initialValues={initialValues}
-              submitText={submitButtonText}
+              submitButtonText={submitButtonText}
             />
           ) : (
             children
