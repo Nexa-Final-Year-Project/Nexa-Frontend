@@ -25,19 +25,19 @@ export type ProviderConfig = {
 export const providers: Record<SocialProvider, ProviderConfig | undefined> = {
   google: {
     Icon: FcGoogle,
-    label: "Continue with Google",
+    label: "Google",
     brandColor: "#292d49",
     textColor: "",
   },
   slack: {
     Icon: SiSlack,
-    label: "Continue with Slack",
+    label: "Slack",
     brandColor: "#292d49",
     textColor: "#292d49",
   },
   github: {
     Icon: FaGithub,
-    label: "Continue with GitHub",
+    label: "GitHub",
     brandColor: "#292d49",
     textColor: "#333333",
   },
