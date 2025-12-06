@@ -1,4 +1,5 @@
 "use client";
+import { useTheme } from "next-themes";
 import {
   CalendarBody,
   CalendarDate,
@@ -137,6 +138,8 @@ const TasksCalendar = ({
   defaultMonth = new Date().getMonth(),
   defaultYear = new Date().getFullYear(),
 }: TasksCalendarProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const formattedTasks = tasks.map(formatTaskForCalendar);
   const { earliestYear: calculatedEarliest, latestYear: calculatedLatest } =
     getYearRange(tasks);
@@ -148,12 +151,32 @@ const TasksCalendar = ({
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-4 mb-2">
-          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-neutral-900/60 border border-white/[0.06] backdrop-blur-sm">
-            <CalendarIcon className="w-6 h-6 text-white/80" />
+          <div
+            className={`flex items-center justify-center w-12 h-12 rounded-2xl border backdrop-blur-sm ${
+              isDark
+                ? "bg-neutral-900/60 border-white/[0.06]"
+                : "bg-neutral-100 border-neutral-300"
+            }`}
+          >
+            <CalendarIcon
+              className={`w-6 h-6 ${
+                isDark ? "text-white/80" : "text-neutral-700"
+              }`}
+            />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Calendar</h1>
-            <p className="text-sm text-white/40">
+            <h1
+              className={`text-2xl font-bold ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
+              Calendar
+            </h1>
+            <p
+              className={`text-sm ${
+                isDark ? "text-white/40" : "text-neutral-600"
+              }`}
+            >
               View your tasks on a timeline
             </p>
           </div>
@@ -161,48 +184,66 @@ const TasksCalendar = ({
       </div>
 
       {/* Calendar Container */}
-      <div className="rounded-2xl bg-neutral-900/40 border border-white/[0.06] backdrop-blur-sm overflow-hidden">
+      <div
+        className={`rounded-2xl border backdrop-blur-sm overflow-hidden ${
+          isDark
+            ? "bg-neutral-900/40 border-white/[0.06]"
+            : "bg-neutral-50 border-neutral-200"
+        }`}
+      >
         <CalendarProvider initialMonth={defaultMonth} initialYear={defaultYear}>
           {/* Calendar Controls */}
-          <div className="p-4 border-b border-white/[0.06]">
+          <div
+            className={`p-4 border-b ${
+              isDark ? "border-white/[0.06]" : "border-neutral-200"
+            }`}
+          >
             <CalendarDate>
               <div className="flex items-center justify-between">
                 <CalendarDatePicker>
                   <div className="flex items-center gap-3">
                     <CalendarMonthPicker
-                      className="
+                      className={`
                         px-4 py-2 rounded-xl 
-                        bg-white/[0.04] border border-white/[0.06]
-                        text-white font-medium
-                        hover:bg-white/[0.08] hover:border-white/[0.1]
+                        font-medium
                         transition-all duration-200 cursor-pointer
                         [&>button]:bg-transparent [&>button]:border-none
-                        [&>button]:text-white [&>button]:font-medium
-                      "
+                        [&>button]:font-medium
+                        ${
+                          isDark
+                            ? "bg-white/[0.04] border border-white/[0.06] text-white hover:bg-white/[0.08] hover:border-white/[0.1] [&>button]:text-white"
+                            : "bg-neutral-100 border border-neutral-300 text-neutral-900 hover:bg-neutral-200 hover:border-neutral-400 [&>button]:text-neutral-900"
+                        }
+                      `}
                     />
                     <CalendarYearPicker
-                      className="
+                      className={`
                         px-4 py-2 rounded-xl 
-                        bg-white/[0.04] border border-white/[0.06]
-                        text-white font-medium
-                        hover:bg-white/[0.08] hover:border-white/[0.1]
+                        font-medium
                         transition-all duration-200 cursor-pointer
                         [&>button]:bg-transparent [&>button]:border-none
-                        [&>button]:text-white [&>button]:font-medium
-                      "
+                        [&>button]:font-medium
+                        ${
+                          isDark
+                            ? "bg-white/[0.04] border border-white/[0.06] text-white hover:bg-white/[0.08] hover:border-white/[0.1] [&>button]:text-white"
+                            : "bg-neutral-100 border border-neutral-300 text-neutral-900 hover:bg-neutral-200 hover:border-neutral-400 [&>button]:text-neutral-900"
+                        }
+                      `}
                       end={latestYear + 1}
                       start={earliestYear}
                     />
                   </div>
                 </CalendarDatePicker>
                 <CalendarDatePagination
-                  className="
+                  className={`
                     [&>button]:w-9 [&>button]:h-9 [&>button]:rounded-lg
-                    [&>button]:bg-white/[0.04] [&>button]:border [&>button]:border-white/[0.06]
-                    [&>button]:text-white/60
-                    [&>button:hover]:bg-white/[0.08] [&>button:hover]:text-white
-                    [&>button]:transition-all [&>button]:duration-200
-                  "
+                    [&>button]:border [&>button]:transition-all [&>button]:duration-200
+                    ${
+                      isDark
+                        ? "[&>button]:bg-white/[0.04] [&>button]:border-white/[0.06] [&>button]:text-white/60 [&>button:hover]:bg-white/[0.08] [&>button:hover]:text-white"
+                        : "[&>button]:bg-neutral-100 [&>button]:border-neutral-300 [&>button]:text-neutral-600 [&>button:hover]:bg-neutral-200 [&>button:hover]:text-neutral-900"
+                    }
+                  `}
                 />
               </div>
             </CalendarDate>
@@ -210,22 +251,29 @@ const TasksCalendar = ({
 
           {/* Calendar Header */}
           <CalendarHeader
-            className="
-              bg-white/[0.02] border-b border-white/[0.06]
-              [&>div]:text-white/40 [&>div]:text-xs [&>div]:font-semibold [&>div]:uppercase [&>div]:tracking-wider
+            className={`
+              border-b
+              [&>div]:text-xs [&>div]:font-semibold [&>div]:uppercase [&>div]:tracking-wider
               [&>div]:py-3
-            "
+              ${
+                isDark
+                  ? "bg-white/[0.02] border-white/[0.06] [&>div]:text-white/40"
+                  : "bg-neutral-50 border-neutral-200 [&>div]:text-neutral-600"
+              }
+            `}
           />
 
           {/* Calendar Body */}
           <CalendarBody
             features={formattedTasks}
-            className="
-              [&>div]:border-white/[0.04]
-              [&_td]:border-white/[0.04]
-              [&_th]:border-white/[0.04]
+            className={`
               min-h-[500px]
-            "
+              ${
+                isDark
+                  ? "[&>div]:border-white/[0.04] [&_td]:border-white/[0.04] [&_th]:border-white/[0.04]"
+                  : "[&>div]:border-neutral-200 [&_td]:border-neutral-200 [&_th]:border-neutral-200"
+              }
+            `}
           >
             {({ feature }) => (
               <CalendarItem
@@ -253,9 +301,19 @@ const TasksCalendar = ({
         </CalendarProvider>
 
         {/* Legend */}
-        <div className="p-4 border-t border-white/[0.06] bg-white/[0.01]">
+        <div
+          className={`p-4 border-t ${
+            isDark
+              ? "border-white/[0.06] bg-white/[0.01]"
+              : "border-neutral-200 bg-neutral-50/50"
+          }`}
+        >
           <div className="flex flex-wrap items-center gap-6">
-            <span className="text-xs font-medium text-white/40 uppercase tracking-wider">
+            <span
+              className={`text-xs font-medium uppercase tracking-wider ${
+                isDark ? "text-white/40" : "text-neutral-600"
+              }`}
+            >
               Status:
             </span>
             <div className="flex flex-wrap items-center gap-4">
@@ -265,13 +323,23 @@ const TasksCalendar = ({
                     className="w-3 h-3 rounded-sm"
                     style={{ backgroundColor: colors.bg }}
                   />
-                  <span className="text-xs text-white/60">{status}</span>
+                  <span
+                    className={`text-xs ${
+                      isDark ? "text-white/60" : "text-neutral-700"
+                    }`}
+                  >
+                    {status}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-6 mt-3">
-            <span className="text-xs font-medium text-white/40 uppercase tracking-wider">
+            <span
+              className={`text-xs font-medium uppercase tracking-wider ${
+                isDark ? "text-white/40" : "text-neutral-600"
+              }`}
+            >
               Priority:
             </span>
             <div className="flex flex-wrap items-center gap-4">
@@ -281,7 +349,13 @@ const TasksCalendar = ({
                     className="w-3 h-3 rounded-sm"
                     style={{ backgroundColor: color }}
                   />
-                  <span className="text-xs text-white/60">{priority}</span>
+                  <span
+                    className={`text-xs ${
+                      isDark ? "text-white/60" : "text-neutral-700"
+                    }`}
+                  >
+                    {priority}
+                  </span>
                 </div>
               ))}
             </div>

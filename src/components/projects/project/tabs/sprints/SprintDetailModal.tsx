@@ -38,6 +38,9 @@ import {
   AvatarFallback,
 } from "@/components/ui/avatar/avatar";
 import { ProjectMember } from "@/types/project";
+import BurndownChart from "@/components/sprints/BurndownChart";
+import RiskMitigationPanel from "@/components/sprints/RiskMitigationPanel";
+import MemberPerformancePanel from "@/components/sprints/MemberPerformancePanel";
 
 // Sprint data from the AI planner response
 interface SprintPlanData {
@@ -1006,6 +1009,114 @@ export default function SprintDetailModal({
               )}
             </div>
           )}
+
+          {/* Burndown Chart */}
+          {sprint.burndownForecast && sprint.burndownForecast.length > 0 && (
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
+              <SectionHeader
+                id="burndown"
+                icon={BarChart3}
+                title="Sprint Burndown"
+              />
+              {expandedSections.has("burndown") && (
+                <div className="mt-3">
+                  <BurndownChart
+                    burndownForecast={sprint.burndownForecast}
+                    totalEffort={sprint.totalEffort || 0}
+                    sprintLengthDays={differenceInDays(
+                      parseISO(sprint.endDate),
+                      parseISO(sprint.startDate)
+                    )}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Risk Mitigation */}
+          {sprint.riskAnalysis && (
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
+              <SectionHeader
+                id="risks"
+                icon={AlertTriangle}
+                title="Risk Analysis"
+                badge={
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-xs ${
+                      riskPercent >= 50
+                        ? "bg-red-500/10 text-red-400"
+                        : riskPercent >= 25
+                        ? "bg-yellow-500/10 text-yellow-400"
+                        : "bg-green-500/10 text-green-400"
+                    }`}
+                  >
+                    {riskPercent.toFixed(0)}% Risk
+                  </span>
+                }
+              />
+              {expandedSections.has("risks") && (
+                <div className="mt-3">
+                  <RiskMitigationPanel
+                    delayRiskPercent={
+                      sprint.riskAnalysis?.delayRiskPercent || 0
+                    }
+                    overloadedMembers={
+                      sprint.riskAnalysis?.overloadedMembers || []
+                    }
+                    criticalDependencies={
+                      sprint.riskAnalysis?.criticalDependencies || []
+                    }
+                    deadlineThreats={sprint.riskAnalysis?.deadlineThreats || []}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Member Performance */}
+          {sprint.memberWorkloadSummary &&
+            sprint.memberWorkloadSummary.length > 0 && (
+              <div
+                className={`pt-4 ${
+                  isDark
+                    ? "border-t border-white/[0.04]"
+                    : "border-t border-neutral-200"
+                }`}
+              >
+                <SectionHeader
+                  id="performance"
+                  icon={Users}
+                  title="Team Workload & Performance"
+                  badge={
+                    <span className="px-2 py-0.5 rounded-full bg-purple-500/10 text-xs text-purple-400">
+                      {sprint.memberWorkloadSummary.length} members
+                    </span>
+                  }
+                />
+                {expandedSections.has("performance") && (
+                  <div className="mt-3">
+                    <MemberPerformancePanel
+                      memberWorkloadSummary={sprint.memberWorkloadSummary}
+                      fairnessReport={sprint.fairnessReport}
+                      selectedTasks={sprint.selectedTasks}
+                      capacity={sprint.capacity}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
         </div>
 
         {/* Footer */}

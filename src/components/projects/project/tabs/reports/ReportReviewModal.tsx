@@ -459,7 +459,7 @@ export default function ReportReviewModal({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`relative w-[92vw] max-w-6xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
+            className={`relative w-[95vw] sm:w-[92vw] max-w-6xl max-h-[85vh] sm:max-h-[90vh] rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
               isDark
                 ? "bg-neutral-900/95 border border-white/[0.08]"
                 : "bg-white border border-neutral-200"

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import {
   Settings,
   Lock,
@@ -29,6 +30,8 @@ export const UserSettingsSidebar = ({
   setActiveSection,
   setActiveCategory,
 }: SidebarProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const sidebarItems: SidebarItem[] = [
     {
       id: "general",
@@ -78,7 +81,13 @@ export const UserSettingsSidebar = ({
   return (
     <div className="w-full md:w-72 flex-shrink-0">
       <div className="md:sticky md:top-6">
-        <div className="rounded-2xl bg-neutral-900/40 dark:bg-neutral-900/40 border border-white/[0.06] p-4 backdrop-blur-sm">
+        <div
+          className={`rounded-2xl border p-4 backdrop-blur-sm ${
+            isDark
+              ? "bg-neutral-900/40 border-white/[0.06]"
+              : "bg-neutral-50 border-neutral-300"
+          }`}
+        >
           <nav className="space-y-6">
             {Object.entries(categorizedItems).map(([category, items]) => (
               <div key={category}>
@@ -92,7 +101,11 @@ export const UserSettingsSidebar = ({
                         : "bg-emerald-500"
                     }`}
                   />
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
+                  <span
+                    className={`text-[10px] font-semibold uppercase tracking-widest ${
+                      isDark ? "text-white/40" : "text-neutral-600"
+                    }`}
+                  >
                     {category}
                   </span>
                 </div>
@@ -111,13 +124,19 @@ export const UserSettingsSidebar = ({
                         }}
                         className={`
                           group w-full flex items-center justify-between px-3 py-2.5 rounded-xl
-                          transition-all duration-200 cursor-pointer text-left
+                          transition-all duration-200 cursor-pointer text-left border
                           ${
                             isActive
                               ? item.destructive
-                                ? "bg-rose-500/10 border border-rose-500/20"
-                                : "bg-white/[0.08] border border-white/[0.08]"
-                              : "border border-transparent hover:bg-white/[0.04]"
+                                ? isDark
+                                  ? "bg-rose-500/10 border-rose-500/20"
+                                  : "bg-red-100 border-red-300"
+                                : isDark
+                                ? "bg-white/[0.08] border-white/[0.08]"
+                                : "bg-neutral-100 border-neutral-300"
+                              : isDark
+                              ? "border-transparent hover:bg-white/[0.04]"
+                              : "border-transparent hover:bg-neutral-100"
                           }
                         `}
                       >

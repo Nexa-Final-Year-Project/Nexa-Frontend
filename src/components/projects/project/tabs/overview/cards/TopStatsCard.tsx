@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { ResponsiveContainer, LineChart, Line } from "recharts";
 import OverviewCard from "../OverviewCard";
@@ -61,6 +62,8 @@ export const TopStatCard = ({
   chartData,
   color = "violet",
 }: TopStatCardProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const isPositive = trend !== undefined && trend >= 0;
   const config =
     colorConfig[color as keyof typeof colorConfig] || colorConfig.violet;
@@ -69,12 +72,15 @@ export const TopStatCard = ({
     <Card
       className={`
       relative overflow-hidden
-      bg-neutral-900/40 border border-white/[0.06]
       rounded-2xl p-5
       transition-all duration-300
-      hover:border-white/[0.1]
-      hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]
+      border
       group cursor-pointer
+      ${
+        isDark
+          ? "bg-neutral-900/40 border-white/[0.06] hover:border-white/[0.1] hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
+          : "bg-neutral-50 border-neutral-300 hover:border-neutral-400 hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
+      }
     `}
     >
       {/* Background glow effect */}
@@ -108,7 +114,13 @@ export const TopStatCard = ({
                 {icon}
               </div>
             )}
-            <span className="text-sm font-medium text-white/50">{title}</span>
+            <span
+              className={`text-sm font-medium ${
+                isDark ? "text-white/50" : "text-neutral-600"
+              }`}
+            >
+              {title}
+            </span>
           </div>
           {trend !== undefined && (
             <div
@@ -134,7 +146,11 @@ export const TopStatCard = ({
         </div>
 
         {/* Main Value */}
-        <div className="text-3xl font-bold text-white tracking-tight">
+        <div
+          className={`text-3xl font-bold tracking-tight ${
+            isDark ? "text-white" : "text-neutral-900"
+          }`}
+        >
           {value}
         </div>
 

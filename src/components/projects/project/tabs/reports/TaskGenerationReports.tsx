@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useCallback, useRef } from "react";
+import { useTheme } from "next-themes";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -85,6 +86,8 @@ export default function TaskGenerationReports({
   projectId: string;
   members: ProjectMember[];
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [reports, setReports] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<any | null>(null);
@@ -532,10 +535,22 @@ export default function TaskGenerationReports({
               setPage(1);
             }}
           >
-            <SelectTrigger className="w-44 bg-white/10 text-white border-white/20">
+            <SelectTrigger
+              className={`w-44 border ${
+                isDark
+                  ? "bg-white/10 text-white border-white/20"
+                  : "bg-neutral-100 text-neutral-900 border-neutral-300"
+              }`}
+            >
               <SelectValue placeholder="Filter status" />
             </SelectTrigger>
-            <SelectContent className="bg-neutral-900 text-white border-white/20">
+            <SelectContent
+              className={`${
+                isDark
+                  ? "bg-neutral-900 text-white border-white/20"
+                  : "bg-white text-neutral-900 border-neutral-300"
+              }`}
+            >
               <SelectItem value="all">All statuses</SelectItem>
               <SelectItem value="pending_review">Pending Review</SelectItem>
               <SelectItem value="approved">Approved</SelectItem>
@@ -543,10 +558,22 @@ export default function TaskGenerationReports({
             </SelectContent>
           </Select>
           <Select value={sortBy} onValueChange={(v) => setSortBy(v)}>
-            <SelectTrigger className="w-40 bg-white/10 text-white border-white/20">
+            <SelectTrigger
+              className={`w-40 border ${
+                isDark
+                  ? "bg-white/10 text-white border-white/20"
+                  : "bg-neutral-100 text-neutral-900 border-neutral-300"
+              }`}
+            >
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
-            <SelectContent className="bg-neutral-900 text-white border-white/20">
+            <SelectContent
+              className={`${
+                isDark
+                  ? "bg-neutral-900 text-white border-white/20"
+                  : "bg-white text-neutral-900 border-neutral-300"
+              }`}
+            >
               <SelectItem value="newest">Newest</SelectItem>
               <SelectItem value="oldest">Oldest</SelectItem>
               <SelectItem value="title">Title</SelectItem>
@@ -557,13 +584,37 @@ export default function TaskGenerationReports({
       </div>
 
       <div className="max-w-5xl mx-auto">
-        <div className="rounded-lg bg-neutral-900/80 border border-neutral-800 p-2 max-h-[76vh] overflow-y-auto">
-          {loading && <div className="p-3 text-slate-400">Loading…</div>}
+        <div
+          className={`rounded-lg border p-2 max-h-[76vh] overflow-y-auto ${
+            isDark
+              ? "bg-neutral-900/80 border-neutral-800"
+              : "bg-neutral-50 border-neutral-300"
+          }`}
+        >
+          {loading && (
+            <div
+              className={`p-3 ${
+                isDark ? "text-slate-400" : "text-neutral-600"
+              }`}
+            >
+              Loading…
+            </div>
+          )}
           {!loading && reports.length === 0 && (
-            <div className="p-3 text-slate-400">No reports yet.</div>
+            <div
+              className={`p-3 ${
+                isDark ? "text-slate-400" : "text-neutral-600"
+              }`}
+            >
+              No reports yet.
+            </div>
           )}
           {!loading && (
-            <ul className="divide-y">
+            <ul
+              className={`divide-y ${
+                isDark ? "divide-neutral-700" : "divide-neutral-200"
+              }`}
+            >
               {getPagedReports(
                 reports,
                 search,
@@ -577,7 +628,13 @@ export default function TaskGenerationReports({
                   onClick={() => openReport(r)}
                   className="cursor-pointer"
                 >
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-neutral-900/70 border border-neutral-700 hover:bg-neutral-800/70 hover:border-neutral-600 transition-colors shadow-[0_0_0_1px_rgba(255,255,255,0.03)]">
+                  <div
+                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition-colors shadow-[0_0_0_1px_rgba(255,255,255,0.03)] ${
+                      isDark
+                        ? "bg-neutral-900/70 border-neutral-700 hover:bg-neutral-800/70 hover:border-neutral-600"
+                        : "bg-neutral-50 border-neutral-300 hover:bg-neutral-100 hover:border-neutral-400"
+                    }`}
+                  >
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="h-10 w-10 rounded-md bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-neutral-200 text-sm font-medium flex-shrink-0 shadow-inner">
                         RG

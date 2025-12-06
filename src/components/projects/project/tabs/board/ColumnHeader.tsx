@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes";
 import { ColumnType } from "./types";
 import { Button } from "@/components/ui/button";
 import { KanbanHeader } from "@/components/ui/kanban";
@@ -46,17 +47,23 @@ export const ColumnHeader = ({
   taskCount,
   onAddTask,
 }: ColumnHeaderProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const gradient = columnGradients[column.name] || columnGradients["Backlog"];
 
   return (
     <KanbanHeader>
       <div
-        className="
+        className={`
         flex items-center justify-between w-full
         px-4 py-3 rounded-xl
-        bg-neutral-900/60 backdrop-blur-sm
-        border border-white/[0.06]
-      "
+        backdrop-blur-sm border
+        ${
+          isDark
+            ? "bg-neutral-900/60 border-white/[0.06]"
+            : "bg-neutral-50 border-neutral-300"
+        }
+      `}
       >
         <div className="flex items-center gap-3">
           {/* Status indicator with glow */}
@@ -69,18 +76,26 @@ export const ColumnHeader = ({
           />
 
           {/* Column name */}
-          <span className="text-sm font-semibold text-white/90 tracking-wide">
+          <span
+            className={`text-sm font-semibold tracking-wide ${
+              isDark ? "text-white/90" : "text-neutral-900"
+            }`}
+          >
             {column.name}
           </span>
 
           {/* Task count badge */}
           {taskCount > 0 && (
             <span
-              className="
-              px-2 py-0.5 rounded-md
-              bg-white/[0.06] border border-white/[0.04]
-              text-xs font-medium text-white/50
-            "
+              className={`
+              px-2 py-0.5 rounded-md border
+              text-xs font-medium
+              ${
+                isDark
+                  ? "bg-white/[0.06] border-white/[0.04] text-white/50"
+                  : "bg-neutral-200 border-neutral-300 text-neutral-700"
+              }
+            `}
             >
               {taskCount}
             </span>
@@ -90,15 +105,24 @@ export const ColumnHeader = ({
         {/* Add task button */}
         <button
           onClick={onAddTask}
-          className="
+          className={`
             p-1.5 rounded-lg
-            bg-white/[0.04] hover:bg-white/[0.08]
-            border border-white/[0.04] hover:border-white/[0.1]
-            transition-all duration-200 cursor-pointer
+            border transition-all duration-200 cursor-pointer
             group
-          "
+            ${
+              isDark
+                ? "bg-white/[0.04] hover:bg-white/[0.08] border-white/[0.04] hover:border-white/[0.1]"
+                : "bg-neutral-200 hover:bg-neutral-300 border-neutral-300 hover:border-neutral-400"
+            }
+          `}
         >
-          <Plus className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
+          <Plus
+            className={`w-4 h-4 transition-colors ${
+              isDark
+                ? "text-white/40 group-hover:text-white/70"
+                : "text-neutral-600 group-hover:text-neutral-900"
+            }`}
+          />
         </button>
       </div>
     </KanbanHeader>

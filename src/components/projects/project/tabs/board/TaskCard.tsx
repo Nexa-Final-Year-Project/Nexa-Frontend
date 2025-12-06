@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import { Avatar, AvatarImage } from "@/components/ui/avatar/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -56,20 +57,26 @@ export const TaskCard = ({
   handleEditTaskModal,
   members,
 }: TaskCardProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { updateTask } = useTasks();
   const renderMenu = () => (
     <ReusableDropdownMenu
       trigger={
         <Button
           variant="ghost"
-          className="
+          className={`
             p-1.5 rounded-lg cursor-pointer
             opacity-0 group-hover:opacity-100
-            hover:bg-white/[0.08]
             transition-all duration-200
-          "
+            ${isDark ? "hover:bg-white/[0.08]" : "hover:bg-neutral-200"}
+          `}
         >
-          <MoreVertical className="h-4 w-4 text-white/50" />
+          <MoreVertical
+            className={`h-4 w-4 ${
+              isDark ? "text-white/50" : "text-neutral-600"
+            }`}
+          />
         </Button>
       }
       items={[
@@ -92,11 +99,15 @@ export const TaskCard = ({
       className={`
         !cursor-pointer group
         relative overflow-hidden
-        bg-neutral-900/60 border border-white/[0.06]
         rounded-xl p-3
         hover:border-white/[0.12]
-        hover:bg-neutral-900/80
         transition-all duration-300
+        border
+        ${
+          isDark
+            ? "bg-neutral-900/60 border-white/[0.06] hover:bg-neutral-900/80"
+            : "bg-neutral-50 border-neutral-300 hover:bg-neutral-100"
+        }
         ${glowClass}
       `}
       onClick={() => {
@@ -116,13 +127,17 @@ export const TaskCard = ({
     >
       {/* Hover shine effect */}
       <div
-        className="
+        className={`
         absolute inset-0 
-        bg-gradient-to-r from-transparent via-white/[0.02] to-transparent
         translate-x-[-100%] group-hover:translate-x-[100%]
         transition-transform duration-700 ease-out
         pointer-events-none
-      "
+        ${
+          isDark
+            ? "bg-gradient-to-r from-transparent via-white/[0.02] to-transparent"
+            : "bg-gradient-to-r from-transparent via-neutral-400/[0.02] to-transparent"
+        }
+      `}
       />
 
       <div className="relative z-10 flex flex-col gap-3">
@@ -145,36 +160,59 @@ export const TaskCard = ({
               <input
                 value={editValue}
                 onChange={(e) => onEditChange(e.target.value)}
-                className="
+                className={`
                   flex-1 text-sm font-medium
-                  bg-white/[0.03] border border-white/[0.1]
                   rounded-lg px-3 py-2
-                  text-white placeholder:text-white/30
-                  focus:border-violet-500/40 focus:outline-none
+                  focus:outline-none
                   transition-all duration-200
-                "
+                  ${
+                    isDark
+                      ? "bg-white/[0.03] border border-white/[0.1] text-white placeholder:text-white/30 focus:border-violet-500/40"
+                      : "bg-neutral-100 border border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus:border-violet-400"
+                  }
+                `}
                 autoFocus
               />
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={onSaveEdit}
-                className="h-8 w-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 cursor-pointer"
+                className={`h-8 w-8 rounded-lg cursor-pointer border ${
+                  isDark
+                    ? "bg-emerald-500/10 border-emerald-500/30 hover:bg-emerald-500/20"
+                    : "bg-emerald-100 border-emerald-300 hover:bg-emerald-200"
+                }`}
               >
-                <Check className="h-4 w-4 text-emerald-400" />
+                <Check
+                  className={`h-4 w-4 ${
+                    isDark ? "text-emerald-400" : "text-emerald-600"
+                  }`}
+                />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={onCancelEdit}
-                className="h-8 w-8 rounded-lg bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 cursor-pointer"
+                className={`h-8 w-8 rounded-lg cursor-pointer border ${
+                  isDark
+                    ? "bg-rose-500/10 border-rose-500/30 hover:bg-rose-500/20"
+                    : "bg-red-100 border-red-300 hover:bg-red-200"
+                }`}
               >
-                <X className="h-4 w-4 text-rose-400" />
+                <X
+                  className={`h-4 w-4 ${
+                    isDark ? "text-rose-400" : "text-red-600"
+                  }`}
+                />
               </Button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <p className="font-medium text-sm text-white/90 line-clamp-2">
+              <p
+                className={`font-medium text-sm line-clamp-2 ${
+                  isDark ? "text-white/90" : "text-neutral-900"
+                }`}
+              >
                 {task?.title}
               </p>
             </div>
@@ -182,7 +220,11 @@ export const TaskCard = ({
         </div>
 
         {/* Footer: Date, Type & Avatar */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/[0.04]">
+        <div
+          className={`flex items-center justify-between pt-2 border-t ${
+            isDark ? "border-white/[0.04]" : "border-neutral-200"
+          }`}
+        >
           <div className="flex flex-col gap-1.5">
             {/* Due Date Badge */}
             <div
