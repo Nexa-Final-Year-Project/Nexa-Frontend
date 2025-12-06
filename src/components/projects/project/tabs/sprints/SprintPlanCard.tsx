@@ -1,7 +1,14 @@
 "use client";
 
 import React from "react";
-import { format, parseISO, differenceInDays, isAfter, isBefore } from "date-fns";
+import { useTheme } from "next-themes";
+import {
+  format,
+  parseISO,
+  differenceInDays,
+  isAfter,
+  isBefore,
+} from "date-fns";
 import {
   Calendar,
   Clock,
@@ -13,7 +20,11 @@ import {
   Zap,
   ChevronRight,
 } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar/avatar";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/components/ui/avatar/avatar";
 import { ProjectMember } from "@/types/project";
 
 // Sprint data from the AI planner response
@@ -86,7 +97,14 @@ interface SprintPlanCardProps {
   onClick: () => void;
 }
 
-export default function SprintPlanCard({ sprint, members = [], onClick }: SprintPlanCardProps) {
+export default function SprintPlanCard({
+  sprint,
+  members = [],
+  onClick,
+}: SprintPlanCardProps) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   // Calculate sprint duration and progress
   const startDate = parseISO(sprint.startDate);
   const endDate = parseISO(sprint.endDate);
@@ -94,7 +112,10 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
   const totalDays = differenceInDays(endDate, startDate);
   const daysElapsed = Math.max(0, differenceInDays(today, startDate));
   const daysRemaining = Math.max(0, differenceInDays(endDate, today));
-  const progressPercent = Math.min(100, Math.round((daysElapsed / totalDays) * 100));
+  const progressPercent = Math.min(
+    100,
+    Math.round((daysElapsed / totalDays) * 100)
+  );
 
   // Status determination
   const isActive = isAfter(today, startDate) && isBefore(today, endDate);
@@ -144,7 +165,8 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
   const extraMemberCount = Math.max(0, assignedMemberIds.size - 4);
 
   // Risk level
-  const riskPercent = sprint.riskAnalysis?.delayRiskPercent || sprint.sprintRiskScore || 0;
+  const riskPercent =
+    sprint.riskAnalysis?.delayRiskPercent || sprint.sprintRiskScore || 0;
   const getRiskLevel = () => {
     if (riskPercent >= 50) return { label: "High Risk", color: "rose" };
     if (riskPercent >= 25) return { label: "Medium Risk", color: "amber" };
@@ -157,12 +179,18 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
   const deferredCount = sprint.deferredTasks?.length || 0;
 
   // Confidence score
-  const confidence = sprint.aiConfidence ? Math.round(sprint.aiConfidence * 100) : null;
+  const confidence = sprint.aiConfidence
+    ? Math.round(sprint.aiConfidence * 100)
+    : null;
 
   return (
     <div
       onClick={onClick}
-      className="group relative bg-neutral-900/40 backdrop-blur-sm border border-white/[0.06] rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:bg-neutral-900/60 hover:border-white/[0.1] hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+      className={`group relative backdrop-blur-sm rounded-2xl p-5 cursor-pointer transition-all duration-300 ${
+        isDark 
+          ? "bg-neutral-900/40 border border-white/[0.06] hover:bg-neutral-900/60 hover:border-white/[0.1] hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+          : "bg-white border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm hover:shadow-md"
+      }`}
     >
       {/* Status Badge */}
       <div className="absolute top-4 right-4">
@@ -182,7 +210,7 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
 
       {/* Header */}
       <div className="mb-4">
-        <h3 className="text-base font-semibold text-white/90 pr-24 truncate">
+        <h3 className={`text-base font-semibold pr-24 truncate ${isDark ? "text-white/90" : "text-neutral-900"}`}>
           {sprint.name || sprint.sprintId}
         </h3>
         <p className="text-xs text-neutral-500 mt-1 flex items-center gap-1.5">
@@ -193,7 +221,7 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
 
       {/* Summary */}
       {(sprint.summary || sprint.aiSummary) && (
-        <p className="text-sm text-neutral-400 line-clamp-2 mb-4 leading-relaxed">
+        <p className={`text-sm line-clamp-2 mb-4 leading-relaxed ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
           {sprint.summary || sprint.aiSummary}
         </p>
       )}
@@ -201,12 +229,12 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
       {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-3 mb-4">
         {/* Tasks */}
-        <div className="bg-white/[0.02] rounded-xl p-3 border border-white/[0.04]">
+        <div className={`rounded-xl p-3 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-100"}`}>
           <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-1">
             <Target className="w-3 h-3" />
             Tasks
           </div>
-          <div className="text-lg font-semibold text-white/90">
+          <div className={`text-lg font-semibold ${isDark ? "text-white/90" : "text-neutral-900"}`}>
             {selectedCount}
             {deferredCount > 0 && (
               <span className="text-xs text-neutral-500 font-normal ml-1">
@@ -217,24 +245,26 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
         </div>
 
         {/* Effort */}
-        <div className="bg-white/[0.02] rounded-xl p-3 border border-white/[0.04]">
+        <div className={`rounded-xl p-3 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-100"}`}>
           <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-1">
             <Clock className="w-3 h-3" />
             Effort
           </div>
-          <div className="text-lg font-semibold text-white/90">
+          <div className={`text-lg font-semibold ${isDark ? "text-white/90" : "text-neutral-900"}`}>
             {sprint.totalEffort || 0}
-            <span className="text-xs text-neutral-500 font-normal ml-1">hrs</span>
+            <span className="text-xs text-neutral-500 font-normal ml-1">
+              hrs
+            </span>
           </div>
         </div>
 
         {/* Velocity */}
-        <div className="bg-white/[0.02] rounded-xl p-3 border border-white/[0.04]">
+        <div className={`rounded-xl p-3 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-100"}`}>
           <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-1">
             <TrendingUp className="w-3 h-3" />
             Velocity
           </div>
-          <div className="text-lg font-semibold text-white/90">
+          <div className={`text-lg font-semibold ${isDark ? "text-white/90" : "text-neutral-900"}`}>
             {sprint.velocity || sprint.predictedVelocity || 0}
           </div>
         </div>
@@ -245,9 +275,9 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
         <div className="mb-4">
           <div className="flex items-center justify-between text-xs mb-1.5">
             <span className="text-neutral-500">Sprint Progress</span>
-            <span className="text-neutral-400">{daysRemaining} days left</span>
+            <span className={isDark ? "text-neutral-400" : "text-neutral-600"}>{daysRemaining} days left</span>
           </div>
-          <div className="h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
+          <div className={`h-1.5 rounded-full overflow-hidden ${isDark ? "bg-white/[0.05]" : "bg-neutral-200"}`}>
             <div
               className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
@@ -257,27 +287,29 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
       )}
 
       {/* Bottom Section */}
-      <div className="flex items-center justify-between pt-3 border-t border-white/[0.04]">
+      <div className={`flex items-center justify-between pt-3 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-100"}`}>
         {/* Team Avatars */}
         <div className="flex items-center">
           <div className="flex -space-x-2">
             {assignedMembers.map((member: any, idx) => (
               <Avatar
                 key={member?.projectMemberId || member?._id || idx}
-                className="w-7 h-7 border-2 border-neutral-900 ring-0"
+                className={`w-7 h-7 ring-0 ${isDark ? "border-2 border-neutral-900" : "border-2 border-white"}`}
               >
                 <AvatarImage
                   src={member?.avatar || member?.photoURL}
                   alt={member?.name || "Member"}
                 />
-                <AvatarFallback className="bg-neutral-800 text-neutral-400 text-xs">
+                <AvatarFallback className={`text-xs ${isDark ? "bg-neutral-800 text-neutral-400" : "bg-neutral-100 text-neutral-600"}`}>
                   {(member?.name || "?").slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             ))}
             {extraMemberCount > 0 && (
-              <div className="w-7 h-7 rounded-full bg-neutral-800 border-2 border-neutral-900 flex items-center justify-center">
-                <span className="text-xs text-neutral-400">+{extraMemberCount}</span>
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center ${isDark ? "bg-neutral-800 border-2 border-neutral-900" : "bg-neutral-100 border-2 border-white"}`}>
+                <span className={`text-xs ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                  +{extraMemberCount}
+                </span>
               </div>
             )}
           </div>
@@ -314,7 +346,7 @@ export default function SprintPlanCard({ sprint, members = [], onClick }: Sprint
           )}
 
           {/* Arrow */}
-          <ChevronRight className="w-4 h-4 text-neutral-600 group-hover:text-neutral-400 group-hover:translate-x-0.5 transition-all" />
+          <ChevronRight className={`w-4 h-4 transition-all ${isDark ? "text-neutral-600 group-hover:text-neutral-400" : "text-neutral-400 group-hover:text-neutral-600"} group-hover:translate-x-0.5`} />
         </div>
       </div>
     </div>

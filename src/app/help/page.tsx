@@ -145,24 +145,26 @@ export default function HelpPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   // Filter FAQs based on search
-  const filteredFaqs = faqs.map((category) => ({
-    ...category,
-    questions: category.questions.filter(
-      (q) =>
-        q.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        q.a.toLowerCase().includes(searchQuery.toLowerCase())
-    ),
-  })).filter((category) => category.questions.length > 0);
+  const filteredFaqs = faqs
+    .map((category) => ({
+      ...category,
+      questions: category.questions.filter(
+        (q) =>
+          q.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          q.a.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    }))
+    .filter((category) => category.questions.length > 0);
 
   return (
     <div className="min-h-screen relative">
       {/* Background */}
       <div className="fixed inset-0 -z-20 bg-neutral-950" />
-      <div 
+      <div
         className="fixed inset-0 -z-10 opacity-[0.015]"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
+          backgroundSize: "60px 60px",
         }}
       />
 
@@ -187,7 +189,8 @@ export default function HelpPage() {
             How can we help?
           </h1>
           <p className="text-lg text-white/50 max-w-xl mx-auto mb-8">
-            Find answers to common questions or get in touch with our support team.
+            Find answers to common questions or get in touch with our support
+            team.
           </p>
 
           {/* Search */}
@@ -281,7 +284,9 @@ export default function HelpPage() {
                     <category.icon className="w-5 h-5 text-white/50" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-white font-medium">{category.category}</h3>
+                    <h3 className="text-white font-medium">
+                      {category.category}
+                    </h3>
                     <p className="text-sm text-white/40">
                       {category.questions.length} questions
                     </p>
@@ -306,11 +311,7 @@ export default function HelpPage() {
                     >
                       <div className="px-6 pb-6">
                         {category.questions.map((q, qIndex) => (
-                          <FAQItem
-                            key={qIndex}
-                            question={q.q}
-                            answer={q.a}
-                          />
+                          <FAQItem key={qIndex} question={q.q} answer={q.a} />
                         ))}
                       </div>
                     </motion.div>

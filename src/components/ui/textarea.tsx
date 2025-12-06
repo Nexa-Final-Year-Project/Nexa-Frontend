@@ -1,8 +1,8 @@
 "use client";
 
-import * as React from "react"
-import { useTheme } from "next-themes"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   const { theme } = useTheme();
@@ -31,7 +31,7 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Textarea }
+export { Textarea };

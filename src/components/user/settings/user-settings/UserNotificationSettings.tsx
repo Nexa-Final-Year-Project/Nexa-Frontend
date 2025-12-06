@@ -1,7 +1,14 @@
 "use client";
 
 import { Switch } from "@/components/ui/switch";
-import { Bell, Mail, Smartphone, Megaphone, Package, ShieldCheck } from "lucide-react";
+import {
+  Bell,
+  Mail,
+  Smartphone,
+  Megaphone,
+  Package,
+  ShieldCheck,
+} from "lucide-react";
 
 interface UserNotificationsSettingsProps {
   notifications: {
@@ -10,7 +17,10 @@ interface UserNotificationsSettingsProps {
   };
 }
 
-const notificationDescriptions: Record<string, { title: string; description: string; icon: React.ReactNode }> = {
+const notificationDescriptions: Record<
+  string,
+  { title: string; description: string; icon: React.ReactNode }
+> = {
   marketing: {
     title: "Marketing",
     description: "Promotions, newsletters, and updates",
@@ -64,10 +74,16 @@ export const UserNotificationSettings = ({
                 className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`
+                  <div
+                    className={`
                     w-10 h-10 rounded-xl flex items-center justify-center transition-colors
-                    ${value ? "bg-blue-500/20 text-blue-400" : "bg-white/[0.06] text-white/40"}
-                  `}>
+                    ${
+                      value
+                        ? "bg-blue-500/20 text-blue-400"
+                        : "bg-white/[0.06] text-white/40"
+                    }
+                  `}
+                  >
                     {info?.icon}
                   </div>
                   <div>
@@ -111,10 +127,16 @@ export const UserNotificationSettings = ({
                 className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`
+                  <div
+                    className={`
                     w-10 h-10 rounded-xl flex items-center justify-center transition-colors
-                    ${value ? "bg-emerald-500/20 text-emerald-400" : "bg-white/[0.06] text-white/40"}
-                  `}>
+                    ${
+                      value
+                        ? "bg-emerald-500/20 text-emerald-400"
+                        : "bg-white/[0.06] text-white/40"
+                    }
+                  `}
+                  >
                     {info?.icon}
                   </div>
                   <div>

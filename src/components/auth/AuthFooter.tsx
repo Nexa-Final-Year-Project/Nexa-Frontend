@@ -18,15 +18,15 @@ export function AuthFooter({
   className,
 }: AuthFooterProps) {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.5 }}
       className={`text-center text-sm pt-4 ${className}`}
     >
       <span className="text-white/50">{text}</span>{" "}
-      <Link 
-        href={href} 
+      <Link
+        href={href}
         className="text-violet-400 hover:text-violet-300 transition-colors font-medium relative group"
       >
         {linkText}

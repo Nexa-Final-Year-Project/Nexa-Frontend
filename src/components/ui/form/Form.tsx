@@ -22,7 +22,7 @@ export const Form = ({
 }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  
+
   // Ensure all fields have defined initial values to prevent controlled/uncontrolled issues
   const safeInitialValues = useMemo(() => {
     const safe: Record<string, any> = {};
@@ -37,10 +37,10 @@ export const Form = ({
     });
     return safe;
   }, [fields, initialValues]);
-  
+
   const form = useForm({ initialValues: safeInitialValues });
   const [loading, setLoading] = useState(false);
-  
+
   // Reset form when initialValues change
   useEffect(() => {
     form.setValues(safeInitialValues);
@@ -72,14 +72,14 @@ export const Form = ({
         </motion.div>
       ))}
 
-      <motion.div 
+      <motion.div
         className="flex justify-center pt-4"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: fields.length * 0.1 }}
       >
-        <motion.div 
-          whileHover={{ scale: 1.02 }} 
+        <motion.div
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className="w-full max-w-sm"
         >
@@ -87,8 +87,8 @@ export const Form = ({
             type="submit"
             disabled={loading}
             className={`w-full cursor-pointer relative overflow-hidden ${
-              isDark 
-                ? "bg-white text-neutral-900 hover:bg-white/90" 
+              isDark
+                ? "bg-white text-neutral-900 hover:bg-white/90"
                 : "bg-neutral-900 text-white hover:bg-neutral-800"
             } font-medium py-3 rounded-xl transition-all duration-300 border-0`}
           >
@@ -97,7 +97,11 @@ export const Form = ({
                 <motion.span
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className={`w-4 h-4 border-2 ${isDark ? "border-neutral-300 border-t-neutral-900" : "border-white/30 border-t-white"} rounded-full`}
+                  className={`w-4 h-4 border-2 ${
+                    isDark
+                      ? "border-neutral-300 border-t-neutral-900"
+                      : "border-white/30 border-t-white"
+                  } rounded-full`}
                 />
                 Processing...
               </span>

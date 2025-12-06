@@ -3,50 +3,49 @@
 import { AnimatedDiv } from "../AnimatedDiv";
 import SectionWrapper from "./SectionWrapper";
 import { useTheme } from "next-themes";
-import {
-  Brain,
-  Activity,
-  Bell,
-  Plug,
-  TrendingUp,
-  Users,
-} from "lucide-react";
+import { Brain, Activity, Bell, Plug, TrendingUp, Users } from "lucide-react";
 
 const features = [
   {
     icon: Brain,
     title: "AI-Driven Automation",
-    description: "Intelligent task assignment and sprint planning that learns from your team's patterns",
+    description:
+      "Intelligent task assignment and sprint planning that learns from your team's patterns",
     gradient: "from-violet-500 to-purple-600",
   },
   {
     icon: Activity,
     title: "Real-Time Monitoring",
-    description: "Live dashboards with instant updates on team progress and project health",
+    description:
+      "Live dashboards with instant updates on team progress and project health",
     gradient: "from-emerald-500 to-teal-600",
   },
   {
     icon: Bell,
     title: "Smart Nudges",
-    description: "Proactive reminders and alerts before deadlines slip or blockers arise",
+    description:
+      "Proactive reminders and alerts before deadlines slip or blockers arise",
     gradient: "from-amber-500 to-orange-600",
   },
   {
     icon: Plug,
     title: "Seamless Integrations",
-    description: "Connect with GitHub, Slack, Jira, and 50+ tools your team already uses",
+    description:
+      "Connect with GitHub, Slack, Jira, and 50+ tools your team already uses",
     gradient: "from-cyan-500 to-blue-600",
   },
   {
     icon: TrendingUp,
     title: "Performance Analytics",
-    description: "Deep insights into team velocity, estimation accuracy, and delivery trends",
+    description:
+      "Deep insights into team velocity, estimation accuracy, and delivery trends",
     gradient: "from-pink-500 to-rose-600",
   },
   {
     icon: Users,
     title: "Team Collaboration",
-    description: "Built-in communication tools with context-aware threads and mentions",
+    description:
+      "Built-in communication tools with context-aware threads and mentions",
     gradient: "from-indigo-500 to-violet-600",
   },
 ];
@@ -77,27 +76,37 @@ const AboutUs = () => {
             }`}
           >
             {/* Gradient hover effect */}
-            <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-            
+            <div
+              className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+            />
+
             {/* Icon */}
-            <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.gradient} mb-4`}>
+            <div
+              className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.gradient} mb-4`}
+            >
               <feature.icon className="w-6 h-6 text-white" />
             </div>
 
             {/* Content */}
-            <h3 className={`text-lg font-semibold mb-2 ${
-              isDark ? "text-white" : "text-neutral-900"
-            }`}>
+            <h3
+              className={`text-lg font-semibold mb-2 ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               {feature.title}
             </h3>
-            <p className={`text-sm leading-relaxed ${
-              isDark ? "text-neutral-400" : "text-neutral-600"
-            }`}>
+            <p
+              className={`text-sm leading-relaxed ${
+                isDark ? "text-neutral-400" : "text-neutral-600"
+              }`}
+            >
               {feature.description}
             </p>
 
             {/* Corner accent */}
-            <div className={`absolute top-3 right-3 w-2 h-2 rounded-full bg-gradient-to-br ${feature.gradient} opacity-60`} />
+            <div
+              className={`absolute top-3 right-3 w-2 h-2 rounded-full bg-gradient-to-br ${feature.gradient} opacity-60`}
+            />
           </AnimatedDiv>
         ))}
       </div>
@@ -113,7 +122,11 @@ const AboutUs = () => {
             : "bg-gradient-to-br from-violet-50 to-emerald-50 border-neutral-200"
         }`}
       >
-        <p className={`text-lg font-medium ${isDark ? "text-white" : "text-neutral-800"}`}>
+        <p
+          className={`text-lg font-medium ${
+            isDark ? "text-white" : "text-neutral-800"
+          }`}
+        >
           Join{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-emerald-500 font-bold">
             10,000+

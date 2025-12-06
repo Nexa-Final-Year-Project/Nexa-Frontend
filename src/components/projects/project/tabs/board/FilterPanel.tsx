@@ -82,22 +82,30 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   };
 
   // Helper component for rendering a section to avoid repetition.
-  const FilterSection = ({ title, icon: Icon, items, selectedItems, onToggle }) => (
-    <section className="
+  const FilterSection = ({
+    title,
+    icon: Icon,
+    items,
+    selectedItems,
+    onToggle,
+  }) => (
+    <section
+      className="
       bg-white/[0.02] border border-white/[0.06]
       rounded-xl p-4
-    ">
+    "
+    >
       <div className="flex items-center gap-2 mb-3">
         <Icon className="w-4 h-4 text-violet-400" />
-        <h3 className="text-sm font-semibold text-white">
-          {title}
-        </h3>
+        <h3 className="text-sm font-semibold text-white">{title}</h3>
         {selectedItems.length > 0 && (
-          <span className="
+          <span
+            className="
             ml-auto px-2 py-0.5 rounded-md
             bg-violet-500/20 text-violet-400
             text-xs font-medium
-          ">
+          "
+          >
             {selectedItems.length}
           </span>
         )}
@@ -116,9 +124,10 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 rounded-lg border px-4 py-2
                 text-sm font-medium
                 transition-all duration-200
-                ${isChecked
-                  ? "border-violet-500/50 bg-gradient-to-r from-violet-500/20 to-cyan-500/10 text-white shadow-[0_0_15px_rgba(139,92,246,0.2)]"
-                  : "border-white/[0.06] bg-white/[0.02] text-white/60 hover:bg-white/[0.05] hover:text-white/80 hover:border-white/[0.1]"
+                ${
+                  isChecked
+                    ? "border-violet-500/50 bg-gradient-to-r from-violet-500/20 to-cyan-500/10 text-white shadow-[0_0_15px_rgba(139,92,246,0.2)]"
+                    : "border-white/[0.06] bg-white/[0.02] text-white/60 hover:bg-white/[0.05] hover:text-white/80 hover:border-white/[0.1]"
                 }
               `}
             >
@@ -140,7 +149,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     <Dialog.Root open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md" />
-        <Dialog.Content className="
+        <Dialog.Content
+          className="
           fixed left-1/2 top-1/2 z-50
           w-[90vw] max-w-lg
           -translate-x-1/2 -translate-y-1/2
@@ -152,21 +162,24 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           focus:outline-none
           data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
           data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95
-        ">
+        "
+        >
           {/* Background glow */}
           <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[200px] bg-violet-500/10 rounded-full blur-[80px]" />
           </div>
-          
+
           {/* Header */}
           <div className="relative flex items-center justify-between pb-5 border-b border-white/[0.06]">
             <div className="flex items-center gap-3">
-              <div className="
+              <div
+                className="
                 w-10 h-10 rounded-xl
                 bg-gradient-to-br from-violet-500/20 to-cyan-500/20
                 border border-violet-500/30
                 flex items-center justify-center
-              ">
+              "
+              >
                 <Filter className="w-5 h-5 text-violet-400" />
               </div>
               <Dialog.Title className="text-lg font-semibold text-white">

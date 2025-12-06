@@ -1,8 +1,11 @@
 import axios from "axios";
 
 // Get base URL and ensure it doesn't end with /api (to avoid double /api)
-const rawBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
-const BASE_URL = rawBaseUrl.endsWith('/api') ? rawBaseUrl.slice(0, -4) : rawBaseUrl;
+const rawBaseUrl =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+const BASE_URL = rawBaseUrl.endsWith("/api")
+  ? rawBaseUrl.slice(0, -4)
+  : rawBaseUrl;
 
 const getAuthHeaders = () => ({
   headers: {
@@ -26,7 +29,12 @@ export const reportsApi = {
   // Approve report (commits hierarchy and tasks)
   // NOTE: Backend mounts pm-approval routes at /api/ai, not /api/pm-approval
   approveReport: async (reportId: string, approvedBy?: string) => {
-    console.log("[reportsApi] approveReport called with reportId:", reportId, "approvedBy:", approvedBy);
+    console.log(
+      "[reportsApi] approveReport called with reportId:",
+      reportId,
+      "approvedBy:",
+      approvedBy
+    );
     const response = await axios.post(
       `${BASE_URL}/api/ai/report/${reportId}/approve`,
       { approvedBy },
@@ -49,7 +57,10 @@ export const reportsApi = {
   // Get suggestions by report
   // NOTE: Backend mounts pm-approval routes at /api/ai
   getSuggestionsByReport: async (reportId: string) => {
-    console.log("[reportsApi] getSuggestionsByReport called with reportId:", reportId);
+    console.log(
+      "[reportsApi] getSuggestionsByReport called with reportId:",
+      reportId
+    );
     const response = await axios.get(
       `${BASE_URL}/api/ai/report/${reportId}/suggestions`,
       getAuthHeaders()
@@ -59,7 +70,10 @@ export const reportsApi = {
 
   // Update assignment suggestions
   updateAssignments: async (reportId: string, assignmentReasons: any[]) => {
-    console.log("[reportsApi] updateAssignments called with reportId:", reportId);
+    console.log(
+      "[reportsApi] updateAssignments called with reportId:",
+      reportId
+    );
     const response = await axios.patch(
       `${BASE_URL}/api/reports/${reportId}/assignments`,
       { assignmentReasons },
@@ -74,7 +88,11 @@ export const reportsApi = {
     suggestionIds: string[],
     approvedBy?: string
   ) => {
-    console.log("[reportsApi] bulkApproveSuggestions called with:", suggestionIds.length, "suggestions");
+    console.log(
+      "[reportsApi] bulkApproveSuggestions called with:",
+      suggestionIds.length,
+      "suggestions"
+    );
     const response = await axios.post(
       `${BASE_URL}/api/ai/suggestions/bulk-approve`,
       { suggestionIds, approvedBy },
@@ -98,7 +116,10 @@ export const reportsApi = {
   // Approve single suggestion
   // NOTE: Backend mounts pm-approval routes at /api/ai
   approveSuggestion: async (suggestionId: string, approvedBy?: string) => {
-    console.log("[reportsApi] approveSuggestion called with suggestionId:", suggestionId);
+    console.log(
+      "[reportsApi] approveSuggestion called with suggestionId:",
+      suggestionId
+    );
     const response = await axios.post(
       `${BASE_URL}/api/ai/suggestion/${suggestionId}/approve`,
       { approvedBy },
@@ -114,7 +135,10 @@ export const reportsApi = {
     declinedBy?: string,
     reason?: string
   ) => {
-    console.log("[reportsApi] declineSuggestion called with suggestionId:", suggestionId);
+    console.log(
+      "[reportsApi] declineSuggestion called with suggestionId:",
+      suggestionId
+    );
     const response = await axios.post(
       `${BASE_URL}/api/ai/suggestion/${suggestionId}/decline`,
       { declinedBy, reason },
@@ -135,7 +159,10 @@ export const reportsApi = {
 
   // Delete report and all associated tasks
   deleteReportWithTasks: async (reportId: string) => {
-    console.log("[reportsApi] deleteReportWithTasks called with reportId:", reportId);
+    console.log(
+      "[reportsApi] deleteReportWithTasks called with reportId:",
+      reportId
+    );
     const response = await axios.delete(
       `${BASE_URL}/api/reports/${reportId}/with-tasks`,
       getAuthHeaders()

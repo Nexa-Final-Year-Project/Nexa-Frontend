@@ -33,9 +33,9 @@ export function SocialButton({
   const { Icon, label, brandColor } = providerConfig;
 
   return (
-    <motion.div 
-      whileHover={{ scale: 1.02 }} 
-      whileTap={{ scale: 0.98 }} 
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       className="w-full"
     >
       <Button
@@ -44,7 +44,12 @@ export function SocialButton({
         fullWidth
         className={`relative overflow-hidden !bg-white/[0.03] !text-white !border-white/[0.08] hover:!bg-white/[0.08] hover:!border-white/[0.15] rounded-xl py-3 transition-all duration-300 group ${className}`}
         onClick={onClick}
-        Icon={<Icon size={20} className="text-white/70 group-hover:text-white transition-colors" />}
+        Icon={
+          <Icon
+            size={20}
+            className="text-white/70 group-hover:text-white transition-colors"
+          />
+        }
         iconPosition="left"
       >
         <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">
@@ -69,7 +74,7 @@ export function SocialButtons({
     const oauthUrl = `${BASE_URL}/auth/${provider}`;
     window.location.href = oauthUrl;
   };
-  
+
   const handleClick = (provider: SocialProvider) => {
     onProviderSelect(provider);
   };

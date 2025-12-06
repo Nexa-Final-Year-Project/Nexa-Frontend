@@ -4,14 +4,14 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/shared/Header/Header";
 import Footer from "@/components/shared/sections/Footer";
-import { 
-  Mail, 
-  MapPin, 
+import {
+  Mail,
+  MapPin,
   Phone,
   MessageSquare,
   Send,
   Clock,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -39,19 +39,23 @@ const contactInfo = [
 const faqs = [
   {
     question: "How does the free trial work?",
-    answer: "Start with our free tier - up to 5 team members, unlimited projects. No credit card required. Upgrade when you're ready for more features.",
+    answer:
+      "Start with our free tier - up to 5 team members, unlimited projects. No credit card required. Upgrade when you're ready for more features.",
   },
   {
     question: "Can I import from other tools?",
-    answer: "Yes! We support imports from Jira, Asana, Trello, Monday.com, and more. Our migration team can also help with custom imports.",
+    answer:
+      "Yes! We support imports from Jira, Asana, Trello, Monday.com, and more. Our migration team can also help with custom imports.",
   },
   {
     question: "Is my data secure?",
-    answer: "Absolutely. We use enterprise-grade encryption, SOC 2 Type II compliance, and regular security audits to protect your data.",
+    answer:
+      "Absolutely. We use enterprise-grade encryption, SOC 2 Type II compliance, and regular security audits to protect your data.",
   },
   {
     question: "Do you offer custom integrations?",
-    answer: "Yes, our API is fully documented and our enterprise plans include custom integration support.",
+    answer:
+      "Yes, our API is fully documented and our enterprise plans include custom integration support.",
   },
 ];
 
@@ -65,17 +69,21 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    
+
     toast.success("Message sent! We'll get back to you soon.");
     setFormData({ name: "", email: "", company: "", subject: "", message: "" });
     setIsSubmitting(false);
@@ -108,7 +116,8 @@ export default function ContactPage() {
               </span>
             </h1>
             <p className="text-lg text-white/60 max-w-2xl mx-auto">
-              Have questions about Nexa? Want to schedule a demo? We'd love to hear from you.
+              Have questions about Nexa? Want to schedule a demo? We'd love to
+              hear from you.
             </p>
           </motion.div>
         </section>
@@ -127,7 +136,9 @@ export default function ContactPage() {
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/10 flex items-center justify-center mx-auto mb-4">
                   <info.icon className="w-6 h-6 text-emerald-400" />
                 </div>
-                <p className="text-xs text-white/40 uppercase tracking-wider mb-1">{info.label}</p>
+                <p className="text-xs text-white/40 uppercase tracking-wider mb-1">
+                  {info.label}
+                </p>
                 <p className="text-white font-medium mb-1">{info.value}</p>
                 <p className="text-xs text-white/50">{info.description}</p>
               </motion.div>
@@ -148,13 +159,17 @@ export default function ContactPage() {
                 <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center">
                   <MessageSquare className="w-5 h-5 text-violet-400" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Send us a message</h2>
+                <h2 className="text-2xl font-bold text-white">
+                  Send us a message
+                </h2>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm text-white/60 mb-2">Name *</label>
+                    <label className="block text-sm text-white/60 mb-2">
+                      Name *
+                    </label>
                     <input
                       type="text"
                       name="name"
@@ -166,7 +181,9 @@ export default function ContactPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-white/60 mb-2">Email *</label>
+                    <label className="block text-sm text-white/60 mb-2">
+                      Email *
+                    </label>
                     <input
                       type="email"
                       name="email"
@@ -181,7 +198,9 @@ export default function ContactPage() {
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm text-white/60 mb-2">Company</label>
+                    <label className="block text-sm text-white/60 mb-2">
+                      Company
+                    </label>
                     <input
                       type="text"
                       name="company"
@@ -192,7 +211,9 @@ export default function ContactPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-white/60 mb-2">Subject *</label>
+                    <label className="block text-sm text-white/60 mb-2">
+                      Subject *
+                    </label>
                     <select
                       name="subject"
                       value={formData.subject}
@@ -200,18 +221,32 @@ export default function ContactPage() {
                       required
                       className="w-full px-4 py-3 rounded-xl bg-neutral-900/60 border border-white/[0.06] text-white focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/20 transition-colors appearance-none cursor-pointer"
                     >
-                      <option value="" disabled className="bg-neutral-900">Select a topic</option>
-                      <option value="demo" className="bg-neutral-900">Request a Demo</option>
-                      <option value="pricing" className="bg-neutral-900">Pricing Question</option>
-                      <option value="support" className="bg-neutral-900">Technical Support</option>
-                      <option value="partnership" className="bg-neutral-900">Partnership</option>
-                      <option value="other" className="bg-neutral-900">Other</option>
+                      <option value="" disabled className="bg-neutral-900">
+                        Select a topic
+                      </option>
+                      <option value="demo" className="bg-neutral-900">
+                        Request a Demo
+                      </option>
+                      <option value="pricing" className="bg-neutral-900">
+                        Pricing Question
+                      </option>
+                      <option value="support" className="bg-neutral-900">
+                        Technical Support
+                      </option>
+                      <option value="partnership" className="bg-neutral-900">
+                        Partnership
+                      </option>
+                      <option value="other" className="bg-neutral-900">
+                        Other
+                      </option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-white/60 mb-2">Message *</label>
+                  <label className="block text-sm text-white/60 mb-2">
+                    Message *
+                  </label>
                   <textarea
                     name="message"
                     value={formData.message}
@@ -249,24 +284,33 @@ export default function ContactPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <h2 className="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">
+                Frequently Asked Questions
+              </h2>
               <div className="space-y-4">
                 {faqs.map((faq, index) => (
                   <div
                     key={index}
                     className="p-5 rounded-xl bg-neutral-900/30 border border-white/[0.04] hover:border-white/[0.08] transition-colors"
                   >
-                    <h3 className="font-medium text-white mb-2">{faq.question}</h3>
-                    <p className="text-sm text-white/50 leading-relaxed">{faq.answer}</p>
+                    <h3 className="font-medium text-white mb-2">
+                      {faq.question}
+                    </h3>
+                    <p className="text-sm text-white/50 leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 ))}
               </div>
 
               {/* Additional CTA */}
               <div className="mt-8 p-6 rounded-xl bg-gradient-to-br from-violet-500/10 to-transparent border border-violet-500/20">
-                <h3 className="font-medium text-white mb-2">Need immediate help?</h3>
+                <h3 className="font-medium text-white mb-2">
+                  Need immediate help?
+                </h3>
                 <p className="text-sm text-white/50 mb-4">
-                  Check out our documentation or join our community Discord for quick answers.
+                  Check out our documentation or join our community Discord for
+                  quick answers.
                 </p>
                 <a
                   href="#"

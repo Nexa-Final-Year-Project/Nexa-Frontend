@@ -11,7 +11,11 @@ import {
   CalendarYearPicker,
 } from "@/components/ui/kibo-ui/calendar";
 import { useEffect } from "react";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 // Types
 interface Task {
@@ -39,7 +43,10 @@ interface TasksCalendarProps {
 const STATUS_COLORS = {
   Backlog: { bg: "rgba(107, 114, 128, 0.8)", border: "rgba(107, 114, 128, 1)" },
   Todo: { bg: "rgba(59, 130, 246, 0.8)", border: "rgba(59, 130, 246, 1)" },
-  "In Progress": { bg: "rgba(245, 158, 11, 0.8)", border: "rgba(245, 158, 11, 1)" },
+  "In Progress": {
+    bg: "rgba(245, 158, 11, 0.8)",
+    border: "rgba(245, 158, 11, 1)",
+  },
   Done: { bg: "rgba(16, 185, 129, 0.8)", border: "rgba(16, 185, 129, 1)" },
   Cancelled: { bg: "rgba(239, 68, 68, 0.6)", border: "rgba(239, 68, 68, 1)" },
 };
@@ -146,7 +153,9 @@ const TasksCalendar = ({
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">Calendar</h1>
-            <p className="text-sm text-white/40">View your tasks on a timeline</p>
+            <p className="text-sm text-white/40">
+              View your tasks on a timeline
+            </p>
           </div>
         </div>
       </div>
@@ -160,7 +169,7 @@ const TasksCalendar = ({
               <div className="flex items-center justify-between">
                 <CalendarDatePicker>
                   <div className="flex items-center gap-3">
-                    <CalendarMonthPicker 
+                    <CalendarMonthPicker
                       className="
                         px-4 py-2 rounded-xl 
                         bg-white/[0.04] border border-white/[0.06]
@@ -169,7 +178,7 @@ const TasksCalendar = ({
                         transition-all duration-200 cursor-pointer
                         [&>button]:bg-transparent [&>button]:border-none
                         [&>button]:text-white [&>button]:font-medium
-                      " 
+                      "
                     />
                     <CalendarYearPicker
                       className="
@@ -186,7 +195,7 @@ const TasksCalendar = ({
                     />
                   </div>
                 </CalendarDatePicker>
-                <CalendarDatePagination 
+                <CalendarDatePagination
                   className="
                     [&>button]:w-9 [&>button]:h-9 [&>button]:rounded-lg
                     [&>button]:bg-white/[0.04] [&>button]:border [&>button]:border-white/[0.06]
@@ -200,7 +209,7 @@ const TasksCalendar = ({
           </div>
 
           {/* Calendar Header */}
-          <CalendarHeader 
+          <CalendarHeader
             className="
               bg-white/[0.02] border-b border-white/[0.06]
               [&>div]:text-white/40 [&>div]:text-xs [&>div]:font-semibold [&>div]:uppercase [&>div]:tracking-wider
@@ -209,7 +218,7 @@ const TasksCalendar = ({
           />
 
           {/* Calendar Body */}
-          <CalendarBody 
+          <CalendarBody
             features={formattedTasks}
             className="
               [&>div]:border-white/[0.04]
@@ -246,12 +255,14 @@ const TasksCalendar = ({
         {/* Legend */}
         <div className="p-4 border-t border-white/[0.06] bg-white/[0.01]">
           <div className="flex flex-wrap items-center gap-6">
-            <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Status:</span>
+            <span className="text-xs font-medium text-white/40 uppercase tracking-wider">
+              Status:
+            </span>
             <div className="flex flex-wrap items-center gap-4">
               {Object.entries(STATUS_COLORS).map(([status, colors]) => (
                 <div key={status} className="flex items-center gap-2">
-                  <div 
-                    className="w-3 h-3 rounded-sm" 
+                  <div
+                    className="w-3 h-3 rounded-sm"
                     style={{ backgroundColor: colors.bg }}
                   />
                   <span className="text-xs text-white/60">{status}</span>
@@ -260,12 +271,14 @@ const TasksCalendar = ({
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-6 mt-3">
-            <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Priority:</span>
+            <span className="text-xs font-medium text-white/40 uppercase tracking-wider">
+              Priority:
+            </span>
             <div className="flex flex-wrap items-center gap-4">
               {Object.entries(PRIORITY_COLORS).map(([priority, color]) => (
                 <div key={priority} className="flex items-center gap-2">
-                  <div 
-                    className="w-3 h-3 rounded-sm" 
+                  <div
+                    className="w-3 h-3 rounded-sm"
                     style={{ backgroundColor: color }}
                   />
                   <span className="text-xs text-white/60">{priority}</span>

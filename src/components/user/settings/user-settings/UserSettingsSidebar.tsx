@@ -1,6 +1,14 @@
 "use client";
 
-import { Settings, Lock, Sun, Bell, Activity, Trash2, ChevronRight } from "lucide-react";
+import {
+  Settings,
+  Lock,
+  Sun,
+  Bell,
+  Activity,
+  Trash2,
+  ChevronRight,
+} from "lucide-react";
 
 interface SidebarProps {
   activeSection: string;
@@ -75,10 +83,15 @@ export const UserSettingsSidebar = ({
             {Object.entries(categorizedItems).map(([category, items]) => (
               <div key={category}>
                 <div className="flex items-center gap-2 px-3 mb-3">
-                  <div className={`w-1.5 h-1.5 rounded-full ${
-                    category === "Danger Zone" ? "bg-rose-500" : 
-                    category === "Preferences" ? "bg-blue-500" : "bg-emerald-500"
-                  }`} />
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      category === "Danger Zone"
+                        ? "bg-rose-500"
+                        : category === "Preferences"
+                        ? "bg-blue-500"
+                        : "bg-emerald-500"
+                    }`}
+                  />
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
                     {category}
                   </span>
@@ -87,59 +100,74 @@ export const UserSettingsSidebar = ({
                 <div className="space-y-1">
                   {items.map((item) => {
                     const isActive = activeSection === item.id;
-                    
+
                     return (
                       <button
                         key={item.id}
                         onClick={() => {
                           setActiveSection(item.id);
-                          if (setActiveCategory) setActiveCategory(item.category);
+                          if (setActiveCategory)
+                            setActiveCategory(item.category);
                         }}
                         className={`
                           group w-full flex items-center justify-between px-3 py-2.5 rounded-xl
                           transition-all duration-200 cursor-pointer text-left
-                          ${isActive 
-                            ? item.destructive
-                              ? "bg-rose-500/10 border border-rose-500/20"
-                              : "bg-white/[0.08] border border-white/[0.08]"
-                            : "border border-transparent hover:bg-white/[0.04]"
+                          ${
+                            isActive
+                              ? item.destructive
+                                ? "bg-rose-500/10 border border-rose-500/20"
+                                : "bg-white/[0.08] border border-white/[0.08]"
+                              : "border border-transparent hover:bg-white/[0.04]"
                           }
                         `}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`
+                          <div
+                            className={`
                             flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200
-                            ${isActive
-                              ? item.destructive
-                                ? "bg-rose-500/20 text-rose-400"
-                                : "bg-white/10 text-white"
-                              : item.destructive
+                            ${
+                              isActive
+                                ? item.destructive
+                                  ? "bg-rose-500/20 text-rose-400"
+                                  : "bg-white/10 text-white"
+                                : item.destructive
                                 ? "bg-rose-500/10 text-rose-400/60 group-hover:text-rose-400"
                                 : "bg-white/[0.04] text-white/50 group-hover:text-white/80"
                             }
-                          `}>
+                          `}
+                          >
                             {item.icon}
                           </div>
-                          <span className={`
+                          <span
+                            className={`
                             text-sm font-medium transition-colors duration-200
-                            ${isActive
-                              ? item.destructive ? "text-rose-400" : "text-white"
-                              : item.destructive
+                            ${
+                              isActive
+                                ? item.destructive
+                                  ? "text-rose-400"
+                                  : "text-white"
+                                : item.destructive
                                 ? "text-rose-400/60 group-hover:text-rose-400"
                                 : "text-white/60 group-hover:text-white/90"
                             }
-                          `}>
+                          `}
+                          >
                             {item.label}
                           </span>
                         </div>
-                        
-                        <ChevronRight className={`
+
+                        <ChevronRight
+                          className={`
                           w-4 h-4 transition-all duration-200
-                          ${isActive
-                            ? item.destructive ? "text-rose-400/60" : "text-white/40"
-                            : "text-white/20 opacity-0 group-hover:opacity-100"
+                          ${
+                            isActive
+                              ? item.destructive
+                                ? "text-rose-400/60"
+                                : "text-white/40"
+                              : "text-white/20 opacity-0 group-hover:opacity-100"
                           }
-                        `} />
+                        `}
+                        />
                       </button>
                     );
                   })}

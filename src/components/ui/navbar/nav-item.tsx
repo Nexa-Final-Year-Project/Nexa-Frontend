@@ -12,18 +12,19 @@ const navItemVariants = cva(
       variant: {
         default: [
           "dark:hover:bg-white/[0.06] dark:text-white/70 dark:hover:text-white",
-          "hover:bg-neutral-100 text-neutral-600 hover:text-neutral-900"
+          "hover:bg-neutral-100 text-neutral-600 hover:text-neutral-900",
         ],
         ghost: [
           "dark:hover:bg-transparent dark:hover:text-white",
-          "hover:bg-transparent hover:text-neutral-900"
+          "hover:bg-transparent hover:text-neutral-900",
         ],
-        premium: "text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300",
+        premium:
+          "text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300",
       },
       active: {
         true: [
           "dark:bg-white/[0.08] dark:text-white dark:border dark:border-white/[0.1]",
-          "bg-neutral-100 text-neutral-900 border border-neutral-200"
+          "bg-neutral-100 text-neutral-900 border border-neutral-200",
         ],
       },
     },
@@ -65,7 +66,9 @@ export function NavItem({
           <Icon className="h-4.5 w-4.5 text-emerald-500 dark:text-emerald-400 group-hover/navitem:text-emerald-600 dark:group-hover/navitem:text-emerald-300 transition-colors" />
         </div>
       )}
-      <span className="group-data-[collapsible=icon]:hidden relative z-10">{label}</span>
+      <span className="group-data-[collapsible=icon]:hidden relative z-10">
+        {label}
+      </span>
       {badge && (
         <span
           className={cn(

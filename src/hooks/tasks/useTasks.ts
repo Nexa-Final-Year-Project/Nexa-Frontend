@@ -113,12 +113,14 @@ export const useTasks = (projectId?: string) => {
           );
           // Avoid duplicating same reportId
           const has = reportId
-            ? existing.some((r: any) => r.reportId === reportId || r._id === reportId)
+            ? existing.some(
+                (r: any) => r.reportId === reportId || r._id === reportId
+              )
             : false;
-          
+
           // Get current user for ownership
           const { user } = useAuthStore.getState();
-          
+
           const payloadToSave = {
             ...response,
             // Ensure we have the _id set from reportId

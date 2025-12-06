@@ -80,7 +80,9 @@ export function Modal({
         </DialogTrigger>
       )}
 
-      <DialogContent className={`${sizeClasses[size]} max-h-[85vh] flex flex-col`}>
+      <DialogContent
+        className={`${sizeClasses[size]} max-h-[85vh] flex flex-col`}
+      >
         {showHeader && (
           <DialogHeader className="flex-shrink-0">
             <DialogTitle className={titleColorClass}>{title}</DialogTitle>

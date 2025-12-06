@@ -62,10 +62,12 @@ export const TopStatCard = ({
   color = "violet",
 }: TopStatCardProps) => {
   const isPositive = trend !== undefined && trend >= 0;
-  const config = colorConfig[color as keyof typeof colorConfig] || colorConfig.violet;
+  const config =
+    colorConfig[color as keyof typeof colorConfig] || colorConfig.violet;
 
   return (
-    <Card className={`
+    <Card
+      className={`
       relative overflow-hidden
       bg-neutral-900/40 border border-white/[0.06]
       rounded-2xl p-5
@@ -73,9 +75,10 @@ export const TopStatCard = ({
       hover:border-white/[0.1]
       hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]
       group cursor-pointer
-    `}>
+    `}
+    >
       {/* Background glow effect */}
-      <div 
+      <div
         className={`
           absolute inset-0 
           bg-gradient-to-br ${config.gradient}
@@ -84,14 +87,15 @@ export const TopStatCard = ({
           blur-xl
         `}
       />
-      
+
       {/* Content */}
       <div className="relative z-10 flex flex-col gap-3">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {icon && (
-              <div className={`
+              <div
+                className={`
                 p-2.5 rounded-xl
                 bg-gradient-to-br ${config.gradient}
                 border ${config.border}
@@ -99,7 +103,8 @@ export const TopStatCard = ({
                 shadow-[0_0_15px_${config.glow}]
                 group-hover:scale-105
                 transition-transform duration-300
-              `}>
+              `}
+              >
                 {icon}
               </div>
             )}
@@ -111,9 +116,10 @@ export const TopStatCard = ({
                 flex items-center gap-1
                 text-xs font-semibold
                 px-2.5 py-1 rounded-lg
-                ${isPositive 
-                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" 
-                  : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                ${
+                  isPositive
+                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                    : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                 }
               `}
             >
@@ -138,9 +144,23 @@ export const TopStatCard = ({
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
                 <defs>
-                  <linearGradient id={`gradient-${color}`} x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor={config.line} stopOpacity={0.5} />
-                    <stop offset="100%" stopColor={config.line} stopOpacity={1} />
+                  <linearGradient
+                    id={`gradient-${color}`}
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="0"
+                  >
+                    <stop
+                      offset="0%"
+                      stopColor={config.line}
+                      stopOpacity={0.5}
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor={config.line}
+                      stopOpacity={1}
+                    />
                   </linearGradient>
                 </defs>
                 <Line
@@ -155,15 +175,17 @@ export const TopStatCard = ({
           </div>
         )}
       </div>
-      
+
       {/* Hover shine effect */}
-      <div className="
+      <div
+        className="
         absolute inset-0 
         bg-gradient-to-r from-transparent via-white/[0.02] to-transparent
         translate-x-[-100%] group-hover:translate-x-[100%]
         transition-transform duration-700 ease-out
         pointer-events-none
-      " />
+      "
+      />
     </Card>
   );
 };

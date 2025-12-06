@@ -85,69 +85,109 @@ export function NavUser(props: NavUserProps) {
             <SidebarMenuButton
               size="lg"
               className={`${
-                isDark 
-                  ? "data-[state=open]:bg-white/[0.06] hover:bg-white/[0.04]" 
+                isDark
+                  ? "data-[state=open]:bg-white/[0.06] hover:bg-white/[0.04]"
                   : "data-[state=open]:bg-neutral-100 hover:bg-neutral-50"
               } transition-all duration-200 cursor-pointer group rounded-xl`}
             >
-              <Avatar className={`h-9 w-9 rounded-xl flex-shrink-0 ring-2 ${
-                isDark 
-                  ? "ring-white/[0.06] group-hover:ring-white/[0.15]" 
-                  : "ring-neutral-200 group-hover:ring-neutral-300"
-              } transition-all`}>
+              <Avatar
+                className={`h-9 w-9 rounded-xl flex-shrink-0 ring-2 ${
+                  isDark
+                    ? "ring-white/[0.06] group-hover:ring-white/[0.15]"
+                    : "ring-neutral-200 group-hover:ring-neutral-300"
+                } transition-all`}
+              >
                 {photo ? (
                   <AvatarImage src={photo} alt={displayName} />
                 ) : (
-                  <AvatarFallback className={`rounded-xl ${
-                    isDark 
-                      ? "bg-white/[0.08] text-white" 
-                      : "bg-neutral-200 text-neutral-700"
-                  } text-sm font-medium`}>
+                  <AvatarFallback
+                    className={`rounded-xl ${
+                      isDark
+                        ? "bg-white/[0.08] text-white"
+                        : "bg-neutral-200 text-neutral-700"
+                    } text-sm font-medium`}
+                  >
                     {initials}
                   </AvatarFallback>
                 )}
               </Avatar>
               <div className="flex flex-col flex-1 min-w-0 ml-3">
-                <span className={`truncate font-medium text-sm ${isDark ? "text-white" : "text-neutral-900"}`}>
+                <span
+                  className={`truncate font-medium text-sm ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {displayName}
                 </span>
-                <span className={`truncate text-xs ${isDark ? "text-white/40" : "text-neutral-500"}`}>
+                <span
+                  className={`truncate text-xs ${
+                    isDark ? "text-white/40" : "text-neutral-500"
+                  }`}
+                >
                   {displayEmail}
                 </span>
               </div>
-              <ChevronsUpDown className={`ml-auto size-4 ${isDark ? "text-white/30 group-hover:text-white/50" : "text-neutral-400 group-hover:text-neutral-600"} transition-colors`} />
+              <ChevronsUpDown
+                className={`ml-auto size-4 ${
+                  isDark
+                    ? "text-white/30 group-hover:text-white/50"
+                    : "text-neutral-400 group-hover:text-neutral-600"
+                } transition-colors`}
+              />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className={`w-64 rounded-2xl ${
-              isDark 
-                ? "bg-[#0c0c10]/95 border-white/[0.08]" 
+              isDark
+                ? "bg-[#0c0c10]/95 border-white/[0.08]"
                 : "bg-white border-neutral-200"
-            } backdrop-blur-xl shadow-2xl ${isDark ? "shadow-black/40" : "shadow-neutral-200/50"} p-2`}
+            } backdrop-blur-xl shadow-2xl ${
+              isDark ? "shadow-black/40" : "shadow-neutral-200/50"
+            } p-2`}
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={8}
           >
             <DropdownMenuLabel className="p-0 font-normal mb-2">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`flex items-center gap-3 p-3 rounded-xl ${isDark ? "bg-white/[0.03]" : "bg-neutral-50"}`}
+                className={`flex items-center gap-3 p-3 rounded-xl ${
+                  isDark ? "bg-white/[0.03]" : "bg-neutral-50"
+                }`}
               >
-                <Avatar className={`h-12 w-12 rounded-xl flex-shrink-0 ring-2 ${isDark ? "ring-white/[0.08]" : "ring-neutral-200"}`}>
+                <Avatar
+                  className={`h-12 w-12 rounded-xl flex-shrink-0 ring-2 ${
+                    isDark ? "ring-white/[0.08]" : "ring-neutral-200"
+                  }`}
+                >
                   {photo ? (
                     <AvatarImage src={photo} alt={displayName} />
                   ) : (
-                    <AvatarFallback className={`rounded-xl ${isDark ? "bg-white/[0.08] text-white" : "bg-neutral-200 text-neutral-700"} font-medium`}>
+                    <AvatarFallback
+                      className={`rounded-xl ${
+                        isDark
+                          ? "bg-white/[0.08] text-white"
+                          : "bg-neutral-200 text-neutral-700"
+                      } font-medium`}
+                    >
                       {initials}
                     </AvatarFallback>
                   )}
                 </Avatar>
                 <div className="flex flex-col flex-1 min-w-0">
-                  <span className={`truncate font-semibold text-sm ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  <span
+                    className={`truncate font-semibold text-sm ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  >
                     {displayName}
                   </span>
-                  <span className={`truncate text-xs ${isDark ? "text-white/40" : "text-neutral-500"}`}>
+                  <span
+                    className={`truncate text-xs ${
+                      isDark ? "text-white/40" : "text-neutral-500"
+                    }`}
+                  >
                     {displayEmail}
                   </span>
                   <span className="mt-1 inline-flex items-center gap-1 text-[10px] text-emerald-500 font-medium">
@@ -160,11 +200,13 @@ export function NavUser(props: NavUserProps) {
 
             <DropdownMenuGroup>
               <Link href={`/u/${userId}/upgrade`}>
-                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
-                  isDark 
-                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
-                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
-                } focus:bg-transparent`}>
+                <DropdownMenuItem
+                  className={`rounded-lg cursor-pointer py-2.5 ${
+                    isDark
+                      ? "text-white/70 hover:text-white hover:bg-white/[0.04]"
+                      : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                  } focus:bg-transparent`}
+                >
                   <Crown className="w-4 h-4 mr-3 text-amber-500" />
                   <span>Upgrade to Pro</span>
                   <Sparkles className="w-3 h-3 ml-auto text-amber-500/50" />
@@ -172,54 +214,86 @@ export function NavUser(props: NavUserProps) {
               </Link>
             </DropdownMenuGroup>
 
-            <DropdownMenuSeparator className={`${isDark ? "bg-white/[0.06]" : "bg-neutral-200"} my-2`} />
+            <DropdownMenuSeparator
+              className={`${
+                isDark ? "bg-white/[0.06]" : "bg-neutral-200"
+              } my-2`}
+            />
 
             <DropdownMenuGroup>
               <Link href={`/u/${userId}/account`}>
-                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
-                  isDark 
-                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
-                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
-                } focus:bg-transparent`}>
-                  <User className={`w-4 h-4 mr-3 ${isDark ? "text-white/40" : "text-neutral-400"}`} />
+                <DropdownMenuItem
+                  className={`rounded-lg cursor-pointer py-2.5 ${
+                    isDark
+                      ? "text-white/70 hover:text-white hover:bg-white/[0.04]"
+                      : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                  } focus:bg-transparent`}
+                >
+                  <User
+                    className={`w-4 h-4 mr-3 ${
+                      isDark ? "text-white/40" : "text-neutral-400"
+                    }`}
+                  />
                   <span>Account</span>
                 </DropdownMenuItem>
               </Link>
               <Link href={`/u/${userId}/billing`}>
-                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
-                  isDark 
-                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
-                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
-                } focus:bg-transparent`}>
-                  <CreditCard className={`w-4 h-4 mr-3 ${isDark ? "text-white/40" : "text-neutral-400"}`} />
+                <DropdownMenuItem
+                  className={`rounded-lg cursor-pointer py-2.5 ${
+                    isDark
+                      ? "text-white/70 hover:text-white hover:bg-white/[0.04]"
+                      : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                  } focus:bg-transparent`}
+                >
+                  <CreditCard
+                    className={`w-4 h-4 mr-3 ${
+                      isDark ? "text-white/40" : "text-neutral-400"
+                    }`}
+                  />
                   <span>Billing</span>
                 </DropdownMenuItem>
               </Link>
               <Link href="/notifications">
-                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
-                  isDark 
-                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
-                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
-                } focus:bg-transparent`}>
-                  <Bell className={`w-4 h-4 mr-3 ${isDark ? "text-white/40" : "text-neutral-400"}`} />
+                <DropdownMenuItem
+                  className={`rounded-lg cursor-pointer py-2.5 ${
+                    isDark
+                      ? "text-white/70 hover:text-white hover:bg-white/[0.04]"
+                      : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                  } focus:bg-transparent`}
+                >
+                  <Bell
+                    className={`w-4 h-4 mr-3 ${
+                      isDark ? "text-white/40" : "text-neutral-400"
+                    }`}
+                  />
                   <span>Notifications</span>
                 </DropdownMenuItem>
               </Link>
               <Link href="/help">
-                <DropdownMenuItem className={`rounded-lg cursor-pointer py-2.5 ${
-                  isDark 
-                    ? "text-white/70 hover:text-white hover:bg-white/[0.04]" 
-                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
-                } focus:bg-transparent`}>
-                  <Settings className={`w-4 h-4 mr-3 ${isDark ? "text-white/40" : "text-neutral-400"}`} />
+                <DropdownMenuItem
+                  className={`rounded-lg cursor-pointer py-2.5 ${
+                    isDark
+                      ? "text-white/70 hover:text-white hover:bg-white/[0.04]"
+                      : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                  } focus:bg-transparent`}
+                >
+                  <Settings
+                    className={`w-4 h-4 mr-3 ${
+                      isDark ? "text-white/40" : "text-neutral-400"
+                    }`}
+                  />
                   <span>Settings & Help</span>
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
 
-            <DropdownMenuSeparator className={`${isDark ? "bg-white/[0.06]" : "bg-neutral-200"} my-2`} />
+            <DropdownMenuSeparator
+              className={`${
+                isDark ? "bg-white/[0.06]" : "bg-neutral-200"
+              } my-2`}
+            />
 
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={handleLogout}
               className="rounded-lg cursor-pointer py-2.5 text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 focus:bg-rose-500/10"
             >

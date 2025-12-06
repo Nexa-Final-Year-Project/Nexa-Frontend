@@ -56,14 +56,14 @@ function DialogContent({
 }) {
   return (
     <DialogPortal data-slot="dialog-portal">
-      <DialogOverlay className="bg-black/70 backdrop-blur-md" />
+      <DialogOverlay className="bg-black/50 dark:bg-black/70 backdrop-blur-md" />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
           // Base styles
           "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6 duration-300 sm:max-w-lg",
-          // Dark glassmorphism
-          "bg-neutral-900/90 backdrop-blur-xl border border-white/[0.08] rounded-2xl shadow-2xl shadow-black/50",
+          // Light/dark glassmorphism
+          "bg-white dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200 dark:border-white/[0.08] rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/50",
           // Animations
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
@@ -77,14 +77,14 @@ function DialogContent({
         {...props}
       >
         {/* Subtle gradient accent at top */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
-        
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
+
         {children}
-        
+
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="absolute top-4 right-4 p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-white/50 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500/30 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+            className="absolute top-4 right-4 p-2 rounded-xl bg-neutral-100 dark:bg-white/[0.04] hover:bg-neutral-200 dark:hover:bg-white/[0.08] border border-neutral-200 dark:border-white/[0.06] text-neutral-500 dark:text-white/50 hover:text-neutral-700 dark:hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
           >
             <XIcon className="w-4 h-4" />
             <span className="sr-only">Close</span>
@@ -99,7 +99,10 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2 text-center sm:text-left pr-8", className)}
+      className={cn(
+        "flex flex-col gap-2 text-center sm:text-left pr-8",
+        className
+      )}
       {...props}
     />
   );
@@ -110,7 +113,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-footer"
       className={cn(
-        "flex flex-col-reverse gap-3 sm:flex-row sm:justify-end pt-4 border-t border-white/[0.06]",
+        "flex flex-col-reverse gap-3 sm:flex-row sm:justify-end pt-4 border-t border-neutral-200 dark:border-white/[0.06]",
         className
       )}
       {...props}
@@ -125,7 +128,10 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-xl leading-none font-semibold text-white tracking-tight", className)}
+      className={cn(
+        "text-xl leading-none font-semibold text-neutral-900 dark:text-white tracking-tight",
+        className
+      )}
       {...props}
     />
   );
@@ -138,7 +144,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-neutral-400 text-sm leading-relaxed", className)}
+      className={cn("text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed", className)}
       {...props}
     />
   );

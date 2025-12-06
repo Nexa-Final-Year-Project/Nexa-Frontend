@@ -46,13 +46,16 @@ export const GeneralSettings = ({
         <div className="space-y-4">
           <div className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors">
             <div className="flex items-center gap-4">
-              <div className={`
+              <div
+                className={`
                 flex items-center justify-center w-10 h-10 rounded-xl transition-colors
-                ${form.values.visibility === "public" 
-                  ? "bg-emerald-500/20 text-emerald-400" 
-                  : "bg-white/[0.06] text-white/60"
+                ${
+                  form.values.visibility === "public"
+                    ? "bg-emerald-500/20 text-emerald-400"
+                    : "bg-white/[0.06] text-white/60"
                 }
-              `}>
+              `}
+              >
                 {form.values.visibility === "public" ? (
                   <Globe className="w-5 h-5" />
                 ) : (
@@ -61,7 +64,9 @@ export const GeneralSettings = ({
               </div>
               <div>
                 <p className="font-medium text-white">
-                  {form.values.visibility === "public" ? "Public Project" : "Private Project"}
+                  {form.values.visibility === "public"
+                    ? "Public Project"
+                    : "Private Project"}
                 </p>
                 <p className="text-sm text-white/40">
                   {form.values.visibility === "public"
@@ -94,7 +99,7 @@ export const GeneralSettings = ({
         <p className="text-sm text-white/40 ml-4 mb-6">
           Update your project details and settings
         </p>
-        
+
         <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-6">
           <Form
             fields={generalFields}
@@ -117,7 +122,7 @@ export const GeneralSettings = ({
         <p className="text-sm text-white/40 ml-4 mb-6">
           Customize your project's visual identity
         </p>
-        
+
         <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-6">
           <div className="flex items-center gap-8">
             {/* Avatar Display */}
@@ -132,24 +137,28 @@ export const GeneralSettings = ({
                 <Upload className="w-6 h-6 text-white/80" />
               </div>
             </div>
-            
+
             {/* Upload Info */}
             <div className="flex-1 space-y-4">
               <div>
-                <h3 className="text-sm font-medium text-white mb-1">Upload a new avatar</h3>
+                <h3 className="text-sm font-medium text-white mb-1">
+                  Upload a new avatar
+                </h3>
                 <p className="text-xs text-white/40">
                   Recommended: Square image, at least 256x256px
                 </p>
               </div>
-              
+
               <div className="flex items-center gap-3">
-                <button className="
+                <button
+                  className="
                   flex items-center gap-2 px-4 py-2.5 rounded-xl
                   bg-white/[0.06] border border-white/[0.08]
                   text-sm font-medium text-white/80
                   hover:bg-white/[0.1] hover:border-white/[0.12]
                   transition-all duration-200 cursor-pointer
-                ">
+                "
+                >
                   <ImageIcon className="w-4 h-4" />
                   Choose File
                 </button>

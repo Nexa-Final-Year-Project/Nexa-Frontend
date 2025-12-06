@@ -22,7 +22,7 @@ export function TabItemReusable({ tabs }: TabItemReusableProps) {
     const handleTabChange = () => {
       // Store current scroll position before tab changes
       const currentScroll = window.scrollY;
-      
+
       // Use requestAnimationFrame to restore scroll after DOM updates
       requestAnimationFrame(() => {
         window.scrollTo({ top: currentScroll, behavior: "instant" });
@@ -41,13 +41,13 @@ export function TabItemReusable({ tabs }: TabItemReusableProps) {
   return (
     <div ref={containerRef} style={{ minHeight: minHeight || "auto" }}>
       {tabs.map((tab) => (
-        <TabsContent 
-          key={tab.id} 
+        <TabsContent
+          key={tab.id}
           value={tab.id}
           forceMount={false}
           className="data-[state=inactive]:hidden"
         >
-          <div className="mt-2 rounded-lg p-4 text-center text-white/60">
+          <div className="mt-2 rounded-lg p-4 text-center text-neutral-500 dark:text-white/60">
             {tab.component || tab.content}
           </div>
         </TabsContent>

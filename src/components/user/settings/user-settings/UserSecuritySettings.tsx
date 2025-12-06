@@ -1,7 +1,15 @@
 "use client";
 
 import { Switch } from "@/components/ui/switch";
-import { ShieldCheck, KeyRound, Mail, Lock, Smartphone, ExternalLink, Check } from "lucide-react";
+import {
+  ShieldCheck,
+  KeyRound,
+  Mail,
+  Lock,
+  Smartphone,
+  ExternalLink,
+  Check,
+} from "lucide-react";
 
 interface UserSecuritySettingsProps {
   security: { twoFactor: boolean; loginAlerts: boolean };
@@ -71,13 +79,16 @@ export const UserSecuritySettings = ({
               className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className={`
+                <div
+                  className={`
                   w-10 h-10 rounded-xl flex items-center justify-center
-                  ${method.status === "enabled"
-                    ? "bg-emerald-500/20 text-emerald-400"
-                    : "bg-white/[0.06] text-white/40"
+                  ${
+                    method.status === "enabled"
+                      ? "bg-emerald-500/20 text-emerald-400"
+                      : "bg-white/[0.06] text-white/40"
                   }
-                `}>
+                `}
+                >
                   {method.icon}
                 </div>
                 <div>
@@ -89,22 +100,28 @@ export const UserSecuritySettings = ({
               {method.status === "enabled" && (
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-xs font-medium text-emerald-400">Enabled</span>
+                  <span className="text-xs font-medium text-emerald-400">
+                    Enabled
+                  </span>
                 </div>
               )}
 
               {method.status === "not-connected" && (
-                <span className="text-xs font-medium text-white/30">Not Connected</span>
+                <span className="text-xs font-medium text-white/30">
+                  Not Connected
+                </span>
               )}
 
               {method.status === "action" && (
-                <button className="
+                <button
+                  className="
                   flex items-center gap-2 px-4 py-2 rounded-xl
                   bg-white/[0.06] border border-white/[0.08]
                   text-sm font-medium text-white/70
                   hover:bg-white/[0.1] hover:text-white
                   transition-all duration-200 cursor-pointer
-                ">
+                "
+                >
                   Connect
                   <ExternalLink className="w-3.5 h-3.5" />
                 </button>
@@ -139,15 +156,23 @@ export const UserSecuritySettings = ({
                 className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`
+                  <div
+                    className={`
                     w-10 h-10 rounded-xl flex items-center justify-center transition-colors
-                    ${value ? "bg-emerald-500/20 text-emerald-400" : "bg-white/[0.06] text-white/40"}
-                  `}>
+                    ${
+                      value
+                        ? "bg-emerald-500/20 text-emerald-400"
+                        : "bg-white/[0.06] text-white/40"
+                    }
+                  `}
+                  >
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
                     <p className="font-medium text-white">{option.label}</p>
-                    <p className="text-xs text-white/40">{option.description}</p>
+                    <p className="text-xs text-white/40">
+                      {option.description}
+                    </p>
                   </div>
                 </div>
                 <Switch

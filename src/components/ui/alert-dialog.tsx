@@ -133,7 +133,11 @@ function AlertDialogAction({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
   return (
     <AlertDialogPrimitive.Action
-      className={cn(buttonVariants(), "bg-violet-600 hover:bg-violet-500 text-white", className)}
+      className={cn(
+        buttonVariants(),
+        "bg-violet-600 hover:bg-violet-500 text-white",
+        className
+      )}
       {...props}
     />
   );
@@ -145,7 +149,11 @@ function AlertDialogCancel({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
   return (
     <AlertDialogPrimitive.Cancel
-      className={cn(buttonVariants({ variant: "outline" }), "border-white/10 text-neutral-300 hover:bg-white/5 hover:text-white", className)}
+      className={cn(
+        buttonVariants({ variant: "outline" }),
+        "border-white/10 text-neutral-300 hover:bg-white/5 hover:text-white",
+        className
+      )}
       {...props}
     />
   );

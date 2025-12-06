@@ -1,17 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import Header from "@/components/shared/Header/Header";
 import Footer from "@/components/shared/sections/Footer";
-import { 
-  Target, 
-  Users, 
-  Zap, 
-  Shield, 
+import {
+  Target,
+  Users,
+  Zap,
+  Shield,
   Lightbulb,
   TrendingUp,
   Heart,
-  Award
+  Award,
 } from "lucide-react";
 import Logo from "@/components/shared/Logo";
 
@@ -26,22 +27,26 @@ const values = [
   {
     icon: Target,
     title: "Mission-Driven",
-    description: "We're on a mission to eliminate project management chaos and help teams focus on what truly matters - building great products.",
+    description:
+      "We're on a mission to eliminate project management chaos and help teams focus on what truly matters - building great products.",
   },
   {
     icon: Lightbulb,
     title: "Innovation First",
-    description: "We leverage cutting-edge AI to transform how teams plan, execute, and deliver projects. Smart automation, not busy work.",
+    description:
+      "We leverage cutting-edge AI to transform how teams plan, execute, and deliver projects. Smart automation, not busy work.",
   },
   {
     icon: Users,
     title: "Team-Centric",
-    description: "Every feature we build is designed to make team collaboration seamless, transparent, and dare we say, enjoyable.",
+    description:
+      "Every feature we build is designed to make team collaboration seamless, transparent, and dare we say, enjoyable.",
   },
   {
     icon: Shield,
     title: "Trust & Security",
-    description: "Your data is sacred. We employ enterprise-grade security to protect your projects and team information.",
+    description:
+      "Your data is sacred. We employ enterprise-grade security to protect your projects and team information.",
   },
 ];
 
@@ -49,25 +54,31 @@ const team = [
   {
     name: "The Vision",
     role: "What Drives Us",
-    description: "We believe project management should be intelligent, intuitive, and invisible. Nexa exists to make that vision a reality for every team.",
+    description:
+      "We believe project management should be intelligent, intuitive, and invisible. Nexa exists to make that vision a reality for every team.",
   },
   {
-    name: "The Technology", 
+    name: "The Technology",
     role: "How We Deliver",
-    description: "Powered by advanced AI and machine learning, Nexa learns from your team's patterns to predict, plan, and optimize automatically.",
+    description:
+      "Powered by advanced AI and machine learning, Nexa learns from your team's patterns to predict, plan, and optimize automatically.",
   },
   {
     name: "The Community",
     role: "Who We Serve",
-    description: "From startups to enterprises, we serve teams who refuse to settle for outdated, manual project management tools.",
+    description:
+      "From startups to enterprises, we serve teams who refuse to settle for outdated, manual project management tools.",
   },
 ];
 
 export default function AboutPage() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className={`min-h-screen ${isDark ? "bg-[#0a0a0f]" : "bg-white"}`}>
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0a0a0f]/80 border-b border-white/5 mb-8">
+      <header className={`sticky top-0 z-50 backdrop-blur-md mb-8 ${isDark ? "bg-[#0a0a0f]/80 border-b border-white/5" : "bg-white/80 border-b border-neutral-200"}`}>
         <div className="mx-auto max-w-4xl p-4">
           <Header />
         </div>
@@ -84,15 +95,16 @@ export default function AboutPage() {
             <span className="inline-block px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-6">
               About Nexa
             </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 ${isDark ? "text-white" : "text-neutral-900"}`}>
               Redefining How Teams
               <span className="block bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
                 Manage Projects
               </span>
             </h1>
-            <p className="text-lg text-white/60 max-w-2xl mx-auto">
-              Nexa is an AI-powered project management platform that automates the tedious, 
-              surfaces the important, and helps your team deliver faster than ever.
+            <p className={`text-lg max-w-2xl mx-auto ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+              Nexa is an AI-powered project management platform that automates
+              the tedious, surfaces the important, and helps your team deliver
+              faster than ever.
             </p>
           </motion.div>
         </section>
@@ -106,15 +118,21 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative group p-6 rounded-2xl bg-neutral-900/40 border border-white/[0.06] text-center hover:border-white/[0.12] transition-colors"
+                className={`relative group p-6 rounded-2xl text-center transition-colors ${
+                  isDark 
+                    ? "bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12]" 
+                    : "bg-neutral-50 border border-neutral-200 hover:border-neutral-300"
+                }`}
               >
                 <div className="flex justify-center mb-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-cyan-500/10 flex items-center justify-center">
                     <stat.icon className="w-6 h-6 text-violet-400" />
                   </div>
                 </div>
-                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-white/50">{stat.label}</div>
+                <div className={`text-3xl font-bold mb-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  {stat.value}
+                </div>
+                <div className={`text-sm ${isDark ? "text-white/50" : "text-neutral-500"}`}>{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -128,11 +146,12 @@ export default function AboutPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className={`text-3xl sm:text-4xl font-bold mb-4 ${isDark ? "text-white" : "text-neutral-900"}`}>
               Our Core Values
             </h2>
-            <p className="text-white/60 max-w-xl mx-auto">
-              The principles that guide everything we build and every decision we make.
+            <p className={`max-w-xl mx-auto ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+              The principles that guide everything we build and every decision
+              we make.
             </p>
           </motion.div>
 
@@ -143,15 +162,23 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                className="p-6 rounded-2xl bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12] transition-colors"
+                className={`p-6 rounded-2xl transition-colors ${
+                  isDark 
+                    ? "bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12]" 
+                    : "bg-neutral-50 border border-neutral-200 hover:border-neutral-300"
+                }`}
               >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-cyan-500/10 flex items-center justify-center flex-shrink-0">
                     <value.icon className="w-6 h-6 text-violet-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">{value.title}</h3>
-                    <p className="text-white/60 text-sm leading-relaxed">{value.description}</p>
+                    <h3 className={`text-xl font-semibold mb-2 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                      {value.title}
+                    </h3>
+                    <p className={`text-sm leading-relaxed ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+                      {value.description}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -168,14 +195,22 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                className="p-6 rounded-2xl bg-gradient-to-b from-neutral-900/60 to-neutral-900/20 border border-white/[0.06] hover:border-violet-500/20 transition-colors"
+                className={`p-6 rounded-2xl transition-colors ${
+                  isDark 
+                    ? "bg-gradient-to-b from-neutral-900/60 to-neutral-900/20 border border-white/[0.06] hover:border-violet-500/20" 
+                    : "bg-gradient-to-b from-neutral-50 to-white border border-neutral-200 hover:border-violet-500/30"
+                }`}
               >
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center mb-4">
                   <Heart className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-1">{item.name}</h3>
+                <h3 className={`text-lg font-semibold mb-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  {item.name}
+                </h3>
                 <p className="text-violet-400 text-sm mb-3">{item.role}</p>
-                <p className="text-white/60 text-sm leading-relaxed">{item.description}</p>
+                <p className={`text-sm leading-relaxed ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+                  {item.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -189,11 +224,12 @@ export default function AboutPage() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-violet-500/10 to-cyan-500/5 border border-violet-500/20"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className={`text-3xl sm:text-4xl font-bold mb-4 ${isDark ? "text-white" : "text-neutral-900"}`}>
               Ready to Transform Your Workflow?
             </h2>
-            <p className="text-white/60 mb-8 max-w-lg mx-auto">
-              Join thousands of teams who've already discovered a smarter way to manage projects.
+            <p className={`mb-8 max-w-lg mx-auto ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+              Join thousands of teams who've already discovered a smarter way to
+              manage projects.
             </p>
             <a
               href="/login"

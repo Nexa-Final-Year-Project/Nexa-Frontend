@@ -15,9 +15,12 @@ interface SprintsFilterPanelProps {
 }
 
 const statusColors: Record<string, string> = {
-  Current: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/30",
-  Upcoming: "bg-amber-500/20 text-amber-300 border-amber-500/30 hover:bg-amber-500/30",
-  Completed: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/30",
+  Current:
+    "bg-cyan-500/20 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/30",
+  Upcoming:
+    "bg-amber-500/20 text-amber-300 border-amber-500/30 hover:bg-amber-500/30",
+  Completed:
+    "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/30",
 };
 
 const SprintsFilterPanel = ({
@@ -96,7 +99,8 @@ const SprintsFilterPanel = ({
                 "rounded-lg border-white/[0.06] text-white/60 bg-white/[0.02]",
                 "hover:bg-violet-500/10 hover:border-violet-500/30 hover:text-white",
                 "transition-all duration-200",
-                filters.datePreset === preset && "bg-violet-500/10 border-violet-500/30 text-white"
+                filters.datePreset === preset &&
+                  "bg-violet-500/10 border-violet-500/30 text-white"
               )}
               onClick={() => {
                 setFilters({ ...filters, datePreset: preset });

@@ -78,7 +78,11 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
       case "members":
         return <TeamSettings project={project} members={members} />;
       case "invitations":
-        return <div className="p-6 text-white/40">Invitations Settings - Coming Soon</div>;
+        return (
+          <div className="p-6 text-white/40">
+            Invitations Settings - Coming Soon
+          </div>
+        );
       case "permissions-tasks":
         return <PermissionsSettings tab="tasks" />;
       case "permissions-project":

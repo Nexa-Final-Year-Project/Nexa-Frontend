@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ScrollArea as ScrollAreaPrimitive } from "radix-ui"
+import * as React from "react";
+import { ScrollArea as ScrollAreaPrimitive } from "radix-ui";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function ScrollArea({
   className,
@@ -25,7 +25,7 @@ function ScrollArea({
       <ScrollBar />
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
-  )
+  );
 }
 
 function ScrollBar({
@@ -52,7 +52,7 @@ function ScrollBar({
         className="bg-neutral-300 hover:bg-neutral-400 dark:bg-white/10 dark:hover:bg-white/20 relative flex-1 rounded-full transition-colors duration-200"
       />
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
-  )
+  );
 }
 
-export { ScrollArea, ScrollBar }
+export { ScrollArea, ScrollBar };

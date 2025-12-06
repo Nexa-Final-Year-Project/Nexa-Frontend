@@ -47,7 +47,7 @@ function TooltipContent({
         sideOffset={sideOffset}
         className={cn(
           // Light mode
-          "bg-neutral-900/95 backdrop-blur-xl text-white border border-neutral-800 shadow-black/10",
+          "bg-neutral-900 backdrop-blur-xl text-white border border-neutral-800 shadow-black/10",
           // Dark mode
           "dark:bg-neutral-900/95 dark:text-white dark:border-white/[0.08] dark:shadow-black/20",
           // Common
@@ -58,7 +58,7 @@ function TooltipContent({
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="fill-neutral-900/95 z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
+        <TooltipPrimitive.Arrow className="fill-neutral-900 dark:fill-neutral-900/95 z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   );

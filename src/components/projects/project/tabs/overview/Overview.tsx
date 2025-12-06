@@ -104,13 +104,15 @@ const Overview = ({
       {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-4">
-          <div className="
+          <div
+            className="
             w-12 h-12 rounded-xl
             bg-gradient-to-br from-violet-500/20 to-cyan-500/20
             border border-violet-500/30
             flex items-center justify-center
             shadow-[0_0_20px_rgba(139,92,246,0.2)]
-          ">
+          "
+          >
             <BarChart3 className="w-6 h-6 text-violet-400" />
           </div>
           <div>
@@ -122,7 +124,7 @@ const Overview = ({
             </p>
           </div>
         </div>
-        
+
         <Button
           variant="outline"
           size="sm"
@@ -155,40 +157,46 @@ const Overview = ({
 
       {/* Charts Section */}
       <div className="flex lg:flex-row flex-col gap-4 mb-6">
-        <div className="
+        <div
+          className="
           w-full lg:w-1/2
           bg-neutral-900/40 border border-white/[0.06]
           rounded-2xl p-5
           backdrop-blur-sm
           hover:border-white/[0.1]
           transition-colors duration-300
-        ">
+        "
+        >
           <TasksChart tasks={tasks} />
         </div>
-        <div className="
+        <div
+          className="
           w-full lg:w-1/2
           bg-neutral-900/40 border border-white/[0.06]
           rounded-2xl p-5
           backdrop-blur-sm
           hover:border-white/[0.1]
           transition-colors duration-300
-        ">
+        "
+        >
           <PriorityChart tasks={tasks} />
         </div>
       </div>
 
       {/* Task Types Section */}
-      <div className="
+      <div
+        className="
         w-full lg:w-1/2
         bg-neutral-900/40 border border-white/[0.06]
         rounded-2xl p-5
         backdrop-blur-sm
         hover:border-white/[0.1]
         transition-colors duration-300
-      ">
+      "
+      >
         <TaskTypes tasks={tasks} />
       </div>
-      
+
       <TaskGeneratorModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -197,7 +205,12 @@ const Overview = ({
         projectType="Web App"
         project={project}
         handleSubmit={async (data) => {
-          await generateTasks(data.description, projectId, data.config, members || []);
+          await generateTasks(
+            data.description,
+            projectId,
+            data.config,
+            members || []
+          );
         }}
       />
     </div>

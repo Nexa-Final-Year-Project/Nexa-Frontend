@@ -9,7 +9,7 @@ export type Sprint = {
   projectId?: string;
   goals: Array<string>;
   status?: string;
-  
+
   // AI Planner fields
   summary?: string;
   aiSummary?: string;
@@ -20,7 +20,7 @@ export type Sprint = {
   velocity?: number;
   sprintRiskScore?: number;
   totalEffort?: number;
-  
+
   capacity?: {
     totalCapacityHours: number;
     memberCapacities: Array<{
@@ -28,16 +28,16 @@ export type Sprint = {
       effectiveHours: number;
     }>;
   };
-  
+
   riskAnalysis?: {
     delayRiskPercent: number;
     overloadedMembers: string[];
     criticalDependencies: string[];
     deadlineThreats: string[];
   };
-  
+
   recommendations?: string[];
-  
+
   selectedTasks?: Array<{
     taskId: string;
     estimatedHours: number;
@@ -57,24 +57,24 @@ export type Sprint = {
       avatar?: string | null;
     };
   }>;
-  
+
   deferredTasks?: Array<{
     taskId: string;
     reason: string;
   }>;
-  
+
   burndownForecast?: Array<{
     date: string;
     remainingHours: number;
   }>;
-  
+
   memberWorkloadSummary?: Array<{
     memberId: string;
     taskCount: number;
     totalEstimatedHours: number;
     totalStoryPoints: number;
   }>;
-  
+
   fairnessReport?: Array<{
     projectMemberId: string;
     fairnessScore: number;

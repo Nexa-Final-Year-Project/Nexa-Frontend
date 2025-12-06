@@ -40,7 +40,7 @@ const StarredProjectsPanel = ({ trigger }: { trigger: React.ReactNode }) => {
       trigger={trigger}
       position={{ side: "right", align: "start" }}
       content={
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95, y: -10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -48,23 +48,27 @@ const StarredProjectsPanel = ({ trigger }: { trigger: React.ReactNode }) => {
           className="w-72"
         >
           {/* Header */}
-          <div className="p-3 border-b border-white/[0.06] flex items-center gap-2">
-            <Star className="w-4 h-4 text-amber-400" fill="currentColor" />
-            <span className="text-sm font-medium text-white">Starred Projects</span>
-            <span className="ml-auto text-xs text-white/40 bg-white/[0.06] px-2 py-0.5 rounded-full">
+          <div className="p-3 border-b border-neutral-200 dark:border-white/[0.06] flex items-center gap-2">
+            <Star className="w-4 h-4 text-amber-500 dark:text-amber-400" fill="currentColor" />
+            <span className="text-sm font-medium text-neutral-900 dark:text-white">
+              Starred Projects
+            </span>
+            <span className="ml-auto text-xs text-neutral-500 dark:text-white/40 bg-neutral-100 dark:bg-white/[0.06] px-2 py-0.5 rounded-full">
               {starredProjects.length}
             </span>
           </div>
 
           {/* Project List */}
-          <div className="p-2 max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+          <div className="p-2 max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-white/10 scrollbar-track-transparent">
             {starredProjects.length === 0 ? (
               <div className="py-8 px-4 text-center">
                 <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mx-auto mb-3">
-                  <Star className="w-6 h-6 text-amber-400/40" />
+                  <Star className="w-6 h-6 text-amber-500/40 dark:text-amber-400/40" />
                 </div>
-                <p className="text-sm text-white/50 mb-1">No starred projects</p>
-                <p className="text-xs text-white/30">
+                <p className="text-sm text-neutral-500 dark:text-white/50 mb-1">
+                  No starred projects
+                </p>
+                <p className="text-xs text-neutral-400 dark:text-white/30">
                   Click the star on any project to add it here
                 </p>
               </div>
@@ -81,26 +85,29 @@ const StarredProjectsPanel = ({ trigger }: { trigger: React.ReactNode }) => {
                       href={`/u/${user?.uid}/p/${project._id}`}
                       className="
                         group flex items-center gap-3 p-2.5 rounded-lg
-                        hover:bg-white/[0.04] transition-all duration-200
+                        hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all duration-200
                       "
                     >
                       <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
-                        <FolderKanban className="w-5 h-5 text-emerald-400" />
+                        <FolderKanban className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-white truncate group-hover:text-emerald-300 transition-colors">
+                        <p className="text-sm font-medium text-neutral-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
                           {project.name}
                         </p>
-                        <p className="text-xs text-white/40 truncate">
+                        <p className="text-xs text-neutral-500 dark:text-white/40 truncate">
                           {project.description || "No description"}
                         </p>
                       </div>
                       <button
                         onClick={(e) => handleUnstar(e, project._id)}
-                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-white/[0.06] transition-all"
+                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-neutral-200 dark:hover:bg-white/[0.06] transition-all"
                         title="Remove from starred"
                       >
-                        <Star className="w-3.5 h-3.5 text-amber-400" fill="currentColor" />
+                        <Star
+                          className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400"
+                          fill="currentColor"
+                        />
                       </button>
                     </Link>
                   </motion.div>
@@ -111,13 +118,13 @@ const StarredProjectsPanel = ({ trigger }: { trigger: React.ReactNode }) => {
 
           {/* Footer */}
           {starredProjects.length > 0 && (
-            <div className="p-2 border-t border-white/[0.06]">
+            <div className="p-2 border-t border-neutral-200 dark:border-white/[0.06]">
               <Link
                 href={`/u/${user?.uid}`}
                 className="
                   flex items-center justify-center gap-2 w-full p-2 rounded-lg
-                  text-xs text-white/50 hover:text-white/70
-                  hover:bg-white/[0.04] transition-colors
+                  text-xs text-neutral-500 dark:text-white/50 hover:text-neutral-700 dark:hover:text-white/70
+                  hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-colors
                 "
               >
                 View all starred

@@ -35,7 +35,9 @@ export function FilterPanelDrawer({
         className="bg-neutral-900/95 backdrop-blur-xl border-white/[0.08] flex flex-col w-[360px]"
       >
         <SheetHeader>
-          <SheetTitle className="text-lg font-semibold text-white">{title}</SheetTitle>
+          <SheetTitle className="text-lg font-semibold text-white">
+            {title}
+          </SheetTitle>
         </SheetHeader>
 
         {/* scrollable filter area */}
@@ -44,9 +46,9 @@ export function FilterPanelDrawer({
         {/* sticky footer */}
         <div className="p-4 border-t border-white/[0.06] flex justify-between gap-3">
           {onClear && (
-            <Button 
-              variant="outline" 
-              onClick={onClear} 
+            <Button
+              variant="outline"
+              onClick={onClear}
               className="
                 flex-1 rounded-xl border-white/[0.06] text-white/60 bg-white/[0.02]
                 hover:bg-white/[0.06] hover:text-white hover:border-white/[0.1]
@@ -56,8 +58,8 @@ export function FilterPanelDrawer({
               Clear
             </Button>
           )}
-          <Button 
-            onClick={onApply} 
+          <Button
+            onClick={onApply}
             className="
               flex-1 rounded-xl
               bg-gradient-to-r from-violet-500 to-violet-600 text-white

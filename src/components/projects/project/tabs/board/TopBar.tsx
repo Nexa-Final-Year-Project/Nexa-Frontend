@@ -29,12 +29,14 @@ export const TopBar: React.FC<TopBarProps> = ({
   return (
     <div className="sticky top-0 z-50 flex flex-col px-4 py-3 gap-4">
       {/* Main Controls Row */}
-      <div className="
+      <div
+        className="
         flex items-center gap-4 justify-between
         bg-neutral-900/60 border border-white/[0.06]
         backdrop-blur-xl rounded-2xl px-4 py-3
         shadow-[0_4px_24px_rgba(0,0,0,0.3)]
-      ">
+      "
+      >
         {/* Search and Members */}
         <div className="flex items-center gap-4 flex-1">
           {/* Search Input */}
@@ -62,18 +64,23 @@ export const TopBar: React.FC<TopBarProps> = ({
             {/* Search Glow */}
             <div className="absolute inset-0 rounded-xl bg-violet-500/10 blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
           </div>
-          
+
           {/* Team Members */}
           <div className="flex items-center">
             <div className="flex -space-x-2">
               {members.slice(0, 4).map((member) => (
-                <div key={member?.memberId?._id} className="relative group/avatar">
-                  <div className="
+                <div
+                  key={member?.memberId?._id}
+                  className="relative group/avatar"
+                >
+                  <div
+                    className="
                     ring-2 ring-neutral-900 rounded-full
                     transition-transform duration-200
                     group-hover/avatar:scale-110 group-hover/avatar:z-10
                     cursor-pointer
-                  ">
+                  "
+                  >
                     <TeamMemberAvatar
                       name={member?.memberId?.name}
                       avatarUrl={member?.memberId?.avatar}
@@ -83,14 +90,16 @@ export const TopBar: React.FC<TopBarProps> = ({
                 </div>
               ))}
               {members.length > 4 && (
-                <div className="
+                <div
+                  className="
                   w-8 h-8 rounded-full
                   bg-white/[0.08] border-2 border-neutral-900
                   flex items-center justify-center
                   text-xs font-medium text-white/60
                   cursor-pointer hover:bg-white/[0.12]
                   transition-colors duration-200
-                ">
+                "
+                >
                   +{members.length - 4}
                 </div>
               )}
@@ -114,17 +123,22 @@ export const TopBar: React.FC<TopBarProps> = ({
             transition-all duration-300 group
           "
         >
-          <Sliders size={16} className="text-violet-400 group-hover:rotate-180 transition-transform duration-500" />
+          <Sliders
+            size={16}
+            className="text-violet-400 group-hover:rotate-180 transition-transform duration-500"
+          />
           <span>Filters</span>
           {activeFilterCount > 0 && (
-            <span className="
+            <span
+              className="
               absolute -right-2 -top-2
               flex h-5 w-5 items-center justify-center
               rounded-full text-[10px] font-bold
               bg-gradient-to-r from-rose-500 to-orange-500
               text-white shadow-[0_0_10px_rgba(244,63,94,0.5)]
               animate-pulse
-            ">
+            "
+            >
               {activeFilterCount}
             </span>
           )}
@@ -134,7 +148,9 @@ export const TopBar: React.FC<TopBarProps> = ({
       {/* Active Filters Row */}
       {activeFilters.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 px-1">
-          <span className="text-xs text-white/40 font-medium mr-1">Active:</span>
+          <span className="text-xs text-white/40 font-medium mr-1">
+            Active:
+          </span>
           {activeFilters.map(({ label, value }) => (
             <div
               key={value}

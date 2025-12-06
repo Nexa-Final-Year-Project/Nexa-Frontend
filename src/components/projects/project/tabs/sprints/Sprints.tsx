@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Plus, Sparkle, LayoutGrid, List } from "lucide-react";
@@ -30,14 +31,22 @@ interface SprintsProps {
 }
 
 /* -------------------- Main Component -------------------- */
-export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: SprintsProps) => {
+export const Sprints = ({
+  projectId,
+  tasks = [],
+  sprints,
+  members = [],
+}: SprintsProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const [selectedSprint, setSelectedSprint] = useState<SprintType | null>(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openPlanningDialog, setOpenPlanningDialog] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
-  const [selectedDetailSprint, setSelectedDetailSprint] = useState<SprintType | null>(null);
+  const [selectedDetailSprint, setSelectedDetailSprint] =
+    useState<SprintType | null>(null);
   const { createSprint, updateSprint, deleteSprint } = useSprints();
 
   // Helpers
@@ -84,27 +93,32 @@ export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: Sprint
 
   // Check if sprint has AI planner data
   const hasAIData = (sprint: SprintType) => {
-    return sprint.aiSummary || sprint.summary || sprint.selectedTasks?.length || sprint.capacity;
+    return (
+      sprint.aiSummary ||
+      sprint.summary ||
+      sprint.selectedTasks?.length ||
+      sprint.capacity
+    );
   };
 
   // Filter AI-planned sprints vs regular sprints
   const aiPlannedSprints = sprints?.filter(hasAIData) || [];
-  const regularSprints = sprints?.filter(s => !hasAIData(s)) || [];
+  const regularSprints = sprints?.filter((s) => !hasAIData(s)) || [];
 
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl dark:text-white font-bold">Sprints Overview</h1>
+        <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>Sprints Overview</h1>
         <div className="flex items-center gap-3">
           {/* View Toggle */}
-          <div className="flex items-center bg-neutral-900/50 border border-white/[0.06] rounded-lg p-1">
+          <div className={`flex items-center rounded-lg p-1 ${isDark ? "bg-neutral-900/50 border border-white/[0.06]" : "bg-neutral-100 border border-neutral-200"}`}>
             <button
               onClick={() => setViewMode("grid")}
               className={`p-1.5 rounded-md transition-colors ${
                 viewMode === "grid"
-                  ? "bg-white/[0.1] text-white"
-                  : "text-neutral-500 hover:text-neutral-300"
+                  ? isDark ? "bg-white/[0.1] text-white" : "bg-white text-neutral-900 shadow-sm"
+                  : isDark ? "text-neutral-500 hover:text-neutral-300" : "text-neutral-500 hover:text-neutral-700"
               }`}
             >
               <LayoutGrid className="w-4 h-4" />
@@ -113,8 +127,8 @@ export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: Sprint
               onClick={() => setViewMode("table")}
               className={`p-1.5 rounded-md transition-colors ${
                 viewMode === "table"
-                  ? "bg-white/[0.1] text-white"
-                  : "text-neutral-500 hover:text-neutral-300"
+                  ? isDark ? "bg-white/[0.1] text-white" : "bg-white text-neutral-900 shadow-sm"
+                  : isDark ? "text-neutral-500 hover:text-neutral-300" : "text-neutral-500 hover:text-neutral-700"
               }`}
             >
               <List className="w-4 h-4" />
@@ -123,10 +137,10 @@ export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: Sprint
           <Button
             variant="outline"
             size="sm"
-            className="flex dark:text-white cursor-pointer items-center !text-sm !p-2"
+            className={`flex cursor-pointer items-center !text-sm !p-2 ${isDark ? "text-white" : "text-neutral-900"}`}
             onClick={() => setOpenPlanningDialog(true)}
           >
-            <Sparkle className="w-4 h-4 mr-2 dark:text-white" />
+            <Sparkle className={`w-4 h-4 mr-2 ${isDark ? "text-white" : "text-neutral-700"}`} />
             Plan Sprints
           </Button>
         </div>
@@ -150,19 +164,22 @@ export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: Sprint
 
       {/* Sprints Content */}
       {!sprints?.length ? (
-        <div className="bg-neutral-900/40 border border-white/[0.06] rounded-2xl p-12">
+        <div className={`rounded-2xl p-12 ${isDark ? "bg-neutral-900/40 border border-white/[0.06]" : "bg-neutral-50 border border-neutral-200"}`}>
           <div className="text-center">
-            <div className="w-16 h-16 rounded-2xl bg-neutral-800/50 border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 ${isDark ? "bg-neutral-800/50 border border-white/[0.06]" : "bg-neutral-100 border border-neutral-200"}`}>
               <Sparkle className="w-8 h-8 text-neutral-500" />
             </div>
-            <h3 className="text-lg font-medium text-white/90 mb-2">No sprints yet</h3>
+            <h3 className={`text-lg font-medium mb-2 ${isDark ? "text-white/90" : "text-neutral-900"}`}>
+              No sprints yet
+            </h3>
             <p className="text-sm text-neutral-500 mb-6 max-w-sm mx-auto">
-              Create your first sprint manually or use AI to automatically plan optimal sprints based on your tasks and team capacity.
+              Create your first sprint manually or use AI to automatically plan
+              optimal sprints based on your tasks and team capacity.
             </p>
             <div className="flex items-center justify-center gap-3">
               <Button
                 variant="outline"
-                className="border-white/[0.1] text-white hover:bg-white/[0.05] cursor-pointer"
+                className={`cursor-pointer ${isDark ? "border-white/[0.1] text-white hover:bg-white/[0.05]" : "border-neutral-300 text-neutral-900 hover:bg-neutral-100"}`}
                 onClick={() => setIsCreateDialogOpen(true)}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -213,7 +230,7 @@ export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: Sprint
                 <h2 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
                   Manual Sprints
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-white/[0.05] text-xs text-neutral-400">
+                <span className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${isDark ? "bg-white/[0.05]" : "bg-neutral-100"}`}>
                   {regularSprints.length}
                 </span>
               </div>
@@ -225,18 +242,25 @@ export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: Sprint
                       setIsSettingsDialogOpen(true);
                       setSelectedSprint(sprint);
                     }}
-                    className="group bg-neutral-900/40 backdrop-blur-sm border border-white/[0.06] rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:bg-neutral-900/60 hover:border-white/[0.1]"
+                    className={`group backdrop-blur-sm rounded-2xl p-5 cursor-pointer transition-all duration-300 ${
+                      isDark 
+                        ? "bg-neutral-900/40 border border-white/[0.06] hover:bg-neutral-900/60 hover:border-white/[0.1]" 
+                        : "bg-white border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm hover:shadow"
+                    }`}
                   >
-                    <h3 className="text-base font-semibold text-white/90 mb-2">{sprint.name}</h3>
+                    <h3 className={`text-base font-semibold mb-2 ${isDark ? "text-white/90" : "text-neutral-900"}`}>
+                      {sprint.name}
+                    </h3>
                     <p className="text-xs text-neutral-500 mb-3">
-                      {format(parseISO(sprint.startDate), "MMM d")} — {format(parseISO(sprint.endDate), "MMM d, yyyy")}
+                      {format(parseISO(sprint.startDate), "MMM d")} —{" "}
+                      {format(parseISO(sprint.endDate), "MMM d, yyyy")}
                     </p>
                     {sprint.goals?.length > 0 && (
-                      <div className="text-sm text-neutral-400 line-clamp-2">
+                      <div className={`text-sm line-clamp-2 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
                         {sprint.goals[0]}
                       </div>
                     )}
-                    <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between">
+                    <div className={`mt-4 pt-3 flex items-center justify-between ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-100"}`}>
                       <span className="text-xs text-neutral-500">
                         {getSprintTasks(sprint._id).length} tasks
                       </span>
@@ -255,7 +279,7 @@ export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: Sprint
             <Button
               variant="outline"
               size="sm"
-              className="border-white/[0.1] text-neutral-400 hover:text-white hover:bg-white/[0.05] cursor-pointer"
+              className={`cursor-pointer ${isDark ? "border-white/[0.1] text-neutral-400 hover:text-white hover:bg-white/[0.05]" : "border-neutral-300 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"}`}
               onClick={() => setIsCreateDialogOpen(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -265,10 +289,10 @@ export const Sprints = ({ projectId, tasks = [], sprints, members = [] }: Sprint
         </div>
       ) : (
         /* Table View */
-        <Card className="bg-neutral-900/40 border-white/[0.06]">
+        <Card className={isDark ? "bg-neutral-900/40 border-white/[0.06]" : "bg-white border-neutral-200"}>
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle className="text-white">All Sprints</CardTitle>
+              <CardTitle className={isDark ? "text-white" : "text-neutral-900"}>All Sprints</CardTitle>
               <Button
                 className="cursor-pointer"
                 onClick={() => setIsCreateDialogOpen(true)}

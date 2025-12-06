@@ -28,13 +28,34 @@ export const sprintApi = baseApi.injectEndpoints({
       }),
     }),
     planSprintsByAI: builder.mutation({
-      // Accept either a projectId string or an object { projectId }
+      // Accept an object with projectId and optional sprint_config
       query: (data) => {
-        const projectId = typeof data === "string" ? data : (data?.projectId || "");
+        const projectId =
+          typeof data === "string" ? data : data?.projectId || "";
+        const body: {
+          sprint_config?: {
+            sprintLengthDays?: number;
+            workHoursPerDay?: number;
+            sprintGoals?: string[];
+            startDate?: string;
+          };
+          maxTasksPerMember?: number;
+        } = {};
+
+        // Include sprint_config if provided
+        if (typeof data === "object" && data?.sprint_config) {
+          body.sprint_config = data.sprint_config;
+        }
+
+        // Include maxTasksPerMember if provided
+        if (typeof data === "object" && data?.maxTasksPerMember) {
+          body.maxTasksPerMember = data.maxTasksPerMember;
+        }
+
         return {
           url: `/sprint/plan/${projectId}`,
           method: "POST",
-          // keep body empty; backend expects projectId in URL
+          body,
         };
       },
     }),

@@ -1,13 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Clock,
-  Frame,
-  Star,
-  Keyboard,
-  HelpCircle,
-} from "lucide-react";
+import { Clock, Frame, Star, Keyboard, HelpCircle } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { NavMain } from "@/components/ui/navbar/nav-main";
@@ -75,14 +69,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }));
 
   return (
-    <Sidebar collapsible="icon" {...props} className={`border-r ${isDark ? "border-white/[0.06]" : "border-neutral-200"}`}>
+    <Sidebar
+      collapsible="icon"
+      {...props}
+      className={`border-r ${
+        isDark ? "border-white/[0.06]" : "border-neutral-200"
+      }`}
+    >
       {/* Clean background */}
-      <div className={`absolute inset-0 ${isDark ? "bg-[#0c0c10]" : "bg-white"} pointer-events-none`} />
-      
+      <div
+        className={`absolute inset-0 ${
+          isDark ? "bg-[#0c0c10]" : "bg-white"
+        } pointer-events-none`}
+      />
+
       <SidebarHeader className="relative z-10">
         <div className="p-4 pt-6 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:pt-4 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
           {/* Original Logo component - links to home "/" */}
-          <Logo 
+          <Logo
             size={36}
             textSize="text-xl"
             gap="space-x-2.5"
@@ -93,35 +97,36 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent className="relative z-10 px-2 group-data-[collapsible=icon]:px-1">
         {/* For You - Dashboard Link */}
-        <Link href={`/u/${user?.uid}`} className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
-          <NavItem 
-            label="For You" 
-            icon={Star} 
-            className="mb-1"
-          />
+        <Link
+          href={`/u/${user?.uid}`}
+          className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center"
+        >
+          <NavItem label="For You" icon={Star} className="mb-1" />
         </Link>
 
         {/* Main Navigation */}
         <NavMain items={data.navMain} />
 
         {/* Projects Section */}
-        <NavProjects
-          projects={isLoading ? [] : formattedProjects}
-        />
+        <NavProjects projects={isLoading ? [] : formattedProjects} />
 
         {/* Bottom Quick Links */}
-        <div className={`mt-auto pt-4 border-t ${isDark ? "border-white/[0.06]" : "border-neutral-200"} mx-2 group-data-[collapsible=icon]:mx-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:items-center`}>
-          <Link href="/shortcuts" className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
-            <NavItem 
-              label="Keyboard Shortcuts" 
-              icon={Keyboard}
-            />
+        <div
+          className={`mt-auto pt-4 border-t ${
+            isDark ? "border-white/[0.06]" : "border-neutral-200"
+          } mx-2 group-data-[collapsible=icon]:mx-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:items-center`}
+        >
+          <Link
+            href="/shortcuts"
+            className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full"
+          >
+            <NavItem label="Keyboard Shortcuts" icon={Keyboard} />
           </Link>
-          <Link href="/help" className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
-            <NavItem 
-              label="Help & Support" 
-              icon={HelpCircle}
-            />
+          <Link
+            href="/help"
+            className="block group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full"
+          >
+            <NavItem label="Help & Support" icon={HelpCircle} />
           </Link>
         </div>
       </SidebarContent>
@@ -129,7 +134,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter className="relative z-10">
         <NavUser user={user} />
       </SidebarFooter>
-      
+
       <SidebarRail />
     </Sidebar>
   );

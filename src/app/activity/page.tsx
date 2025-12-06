@@ -45,10 +45,17 @@ import { useTheme } from "next-themes";
 
 type ViewMode = "timeline" | "grouped";
 type FilterEntity = "all" | "task" | "project" | "sprint" | "comment";
-type FilterAction = "all" | "created" | "updated" | "deleted" | "assigned" | "status_changed";
+type FilterAction =
+  | "all"
+  | "created"
+  | "updated"
+  | "deleted"
+  | "assigned"
+  | "status_changed";
 
 export default function ActivityPage() {
-  const { activityLogs, fetchAllActivityLogs, isLoading, error } = useActivityLogs();
+  const { activityLogs, fetchAllActivityLogs, isLoading, error } =
+    useActivityLogs();
   const { user } = useAuthStore();
   const { data: projectsData } = useGetProjectsQuery({});
   const { theme } = useTheme();
@@ -58,14 +65,17 @@ export default function ActivityPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("timeline");
   const [filterEntity, setFilterEntity] = useState<FilterEntity>("all");
   const [filterAction, setFilterAction] = useState<FilterAction>("all");
-  const [dateRange, setDateRange] = useState<"all" | "today" | "week" | "month">("all");
+  const [dateRange, setDateRange] = useState<
+    "all" | "today" | "week" | "month"
+  >("all");
   const [expandedLogs, setExpandedLogs] = useState<Record<string, boolean>>({});
 
   // Normalize projects
   const projects: Project[] = useMemo(() => {
     if (!projectsData) return [];
     if (Array.isArray(projectsData)) return projectsData;
-    if (Array.isArray((projectsData as any).projects)) return (projectsData as any).projects;
+    if (Array.isArray((projectsData as any).projects))
+      return (projectsData as any).projects;
     return [];
   }, [projectsData]);
 
@@ -109,8 +119,7 @@ export default function ActivityPage() {
     switch (dateRange) {
       case "today":
         result = result.filter(
-          (log) =>
-            new Date(log.timestamp).toDateString() === now.toDateString()
+          (log) => new Date(log.timestamp).toDateString() === now.toDateString()
         );
         break;
       case "week":
@@ -125,7 +134,8 @@ export default function ActivityPage() {
 
     // Sort by timestamp descending
     return result.sort(
-      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     );
   }, [activityLogs, searchQuery, filterEntity, filterAction, dateRange]);
 
@@ -177,31 +187,34 @@ export default function ActivityPage() {
 
   const getActionColor = (action: string) => {
     const colorMap: Record<string, string> = {
-      created: isDark 
+      created: isDark
         ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
         : "bg-emerald-50 text-emerald-600 border-emerald-200",
-      updated: isDark 
+      updated: isDark
         ? "bg-blue-500/20 text-blue-400 border-blue-500/30"
         : "bg-blue-50 text-blue-600 border-blue-200",
-      deleted: isDark 
+      deleted: isDark
         ? "bg-rose-500/20 text-rose-400 border-rose-500/30"
         : "bg-rose-50 text-rose-600 border-rose-200",
-      assigned: isDark 
+      assigned: isDark
         ? "bg-violet-500/20 text-violet-400 border-violet-500/30"
         : "bg-violet-50 text-violet-600 border-violet-200",
-      unassigned: isDark 
+      unassigned: isDark
         ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
         : "bg-amber-50 text-amber-600 border-amber-200",
-      status_changed: isDark 
+      status_changed: isDark
         ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
         : "bg-cyan-50 text-cyan-600 border-cyan-200",
-      commented: isDark 
+      commented: isDark
         ? "bg-pink-500/20 text-pink-400 border-pink-500/30"
         : "bg-pink-50 text-pink-600 border-pink-200",
     };
-    return colorMap[action] || (isDark 
-      ? "bg-neutral-500/20 text-neutral-400 border-neutral-500/30"
-      : "bg-neutral-100 text-neutral-600 border-neutral-200");
+    return (
+      colorMap[action] ||
+      (isDark
+        ? "bg-neutral-500/20 text-neutral-400 border-neutral-500/30"
+        : "bg-neutral-100 text-neutral-600 border-neutral-200")
+    );
   };
 
   const getEntityIcon = (entity: string) => {
@@ -273,10 +286,12 @@ export default function ActivityPage() {
   ];
 
   return (
-    <div className={cn(
-      "min-h-screen relative",
-      isDark ? "bg-neutral-950" : "bg-neutral-50"
-    )}>
+    <div
+      className={cn(
+        "min-h-screen relative",
+        isDark ? "bg-neutral-950" : "bg-neutral-50"
+      )}
+    >
       {/* Background */}
       {isDark && (
         <>
@@ -292,12 +307,14 @@ export default function ActivityPage() {
       )}
 
       {/* Header */}
-      <header className={cn(
-        "sticky top-0 z-50 backdrop-blur-md border-b",
-        isDark 
-          ? "bg-neutral-900/80 border-white/5"
-          : "bg-white/80 border-neutral-200"
-      )}>
+      <header
+        className={cn(
+          "sticky top-0 z-50 backdrop-blur-md border-b",
+          isDark
+            ? "bg-neutral-900/80 border-white/5"
+            : "bg-white/80 border-neutral-200"
+        )}
+      >
         <div className="mx-auto max-w-7xl px-4 py-4">
           <Header />
         </div>
@@ -306,11 +323,13 @@ export default function ActivityPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Back Button */}
-        <Link 
+        <Link
           href={user?.uid ? `/u/${user.uid}` : "/projects"}
           className={cn(
             "inline-flex items-center gap-2 text-sm transition-colors mb-6",
-            isDark ? "text-white/50 hover:text-white" : "text-neutral-500 hover:text-neutral-900"
+            isDark
+              ? "text-white/50 hover:text-white"
+              : "text-neutral-500 hover:text-neutral-900"
           )}
         >
           <ArrowLeft className="w-4 h-4" />
@@ -325,28 +344,36 @@ export default function ActivityPage() {
         >
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className={cn(
-                "w-14 h-14 rounded-2xl flex items-center justify-center border",
-                isDark 
-                  ? "bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border-white/10"
-                  : "bg-gradient-to-br from-emerald-50 to-cyan-50 border-emerald-200"
-              )}>
-                <Activity className={cn(
-                  "w-7 h-7",
-                  isDark ? "text-emerald-400" : "text-emerald-600"
-                )} />
+              <div
+                className={cn(
+                  "w-14 h-14 rounded-2xl flex items-center justify-center border",
+                  isDark
+                    ? "bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border-white/10"
+                    : "bg-gradient-to-br from-emerald-50 to-cyan-50 border-emerald-200"
+                )}
+              >
+                <Activity
+                  className={cn(
+                    "w-7 h-7",
+                    isDark ? "text-emerald-400" : "text-emerald-600"
+                  )}
+                />
               </div>
               <div>
-                <h1 className={cn(
-                  "text-3xl md:text-4xl font-bold",
-                  isDark ? "text-white" : "text-neutral-900"
-                )}>
+                <h1
+                  className={cn(
+                    "text-3xl md:text-4xl font-bold",
+                    isDark ? "text-white" : "text-neutral-900"
+                  )}
+                >
                   Activity Feed
                 </h1>
-                <p className={cn(
-                  "text-sm",
-                  isDark ? "text-neutral-400" : "text-neutral-600"
-                )}>
+                <p
+                  className={cn(
+                    "text-sm",
+                    isDark ? "text-neutral-400" : "text-neutral-600"
+                  )}
+                >
                   Track all changes across your workspace
                 </p>
               </div>
@@ -356,11 +383,13 @@ export default function ActivityPage() {
                 variant="outline"
                 className={cn(
                   "transition-all",
-                  isDark 
+                  isDark
                     ? "border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
                     : "border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:border-neutral-300"
                 )}
-                onClick={() => fetchAllActivityLogs(user ? { userId: user.id } : {})}
+                onClick={() =>
+                  fetchAllActivityLogs(user ? { userId: user.id } : {})
+                }
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Refresh
@@ -413,22 +442,32 @@ export default function ActivityPage() {
               transition={{ delay: 0.1 + index * 0.05 }}
               className={cn(
                 "p-5 rounded-2xl border transition-all",
-                isDark 
+                isDark
                   ? "bg-neutral-900/50 border-white/[0.06] hover:border-white/[0.1]"
                   : "bg-white border-neutral-200 hover:border-neutral-300 shadow-sm"
               )}
             >
-              <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mb-3`}>
+              <div
+                className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mb-3`}
+              >
                 <stat.icon className={`w-5 h-5 ${stat.color}`} />
               </div>
-              <div className={cn(
-                "text-2xl font-bold mb-1",
-                isDark ? "text-white" : "text-neutral-900"
-              )}>{stat.value}</div>
-              <div className={cn(
-                "text-xs",
-                isDark ? "text-neutral-500" : "text-neutral-600"
-              )}>{stat.label}</div>
+              <div
+                className={cn(
+                  "text-2xl font-bold mb-1",
+                  isDark ? "text-white" : "text-neutral-900"
+                )}
+              >
+                {stat.value}
+              </div>
+              <div
+                className={cn(
+                  "text-xs",
+                  isDark ? "text-neutral-500" : "text-neutral-600"
+                )}
+              >
+                {stat.label}
+              </div>
             </motion.div>
           ))}
         </motion.div>
@@ -443,10 +482,12 @@ export default function ActivityPage() {
           {/* Search */}
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className={cn(
-                "absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5",
-                isDark ? "text-neutral-500" : "text-neutral-400"
-              )} />
+              <Search
+                className={cn(
+                  "absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5",
+                  isDark ? "text-neutral-500" : "text-neutral-400"
+                )}
+              />
               <input
                 type="text"
                 placeholder="Search activities..."
@@ -454,7 +495,7 @@ export default function ActivityPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={cn(
                   "w-full pl-12 pr-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2",
-                  isDark 
+                  isDark
                     ? "bg-neutral-900/60 border-white/10 text-white placeholder-neutral-500 focus:border-emerald-500/50 focus:ring-emerald-500/20"
                     : "bg-white border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:ring-emerald-500/20"
                 )}
@@ -466,12 +507,12 @@ export default function ActivityPage() {
                 className={cn(
                   "p-3 rounded-xl border transition-all",
                   viewMode === "timeline"
-                    ? isDark 
+                    ? isDark
                       ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-400"
                       : "bg-emerald-50 border-emerald-200 text-emerald-600"
-                    : isDark 
-                      ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white"
-                      : "bg-white border-neutral-200 text-neutral-500 hover:text-neutral-900"
+                    : isDark
+                    ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white"
+                    : "bg-white border-neutral-200 text-neutral-500 hover:text-neutral-900"
                 )}
               >
                 <List className="w-5 h-5" />
@@ -481,12 +522,12 @@ export default function ActivityPage() {
                 className={cn(
                   "p-3 rounded-xl border transition-all",
                   viewMode === "grouped"
-                    ? isDark 
+                    ? isDark
                       ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-400"
                       : "bg-emerald-50 border-emerald-200 text-emerald-600"
-                    : isDark 
-                      ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white"
-                      : "bg-white border-neutral-200 text-neutral-500 hover:text-neutral-900"
+                    : isDark
+                    ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white"
+                    : "bg-white border-neutral-200 text-neutral-500 hover:text-neutral-900"
                 )}
               >
                 <LayoutGrid className="w-5 h-5" />
@@ -498,10 +539,14 @@ export default function ActivityPage() {
           <div className="flex flex-wrap gap-2">
             {/* Entity Filter */}
             <div className="flex flex-wrap gap-2 items-center">
-              <span className={cn(
-                "text-xs uppercase tracking-wider mr-2",
-                isDark ? "text-neutral-500" : "text-neutral-600"
-              )}>Type:</span>
+              <span
+                className={cn(
+                  "text-xs uppercase tracking-wider mr-2",
+                  isDark ? "text-neutral-500" : "text-neutral-600"
+                )}
+              >
+                Type:
+              </span>
               {entityFilters.map((filter) => (
                 <button
                   key={filter.key}
@@ -509,12 +554,12 @@ export default function ActivityPage() {
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-medium transition-all border",
                     filterEntity === filter.key
-                      ? isDark 
+                      ? isDark
                         ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
                         : "bg-emerald-50 text-emerald-600 border-emerald-200"
-                      : isDark 
-                        ? "bg-neutral-900/40 text-neutral-400 border-white/5 hover:text-white hover:border-white/10"
-                        : "bg-white text-neutral-500 border-neutral-200 hover:text-neutral-900 hover:border-neutral-300"
+                      : isDark
+                      ? "bg-neutral-900/40 text-neutral-400 border-white/5 hover:text-white hover:border-white/10"
+                      : "bg-white text-neutral-500 border-neutral-200 hover:text-neutral-900 hover:border-neutral-300"
                   )}
                 >
                   {filter.label}
@@ -522,17 +567,23 @@ export default function ActivityPage() {
               ))}
             </div>
 
-            <div className={cn(
-              "w-px h-6 mx-2 hidden sm:block",
-              isDark ? "bg-white/10" : "bg-neutral-200"
-            )} />
+            <div
+              className={cn(
+                "w-px h-6 mx-2 hidden sm:block",
+                isDark ? "bg-white/10" : "bg-neutral-200"
+              )}
+            />
 
             {/* Date Filter */}
             <div className="flex flex-wrap gap-2 items-center">
-              <span className={cn(
-                "text-xs uppercase tracking-wider mr-2",
-                isDark ? "text-neutral-500" : "text-neutral-600"
-              )}>Time:</span>
+              <span
+                className={cn(
+                  "text-xs uppercase tracking-wider mr-2",
+                  isDark ? "text-neutral-500" : "text-neutral-600"
+                )}
+              >
+                Time:
+              </span>
               {dateFilters.map((filter) => (
                 <button
                   key={filter.key}
@@ -540,12 +591,12 @@ export default function ActivityPage() {
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-medium transition-all border",
                     dateRange === filter.key
-                      ? isDark 
+                      ? isDark
                         ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
                         : "bg-emerald-50 text-emerald-600 border-emerald-200"
-                      : isDark 
-                        ? "bg-neutral-900/40 text-neutral-400 border-white/5 hover:text-white hover:border-white/10"
-                        : "bg-white text-neutral-500 border-neutral-200 hover:text-neutral-900 hover:border-neutral-300"
+                      : isDark
+                      ? "bg-neutral-900/40 text-neutral-400 border-white/5 hover:text-white hover:border-white/10"
+                      : "bg-white text-neutral-500 border-neutral-200 hover:text-neutral-900 hover:border-neutral-300"
                   )}
                 >
                   {filter.label}
@@ -558,27 +609,37 @@ export default function ActivityPage() {
         {/* Activity List */}
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className={cn(
-              "w-10 h-10 animate-spin mb-4",
-              isDark ? "text-emerald-400" : "text-emerald-600"
-            )} />
-            <p className={isDark ? "text-neutral-400" : "text-neutral-600"}>Loading activity...</p>
+            <Loader2
+              className={cn(
+                "w-10 h-10 animate-spin mb-4",
+                isDark ? "text-emerald-400" : "text-emerald-600"
+              )}
+            />
+            <p className={isDark ? "text-neutral-400" : "text-neutral-600"}>
+              Loading activity...
+            </p>
           </div>
         ) : error ? (
-          <div className={cn(
-            "flex flex-col items-center justify-center py-20 px-4 rounded-2xl border",
-            isDark 
-              ? "bg-rose-500/10 border-rose-500/20"
-              : "bg-rose-50 border-rose-200"
-          )}>
-            <Trash2 className={cn(
-              "w-10 h-10 mb-4",
-              isDark ? "text-rose-400" : "text-rose-600"
-            )} />
-            <p className={cn(
-              "text-center",
-              isDark ? "text-rose-400" : "text-rose-600"
-            )}>
+          <div
+            className={cn(
+              "flex flex-col items-center justify-center py-20 px-4 rounded-2xl border",
+              isDark
+                ? "bg-rose-500/10 border-rose-500/20"
+                : "bg-rose-50 border-rose-200"
+            )}
+          >
+            <Trash2
+              className={cn(
+                "w-10 h-10 mb-4",
+                isDark ? "text-rose-400" : "text-rose-600"
+              )}
+            />
+            <p
+              className={cn(
+                "text-center",
+                isDark ? "text-rose-400" : "text-rose-600"
+              )}
+            >
               Failed to load activity. Please try again.
             </p>
           </div>
@@ -588,28 +649,38 @@ export default function ActivityPage() {
             animate={{ opacity: 1, scale: 1 }}
             className={cn(
               "flex flex-col items-center justify-center py-20 px-4 rounded-2xl border",
-              isDark 
+              isDark
                 ? "bg-neutral-900/30 border-white/5"
                 : "bg-white border-neutral-200"
             )}
           >
-            <div className={cn(
-              "w-20 h-20 rounded-2xl flex items-center justify-center mb-6",
-              isDark ? "bg-emerald-500/10" : "bg-emerald-50"
-            )}>
-              <Activity className={cn(
-                "w-10 h-10",
-                isDark ? "text-emerald-400/50" : "text-emerald-600/50"
-              )} />
+            <div
+              className={cn(
+                "w-20 h-20 rounded-2xl flex items-center justify-center mb-6",
+                isDark ? "bg-emerald-500/10" : "bg-emerald-50"
+              )}
+            >
+              <Activity
+                className={cn(
+                  "w-10 h-10",
+                  isDark ? "text-emerald-400/50" : "text-emerald-600/50"
+                )}
+              />
             </div>
-            <h3 className={cn(
-              "text-xl font-semibold mb-2",
-              isDark ? "text-white/80" : "text-neutral-900"
-            )}>No activity found</h3>
-            <p className={cn(
-              "text-center max-w-md",
-              isDark ? "text-neutral-400" : "text-neutral-600"
-            )}>
+            <h3
+              className={cn(
+                "text-xl font-semibold mb-2",
+                isDark ? "text-white/80" : "text-neutral-900"
+              )}
+            >
+              No activity found
+            </h3>
+            <p
+              className={cn(
+                "text-center max-w-md",
+                isDark ? "text-neutral-400" : "text-neutral-600"
+              )}
+            >
               {searchQuery
                 ? `No activities match "${searchQuery}".`
                 : "Your activity feed is empty. Actions you take will appear here."}
@@ -622,12 +693,14 @@ export default function ActivityPage() {
             className="relative"
           >
             {/* Timeline line */}
-            <div className={cn(
-              "absolute left-[27px] top-0 bottom-0 w-px bg-gradient-to-b",
-              isDark 
-                ? "from-emerald-500/50 via-violet-500/30 to-transparent"
-                : "from-emerald-500/30 via-neutral-300 to-transparent"
-            )} />
+            <div
+              className={cn(
+                "absolute left-[27px] top-0 bottom-0 w-px bg-gradient-to-b",
+                isDark
+                  ? "from-emerald-500/50 via-violet-500/30 to-transparent"
+                  : "from-emerald-500/30 via-neutral-300 to-transparent"
+              )}
+            />
 
             <div className="space-y-4">
               {filteredLogs.map((log, index) => {
@@ -653,60 +726,80 @@ export default function ActivityPage() {
                     </div>
 
                     {/* Card */}
-                    <div className={cn(
-                      "p-5 rounded-2xl border transition-all",
-                      isDark 
-                        ? "bg-neutral-900/50 border-white/[0.06] hover:border-white/[0.1]"
-                        : "bg-white border-neutral-200 hover:border-neutral-300 shadow-sm"
-                    )}>
+                    <div
+                      className={cn(
+                        "p-5 rounded-2xl border transition-all",
+                        isDark
+                          ? "bg-neutral-900/50 border-white/[0.06] hover:border-white/[0.1]"
+                          : "bg-white border-neutral-200 hover:border-neutral-300 shadow-sm"
+                      )}
+                    >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center flex-wrap gap-2 mb-2">
-                            <span className={cn(
-                              "text-sm font-semibold capitalize",
-                              isDark ? "text-white" : "text-neutral-900"
-                            )}>
+                            <span
+                              className={cn(
+                                "text-sm font-semibold capitalize",
+                                isDark ? "text-white" : "text-neutral-900"
+                              )}
+                            >
                               {log.action.replace("_", " ")}
                             </span>
-                            <span className={cn(
-                              "text-sm",
-                              isDark ? "text-neutral-500" : "text-neutral-500"
-                            )}>
+                            <span
+                              className={cn(
+                                "text-sm",
+                                isDark ? "text-neutral-500" : "text-neutral-500"
+                              )}
+                            >
                               {log.entityType.toLowerCase()}
                             </span>
                             {(log as any).task && (
-                              <div className={cn(
-                                "flex items-center gap-1.5 px-2 py-0.5 rounded-lg",
-                                isDark ? "bg-white/[0.04]" : "bg-neutral-100"
-                              )}>
+                              <div
+                                className={cn(
+                                  "flex items-center gap-1.5 px-2 py-0.5 rounded-lg",
+                                  isDark ? "bg-white/[0.04]" : "bg-neutral-100"
+                                )}
+                              >
                                 {getEntityIcon("Task")}
-                                <span className={cn(
-                                  "text-xs",
-                                  isDark ? "text-neutral-400" : "text-neutral-600"
-                                )}>
+                                <span
+                                  className={cn(
+                                    "text-xs",
+                                    isDark
+                                      ? "text-neutral-400"
+                                      : "text-neutral-600"
+                                  )}
+                                >
                                   {(log as any).task.title}
                                 </span>
                               </div>
                             )}
                             {(log as any).project && (
-                              <div className={cn(
-                                "flex items-center gap-1.5 px-2 py-0.5 rounded-lg",
-                                isDark ? "bg-white/[0.04]" : "bg-neutral-100"
-                              )}>
+                              <div
+                                className={cn(
+                                  "flex items-center gap-1.5 px-2 py-0.5 rounded-lg",
+                                  isDark ? "bg-white/[0.04]" : "bg-neutral-100"
+                                )}
+                              >
                                 {getEntityIcon("Project")}
-                                <span className={cn(
-                                  "text-xs",
-                                  isDark ? "text-neutral-400" : "text-neutral-600"
-                                )}>
+                                <span
+                                  className={cn(
+                                    "text-xs",
+                                    isDark
+                                      ? "text-neutral-400"
+                                      : "text-neutral-600"
+                                  )}
+                                >
                                   {(log as any).project.name}
                                 </span>
                               </div>
                             )}
                           </div>
-                          <div className={cn(
-                            "flex items-center gap-2 text-xs",
-                            isDark ? "text-neutral-500" : "text-neutral-500"
-                          )}>
+                          <div
+                            className={cn(
+                              "flex items-center gap-2 text-xs",
+                              isDark ? "text-neutral-500" : "text-neutral-500"
+                            )}
+                          >
                             <Clock className="w-3.5 h-3.5" />
                             <span>{formatDate(log.timestamp)}</span>
                           </div>
@@ -716,7 +809,7 @@ export default function ActivityPage() {
                           onClick={() => toggleExpand(log._id)}
                           className={cn(
                             "p-2 rounded-lg transition-all",
-                            isDark 
+                            isDark
                               ? "text-neutral-500 hover:text-white hover:bg-white/5"
                               : "text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100"
                           )}
@@ -741,34 +834,78 @@ export default function ActivityPage() {
                               isDark ? "border-white/5" : "border-neutral-200"
                             )}
                           >
-                            <div className={cn(
-                              "text-xs",
-                              isDark ? "text-neutral-400" : "text-neutral-600"
-                            )}>
+                            <div
+                              className={cn(
+                                "text-xs",
+                                isDark ? "text-neutral-400" : "text-neutral-600"
+                              )}
+                            >
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <span className={isDark ? "text-neutral-500" : "text-neutral-500"}>Entity Type:</span>
-                                  <span className={cn("ml-2", isDark ? "text-white" : "text-neutral-900")}>{log.entityType}</span>
+                                  <span
+                                    className={
+                                      isDark
+                                        ? "text-neutral-500"
+                                        : "text-neutral-500"
+                                    }
+                                  >
+                                    Entity Type:
+                                  </span>
+                                  <span
+                                    className={cn(
+                                      "ml-2",
+                                      isDark ? "text-white" : "text-neutral-900"
+                                    )}
+                                  >
+                                    {log.entityType}
+                                  </span>
                                 </div>
                                 <div>
-                                  <span className={isDark ? "text-neutral-500" : "text-neutral-500"}>Timestamp:</span>
-                                  <span className={cn("ml-2", isDark ? "text-white" : "text-neutral-900")}>
+                                  <span
+                                    className={
+                                      isDark
+                                        ? "text-neutral-500"
+                                        : "text-neutral-500"
+                                    }
+                                  >
+                                    Timestamp:
+                                  </span>
+                                  <span
+                                    className={cn(
+                                      "ml-2",
+                                      isDark ? "text-white" : "text-neutral-900"
+                                    )}
+                                  >
                                     {new Date(log.timestamp).toLocaleString()}
                                   </span>
                                 </div>
                               </div>
                               {log.details && (
-                                <div className={cn(
-                                  "mt-3 p-3 rounded-lg border",
-                                  isDark 
-                                    ? "bg-white/[0.02] border-white/5"
-                                    : "bg-neutral-50 border-neutral-200"
-                                )}>
-                                  <span className={isDark ? "text-neutral-500" : "text-neutral-500"}>Details:</span>
-                                  <pre className={cn(
-                                    "mt-1 whitespace-pre-wrap",
-                                    isDark ? "text-white/70" : "text-neutral-700"
-                                  )}>
+                                <div
+                                  className={cn(
+                                    "mt-3 p-3 rounded-lg border",
+                                    isDark
+                                      ? "bg-white/[0.02] border-white/5"
+                                      : "bg-neutral-50 border-neutral-200"
+                                  )}
+                                >
+                                  <span
+                                    className={
+                                      isDark
+                                        ? "text-neutral-500"
+                                        : "text-neutral-500"
+                                    }
+                                  >
+                                    Details:
+                                  </span>
+                                  <pre
+                                    className={cn(
+                                      "mt-1 whitespace-pre-wrap",
+                                      isDark
+                                        ? "text-white/70"
+                                        : "text-neutral-700"
+                                    )}
+                                  >
                                     {typeof log.details === "string"
                                       ? log.details
                                       : JSON.stringify(log.details, null, 2)}
@@ -801,30 +938,39 @@ export default function ActivityPage() {
               >
                 {/* Date Header */}
                 <div className="flex items-center gap-4 mb-4">
-                  <div className={cn(
-                    "px-4 py-2 rounded-xl border",
-                    isDark 
-                      ? "bg-emerald-500/10 border-emerald-500/20"
-                      : "bg-emerald-50 border-emerald-200"
-                  )}>
-                    <span className={cn(
-                      "text-sm font-semibold",
-                      isDark ? "text-emerald-400" : "text-emerald-600"
-                    )}>
+                  <div
+                    className={cn(
+                      "px-4 py-2 rounded-xl border",
+                      isDark
+                        ? "bg-emerald-500/10 border-emerald-500/20"
+                        : "bg-emerald-50 border-emerald-200"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "text-sm font-semibold",
+                        isDark ? "text-emerald-400" : "text-emerald-600"
+                      )}
+                    >
                       {formatGroupDate(date)}
                     </span>
                   </div>
-                  <div className={cn(
-                    "flex-1 h-px bg-gradient-to-r",
-                    isDark 
-                      ? "from-emerald-500/20 to-transparent"
-                      : "from-emerald-200 to-transparent"
-                  )} />
-                  <span className={cn(
-                    "text-xs",
-                    isDark ? "text-neutral-500" : "text-neutral-500"
-                  )}>
-                    {logs.length} {logs.length === 1 ? "activity" : "activities"}
+                  <div
+                    className={cn(
+                      "flex-1 h-px bg-gradient-to-r",
+                      isDark
+                        ? "from-emerald-500/20 to-transparent"
+                        : "from-emerald-200 to-transparent"
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "text-xs",
+                      isDark ? "text-neutral-500" : "text-neutral-500"
+                    )}
+                  >
+                    {logs.length}{" "}
+                    {logs.length === 1 ? "activity" : "activities"}
                   </span>
                 </div>
 
@@ -841,7 +987,7 @@ export default function ActivityPage() {
                         transition={{ delay: index * 0.05 }}
                         className={cn(
                           "p-4 rounded-xl border transition-all group",
-                          isDark 
+                          isDark
                             ? "bg-neutral-900/40 border-white/[0.06] hover:border-white/[0.1]"
                             : "bg-white border-neutral-200 hover:border-neutral-300 shadow-sm"
                         )}
@@ -857,37 +1003,53 @@ export default function ActivityPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className={cn(
-                                "text-sm font-medium capitalize",
-                                isDark ? "text-white" : "text-neutral-900"
-                              )}>
+                              <span
+                                className={cn(
+                                  "text-sm font-medium capitalize",
+                                  isDark ? "text-white" : "text-neutral-900"
+                                )}
+                              >
                                 {log.action.replace("_", " ")}
                               </span>
-                              <span className={cn(
-                                "text-xs",
-                                isDark ? "text-neutral-500" : "text-neutral-500"
-                              )}>
+                              <span
+                                className={cn(
+                                  "text-xs",
+                                  isDark
+                                    ? "text-neutral-500"
+                                    : "text-neutral-500"
+                                )}
+                              >
                                 {log.entityType}
                               </span>
                             </div>
                             {((log as any).task || (log as any).project) && (
-                              <p className={cn(
-                                "text-xs truncate",
-                                isDark ? "text-neutral-400" : "text-neutral-600"
-                              )}>
-                                {(log as any).task?.title || (log as any).project?.name}
+                              <p
+                                className={cn(
+                                  "text-xs truncate",
+                                  isDark
+                                    ? "text-neutral-400"
+                                    : "text-neutral-600"
+                                )}
+                              >
+                                {(log as any).task?.title ||
+                                  (log as any).project?.name}
                               </p>
                             )}
-                            <div className={cn(
-                              "flex items-center gap-1 mt-2 text-xs",
-                              isDark ? "text-neutral-500" : "text-neutral-500"
-                            )}>
+                            <div
+                              className={cn(
+                                "flex items-center gap-1 mt-2 text-xs",
+                                isDark ? "text-neutral-500" : "text-neutral-500"
+                              )}
+                            >
                               <Clock className="w-3 h-3" />
                               <span>
-                                {new Date(log.timestamp).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })}
+                                {new Date(log.timestamp).toLocaleTimeString(
+                                  [],
+                                  {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
                               </span>
                             </div>
                           </div>
@@ -909,22 +1071,34 @@ export default function ActivityPage() {
             transition={{ delay: 0.4 }}
             className={cn(
               "mt-12 p-6 rounded-2xl border text-center",
-              isDark 
+              isDark
                 ? "bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border-white/5"
                 : "bg-gradient-to-br from-emerald-50 to-cyan-50 border-neutral-200"
             )}
           >
-            <p className={isDark ? "text-neutral-400 text-sm" : "text-neutral-600 text-sm"}>
+            <p
+              className={
+                isDark ? "text-neutral-400 text-sm" : "text-neutral-600 text-sm"
+              }
+            >
               Showing{" "}
-              <span className={cn(
-                "font-semibold",
-                isDark ? "text-white" : "text-neutral-900"
-              )}>{filteredLogs.length}</span>{" "}
+              <span
+                className={cn(
+                  "font-semibold",
+                  isDark ? "text-white" : "text-neutral-900"
+                )}
+              >
+                {filteredLogs.length}
+              </span>{" "}
               of{" "}
-              <span className={cn(
-                "font-semibold",
-                isDark ? "text-white" : "text-neutral-900"
-              )}>{activityLogs.length}</span>{" "}
+              <span
+                className={cn(
+                  "font-semibold",
+                  isDark ? "text-white" : "text-neutral-900"
+                )}
+              >
+                {activityLogs.length}
+              </span>{" "}
               total activities
             </p>
           </motion.div>

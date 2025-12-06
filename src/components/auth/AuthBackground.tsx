@@ -8,79 +8,92 @@ export function AuthBackground({ children }: { children: ReactNode }) {
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#050508] overflow-hidden">
       {/* Base gradient - deeper black */}
       <div className="fixed inset-0 -z-30 bg-[#050508]" />
-      
+
       {/* Subtle grid pattern - more refined */}
-      <div 
+      <div
         className="fixed inset-0 -z-25 opacity-[0.015]"
         style={{
           backgroundImage: `
             linear-gradient(rgba(139,92,246,0.1) 1px, transparent 1px), 
             linear-gradient(90deg, rgba(139,92,246,0.1) 1px, transparent 1px)
           `,
-          backgroundSize: '60px 60px'
+          backgroundSize: "60px 60px",
         }}
       />
 
       {/* Floating gradient orbs - animated */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ 
+        animate={{
           opacity: [0.3, 0.5, 0.3],
           scale: [1, 1.1, 1],
           x: [0, 30, 0],
-          y: [0, -20, 0]
+          y: [0, -20, 0],
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         className="fixed -z-10 w-[700px] h-[700px] rounded-full top-[-300px] left-[-300px]"
         style={{
-          background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 60%)",
+          background:
+            "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 60%)",
         }}
       />
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ 
+        animate={{
           opacity: [0.2, 0.4, 0.2],
           scale: [1, 1.15, 1],
           x: [0, -40, 0],
-          y: [0, 30, 0]
+          y: [0, 30, 0],
         }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
         className="fixed -z-10 w-[600px] h-[600px] rounded-full bottom-[-200px] right-[-200px]"
         style={{
-          background: "radial-gradient(circle, rgba(34,211,238,0.08) 0%, transparent 60%)",
+          background:
+            "radial-gradient(circle, rgba(34,211,238,0.08) 0%, transparent 60%)",
         }}
       />
-      
+
       {/* Third accent orb */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ 
+        animate={{
           opacity: [0.1, 0.2, 0.1],
-          scale: [1, 1.2, 1]
+          scale: [1, 1.2, 1],
         }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 4,
+        }}
         className="fixed -z-10 w-[400px] h-[400px] rounded-full top-[30%] right-[-100px]"
         style={{
-          background: "radial-gradient(circle, rgba(236,72,153,0.06) 0%, transparent 60%)",
+          background:
+            "radial-gradient(circle, rgba(236,72,153,0.06) 0%, transparent 60%)",
         }}
       />
-      
+
       {/* Animated floating particles */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         {[...Array(12)].map((_, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 0 }}
-            animate={{ 
+            animate={{
               opacity: [0, 0.5, 0],
               y: [0, -150],
-              x: [0, Math.random() * 40 - 20]
+              x: [0, Math.random() * 40 - 20],
             }}
             transition={{
               duration: 6 + Math.random() * 4,
               delay: i * 1.5,
               repeat: Infinity,
-              ease: "easeOut"
+              ease: "easeOut",
             }}
             className="absolute rounded-full"
             style={{
@@ -88,20 +101,21 @@ export function AuthBackground({ children }: { children: ReactNode }) {
               bottom: "5%",
               width: `${2 + Math.random() * 3}px`,
               height: `${2 + Math.random() * 3}px`,
-              background: i % 2 === 0 ? "rgba(139,92,246,0.5)" : "rgba(34,211,238,0.4)"
+              background:
+                i % 2 === 0 ? "rgba(139,92,246,0.5)" : "rgba(34,211,238,0.4)",
             }}
           />
         ))}
       </div>
 
       {/* Center glow - pulsing */}
-      <motion.div 
-        animate={{ 
+      <motion.div
+        animate={{
           opacity: [0.03, 0.06, 0.03],
-          scale: [1, 1.1, 1]
+          scale: [1, 1.1, 1],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[1000px] h-[500px] rounded-full blur-3xl bg-gradient-to-r from-violet-500/30 via-purple-500/20 to-cyan-500/30" 
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[1000px] h-[500px] rounded-full blur-3xl bg-gradient-to-r from-violet-500/30 via-purple-500/20 to-cyan-500/30"
       />
 
       {/* Horizontal light beams */}

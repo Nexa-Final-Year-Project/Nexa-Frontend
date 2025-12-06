@@ -19,12 +19,15 @@ export const SprintModal: React.FC<SprintModalProps> = ({
   mode,
 }) => {
   // Provide default values to prevent controlled/uncontrolled input errors
-  const defaultValues = useMemo(() => ({
-    name: initialData?.name || "",
-    startDate: initialData?.startDate || "",
-    endDate: initialData?.endDate || "",
-    goals: initialData?.goals || [],
-  }), [initialData]);
+  const defaultValues = useMemo(
+    () => ({
+      name: initialData?.name || "",
+      startDate: initialData?.startDate || "",
+      endDate: initialData?.endDate || "",
+      goals: initialData?.goals || [],
+    }),
+    [initialData]
+  );
 
   return (
     <Modal

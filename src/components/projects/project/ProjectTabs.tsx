@@ -56,7 +56,9 @@ const projectTabs = (
       id: "sprints",
       label: "Sprints",
       icon: SheetIcon,
-      content: <Sprints projectId={projectId} sprints={sprints} members={members} />,
+      content: (
+        <Sprints projectId={projectId} sprints={sprints} members={members} />
+      ),
     },
     {
       id: "board",
@@ -126,27 +128,30 @@ export function ProjectTabs({
     useLazyGetSprintByProjectIdQuery();
   const { setTasks, tasks } = useTaskStore();
   const { setSprints, sprints } = useSprintStore();
-  
+
   // Function to refresh tasks
   const refreshTasks = () => {
     if (projectId) {
       fetchTasksByProjectId(projectId);
     }
   };
-  
+
   useEffect(() => {
     refreshTasks();
   }, [projectId, fetchTasksByProjectId]);
-  
+
   // Listen for tasks:refresh event to update analytics in real-time
   useEffect(() => {
     const handleTasksRefresh = () => {
-      console.log("[ProjectTabs] Received tasks:refresh event, refetching tasks...");
+      console.log(
+        "[ProjectTabs] Received tasks:refresh event, refetching tasks..."
+      );
       refreshTasks();
     };
-    
+
     window.addEventListener("tasks:refresh", handleTasksRefresh);
-    return () => window.removeEventListener("tasks:refresh", handleTasksRefresh);
+    return () =>
+      window.removeEventListener("tasks:refresh", handleTasksRefresh);
   }, [projectId]);
 
   // Update task store when data changes

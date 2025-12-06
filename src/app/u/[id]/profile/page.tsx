@@ -6,16 +6,16 @@ import { ImageUploader } from "@/components/ui/image/ImageUploader";
 import { useProjects } from "@/hooks/projects/useProjects";
 import { useAuthStore } from "@/store/auth/authStore";
 import React, { useEffect } from "react";
-import { 
-  Mail, 
-  MapPin, 
-  Briefcase, 
-  Building2, 
-  Calendar, 
+import {
+  Mail,
+  MapPin,
+  Briefcase,
+  Building2,
+  Calendar,
   Edit3,
   ArrowUpRight,
   Activity,
-  FolderKanban
+  FolderKanban,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -53,8 +53,8 @@ const ProfilePage = () => {
               <div className="flex flex-col items-center">
                 <div className="relative">
                   {user?.photoURL ? (
-                    <img 
-                      src={user.photoURL} 
+                    <img
+                      src={user.photoURL}
                       alt={user.name || "User"}
                       className="w-28 h-28 rounded-full object-cover border-4 border-[#0a0a0f] ring-2 ring-violet-500/30"
                     />
@@ -70,13 +70,15 @@ const ProfilePage = () => {
                     <Edit3 className="w-4 h-4" />
                   </button>
                 </div>
-                
+
                 <h2 className="mt-4 text-xl font-bold text-white">
                   {user?.name || "User"}
                 </h2>
-                <p className="text-sm text-white/40">@{user?.name?.toLowerCase().replace(/\s/g, '') || "user"}</p>
-                
-                <Link 
+                <p className="text-sm text-white/40">
+                  @{user?.name?.toLowerCase().replace(/\s/g, "") || "user"}
+                </p>
+
+                <Link
                   href={`/u/${user?.uid}/settings`}
                   className="mt-4 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white/70 hover:bg-white/[0.06] hover:text-white transition-all flex items-center gap-2"
                 >
@@ -116,10 +118,14 @@ const ProfilePage = () => {
 
               {/* Contact */}
               <div>
-                <h3 className="text-sm font-semibold text-white mb-4">Contact</h3>
+                <h3 className="text-sm font-semibold text-white mb-4">
+                  Contact
+                </h3>
                 <div className="flex items-center gap-3 text-sm">
                   <Mail className="w-4 h-4 text-white/30" />
-                  <span className="text-white/60">{user?.email || "email@example.com"}</span>
+                  <span className="text-white/60">
+                    {user?.email || "email@example.com"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -134,7 +140,9 @@ const ProfilePage = () => {
                   <div className="p-2 rounded-lg bg-violet-500/10">
                     <Activity className="w-5 h-5 text-violet-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Recent Activity</h3>
+                  <h3 className="text-lg font-semibold text-white">
+                    Recent Activity
+                  </h3>
                 </div>
                 <button className="text-sm text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1">
                   View all
@@ -153,7 +161,7 @@ const ProfilePage = () => {
                   </div>
                   <h3 className="text-lg font-semibold text-white">Projects</h3>
                 </div>
-                <Link 
+                <Link
                   href={`/u/${user?.uid}/p`}
                   className="text-sm text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1"
                 >

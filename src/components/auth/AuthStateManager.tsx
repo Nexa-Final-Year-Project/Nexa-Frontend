@@ -11,7 +11,8 @@ import { useRouter, usePathname } from "next/navigation";
  * and handles token validation/refresh
  */
 export function AuthStateManager() {
-  const { user, setUser, logout, refreshToken, setTokenExpiry } = useAuthStore();
+  const { user, setUser, logout, refreshToken, setTokenExpiry } =
+    useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
   const hasInitialized = useRef(false);
@@ -30,9 +31,9 @@ export function AuthStateManager() {
           // If token changed or doesn't exist, update it
           if (idToken !== storedToken) {
             localStorage.setItem("authToken", idToken);
-            
+
             // Decode and store expiry
-            const tokenParts = idToken.split('.');
+            const tokenParts = idToken.split(".");
             if (tokenParts.length === 3) {
               const payload = JSON.parse(atob(tokenParts[1]));
               if (payload.exp) {
@@ -80,7 +81,7 @@ export function AuthStateManager() {
       if (token && storedUser) {
         try {
           // Decode token to check expiry
-          const tokenParts = token.split('.');
+          const tokenParts = token.split(".");
           if (tokenParts.length === 3) {
             const payload = JSON.parse(atob(tokenParts[1]));
             const expiryTime = payload.exp * 1000;
@@ -90,16 +91,19 @@ export function AuthStateManager() {
             if (expiryTime - now < 2 * 60 * 1000) {
               console.log("Token expired or expiring soon, refreshing...");
               const newToken = await refreshToken();
-              
+
               if (!newToken) {
                 // Refresh failed, logout
                 console.error("Token refresh failed, logging out");
                 logout();
                 const auth = getAuth(app);
                 await auth.signOut();
-                
+
                 // Redirect to login if not already on auth page
-                if (!pathname?.startsWith("/login") && !pathname?.startsWith("/register")) {
+                if (
+                  !pathname?.startsWith("/login") &&
+                  !pathname?.startsWith("/register")
+                ) {
                   router.push("/login");
                 }
               }

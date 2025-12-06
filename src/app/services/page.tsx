@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 import Header from "@/components/shared/Header/Header";
 import Footer from "@/components/shared/sections/Footer";
-import { 
-  Brain, 
-  Workflow, 
-  BarChart3, 
-  Users2, 
+import {
+  Brain,
+  Workflow,
+  BarChart3,
+  Users2,
   Calendar,
   GitBranch,
   Bell,
@@ -15,59 +15,111 @@ import {
   Target,
   Zap,
   ArrowRight,
-  CheckCircle2
+  CheckCircle2,
 } from "lucide-react";
 
 const services = [
   {
     icon: Brain,
     title: "AI Sprint Planning",
-    description: "Automated sprint planning powered by machine learning. Nexa analyzes your team's velocity, capacity, and historical data to create optimal sprint plans.",
-    features: ["Auto task allocation", "Capacity balancing", "Risk prediction", "Timeline optimization"],
+    description:
+      "Automated sprint planning powered by machine learning. Nexa analyzes your team's velocity, capacity, and historical data to create optimal sprint plans.",
+    features: [
+      "Auto task allocation",
+      "Capacity balancing",
+      "Risk prediction",
+      "Timeline optimization",
+    ],
     gradient: "from-violet-500 to-purple-600",
   },
   {
     icon: Workflow,
     title: "Intelligent Workflows",
-    description: "Design and automate custom workflows that adapt to your team's processes. No more manual status updates or missed handoffs.",
-    features: ["Custom automations", "Smart triggers", "Template library", "Process analytics"],
+    description:
+      "Design and automate custom workflows that adapt to your team's processes. No more manual status updates or missed handoffs.",
+    features: [
+      "Custom automations",
+      "Smart triggers",
+      "Template library",
+      "Process analytics",
+    ],
     gradient: "from-cyan-500 to-blue-600",
   },
   {
     icon: BarChart3,
     title: "Performance Analytics",
-    description: "Real-time insights into team performance, project health, and delivery metrics. Make data-driven decisions with confidence.",
-    features: ["Team velocity tracking", "Burndown charts", "Predictive analytics", "Custom dashboards"],
+    description:
+      "Real-time insights into team performance, project health, and delivery metrics. Make data-driven decisions with confidence.",
+    features: [
+      "Team velocity tracking",
+      "Burndown charts",
+      "Predictive analytics",
+      "Custom dashboards",
+    ],
     gradient: "from-emerald-500 to-green-600",
   },
   {
     icon: Users2,
     title: "Team Collaboration",
-    description: "Seamless communication and collaboration tools built right into your project workflow. Keep everyone aligned and informed.",
-    features: ["Real-time updates", "Comment threads", "@mentions", "Activity feeds"],
+    description:
+      "Seamless communication and collaboration tools built right into your project workflow. Keep everyone aligned and informed.",
+    features: [
+      "Real-time updates",
+      "Comment threads",
+      "@mentions",
+      "Activity feeds",
+    ],
     gradient: "from-orange-500 to-amber-600",
   },
   {
     icon: Calendar,
     title: "Smart Scheduling",
-    description: "Intelligent scheduling that considers team availability, dependencies, and priorities to keep your projects on track.",
-    features: ["Dependency management", "Resource leveling", "Conflict detection", "Timeline views"],
+    description:
+      "Intelligent scheduling that considers team availability, dependencies, and priorities to keep your projects on track.",
+    features: [
+      "Dependency management",
+      "Resource leveling",
+      "Conflict detection",
+      "Timeline views",
+    ],
     gradient: "from-pink-500 to-rose-600",
   },
   {
     icon: GitBranch,
     title: "Integration Hub",
-    description: "Connect Nexa with your favorite tools. Seamless integrations with GitHub, Slack, Jira, and 50+ other platforms.",
-    features: ["GitHub sync", "Slack notifications", "Jira import", "API access"],
+    description:
+      "Connect Nexa with your favorite tools. Seamless integrations with GitHub, Slack, Jira, and 50+ other platforms.",
+    features: [
+      "GitHub sync",
+      "Slack notifications",
+      "Jira import",
+      "API access",
+    ],
     gradient: "from-indigo-500 to-violet-600",
   },
 ];
 
 const additionalFeatures = [
-  { icon: Bell, title: "Smart Notifications", description: "AI-filtered alerts that matter" },
-  { icon: Layers, title: "Epic Management", description: "Organize large initiatives easily" },
-  { icon: Target, title: "Goal Tracking", description: "OKRs and milestone tracking" },
-  { icon: Zap, title: "Quick Actions", description: "Keyboard shortcuts for power users" },
+  {
+    icon: Bell,
+    title: "Smart Notifications",
+    description: "AI-filtered alerts that matter",
+  },
+  {
+    icon: Layers,
+    title: "Epic Management",
+    description: "Organize large initiatives easily",
+  },
+  {
+    icon: Target,
+    title: "Goal Tracking",
+    description: "OKRs and milestone tracking",
+  },
+  {
+    icon: Zap,
+    title: "Quick Actions",
+    description: "Keyboard shortcuts for power users",
+  },
 ];
 
 export default function ServicesPage() {
@@ -98,8 +150,8 @@ export default function ServicesPage() {
               </span>
             </h1>
             <p className="text-lg text-white/60 max-w-2xl mx-auto">
-              From AI-powered planning to real-time analytics, Nexa provides the complete 
-              toolkit for modern project management.
+              From AI-powered planning to real-time analytics, Nexa provides the
+              complete toolkit for modern project management.
             </p>
           </motion.div>
         </section>
@@ -116,18 +168,27 @@ export default function ServicesPage() {
                 className="group relative p-6 rounded-2xl bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300"
               >
                 {/* Icon */}
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} bg-opacity-20 flex items-center justify-center mb-5`}>
+                <div
+                  className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} bg-opacity-20 flex items-center justify-center mb-5`}
+                >
                   <service.icon className="w-7 h-7 text-white" />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-semibold text-white mb-3">{service.title}</h3>
-                <p className="text-white/60 text-sm leading-relaxed mb-5">{service.description}</p>
+                <h3 className="text-xl font-semibold text-white mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-white/60 text-sm leading-relaxed mb-5">
+                  {service.description}
+                </p>
 
                 {/* Features list */}
                 <ul className="space-y-2">
                   {service.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm text-white/50">
+                    <li
+                      key={feature}
+                      className="flex items-center gap-2 text-sm text-white/50"
+                    >
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                       {feature}
                     </li>
@@ -152,7 +213,9 @@ export default function ServicesPage() {
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
               Plus Many More Features
             </h2>
-            <p className="text-white/60">Tools designed to boost your team's productivity</p>
+            <p className="text-white/60">
+              Tools designed to boost your team's productivity
+            </p>
           </motion.div>
 
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -186,7 +249,8 @@ export default function ServicesPage() {
               Start Free, Scale When Ready
             </h2>
             <p className="text-white/60 mb-8 max-w-lg mx-auto">
-              Try Nexa free with up to 5 team members. Upgrade anytime as your team grows.
+              Try Nexa free with up to 5 team members. Upgrade anytime as your
+              team grows.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a

@@ -71,7 +71,9 @@ export const UserGeneralSettings = ({
               <Avatar className="h-24 w-24 rounded-2xl border-2 border-white/[0.08] shadow-lg">
                 <AvatarImage src={user?.photoURL} className="rounded-2xl" />
                 <AvatarFallback className="text-3xl rounded-2xl bg-gradient-to-br from-neutral-800 to-neutral-900 text-white/80 font-semibold">
-                  {user?.name?.charAt(0).toUpperCase() || <UserIcon className="w-10 h-10" />}
+                  {user?.name?.charAt(0).toUpperCase() || (
+                    <UserIcon className="w-10 h-10" />
+                  )}
                 </AvatarFallback>
               </Avatar>
               <div className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
@@ -82,20 +84,24 @@ export const UserGeneralSettings = ({
             {/* Upload Info */}
             <div className="flex-1 space-y-4">
               <div>
-                <h3 className="text-sm font-medium text-white mb-1">Upload a new photo</h3>
+                <h3 className="text-sm font-medium text-white mb-1">
+                  Upload a new photo
+                </h3>
                 <p className="text-xs text-white/40">
                   Recommended: Square image, at least 256x256px
                 </p>
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="
+                <button
+                  className="
                   flex items-center gap-2 px-4 py-2.5 rounded-xl
                   bg-white/[0.06] border border-white/[0.08]
                   text-sm font-medium text-white/80
                   hover:bg-white/[0.1] hover:border-white/[0.12]
                   transition-all duration-200 cursor-pointer
-                ">
+                "
+                >
                   <ImageIcon className="w-4 h-4" />
                   Choose File
                 </button>

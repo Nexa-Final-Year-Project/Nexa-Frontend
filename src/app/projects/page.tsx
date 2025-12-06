@@ -35,7 +35,8 @@ type FilterType = "all" | "starred" | "recent" | "owned";
 export default function ProjectsPage() {
   const { data: projectsData, isLoading, error } = useGetProjectsQuery({});
   const { user } = useAuthStore();
-  const { isStarred, toggleStar, starredProjectIds } = useStarredProjectsStore();
+  const { isStarred, toggleStar, starredProjectIds } =
+    useStarredProjectsStore();
   const router = useRouter();
 
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -46,8 +47,10 @@ export default function ProjectsPage() {
   const projects: Project[] = useMemo(() => {
     if (!projectsData) return [];
     if (Array.isArray(projectsData)) return projectsData;
-    if (Array.isArray((projectsData as any).projects)) return (projectsData as any).projects;
-    if (Array.isArray((projectsData as any).data)) return (projectsData as any).data;
+    if (Array.isArray((projectsData as any).projects))
+      return (projectsData as any).projects;
+    if (Array.isArray((projectsData as any).data))
+      return (projectsData as any).data;
     return [];
   }, [projectsData]);
 
@@ -73,23 +76,30 @@ export default function ProjectsPage() {
       case "recent":
         result = result
           .slice()
-          .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt || 0).getTime() -
+              new Date(a.createdAt || 0).getTime()
+          )
           .slice(0, 6);
         break;
       case "owned":
-        result = result.filter((p) => p.owner === user?.id || p.owner === (user as any)?._id);
+        result = result.filter(
+          (p) => p.owner === user?.id || p.owner === (user as any)?._id
+        );
         break;
     }
 
     return result;
   }, [projects, searchQuery, activeFilter, starredProjectIds, user]);
 
-  const filters: { key: FilterType; label: string; icon: React.ElementType }[] = [
-    { key: "all", label: "All Projects", icon: Grid3X3 },
-    { key: "starred", label: "Starred", icon: Star },
-    { key: "recent", label: "Recent", icon: Clock },
-    { key: "owned", label: "My Projects", icon: Users },
-  ];
+  const filters: { key: FilterType; label: string; icon: React.ElementType }[] =
+    [
+      { key: "all", label: "All Projects", icon: Grid3X3 },
+      { key: "starred", label: "Starred", icon: Star },
+      { key: "recent", label: "Recent", icon: Clock },
+      { key: "owned", label: "My Projects", icon: Users },
+    ];
 
   // Get gradient based on project name
   const getProjectGradient = (name: string) => {
@@ -101,7 +111,9 @@ export default function ProjectsPage() {
       { bg: "from-cyan-500/15 to-cyan-500/5", accent: "cyan" },
       { bg: "from-amber-500/15 to-amber-500/5", accent: "amber" },
     ];
-    const hash = name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = name
+      .split("")
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return gradients[hash % gradients.length];
   };
 
@@ -132,12 +144,14 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen relative">
       {/* Background */}
-      <div className={cn(
-        "fixed inset-0 -z-20",
-        isDark 
-          ? "bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950" 
-          : "bg-gradient-to-b from-white via-neutral-50 to-white"
-      )} />
+      <div
+        className={cn(
+          "fixed inset-0 -z-20",
+          isDark
+            ? "bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950"
+            : "bg-gradient-to-b from-white via-neutral-50 to-white"
+        )}
+      />
       {isDark && (
         <div
           className="fixed inset-0 -z-10 opacity-30"
@@ -149,12 +163,14 @@ export default function ProjectsPage() {
       )}
 
       {/* Header */}
-      <header className={cn(
-        "sticky top-0 z-50 backdrop-blur-md border-b",
-        isDark 
-          ? "bg-neutral-900/80 border-white/5" 
-          : "bg-white/80 border-neutral-200"
-      )}>
+      <header
+        className={cn(
+          "sticky top-0 z-50 backdrop-blur-md border-b",
+          isDark
+            ? "bg-neutral-900/80 border-white/5"
+            : "bg-white/80 border-neutral-200"
+        )}
+      >
         <div className="mx-auto max-w-7xl px-4 py-4">
           <Header />
         </div>
@@ -171,19 +187,29 @@ export default function ProjectsPage() {
           >
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <div className={cn(
-                  "w-12 h-12 rounded-2xl border flex items-center justify-center",
-                  isDark 
-                    ? "bg-gradient-to-br from-white/10 to-white/5 border-white/10" 
-                    : "bg-gradient-to-br from-neutral-100 to-neutral-50 border-neutral-200"
-                )}>
-                  <Folder className={isDark ? "w-6 h-6 text-white/70" : "w-6 h-6 text-neutral-600"} />
+                <div
+                  className={cn(
+                    "w-12 h-12 rounded-2xl border flex items-center justify-center",
+                    isDark
+                      ? "bg-gradient-to-br from-white/10 to-white/5 border-white/10"
+                      : "bg-gradient-to-br from-neutral-100 to-neutral-50 border-neutral-200"
+                  )}
+                >
+                  <Folder
+                    className={
+                      isDark
+                        ? "w-6 h-6 text-white/70"
+                        : "w-6 h-6 text-neutral-600"
+                    }
+                  />
                 </div>
                 <div>
-                  <h1 className={cn(
-                    "text-3xl md:text-4xl font-bold",
-                    isDark ? "text-white" : "text-neutral-900"
-                  )}>
+                  <h1
+                    className={cn(
+                      "text-3xl md:text-4xl font-bold",
+                      isDark ? "text-white" : "text-neutral-900"
+                    )}
+                  >
                     Projects
                   </h1>
                   <p className="text-neutral-500 text-sm">
@@ -197,8 +223,8 @@ export default function ProjectsPage() {
                 variant="outline"
                 className={cn(
                   "font-medium transition-all",
-                  isDark 
-                    ? "border-white/10 text-white hover:bg-white/[0.04] hover:border-white/20" 
+                  isDark
+                    ? "border-white/10 text-white hover:bg-white/[0.04] hover:border-white/20"
                     : "border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300"
                 )}
               >
@@ -227,8 +253,8 @@ export default function ProjectsPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={cn(
                   "w-full pl-12 pr-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2",
-                  isDark 
-                    ? "bg-neutral-900/60 border-white/10 text-white placeholder-neutral-500 focus:border-white/20 focus:ring-white/10" 
+                  isDark
+                    ? "bg-neutral-900/60 border-white/10 text-white placeholder-neutral-500 focus:border-white/20 focus:ring-white/10"
                     : "bg-white border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-neutral-300 focus:ring-neutral-200/50"
                 )}
               />
@@ -239,12 +265,12 @@ export default function ProjectsPage() {
                 className={cn(
                   "p-3 rounded-xl border transition-all",
                   viewMode === "grid"
-                    ? isDark 
-                      ? "bg-white/10 border-white/20 text-white" 
+                    ? isDark
+                      ? "bg-white/10 border-white/20 text-white"
                       : "bg-neutral-900 border-neutral-800 text-white"
-                    : isDark 
-                      ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
-                      : "bg-white border-neutral-200 text-neutral-400 hover:text-neutral-900 hover:border-neutral-300"
+                    : isDark
+                    ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
+                    : "bg-white border-neutral-200 text-neutral-400 hover:text-neutral-900 hover:border-neutral-300"
                 )}
               >
                 <Grid3X3 className="w-5 h-5" />
@@ -254,12 +280,12 @@ export default function ProjectsPage() {
                 className={cn(
                   "p-3 rounded-xl border transition-all",
                   viewMode === "list"
-                    ? isDark 
-                      ? "bg-white/10 border-white/20 text-white" 
+                    ? isDark
+                      ? "bg-white/10 border-white/20 text-white"
                       : "bg-neutral-900 border-neutral-800 text-white"
-                    : isDark 
-                      ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
-                      : "bg-white border-neutral-200 text-neutral-400 hover:text-neutral-900 hover:border-neutral-300"
+                    : isDark
+                    ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
+                    : "bg-white border-neutral-200 text-neutral-400 hover:text-neutral-900 hover:border-neutral-300"
                 )}
               >
                 <List className="w-5 h-5" />
@@ -276,12 +302,12 @@ export default function ProjectsPage() {
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all border",
                   activeFilter === filter.key
-                    ? isDark 
-                      ? "bg-white/10 border-white/20 text-white" 
+                    ? isDark
+                      ? "bg-white/10 border-white/20 text-white"
                       : "bg-neutral-900 border-neutral-800 text-white"
-                    : isDark 
-                      ? "bg-neutral-900/40 border-white/5 text-neutral-400 hover:text-white hover:border-white/10"
-                      : "bg-white border-neutral-200 text-neutral-500 hover:text-neutral-900 hover:border-neutral-300"
+                    : isDark
+                    ? "bg-neutral-900/40 border-white/5 text-neutral-400 hover:text-white hover:border-white/10"
+                    : "bg-white border-neutral-200 text-neutral-500 hover:text-neutral-900 hover:border-neutral-300"
                 )}
               >
                 <filter.icon className="w-4 h-4" />
@@ -299,10 +325,12 @@ export default function ProjectsPage() {
         {/* Projects Grid/List */}
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className={cn(
-              "w-10 h-10 animate-spin mb-4",
-              isDark ? "text-white/60" : "text-neutral-400"
-            )} />
+            <Loader2
+              className={cn(
+                "w-10 h-10 animate-spin mb-4",
+                isDark ? "text-white/60" : "text-neutral-400"
+              )}
+            />
             <p className="text-neutral-500">Loading projects...</p>
           </div>
         ) : error ? (
@@ -317,25 +345,35 @@ export default function ProjectsPage() {
             animate={{ opacity: 1, scale: 1 }}
             className={cn(
               "flex flex-col items-center justify-center py-20 px-4 rounded-2xl border",
-              isDark 
-                ? "bg-neutral-900/30 border-white/5" 
+              isDark
+                ? "bg-neutral-900/30 border-white/5"
                 : "bg-neutral-50 border-neutral-200"
             )}
           >
-            <div className={cn(
-              "w-20 h-20 rounded-2xl flex items-center justify-center mb-6",
-              isDark ? "bg-white/5" : "bg-neutral-100"
-            )}>
+            <div
+              className={cn(
+                "w-20 h-20 rounded-2xl flex items-center justify-center mb-6",
+                isDark ? "bg-white/5" : "bg-neutral-100"
+              )}
+            >
               {activeFilter === "starred" ? (
                 <Star className="w-10 h-10 text-amber-400/50" />
               ) : (
-                <Folder className={isDark ? "w-10 h-10 text-white/30" : "w-10 h-10 text-neutral-300"} />
+                <Folder
+                  className={
+                    isDark
+                      ? "w-10 h-10 text-white/30"
+                      : "w-10 h-10 text-neutral-300"
+                  }
+                />
               )}
             </div>
-            <h3 className={cn(
-              "text-xl font-semibold mb-2",
-              isDark ? "text-white/80" : "text-neutral-700"
-            )}>
+            <h3
+              className={cn(
+                "text-xl font-semibold mb-2",
+                isDark ? "text-white/80" : "text-neutral-700"
+              )}
+            >
               {searchQuery
                 ? "No projects found"
                 : activeFilter === "starred"
@@ -353,7 +391,11 @@ export default function ProjectsPage() {
               <Link href="/u/projects">
                 <Button
                   variant="filled"
-                  className={isDark ? "!bg-white !text-neutral-900 hover:!bg-white/90" : "!bg-neutral-900 !text-white hover:!bg-neutral-800"}
+                  className={
+                    isDark
+                      ? "!bg-white !text-neutral-900 hover:!bg-white/90"
+                      : "!bg-neutral-900 !text-white hover:!bg-neutral-800"
+                  }
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Create Project
@@ -384,8 +426,8 @@ export default function ProjectsPage() {
                       onClick={() => handleProjectClick(project._id)}
                       className={cn(
                         "group relative overflow-hidden rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-xl border",
-                        isDark 
-                          ? "bg-neutral-900/50 border-white/[0.06] hover:bg-neutral-900/70 hover:border-white/[0.1] hover:shadow-black/20" 
+                        isDark
+                          ? "bg-neutral-900/50 border-white/[0.06] hover:bg-neutral-900/70 hover:border-white/[0.1] hover:shadow-black/20"
                           : "bg-white border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 hover:shadow-neutral-200/50"
                       )}
                     >
@@ -399,7 +441,9 @@ export default function ProjectsPage() {
                         <div
                           className={`w-12 h-12 rounded-xl bg-gradient-to-br ${bg} border border-white/[0.06] flex items-center justify-center`}
                         >
-                          <Folder className={`w-6 h-6 ${getAccentClass(accent)}`} />
+                          <Folder
+                            className={`w-6 h-6 ${getAccentClass(accent)}`}
+                          />
                         </div>
 
                         {/* Actions */}
@@ -410,9 +454,9 @@ export default function ProjectsPage() {
                               "w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200",
                               starred
                                 ? "bg-amber-500/15 text-amber-400"
-                                : isDark 
-                                  ? "bg-transparent text-white/30 hover:text-amber-400 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
-                                  : "bg-transparent text-neutral-300 hover:text-amber-500 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
+                                : isDark
+                                ? "bg-transparent text-white/30 hover:text-amber-400 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
+                                : "bg-transparent text-neutral-300 hover:text-amber-500 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
                             )}
                           >
                             <Star
@@ -420,22 +464,26 @@ export default function ProjectsPage() {
                               fill={starred ? "currentColor" : "none"}
                             />
                           </button>
-                          <div className={cn(
-                            "w-9 h-9 rounded-xl flex items-center justify-center bg-transparent opacity-0 group-hover:opacity-100 transition-all duration-200",
-                            isDark 
-                              ? "text-white/30 hover:text-white hover:bg-white/5" 
-                              : "text-neutral-300 hover:text-neutral-600 hover:bg-neutral-100"
-                          )}>
+                          <div
+                            className={cn(
+                              "w-9 h-9 rounded-xl flex items-center justify-center bg-transparent opacity-0 group-hover:opacity-100 transition-all duration-200",
+                              isDark
+                                ? "text-white/30 hover:text-white hover:bg-white/5"
+                                : "text-neutral-300 hover:text-neutral-600 hover:bg-neutral-100"
+                            )}
+                          >
                             <ArrowUpRight className="w-4 h-4" />
                           </div>
                         </div>
                       </div>
 
                       {/* Content */}
-                      <h3 className={cn(
-                        "text-lg font-semibold mb-2 line-clamp-1",
-                        isDark ? "text-white" : "text-neutral-900"
-                      )}>
+                      <h3
+                        className={cn(
+                          "text-lg font-semibold mb-2 line-clamp-1",
+                          isDark ? "text-white" : "text-neutral-900"
+                        )}
+                      >
                         {project.name}
                       </h3>
                       <p className="text-sm text-neutral-500 line-clamp-2 mb-4">
@@ -443,10 +491,12 @@ export default function ProjectsPage() {
                       </p>
 
                       {/* Footer */}
-                      <div className={cn(
-                        "flex items-center justify-between pt-4 border-t",
-                        isDark ? "border-white/5" : "border-neutral-100"
-                      )}>
+                      <div
+                        className={cn(
+                          "flex items-center justify-between pt-4 border-t",
+                          isDark ? "border-white/5" : "border-neutral-100"
+                        )}
+                      >
                         <div className="flex items-center gap-2 text-xs text-neutral-500">
                           <Users className="w-3.5 h-3.5" />
                           <span>{project.members?.length || 0} members</span>
@@ -485,8 +535,8 @@ export default function ProjectsPage() {
                       onClick={() => handleProjectClick(project._id)}
                       className={cn(
                         "group flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all duration-200",
-                        isDark 
-                          ? "bg-neutral-900/50 border-white/[0.06] hover:bg-neutral-900/70 hover:border-white/[0.1]" 
+                        isDark
+                          ? "bg-neutral-900/50 border-white/[0.06] hover:bg-neutral-900/70 hover:border-white/[0.1]"
                           : "bg-white border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300"
                       )}
                     >
@@ -497,9 +547,9 @@ export default function ProjectsPage() {
                           "flex-shrink-0 p-2 rounded-lg transition-all duration-200",
                           starred
                             ? "bg-amber-500/20 text-amber-400"
-                            : isDark 
-                              ? "bg-white/[0.04] text-white/30 hover:text-amber-400 hover:bg-amber-500/10"
-                              : "bg-neutral-100 text-neutral-300 hover:text-amber-500 hover:bg-amber-500/10"
+                            : isDark
+                            ? "bg-white/[0.04] text-white/30 hover:text-amber-400 hover:bg-amber-500/10"
+                            : "bg-neutral-100 text-neutral-300 hover:text-amber-500 hover:bg-amber-500/10"
                         )}
                       >
                         <Star
@@ -512,15 +562,19 @@ export default function ProjectsPage() {
                       <div
                         className={`w-10 h-10 rounded-lg bg-gradient-to-br ${bg} flex items-center justify-center flex-shrink-0`}
                       >
-                        <Folder className={`w-5 h-5 ${getAccentClass(accent)}`} />
+                        <Folder
+                          className={`w-5 h-5 ${getAccentClass(accent)}`}
+                        />
                       </div>
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
-                        <h3 className={cn(
-                          "font-medium truncate",
-                          isDark ? "text-white" : "text-neutral-900"
-                        )}>
+                        <h3
+                          className={cn(
+                            "font-medium truncate",
+                            isDark ? "text-white" : "text-neutral-900"
+                          )}
+                        >
                           {project.name}
                         </h3>
                         <p className="text-sm text-neutral-500 truncate">
@@ -545,12 +599,14 @@ export default function ProjectsPage() {
                       </div>
 
                       {/* Arrow */}
-                      <ArrowUpRight className={cn(
-                        "w-5 h-5 transition-colors",
-                        isDark 
-                          ? "text-white/30 group-hover:text-white/60" 
-                          : "text-neutral-300 group-hover:text-neutral-500"
-                      )} />
+                      <ArrowUpRight
+                        className={cn(
+                          "w-5 h-5 transition-colors",
+                          isDark
+                            ? "text-white/30 group-hover:text-white/60"
+                            : "text-neutral-300 group-hover:text-neutral-500"
+                        )}
+                      />
                     </motion.div>
                   );
                 })}
@@ -567,8 +623,8 @@ export default function ProjectsPage() {
             transition={{ delay: 0.3 }}
             className={cn(
               "mt-12 p-6 rounded-2xl border",
-              isDark 
-                ? "bg-neutral-900/30 border-white/5" 
+              isDark
+                ? "bg-neutral-900/30 border-white/5"
                 : "bg-neutral-50 border-neutral-200"
             )}
           >
@@ -588,7 +644,10 @@ export default function ProjectsPage() {
                 },
                 {
                   icon: Users,
-                  value: projects.reduce((acc, p) => acc + (p.members?.length || 0), 0),
+                  value: projects.reduce(
+                    (acc, p) => acc + (p.members?.length || 0),
+                    0
+                  ),
                   label: "Total Members",
                   color: "text-emerald-500",
                 },
@@ -605,10 +664,14 @@ export default function ProjectsPage() {
               ].map((stat, index) => (
                 <div key={index} className="text-center">
                   <stat.icon className={`w-5 h-5 ${stat.color} mx-auto mb-2`} />
-                  <div className={cn(
-                    "text-2xl font-bold",
-                    isDark ? "text-white" : "text-neutral-900"
-                  )}>{stat.value}</div>
+                  <div
+                    className={cn(
+                      "text-2xl font-bold",
+                      isDark ? "text-white" : "text-neutral-900"
+                    )}
+                  >
+                    {stat.value}
+                  </div>
                   <div className="text-xs text-neutral-500">{stat.label}</div>
                 </div>
               ))}

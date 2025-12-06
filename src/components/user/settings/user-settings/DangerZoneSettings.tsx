@@ -24,7 +24,8 @@ export const DangerZoneSettings: React.FC<DangerZoneSettingsProps> = ({
           </h2>
         </div>
         <p className="text-sm text-white/40 ml-4 mb-6">
-          Actions in this section are irreversible. Please proceed with extreme caution.
+          Actions in this section are irreversible. Please proceed with extreme
+          caution.
         </p>
 
         <div className="space-y-4">
@@ -36,9 +37,13 @@ export const DangerZoneSettings: React.FC<DangerZoneSettingsProps> = ({
                   <RotateCcw className="w-5 h-5 text-amber-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-1">Reset All Data</h3>
+                  <h3 className="font-semibold text-white mb-1">
+                    Reset All Data
+                  </h3>
                   <p className="text-sm text-white/40">
-                    Reset all your app data to default settings. This will not delete your account but will clear all preferences and history.
+                    Reset all your app data to default settings. This will not
+                    delete your account but will clear all preferences and
+                    history.
                   </p>
                 </div>
               </div>
@@ -67,9 +72,13 @@ export const DangerZoneSettings: React.FC<DangerZoneSettingsProps> = ({
                   <Trash2 className="w-5 h-5 text-rose-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-1">Delete Account</h3>
+                  <h3 className="font-semibold text-white mb-1">
+                    Delete Account
+                  </h3>
                   <p className="text-sm text-white/40">
-                    Permanently delete your account and all associated data. This action cannot be undone and all your projects will be lost.
+                    Permanently delete your account and all associated data.
+                    This action cannot be undone and all your projects will be
+                    lost.
                   </p>
                 </div>
               </div>

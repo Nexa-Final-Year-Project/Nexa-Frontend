@@ -37,24 +37,29 @@ const ICONS: Record<EntityType, React.ReactNode> = {
   ActivityLog: <History className="w-4 h-4 text-amber-400" />,
 };
 
-const FILTER_COLORS: Record<EntityType, { active: string; inactive: string }> = {
-  Task: { 
-    active: "bg-violet-500/20 border-violet-500/40 text-violet-300", 
-    inactive: "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]" 
-  },
-  Project: { 
-    active: "bg-emerald-500/20 border-emerald-500/40 text-emerald-300", 
-    inactive: "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]" 
-  },
-  User: { 
-    active: "bg-cyan-500/20 border-cyan-500/40 text-cyan-300", 
-    inactive: "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]" 
-  },
-  ActivityLog: { 
-    active: "bg-amber-500/20 border-amber-500/40 text-amber-300", 
-    inactive: "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]" 
-  },
-};
+const FILTER_COLORS: Record<EntityType, { active: string; inactive: string }> =
+  {
+    Task: {
+      active: "bg-violet-500/20 border-violet-500/40 text-violet-300",
+      inactive:
+        "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]",
+    },
+    Project: {
+      active: "bg-emerald-500/20 border-emerald-500/40 text-emerald-300",
+      inactive:
+        "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]",
+    },
+    User: {
+      active: "bg-cyan-500/20 border-cyan-500/40 text-cyan-300",
+      inactive:
+        "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]",
+    },
+    ActivityLog: {
+      active: "bg-amber-500/20 border-amber-500/40 text-amber-300",
+      inactive:
+        "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]",
+    },
+  };
 
 export default function GlobalSearch() {
   const [query, setQuery] = useState("");
@@ -163,7 +168,10 @@ export default function GlobalSearch() {
     const regex = new RegExp(`(${query})`, "gi");
     return text.split(regex).map((part, i) =>
       part.toLowerCase() === query.toLowerCase() ? (
-        <span key={i} className="bg-violet-500/30 text-violet-200 font-medium px-0.5 rounded">
+        <span
+          key={i}
+          className="bg-violet-500/30 text-violet-200 font-medium px-0.5 rounded"
+        >
           {part}
         </span>
       ) : (
@@ -175,7 +183,8 @@ export default function GlobalSearch() {
   return (
     <div className="relative w-full max-w-2xl mx-auto flex flex-col items-center">
       {/* Search input */}
-      <div className="
+      <div
+        className="
         relative flex items-center w-full
         bg-neutral-900/80 border border-white/[0.08]
         rounded-2xl px-4 py-3
@@ -184,7 +193,8 @@ export default function GlobalSearch() {
         focus-within:shadow-[0_0_30px_rgba(139,92,246,0.15)]
         transition-all duration-300
         group
-      ">
+      "
+      >
         <Search className="w-5 h-5 text-white/30 group-focus-within:text-violet-400 transition-colors duration-200" />
         <Input
           ref={inputRef}
@@ -207,13 +217,15 @@ export default function GlobalSearch() {
             <X className="w-4 h-4 text-white/40" />
           </button>
         )}
-        <div className="
+        <div
+          className="
           hidden sm:flex items-center gap-1
           px-2 py-1 rounded-lg
           bg-white/[0.05] border border-white/[0.06]
           text-xs text-white/30
           ml-2
-        ">
+        "
+        >
           <Command className="w-3 h-3" />
           <span>/</span>
         </div>
@@ -243,13 +255,15 @@ export default function GlobalSearch() {
 
       {/* Recent searches */}
       {!query && recent.length > 0 && (
-        <Card className="
+        <Card
+          className="
           absolute top-20 w-full z-50
           bg-neutral-950/95 border border-white/[0.08]
           rounded-2xl overflow-hidden
           shadow-[0_20px_60px_rgba(0,0,0,0.5)]
           backdrop-blur-xl
-        ">
+        "
+        >
           <CardContent className="p-3">
             <div className="flex items-center gap-2 text-xs uppercase font-semibold text-white/40 mb-3 px-2">
               <Clock className="w-3.5 h-3.5" />
@@ -275,14 +289,16 @@ export default function GlobalSearch() {
 
       {/* Results dropdown */}
       {query && (
-        <Card className="
+        <Card
+          className="
           absolute top-20 w-full z-50
           bg-neutral-950/95 border border-white/[0.08]
           rounded-2xl overflow-hidden
           shadow-[0_20px_60px_rgba(0,0,0,0.5)]
           backdrop-blur-xl
           max-h-[60vh] overflow-y-auto
-        ">
+        "
+        >
           <CardContent className="p-3">
             {loading && (
               <div className="flex items-center gap-3 p-4 text-sm text-white/50">
@@ -293,11 +309,13 @@ export default function GlobalSearch() {
 
             {!loading && results.length === 0 && (
               <div className="flex flex-col items-center gap-3 p-8 text-center">
-                <div className="
+                <div
+                  className="
                   w-12 h-12 rounded-xl
                   bg-white/[0.03] border border-white/[0.06]
                   flex items-center justify-center
-                ">
+                "
+                >
                   <Search className="w-5 h-5 text-white/30" />
                 </div>
                 <p className="text-sm text-white/40">
@@ -324,16 +342,19 @@ export default function GlobalSearch() {
                         className={`
                           flex items-start gap-3 rounded-xl px-3 py-3
                           transition-all duration-200 cursor-pointer
-                          ${isActive
-                            ? "bg-gradient-to-r from-violet-600/20 to-cyan-600/10 border border-violet-500/30 shadow-[0_0_20px_rgba(139,92,246,0.15)]"
-                            : "hover:bg-white/[0.03] border border-transparent"
+                          ${
+                            isActive
+                              ? "bg-gradient-to-r from-violet-600/20 to-cyan-600/10 border border-violet-500/30 shadow-[0_0_20px_rgba(139,92,246,0.15)]"
+                              : "hover:bg-white/[0.03] border border-transparent"
                           }
                         `}
                       >
-                        <div className={`
+                        <div
+                          className={`
                           p-2 rounded-lg
                           ${isActive ? "bg-violet-500/20" : "bg-white/[0.03]"}
-                        `}>
+                        `}
+                        >
                           {ICONS[item.entityType]}
                         </div>
                         <div className="flex-1 min-w-0">

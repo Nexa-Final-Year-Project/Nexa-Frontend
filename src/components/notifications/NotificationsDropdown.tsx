@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Bell, ExternalLink, Trash2, Check, BellOff, Sparkles } from "lucide-react";
+import {
+  Bell,
+  ExternalLink,
+  Trash2,
+  Check,
+  BellOff,
+  Sparkles,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -84,14 +91,21 @@ export const NotificationsDropdown = () => {
           title="Notifications"
         >
           <motion.div
-            animate={unreadCount > 0 ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
-            transition={{ duration: 0.5, delay: 1, repeat: Infinity, repeatDelay: 5 }}
+            animate={
+              unreadCount > 0 ? { rotate: [0, -10, 10, -10, 10, 0] } : {}
+            }
+            transition={{
+              duration: 0.5,
+              delay: 1,
+              repeat: Infinity,
+              repeatDelay: 5,
+            }}
           >
             <Bell className="h-5 w-5" />
           </motion.div>
           <AnimatePresence>
             {unreadCount > 0 && (
-              <motion.span 
+              <motion.span
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
@@ -103,12 +117,12 @@ export const NotificationsDropdown = () => {
           </AnimatePresence>
         </Button>
       </PopoverTrigger>
-      <PopoverContent 
-        className="w-[360px] p-0 mr-4 bg-neutral-900/95 backdrop-blur-xl border-white/[0.08] shadow-2xl shadow-black/40" 
+      <PopoverContent
+        className="w-[360px] p-0 mr-4 bg-neutral-900/95 backdrop-blur-xl border-white/[0.08] shadow-2xl shadow-black/40"
         align="end"
         sideOffset={8}
       >
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col max-h-[480px]"
@@ -120,15 +134,22 @@ export const NotificationsDropdown = () => {
                 <Bell className="h-4 w-4 text-violet-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-sm text-white">Notifications</h3>
+                <h3 className="font-semibold text-sm text-white">
+                  Notifications
+                </h3>
                 {unreadCount > 0 && (
-                  <p className="text-[10px] text-white/40">{unreadCount} unread</p>
+                  <p className="text-[10px] text-white/40">
+                    {unreadCount} unread
+                  </p>
                 )}
               </div>
             </div>
             <div className="flex gap-1">
               {unreadCount > 0 && (
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <Button
                     variant="ghost"
                     size="sm"
@@ -140,7 +161,10 @@ export const NotificationsDropdown = () => {
                   </Button>
                 </motion.div>
               )}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="ghost"
                   size="sm"
@@ -157,7 +181,7 @@ export const NotificationsDropdown = () => {
           {/* Notifications List */}
           <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
             {unreadNotifications.length === 0 ? (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="px-4 py-12 text-center"
@@ -165,7 +189,9 @@ export const NotificationsDropdown = () => {
                 <div className="w-16 h-16 rounded-2xl bg-white/[0.03] flex items-center justify-center mx-auto mb-4">
                   <BellOff className="h-8 w-8 text-white/20" />
                 </div>
-                <p className="text-sm font-medium text-white/50 mb-1">All caught up!</p>
+                <p className="text-sm font-medium text-white/50 mb-1">
+                  All caught up!
+                </p>
                 <p className="text-xs text-white/30">No unread notifications</p>
               </motion.div>
             ) : (
@@ -186,7 +212,7 @@ export const NotificationsDropdown = () => {
                       >
                         {/* Unread indicator */}
                         <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-violet-500 to-violet-600 rounded-r-full" />
-                        
+
                         {/* Avatar */}
                         <Avatar className="h-10 w-10 flex-shrink-0 ring-2 ring-white/[0.06]">
                           <AvatarImage

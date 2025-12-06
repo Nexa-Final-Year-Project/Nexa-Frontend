@@ -15,10 +15,13 @@ export default function Home() {
     <div className="min-h-screen relative overflow-hidden">
       {/* Background gradient mesh */}
       <div className="fixed inset-0 -z-20 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 dark:block hidden" />
-      <div className="fixed inset-0 -z-10 opacity-30 dark:block hidden" style={{
-        backgroundImage: `radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                          radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)`
-      }} />
+      <div
+        className="fixed inset-0 -z-10 opacity-30 dark:block hidden"
+        style={{
+          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                          radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)`,
+        }}
+      />
 
       {/* Navigation */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-white/5">

@@ -9,14 +9,14 @@ const CTA = () => {
   return (
     <div className="relative overflow-hidden rounded-3xl bg-neutral-900/50 border border-white/[0.06]">
       {/* Subtle background grid */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
+          backgroundSize: "40px 40px",
         }}
       />
-      
+
       {/* Subtle glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-violet-500/5 rounded-full blur-[100px]" />
 
@@ -37,17 +37,23 @@ const CTA = () => {
 
           {/* Description */}
           <p className="text-lg text-white/50 mb-10 max-w-xl mx-auto">
-            Join thousands of high-performing teams already using NEXA to ship faster and collaborate smarter.
+            Join thousands of high-performing teams already using NEXA to ship
+            faster and collaborate smarter.
           </p>
 
           {/* Feature list */}
           <div className="flex flex-wrap justify-center gap-6 mb-10">
-            {["14-day free trial", "Full access", "Cancel anytime"].map((feature, index) => (
-              <div key={index} className="flex items-center gap-2 text-white/40">
-                <Check className="w-4 h-4" />
-                <span className="text-sm">{feature}</span>
-              </div>
-            ))}
+            {["14-day free trial", "Full access", "Cancel anytime"].map(
+              (feature, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 text-white/40"
+                >
+                  <Check className="w-4 h-4" />
+                  <span className="text-sm">{feature}</span>
+                </div>
+              )
+            )}
           </div>
 
           {/* CTA Buttons - MINIMAL */}

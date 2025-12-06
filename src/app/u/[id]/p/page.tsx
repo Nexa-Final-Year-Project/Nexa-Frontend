@@ -190,10 +190,12 @@ export default function ProjectsPage() {
   }, [projects?.length]);
 
   return (
-    <div className={cn(
-      "relative p-6",
-      isDark ? "bg-transparent" : "bg-neutral-50"
-    )}>
+    <div
+      className={cn(
+        "relative p-6",
+        isDark ? "bg-transparent" : "bg-neutral-50"
+      )}
+    >
       {/* Background ambient effects */}
       {isDark && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
@@ -211,37 +213,49 @@ export default function ProjectsPage() {
               href={`/u/${params.id}`}
               className={cn(
                 "p-2.5 rounded-xl border transition-all",
-                isDark 
+                isDark
                   ? "bg-white/[0.04] border-white/[0.06] hover:bg-white/[0.06]"
                   : "bg-white border-neutral-200 hover:bg-neutral-50 shadow-sm"
               )}
             >
-              <ArrowLeft className={cn(
-                "w-5 h-5",
-                isDark ? "text-white/60" : "text-neutral-500"
-              )} />
+              <ArrowLeft
+                className={cn(
+                  "w-5 h-5",
+                  isDark ? "text-white/60" : "text-neutral-500"
+                )}
+              />
             </Link>
-            
-            <div className={cn(
-              "w-12 h-12 rounded-xl border flex items-center justify-center",
-              isDark 
-                ? "bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
-                : "bg-gradient-to-br from-emerald-50 to-cyan-50 border-emerald-200"
-            )}>
+
+            <div
+              className={cn(
+                "w-12 h-12 rounded-xl border flex items-center justify-center",
+                isDark
+                  ? "bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                  : "bg-gradient-to-br from-emerald-50 to-cyan-50 border-emerald-200"
+              )}
+            >
               <FolderKanban className="w-6 h-6 text-emerald-500" />
             </div>
             <div>
-              <h1 className={cn(
-                "text-2xl font-bold tracking-tight",
-                isDark ? "text-white" : "text-neutral-900"
-              )}>Projects</h1>
-              <p className={cn(
-                "text-sm mt-0.5",
-                isDark ? "text-white/40" : "text-neutral-500"
-              )}>Manage and organize all your projects</p>
+              <h1
+                className={cn(
+                  "text-2xl font-bold tracking-tight",
+                  isDark ? "text-white" : "text-neutral-900"
+                )}
+              >
+                Projects
+              </h1>
+              <p
+                className={cn(
+                  "text-sm mt-0.5",
+                  isDark ? "text-white/40" : "text-neutral-500"
+                )}
+              >
+                Manage and organize all your projects
+              </p>
             </div>
           </div>
-          
+
           {/* Create Project Button */}
           <Button
             className="
@@ -263,24 +277,30 @@ export default function ProjectsPage() {
 
         {/* Decorative divider */}
         <div className="relative h-px">
-          <div className={cn(
-            "absolute inset-0 bg-gradient-to-r from-transparent to-transparent",
-            isDark ? "via-white/[0.08]" : "via-neutral-200"
-          )} />
-          <div className={cn(
-            "absolute left-0 w-20 h-px bg-gradient-to-r to-transparent",
-            isDark ? "from-emerald-500/50" : "from-emerald-400"
-          )} />
+          <div
+            className={cn(
+              "absolute inset-0 bg-gradient-to-r from-transparent to-transparent",
+              isDark ? "via-white/[0.08]" : "via-neutral-200"
+            )}
+          />
+          <div
+            className={cn(
+              "absolute left-0 w-20 h-px bg-gradient-to-r to-transparent",
+              isDark ? "from-emerald-500/50" : "from-emerald-400"
+            )}
+          />
         </div>
       </div>
 
       {/* Table Container */}
-      <div className={cn(
-        "rounded-2xl overflow-hidden backdrop-blur-sm border",
-        isDark 
-          ? "bg-neutral-900/30 border-white/[0.06]"
-          : "bg-white border-neutral-200 shadow-sm"
-      )}>
+      <div
+        className={cn(
+          "rounded-2xl overflow-hidden backdrop-blur-sm border",
+          isDark
+            ? "bg-neutral-900/30 border-white/[0.06]"
+            : "bg-white border-neutral-200 shadow-sm"
+        )}
+      >
         <EditableTable
           columns={columns}
           data={projectData || []}

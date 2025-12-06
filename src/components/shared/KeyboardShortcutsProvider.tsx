@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import GlobalSearchModal from "@/components/shared/search/GlobalSearchModal";
 import { useRouter } from "next/navigation";
 
@@ -10,17 +16,24 @@ interface KeyboardShortcutsContextType {
   isSearchOpen: boolean;
 }
 
-const KeyboardShortcutsContext = createContext<KeyboardShortcutsContextType | null>(null);
+const KeyboardShortcutsContext =
+  createContext<KeyboardShortcutsContextType | null>(null);
 
 export function useKeyboardShortcuts() {
   const context = useContext(KeyboardShortcutsContext);
   if (!context) {
-    throw new Error("useKeyboardShortcuts must be used within KeyboardShortcutsProvider");
+    throw new Error(
+      "useKeyboardShortcuts must be used within KeyboardShortcutsProvider"
+    );
   }
   return context;
 }
 
-export function KeyboardShortcutsProvider({ children }: { children: React.ReactNode }) {
+export function KeyboardShortcutsProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const router = useRouter();
 
@@ -32,10 +45,11 @@ export function KeyboardShortcutsProvider({ children }: { children: React.ReactN
       // Get the target element
       const target = e.target as HTMLElement;
       const tagName = target.tagName.toLowerCase();
-      const isEditable = target.isContentEditable || 
-                         tagName === "input" || 
-                         tagName === "textarea" || 
-                         tagName === "select";
+      const isEditable =
+        target.isContentEditable ||
+        tagName === "input" ||
+        tagName === "textarea" ||
+        tagName === "select";
 
       // Cmd/Ctrl + K - Universal Search (works everywhere)
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -73,10 +87,12 @@ export function KeyboardShortcutsProvider({ children }: { children: React.ReactN
   }, [router, isSearchOpen]);
 
   return (
-    <KeyboardShortcutsContext.Provider value={{ openSearch, closeSearch, isSearchOpen }}>
+    <KeyboardShortcutsContext.Provider
+      value={{ openSearch, closeSearch, isSearchOpen }}
+    >
       {children}
-      <GlobalSearchModal 
-        isOpen={isSearchOpen} 
+      <GlobalSearchModal
+        isOpen={isSearchOpen}
         onOpenChange={setIsSearchOpen}
         title="Universal Search"
       />

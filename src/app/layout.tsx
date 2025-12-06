@@ -13,7 +13,8 @@ import { KeyboardShortcutsProvider } from "@/components/shared/KeyboardShortcuts
 
 export const metadata: Metadata = {
   title: "Nexa - AI-Powered Project Management",
-  description: "Intelligent project management platform that automates planning, surfaces insights, and helps your team deliver faster.",
+  description:
+    "Intelligent project management platform that automates planning, surfaces insights, and helps your team deliver faster.",
 };
 
 export default function RootLayout({

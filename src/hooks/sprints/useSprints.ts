@@ -63,15 +63,37 @@ export const useSprints = (projectId?: string) => {
     [createSprintApi, addSprint, updateSprint, removeSprint]
   );
 
-  // Generate sprints using AI for a given projectId
+  // Generate sprints using AI for a given projectId and optional config
   const generateSprints = useCallback(
-    async (projectId: string) => {
+    async (
+      projectId: string,
+      sprintConfig?: {
+        sprintLengthDays?: number;
+        workHoursPerDay?: number;
+        sprintGoals?: string[];
+        startDate?: string;
+      },
+      maxTasksPerMember?: number
+    ) => {
       setLoading(true);
       setError(null);
 
       try {
-        // API expects projectId in the URL — pass the id string directly
-        const response = await generateSprintsByAIApi(projectId).unwrap();
+        // API expects projectId in the URL and optional config in body
+        const payload: {
+          projectId: string;
+          sprint_config?: typeof sprintConfig;
+          maxTasksPerMember?: number;
+        } = { projectId };
+
+        if (sprintConfig) {
+          payload.sprint_config = sprintConfig;
+        }
+        if (maxTasksPerMember) {
+          payload.maxTasksPerMember = maxTasksPerMember;
+        }
+
+        const response = await generateSprintsByAIApi(payload).unwrap();
         setSprints(response.sprints);
         // setSprints((prevSprints) => [...prevSprints, ...response.sprints]);
         // Refresh sprints after generation

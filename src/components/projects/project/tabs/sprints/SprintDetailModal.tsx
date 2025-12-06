@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { format, parseISO, differenceInDays, isAfter, isBefore } from "date-fns";
+import { useTheme } from "next-themes";
+import {
+  format,
+  parseISO,
+  differenceInDays,
+  isAfter,
+  isBefore,
+} from "date-fns";
 import {
   X,
   Calendar,
@@ -25,7 +32,11 @@ import {
   Scale,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar/avatar";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/components/ui/avatar/avatar";
 import { ProjectMember } from "@/types/project";
 
 // Sprint data from the AI planner response
@@ -115,6 +126,8 @@ export default function SprintDetailModal({
   sprint,
   members = [],
 }: SprintDetailModalProps) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(["overview", "tasks", "team"])
   );
@@ -140,7 +153,10 @@ export default function SprintDetailModal({
   const totalDays = differenceInDays(endDate, startDate);
   const daysElapsed = Math.max(0, differenceInDays(today, startDate));
   const daysRemaining = Math.max(0, differenceInDays(endDate, today));
-  const progressPercent = Math.min(100, Math.round((daysElapsed / totalDays) * 100));
+  const progressPercent = Math.min(
+    100,
+    Math.round((daysElapsed / totalDays) * 100)
+  );
 
   const isActive = isAfter(today, startDate) && isBefore(today, endDate);
   const isCompleted = isAfter(today, endDate);
@@ -160,11 +176,32 @@ export default function SprintDetailModal({
   const StatusIcon = status.icon;
 
   // Risk calculations
-  const riskPercent = sprint.riskAnalysis?.delayRiskPercent || sprint.sprintRiskScore || 0;
+  const riskPercent =
+    sprint.riskAnalysis?.delayRiskPercent || sprint.sprintRiskScore || 0;
   const getRiskConfig = () => {
-    if (riskPercent >= 50) return { label: "High Risk", color: "rose", bg: "bg-rose-500/10", border: "border-rose-500/20", text: "text-rose-400" };
-    if (riskPercent >= 25) return { label: "Medium Risk", color: "amber", bg: "bg-amber-500/10", border: "border-amber-500/20", text: "text-amber-400" };
-    return { label: "Low Risk", color: "emerald", bg: "bg-emerald-500/10", border: "border-emerald-500/20", text: "text-emerald-400" };
+    if (riskPercent >= 50)
+      return {
+        label: "High Risk",
+        color: "rose",
+        bg: "bg-rose-500/10",
+        border: "border-rose-500/20",
+        text: "text-rose-400",
+      };
+    if (riskPercent >= 25)
+      return {
+        label: "Medium Risk",
+        color: "amber",
+        bg: "bg-amber-500/10",
+        border: "border-amber-500/20",
+        text: "text-amber-400",
+      };
+    return {
+      label: "Low Risk",
+      color: "emerald",
+      bg: "bg-emerald-500/10",
+      border: "border-emerald-500/20",
+      text: "text-emerald-400",
+    };
   };
   const risk = getRiskConfig();
 
@@ -175,7 +212,9 @@ export default function SprintDetailModal({
   // Get member details
   const getMemberDetails = (memberId: string) => {
     const taskWithMember = sprint.selectedTasks?.find(
-      (t) => t.assignedMemberDetails?.projectMemberId === memberId || t.assignedTo === memberId
+      (t) =>
+        t.assignedMemberDetails?.projectMemberId === memberId ||
+        t.assignedTo === memberId
     );
     if (taskWithMember?.assignedMemberDetails) {
       return taskWithMember.assignedMemberDetails;
@@ -190,7 +229,7 @@ export default function SprintDetailModal({
       (m) => m.memberId === memberId
     );
     const memberFromProps = members.find((m) => m._id === memberId);
-    
+
     return {
       projectMemberId: memberId,
       name: memberFromProps?.name || "Unknown",
@@ -199,7 +238,10 @@ export default function SprintDetailModal({
       effectiveCapacity: memberFromCapacity?.effectiveHours || 0,
       fairShareHours: memberFromFairness?.fairShareHours || 0,
       fairnessScore: memberFromFairness?.fairnessScore || 1,
-      plannedHours: memberFromFairness?.plannedHours || memberFromWorkload?.totalEstimatedHours || 0,
+      plannedHours:
+        memberFromFairness?.plannedHours ||
+        memberFromWorkload?.totalEstimatedHours ||
+        0,
       taskCount: memberFromWorkload?.taskCount || 0,
       overloadFlag: memberFromFairness?.overloadFlag || false,
     };
@@ -207,18 +249,23 @@ export default function SprintDetailModal({
 
   // Collect all unique member IDs
   const allMemberIds = new Set<string>();
-  sprint.capacity?.memberCapacities.forEach((m) => allMemberIds.add(m.projectMemberId));
+  sprint.capacity?.memberCapacities.forEach((m) =>
+    allMemberIds.add(m.projectMemberId)
+  );
   sprint.fairnessReport?.forEach((m) => allMemberIds.add(m.projectMemberId));
   sprint.memberWorkloadSummary?.forEach((m) => allMemberIds.add(m.memberId));
   sprint.selectedTasks?.forEach((t) => {
     if (t.assignedTo) allMemberIds.add(t.assignedTo);
-    if (t.assignedMemberDetails?.projectMemberId) allMemberIds.add(t.assignedMemberDetails.projectMemberId);
+    if (t.assignedMemberDetails?.projectMemberId)
+      allMemberIds.add(t.assignedMemberDetails.projectMemberId);
   });
 
   const allMembers = Array.from(allMemberIds).map(getMemberDetails);
 
   // Confidence
-  const confidence = sprint.aiConfidence ? Math.round(sprint.aiConfidence * 100) : null;
+  const confidence = sprint.aiConfidence
+    ? Math.round(sprint.aiConfidence * 100)
+    : null;
 
   // Section Header Component
   const SectionHeader = ({
@@ -238,7 +285,7 @@ export default function SprintDetailModal({
     >
       <div className="flex items-center gap-2">
         <Icon className="w-4 h-4 text-neutral-500" />
-        <span className="text-sm font-medium text-white/90">{title}</span>
+        <span className={`text-sm font-medium ${isDark ? "text-white/90" : "text-neutral-900"}`}>{title}</span>
         {badge}
       </div>
       {expandedSections.has(id) ? (
@@ -291,7 +338,13 @@ export default function SprintDetailModal({
           />
           {/* Gradient fill */}
           <defs>
-            <linearGradient id="burndownGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <linearGradient
+              id="burndownGradient"
+              x1="0%"
+              y1="0%"
+              x2="0%"
+              y2="100%"
+            >
               <stop offset="0%" stopColor="rgba(59,130,246,0.2)" />
               <stop offset="100%" stopColor="rgba(59,130,246,0)" />
             </linearGradient>
@@ -303,7 +356,9 @@ export default function SprintDetailModal({
         </svg>
         <div className="flex justify-between text-xs text-neutral-500 mt-1">
           <span>{format(parseISO(forecast[0].date), "MMM d")}</span>
-          <span>{format(parseISO(forecast[forecast.length - 1].date), "MMM d")}</span>
+          <span>
+            {format(parseISO(forecast[forecast.length - 1].date), "MMM d")}
+          </span>
         </div>
       </div>
     );
@@ -313,17 +368,21 @@ export default function SprintDetailModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className={`absolute inset-0 backdrop-blur-sm ${isDark ? "bg-black/60" : "bg-black/30"}`}
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-3xl max-h-[90vh] bg-neutral-950 border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <div className={`relative w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
+        isDark 
+          ? "bg-neutral-950 border border-white/[0.08]" 
+          : "bg-white border border-neutral-200"
+      }`}>
         {/* Header */}
-        <div className="flex items-start justify-between p-6 border-b border-white/[0.06]">
+        <div className={`flex items-start justify-between p-6 ${isDark ? "border-b border-white/[0.06]" : "border-b border-neutral-200"}`}>
           <div className="flex-1 min-w-0 pr-4">
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-xl font-semibold text-white truncate">
+              <h2 className={`text-xl font-semibold truncate ${isDark ? "text-white" : "text-neutral-900"}`}>
                 {sprint.name || sprint.sprintId}
               </h2>
               <div
@@ -358,9 +417,9 @@ export default function SprintDetailModal({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/[0.05] transition-colors"
+            className={`p-2 rounded-lg transition-colors ${isDark ? "hover:bg-white/[0.05]" : "hover:bg-neutral-100"}`}
           >
-            <X className="w-5 h-5 text-neutral-400" />
+            <X className={`w-5 h-5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`} />
           </button>
         </div>
 
@@ -368,8 +427,8 @@ export default function SprintDetailModal({
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Summary */}
           {(sprint.summary || sprint.aiSummary) && (
-            <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4">
-              <p className="text-sm text-neutral-300 leading-relaxed">
+            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
+              <p className={`text-sm leading-relaxed ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
                 {sprint.summary || sprint.aiSummary}
               </p>
             </div>
@@ -378,12 +437,14 @@ export default function SprintDetailModal({
           {/* Key Metrics Row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {/* Tasks */}
-            <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4">
+            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
               <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-2">
                 <Target className="w-3.5 h-3.5" />
                 Selected Tasks
               </div>
-              <div className="text-2xl font-semibold text-white">{selectedCount}</div>
+              <div className={`text-2xl font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                {selectedCount}
+              </div>
               {deferredCount > 0 && (
                 <div className="text-xs text-neutral-500 mt-1">
                   +{deferredCount} deferred
@@ -392,37 +453,41 @@ export default function SprintDetailModal({
             </div>
 
             {/* Total Effort */}
-            <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4">
+            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
               <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-2">
                 <Clock className="w-3.5 h-3.5" />
                 Total Effort
               </div>
-              <div className="text-2xl font-semibold text-white">
+              <div className={`text-2xl font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
                 {sprint.totalEffort || 0}
-                <span className="text-sm text-neutral-500 font-normal ml-1">hrs</span>
+                <span className="text-sm text-neutral-500 font-normal ml-1">
+                  hrs
+                </span>
               </div>
             </div>
 
             {/* Velocity */}
-            <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4">
+            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
               <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-2">
                 <TrendingUp className="w-3.5 h-3.5" />
                 Velocity
               </div>
-              <div className="text-2xl font-semibold text-white">
+              <div className={`text-2xl font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
                 {sprint.velocity || sprint.predictedVelocity || 0}
               </div>
             </div>
 
             {/* Capacity */}
-            <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4">
+            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
               <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-2">
                 <Users className="w-3.5 h-3.5" />
                 Team Capacity
               </div>
-              <div className="text-2xl font-semibold text-white">
+              <div className={`text-2xl font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
                 {Math.round(sprint.capacity?.totalCapacityHours || 0)}
-                <span className="text-sm text-neutral-500 font-normal ml-1">hrs</span>
+                <span className="text-sm text-neutral-500 font-normal ml-1">
+                  hrs
+                </span>
               </div>
             </div>
           </div>
@@ -434,16 +499,23 @@ export default function SprintDetailModal({
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <AlertTriangle className={`w-4 h-4 ${risk.text}`} />
-                  <span className={`text-sm font-medium ${risk.text}`}>{risk.label}</span>
+                  <span className={`text-sm font-medium ${risk.text}`}>
+                    {risk.label}
+                  </span>
                 </div>
-                <span className={`text-2xl font-bold ${risk.text}`}>{Math.round(riskPercent)}%</span>
+                <span className={`text-2xl font-bold ${risk.text}`}>
+                  {Math.round(riskPercent)}%
+                </span>
               </div>
               {sprint.riskAnalysis?.overloadedMembers?.length ? (
                 <p className="text-xs text-neutral-400">
-                  {sprint.riskAnalysis.overloadedMembers.length} overloaded member(s)
+                  {sprint.riskAnalysis.overloadedMembers.length} overloaded
+                  member(s)
                 </p>
               ) : (
-                <p className="text-xs text-neutral-400">No critical issues detected</p>
+                <p className="text-xs text-neutral-400">
+                  No critical issues detected
+                </p>
               )}
             </div>
 
@@ -452,7 +524,9 @@ export default function SprintDetailModal({
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <Zap className="w-4 h-4 text-blue-400" />
-                  <span className="text-sm font-medium text-blue-400">AI Confidence</span>
+                  <span className="text-sm font-medium text-blue-400">
+                    AI Confidence
+                  </span>
                 </div>
                 <span className="text-2xl font-bold text-blue-400">
                   {confidence ?? "—"}%
@@ -468,14 +542,14 @@ export default function SprintDetailModal({
 
           {/* Burndown Forecast */}
           {sprint.burndownForecast && sprint.burndownForecast.length > 0 && (
-            <div className="border-t border-white/[0.04] pt-4">
+            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
               <SectionHeader
                 id="burndown"
                 icon={BarChart3}
                 title="Burndown Forecast"
               />
               {expandedSections.has("burndown") && (
-                <div className="mt-3 bg-white/[0.02] border border-white/[0.04] rounded-xl p-4">
+                <div className={`mt-3 rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
                   <BurndownChart />
                 </div>
               )}
@@ -484,13 +558,13 @@ export default function SprintDetailModal({
 
           {/* Goals */}
           {sprint.goals && sprint.goals.length > 0 && (
-            <div className="border-t border-white/[0.04] pt-4">
+            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
               <SectionHeader
                 id="goals"
                 icon={Target}
                 title="Sprint Goals"
                 badge={
-                  <span className="px-2 py-0.5 rounded-full bg-white/[0.05] text-xs text-neutral-400">
+                  <span className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${isDark ? "bg-white/[0.05]" : "bg-neutral-100"}`}>
                     {sprint.goals.length}
                   </span>
                 }
@@ -500,12 +574,16 @@ export default function SprintDetailModal({
                   {sprint.goals.map((goal, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-3 bg-white/[0.02] border border-white/[0.04] rounded-xl p-3"
+                      className={`flex items-start gap-3 rounded-xl p-3 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}
                     >
                       <div className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs text-emerald-400 font-medium">{idx + 1}</span>
+                        <span className="text-xs text-emerald-400 font-medium">
+                          {idx + 1}
+                        </span>
                       </div>
-                      <p className="text-sm text-neutral-300 leading-relaxed">{goal}</p>
+                      <p className={`text-sm leading-relaxed ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
+                        {goal}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -514,13 +592,13 @@ export default function SprintDetailModal({
           )}
 
           {/* Team Workload */}
-          <div className="border-t border-white/[0.04] pt-4">
+          <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
             <SectionHeader
               id="team"
               icon={Users}
               title="Team Workload"
               badge={
-                <span className="px-2 py-0.5 rounded-full bg-white/[0.05] text-xs text-neutral-400">
+                <span className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${isDark ? "bg-white/[0.05]" : "bg-neutral-100"}`}>
                   {allMembers.length} members
                 </span>
               }
@@ -528,45 +606,62 @@ export default function SprintDetailModal({
             {expandedSections.has("team") && (
               <div className="mt-3 space-y-2">
                 {allMembers.map((member: any) => {
-                  const workloadPercent = member.effectiveCapacity > 0
-                    ? Math.min(100, Math.round((member.plannedHours / member.effectiveCapacity) * 100))
-                    : 0;
-                  const isOverloaded = workloadPercent > 100 || member.overloadFlag;
+                  const workloadPercent =
+                    member.effectiveCapacity > 0
+                      ? Math.min(
+                          100,
+                          Math.round(
+                            (member.plannedHours / member.effectiveCapacity) *
+                              100
+                          )
+                        )
+                      : 0;
+                  const isOverloaded =
+                    workloadPercent > 100 || member.overloadFlag;
 
                   return (
                     <div
                       key={member.projectMemberId}
-                      className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4"
+                      className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <Avatar className="w-9 h-9">
-                            <AvatarImage src={member.avatar} alt={member.name} />
-                            <AvatarFallback className="bg-neutral-800 text-neutral-400 text-sm">
+                            <AvatarImage
+                              src={member.avatar}
+                              alt={member.name}
+                            />
+                            <AvatarFallback className={`text-sm ${isDark ? "bg-neutral-800 text-neutral-400" : "bg-neutral-100 text-neutral-600"}`}>
                               {(member.name || "?").slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <div className="text-sm font-medium text-white/90">{member.name}</div>
-                            <div className="text-xs text-neutral-500 capitalize">{member.role}</div>
+                            <div className={`text-sm font-medium ${isDark ? "text-white/90" : "text-neutral-900"}`}>
+                              {member.name}
+                            </div>
+                            <div className="text-xs text-neutral-500 capitalize">
+                              {member.role}
+                            </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-sm font-semibold text-white/90">
+                          <div className={`text-sm font-semibold ${isDark ? "text-white/90" : "text-neutral-900"}`}>
                             {member.plannedHours || 0}
                             <span className="text-neutral-500 font-normal">
-                              {" "}/ {Math.round(member.effectiveCapacity || 0)}h
+                              {" "}
+                              / {Math.round(member.effectiveCapacity || 0)}h
                             </span>
                           </div>
                           {member.taskCount !== undefined && (
                             <div className="text-xs text-neutral-500">
-                              {member.taskCount} task{member.taskCount !== 1 ? "s" : ""}
+                              {member.taskCount} task
+                              {member.taskCount !== 1 ? "s" : ""}
                             </div>
                           )}
                         </div>
                       </div>
                       {/* Workload bar */}
-                      <div className="h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
+                      <div className={`h-1.5 rounded-full overflow-hidden ${isDark ? "bg-white/[0.05]" : "bg-neutral-200"}`}>
                         <div
                           className={`h-full rounded-full transition-all ${
                             isOverloaded
@@ -575,7 +670,9 @@ export default function SprintDetailModal({
                               ? "bg-gradient-to-r from-amber-500 to-amber-400"
                               : "bg-gradient-to-r from-emerald-500 to-emerald-400"
                           }`}
-                          style={{ width: `${Math.min(100, workloadPercent)}%` }}
+                          style={{
+                            width: `${Math.min(100, workloadPercent)}%`,
+                          }}
                         />
                       </div>
                       {/* Fairness indicator */}
@@ -594,7 +691,7 @@ export default function SprintDetailModal({
 
           {/* Selected Tasks */}
           {sprint.selectedTasks && sprint.selectedTasks.length > 0 && (
-            <div className="border-t border-white/[0.04] pt-4">
+            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
               <SectionHeader
                 id="tasks"
                 icon={ListTodo}
@@ -608,30 +705,47 @@ export default function SprintDetailModal({
               {expandedSections.has("tasks") && (
                 <div className="mt-3 space-y-2">
                   {sprint.selectedTasks.map((task, idx) => {
-                    const assignee = task.assignedMemberDetails || getMemberDetails(task.assignedTo);
+                    const assignee =
+                      task.assignedMemberDetails ||
+                      getMemberDetails(task.assignedTo);
                     return (
                       <div
                         key={task.taskId}
-                        className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4"
+                        className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs font-mono text-neutral-500">{task.taskId}</span>
-                              <span className="text-xs text-neutral-600">•</span>
-                              <span className="text-xs text-neutral-500">{task.estimatedHours}h</span>
+                              <span className="text-xs font-mono text-neutral-500">
+                                {task.taskId}
+                              </span>
+                              <span className="text-xs text-neutral-600">
+                                •
+                              </span>
+                              <span className="text-xs text-neutral-500">
+                                {task.estimatedHours}h
+                              </span>
                             </div>
-                            <p className="text-sm text-neutral-400 line-clamp-2">{task.reason}</p>
+                            <p className={`text-sm line-clamp-2 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                              {task.reason}
+                            </p>
                           </div>
                           {assignee && (
                             <div className="flex items-center gap-2 flex-shrink-0">
                               <Avatar className="w-6 h-6">
-                                <AvatarImage src={assignee.avatar || undefined} alt={assignee.name} />
-                                <AvatarFallback className="bg-neutral-800 text-neutral-400 text-[10px]">
-                                  {(assignee.name || "?").slice(0, 2).toUpperCase()}
+                                <AvatarImage
+                                  src={assignee.avatar || undefined}
+                                  alt={assignee.name}
+                                />
+                                <AvatarFallback className={`text-[10px] ${isDark ? "bg-neutral-800 text-neutral-400" : "bg-neutral-100 text-neutral-600"}`}>
+                                  {(assignee.name || "?")
+                                    .slice(0, 2)
+                                    .toUpperCase()}
                                 </AvatarFallback>
                               </Avatar>
-                              <span className="text-xs text-neutral-400">{assignee.name}</span>
+                              <span className={`text-xs ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                                {assignee.name}
+                              </span>
                             </div>
                           )}
                         </div>
@@ -645,7 +759,7 @@ export default function SprintDetailModal({
 
           {/* Deferred Tasks */}
           {sprint.deferredTasks && sprint.deferredTasks.length > 0 && (
-            <div className="border-t border-white/[0.04] pt-4">
+            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
               <SectionHeader
                 id="deferred"
                 icon={AlertCircle}
@@ -664,9 +778,11 @@ export default function SprintDetailModal({
                       className="bg-amber-500/5 border border-amber-500/10 rounded-xl p-4"
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-mono text-amber-400/70">{task.taskId}</span>
+                        <span className="text-xs font-mono text-amber-400/70">
+                          {task.taskId}
+                        </span>
                       </div>
-                      <p className="text-sm text-neutral-400">{task.reason}</p>
+                      <p className={`text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>{task.reason}</p>
                     </div>
                   ))}
                 </div>
@@ -676,7 +792,7 @@ export default function SprintDetailModal({
 
           {/* Recommendations */}
           {sprint.recommendations && sprint.recommendations.length > 0 && (
-            <div className="border-t border-white/[0.04] pt-4">
+            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
               <SectionHeader
                 id="recommendations"
                 icon={Flame}
@@ -695,7 +811,7 @@ export default function SprintDetailModal({
                       className="bg-blue-500/5 border border-blue-500/10 rounded-xl p-3 flex items-start gap-3"
                     >
                       <Zap className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
-                      <p className="text-sm text-neutral-300">{rec}</p>
+                      <p className={`text-sm ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>{rec}</p>
                     </div>
                   ))}
                 </div>
@@ -705,10 +821,14 @@ export default function SprintDetailModal({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/[0.06] bg-white/[0.01]">
+        <div className={`flex items-center justify-end gap-3 px-6 py-4 ${isDark ? "border-t border-white/[0.06] bg-white/[0.01]" : "border-t border-neutral-200 bg-neutral-50"}`}>
           <Button
             onClick={onClose}
-            className="border border-neutral-600/50 bg-neutral-800/30 text-neutral-300 hover:bg-neutral-700/50 hover:border-neutral-500 transition-all duration-200 cursor-pointer"
+            className={`transition-all duration-200 cursor-pointer ${
+              isDark 
+                ? "border border-neutral-600/50 bg-neutral-800/30 text-neutral-300 hover:bg-neutral-700/50 hover:border-neutral-500"
+                : "border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-100 hover:border-neutral-400"
+            }`}
           >
             Close
           </Button>

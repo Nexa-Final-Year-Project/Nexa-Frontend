@@ -1,7 +1,15 @@
 "use client";
 
 import { Switch } from "@/components/ui/switch";
-import { Sun, Moon, Monitor, Bell, Check, Mail, Smartphone } from "lucide-react";
+import {
+  Sun,
+  Moon,
+  Monitor,
+  Bell,
+  Check,
+  Mail,
+  Smartphone,
+} from "lucide-react";
 
 interface UserPreferencesSettingsProps {
   preferences: {
@@ -77,9 +85,10 @@ export const UserPreferencesSettings = ({
                 onClick={() => onThemeChange(option.value)}
                 className={`
                   group relative p-5 rounded-2xl text-left transition-all duration-300 cursor-pointer
-                  ${isActive
-                    ? "bg-white/[0.08] border-2 border-white/[0.15]"
-                    : "bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.1]"
+                  ${
+                    isActive
+                      ? "bg-white/[0.08] border-2 border-white/[0.15]"
+                      : "bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.1]"
                   }
                 `}
               >
@@ -91,17 +100,24 @@ export const UserPreferencesSettings = ({
                 )}
 
                 {/* Icon */}
-                <div className={`
+                <div
+                  className={`
                   w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all duration-300
-                  ${isActive
-                    ? `bg-gradient-to-br ${option.gradient} text-white shadow-lg`
-                    : "bg-white/[0.06] text-white/50 group-hover:text-white/70"
+                  ${
+                    isActive
+                      ? `bg-gradient-to-br ${option.gradient} text-white shadow-lg`
+                      : "bg-white/[0.06] text-white/50 group-hover:text-white/70"
                   }
-                `}>
+                `}
+                >
                   {option.icon}
                 </div>
 
-                <h3 className={`font-semibold mb-1 transition-colors ${isActive ? "text-white" : "text-white/70"}`}>
+                <h3
+                  className={`font-semibold mb-1 transition-colors ${
+                    isActive ? "text-white" : "text-white/70"
+                  }`}
+                >
                   {option.label}
                 </h3>
                 <p className="text-xs text-white/40">{option.description}</p>
@@ -128,22 +144,33 @@ export const UserPreferencesSettings = ({
 
         <div className="space-y-3">
           {notificationOptions.map((option) => {
-            const value = preferences.notifications[option.key as keyof typeof preferences.notifications];
+            const value =
+              preferences.notifications[
+                option.key as keyof typeof preferences.notifications
+              ];
             return (
               <div
                 key={option.key}
                 className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`
+                  <div
+                    className={`
                     w-10 h-10 rounded-xl flex items-center justify-center transition-colors
-                    ${value ? "bg-emerald-500/20 text-emerald-400" : "bg-white/[0.06] text-white/40"}
-                  `}>
+                    ${
+                      value
+                        ? "bg-emerald-500/20 text-emerald-400"
+                        : "bg-white/[0.06] text-white/40"
+                    }
+                  `}
+                  >
                     {option.icon}
                   </div>
                   <div>
                     <p className="font-medium text-white">{option.label}</p>
-                    <p className="text-xs text-white/40">{option.description}</p>
+                    <p className="text-xs text-white/40">
+                      {option.description}
+                    </p>
                   </div>
                 </div>
                 <Switch

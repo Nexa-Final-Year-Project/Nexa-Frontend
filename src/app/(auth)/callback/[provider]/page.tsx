@@ -22,7 +22,7 @@ export default function OAuthCallbackPage() {
   const searchParams = useSearchParams();
   const { setUser } = useAuthStore();
   const { next, setNext } = useAuthRedirect();
-  
+
   useEffect(() => {
     const token = searchParams.get("token");
 
@@ -52,7 +52,7 @@ export default function OAuthCallbackPage() {
         // Persist locally
         localStorage.setItem("authToken", idToken);
         localStorage.setItem("userData", JSON.stringify(userData));
-        
+
         // Store token expiry time
         if (decoded.exp) {
           const expiryTime = decoded.exp * 1000; // Convert to milliseconds
