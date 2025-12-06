@@ -192,7 +192,9 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
                               <span className="line-through text-rose-500 dark:text-rose-400/70 mr-2">
                                 {String(change.oldVal) || "empty"}
                               </span>
-                              <span className="text-neutral-400 dark:text-white/30 mx-1">→</span>
+                              <span className="text-neutral-400 dark:text-white/30 mx-1">
+                                →
+                              </span>
                               <span className="text-emerald-600 dark:text-emerald-400 font-medium ml-2">
                                 {String(change.newVal) || "empty"}
                               </span>
@@ -224,7 +226,9 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
           >
             <Calendar className="h-5 w-5 text-neutral-400 dark:text-white/30" />
           </div>
-          <p className="text-sm text-neutral-500 dark:text-white/40">No activity yet</p>
+          <p className="text-sm text-neutral-500 dark:text-white/40">
+            No activity yet
+          </p>
         </div>
       )}
     </div>

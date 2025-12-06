@@ -30,7 +30,9 @@ const AssignedTasks = () => {
             <ClipboardList className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Assigned Tasks</h2>
+            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
+              Assigned Tasks
+            </h2>
             <p className="text-xs text-neutral-500 dark:text-white/40">
               Tasks assigned to you across projects
             </p>

@@ -109,16 +109,32 @@ export const Sprints = ({
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>Sprints Overview</h1>
+        <h1
+          className={`text-2xl font-bold ${
+            isDark ? "text-white" : "text-neutral-900"
+          }`}
+        >
+          Sprints Overview
+        </h1>
         <div className="flex items-center gap-3">
           {/* View Toggle */}
-          <div className={`flex items-center rounded-lg p-1 ${isDark ? "bg-neutral-900/50 border border-white/[0.06]" : "bg-neutral-100 border border-neutral-200"}`}>
+          <div
+            className={`flex items-center rounded-lg p-1 ${
+              isDark
+                ? "bg-neutral-900/50 border border-white/[0.06]"
+                : "bg-neutral-100 border border-neutral-200"
+            }`}
+          >
             <button
               onClick={() => setViewMode("grid")}
               className={`p-1.5 rounded-md transition-colors ${
                 viewMode === "grid"
-                  ? isDark ? "bg-white/[0.1] text-white" : "bg-white text-neutral-900 shadow-sm"
-                  : isDark ? "text-neutral-500 hover:text-neutral-300" : "text-neutral-500 hover:text-neutral-700"
+                  ? isDark
+                    ? "bg-white/[0.1] text-white"
+                    : "bg-white text-neutral-900 shadow-sm"
+                  : isDark
+                  ? "text-neutral-500 hover:text-neutral-300"
+                  : "text-neutral-500 hover:text-neutral-700"
               }`}
             >
               <LayoutGrid className="w-4 h-4" />
@@ -127,8 +143,12 @@ export const Sprints = ({
               onClick={() => setViewMode("table")}
               className={`p-1.5 rounded-md transition-colors ${
                 viewMode === "table"
-                  ? isDark ? "bg-white/[0.1] text-white" : "bg-white text-neutral-900 shadow-sm"
-                  : isDark ? "text-neutral-500 hover:text-neutral-300" : "text-neutral-500 hover:text-neutral-700"
+                  ? isDark
+                    ? "bg-white/[0.1] text-white"
+                    : "bg-white text-neutral-900 shadow-sm"
+                  : isDark
+                  ? "text-neutral-500 hover:text-neutral-300"
+                  : "text-neutral-500 hover:text-neutral-700"
               }`}
             >
               <List className="w-4 h-4" />
@@ -137,10 +157,16 @@ export const Sprints = ({
           <Button
             variant="outline"
             size="sm"
-            className={`flex cursor-pointer items-center !text-sm !p-2 ${isDark ? "text-white" : "text-neutral-900"}`}
+            className={`flex cursor-pointer items-center !text-sm !p-2 ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
             onClick={() => setOpenPlanningDialog(true)}
           >
-            <Sparkle className={`w-4 h-4 mr-2 ${isDark ? "text-white" : "text-neutral-700"}`} />
+            <Sparkle
+              className={`w-4 h-4 mr-2 ${
+                isDark ? "text-white" : "text-neutral-700"
+              }`}
+            />
             Plan Sprints
           </Button>
         </div>
@@ -164,12 +190,28 @@ export const Sprints = ({
 
       {/* Sprints Content */}
       {!sprints?.length ? (
-        <div className={`rounded-2xl p-12 ${isDark ? "bg-neutral-900/40 border border-white/[0.06]" : "bg-neutral-50 border border-neutral-200"}`}>
+        <div
+          className={`rounded-2xl p-12 ${
+            isDark
+              ? "bg-neutral-900/40 border border-white/[0.06]"
+              : "bg-neutral-50 border border-neutral-200"
+          }`}
+        >
           <div className="text-center">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 ${isDark ? "bg-neutral-800/50 border border-white/[0.06]" : "bg-neutral-100 border border-neutral-200"}`}>
+            <div
+              className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 ${
+                isDark
+                  ? "bg-neutral-800/50 border border-white/[0.06]"
+                  : "bg-neutral-100 border border-neutral-200"
+              }`}
+            >
               <Sparkle className="w-8 h-8 text-neutral-500" />
             </div>
-            <h3 className={`text-lg font-medium mb-2 ${isDark ? "text-white/90" : "text-neutral-900"}`}>
+            <h3
+              className={`text-lg font-medium mb-2 ${
+                isDark ? "text-white/90" : "text-neutral-900"
+              }`}
+            >
               No sprints yet
             </h3>
             <p className="text-sm text-neutral-500 mb-6 max-w-sm mx-auto">
@@ -179,7 +221,11 @@ export const Sprints = ({
             <div className="flex items-center justify-center gap-3">
               <Button
                 variant="outline"
-                className={`cursor-pointer ${isDark ? "border-white/[0.1] text-white hover:bg-white/[0.05]" : "border-neutral-300 text-neutral-900 hover:bg-neutral-100"}`}
+                className={`cursor-pointer ${
+                  isDark
+                    ? "border-white/[0.1] text-white hover:bg-white/[0.05]"
+                    : "border-neutral-300 text-neutral-900 hover:bg-neutral-100"
+                }`}
                 onClick={() => setIsCreateDialogOpen(true)}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -230,7 +276,11 @@ export const Sprints = ({
                 <h2 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
                   Manual Sprints
                 </h2>
-                <span className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${isDark ? "bg-white/[0.05]" : "bg-neutral-100"}`}>
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${
+                    isDark ? "bg-white/[0.05]" : "bg-neutral-100"
+                  }`}
+                >
                   {regularSprints.length}
                 </span>
               </div>
@@ -243,12 +293,16 @@ export const Sprints = ({
                       setSelectedSprint(sprint);
                     }}
                     className={`group backdrop-blur-sm rounded-2xl p-5 cursor-pointer transition-all duration-300 ${
-                      isDark 
-                        ? "bg-neutral-900/40 border border-white/[0.06] hover:bg-neutral-900/60 hover:border-white/[0.1]" 
+                      isDark
+                        ? "bg-neutral-900/40 border border-white/[0.06] hover:bg-neutral-900/60 hover:border-white/[0.1]"
                         : "bg-white border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 shadow-sm hover:shadow"
                     }`}
                   >
-                    <h3 className={`text-base font-semibold mb-2 ${isDark ? "text-white/90" : "text-neutral-900"}`}>
+                    <h3
+                      className={`text-base font-semibold mb-2 ${
+                        isDark ? "text-white/90" : "text-neutral-900"
+                      }`}
+                    >
                       {sprint.name}
                     </h3>
                     <p className="text-xs text-neutral-500 mb-3">
@@ -256,11 +310,21 @@ export const Sprints = ({
                       {format(parseISO(sprint.endDate), "MMM d, yyyy")}
                     </p>
                     {sprint.goals?.length > 0 && (
-                      <div className={`text-sm line-clamp-2 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                      <div
+                        className={`text-sm line-clamp-2 ${
+                          isDark ? "text-neutral-400" : "text-neutral-600"
+                        }`}
+                      >
                         {sprint.goals[0]}
                       </div>
                     )}
-                    <div className={`mt-4 pt-3 flex items-center justify-between ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-100"}`}>
+                    <div
+                      className={`mt-4 pt-3 flex items-center justify-between ${
+                        isDark
+                          ? "border-t border-white/[0.04]"
+                          : "border-t border-neutral-100"
+                      }`}
+                    >
                       <span className="text-xs text-neutral-500">
                         {getSprintTasks(sprint._id).length} tasks
                       </span>
@@ -279,7 +343,11 @@ export const Sprints = ({
             <Button
               variant="outline"
               size="sm"
-              className={`cursor-pointer ${isDark ? "border-white/[0.1] text-neutral-400 hover:text-white hover:bg-white/[0.05]" : "border-neutral-300 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"}`}
+              className={`cursor-pointer ${
+                isDark
+                  ? "border-white/[0.1] text-neutral-400 hover:text-white hover:bg-white/[0.05]"
+                  : "border-neutral-300 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+              }`}
               onClick={() => setIsCreateDialogOpen(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -289,10 +357,18 @@ export const Sprints = ({
         </div>
       ) : (
         /* Table View */
-        <Card className={isDark ? "bg-neutral-900/40 border-white/[0.06]" : "bg-white border-neutral-200"}>
+        <Card
+          className={
+            isDark
+              ? "bg-neutral-900/40 border-white/[0.06]"
+              : "bg-white border-neutral-200"
+          }
+        >
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle className={isDark ? "text-white" : "text-neutral-900"}>All Sprints</CardTitle>
+              <CardTitle className={isDark ? "text-white" : "text-neutral-900"}>
+                All Sprints
+              </CardTitle>
               <Button
                 className="cursor-pointer"
                 onClick={() => setIsCreateDialogOpen(true)}

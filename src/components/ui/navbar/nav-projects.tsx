@@ -56,7 +56,9 @@ export function NavProjects({
       <SidebarMenu className="max-h-[300px] overflow-y-auto scrollbar-none">
         {projects.length === 0 ? (
           <div className="px-3 py-4 text-center">
-            <p className="text-xs text-neutral-400 dark:text-white/30">No projects yet</p>
+            <p className="text-xs text-neutral-400 dark:text-white/30">
+              No projects yet
+            </p>
             <button
               onClick={() => openModal("project.create")}
               className="mt-2 text-xs text-emerald-500 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 transition-colors"

@@ -144,7 +144,10 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed", className)}
+      className={cn(
+        "text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed",
+        className
+      )}
       {...props}
     />
   );

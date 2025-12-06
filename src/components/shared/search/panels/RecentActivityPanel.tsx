@@ -172,7 +172,9 @@ const RecentActivityPanel = ({ trigger }: { trigger: React.ReactNode }) => {
                 <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-3">
                   <Clock className="w-6 h-6 text-emerald-500/40 dark:text-emerald-400/40" />
                 </div>
-                <p className="text-sm text-neutral-500 dark:text-white/50 mb-1">No activity found</p>
+                <p className="text-sm text-neutral-500 dark:text-white/50 mb-1">
+                  No activity found
+                </p>
                 <p className="text-xs text-neutral-400 dark:text-white/30">
                   {searchTerm
                     ? "Try a different search"

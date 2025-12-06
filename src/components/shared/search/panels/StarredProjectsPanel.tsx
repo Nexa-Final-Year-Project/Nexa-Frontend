@@ -49,7 +49,10 @@ const StarredProjectsPanel = ({ trigger }: { trigger: React.ReactNode }) => {
         >
           {/* Header */}
           <div className="p-3 border-b border-neutral-200 dark:border-white/[0.06] flex items-center gap-2">
-            <Star className="w-4 h-4 text-amber-500 dark:text-amber-400" fill="currentColor" />
+            <Star
+              className="w-4 h-4 text-amber-500 dark:text-amber-400"
+              fill="currentColor"
+            />
             <span className="text-sm font-medium text-neutral-900 dark:text-white">
               Starred Projects
             </span>

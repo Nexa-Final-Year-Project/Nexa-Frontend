@@ -78,7 +78,13 @@ export default function AboutPage() {
   return (
     <div className={`min-h-screen ${isDark ? "bg-[#0a0a0f]" : "bg-white"}`}>
       {/* Header */}
-      <header className={`sticky top-0 z-50 backdrop-blur-md mb-8 ${isDark ? "bg-[#0a0a0f]/80 border-b border-white/5" : "bg-white/80 border-b border-neutral-200"}`}>
+      <header
+        className={`sticky top-0 z-50 backdrop-blur-md mb-8 ${
+          isDark
+            ? "bg-[#0a0a0f]/80 border-b border-white/5"
+            : "bg-white/80 border-b border-neutral-200"
+        }`}
+      >
         <div className="mx-auto max-w-4xl p-4">
           <Header />
         </div>
@@ -95,13 +101,21 @@ export default function AboutPage() {
             <span className="inline-block px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-6">
               About Nexa
             </span>
-            <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 ${isDark ? "text-white" : "text-neutral-900"}`}>
+            <h1
+              className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               Redefining How Teams
               <span className="block bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
                 Manage Projects
               </span>
             </h1>
-            <p className={`text-lg max-w-2xl mx-auto ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+            <p
+              className={`text-lg max-w-2xl mx-auto ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}
+            >
               Nexa is an AI-powered project management platform that automates
               the tedious, surfaces the important, and helps your team deliver
               faster than ever.
@@ -119,8 +133,8 @@ export default function AboutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className={`relative group p-6 rounded-2xl text-center transition-colors ${
-                  isDark 
-                    ? "bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12]" 
+                  isDark
+                    ? "bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12]"
                     : "bg-neutral-50 border border-neutral-200 hover:border-neutral-300"
                 }`}
               >
@@ -129,10 +143,20 @@ export default function AboutPage() {
                     <stat.icon className="w-6 h-6 text-violet-400" />
                   </div>
                 </div>
-                <div className={`text-3xl font-bold mb-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                <div
+                  className={`text-3xl font-bold mb-1 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {stat.value}
                 </div>
-                <div className={`text-sm ${isDark ? "text-white/50" : "text-neutral-500"}`}>{stat.label}</div>
+                <div
+                  className={`text-sm ${
+                    isDark ? "text-white/50" : "text-neutral-500"
+                  }`}
+                >
+                  {stat.label}
+                </div>
               </motion.div>
             ))}
           </div>
@@ -146,10 +170,18 @@ export default function AboutPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-center mb-12"
           >
-            <h2 className={`text-3xl sm:text-4xl font-bold mb-4 ${isDark ? "text-white" : "text-neutral-900"}`}>
+            <h2
+              className={`text-3xl sm:text-4xl font-bold mb-4 ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               Our Core Values
             </h2>
-            <p className={`max-w-xl mx-auto ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+            <p
+              className={`max-w-xl mx-auto ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}
+            >
               The principles that guide everything we build and every decision
               we make.
             </p>
@@ -163,8 +195,8 @@ export default function AboutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                 className={`p-6 rounded-2xl transition-colors ${
-                  isDark 
-                    ? "bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12]" 
+                  isDark
+                    ? "bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12]"
                     : "bg-neutral-50 border border-neutral-200 hover:border-neutral-300"
                 }`}
               >
@@ -173,10 +205,18 @@ export default function AboutPage() {
                     <value.icon className="w-6 h-6 text-violet-400" />
                   </div>
                   <div>
-                    <h3 className={`text-xl font-semibold mb-2 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                    <h3
+                      className={`text-xl font-semibold mb-2 ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
                       {value.title}
                     </h3>
-                    <p className={`text-sm leading-relaxed ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+                    <p
+                      className={`text-sm leading-relaxed ${
+                        isDark ? "text-white/60" : "text-neutral-600"
+                      }`}
+                    >
                       {value.description}
                     </p>
                   </div>
@@ -196,19 +236,27 @@ export default function AboutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                 className={`p-6 rounded-2xl transition-colors ${
-                  isDark 
-                    ? "bg-gradient-to-b from-neutral-900/60 to-neutral-900/20 border border-white/[0.06] hover:border-violet-500/20" 
+                  isDark
+                    ? "bg-gradient-to-b from-neutral-900/60 to-neutral-900/20 border border-white/[0.06] hover:border-violet-500/20"
                     : "bg-gradient-to-b from-neutral-50 to-white border border-neutral-200 hover:border-violet-500/30"
                 }`}
               >
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center mb-4">
                   <Heart className="w-6 h-6 text-white" />
                 </div>
-                <h3 className={`text-lg font-semibold mb-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                <h3
+                  className={`text-lg font-semibold mb-1 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {item.name}
                 </h3>
                 <p className="text-violet-400 text-sm mb-3">{item.role}</p>
-                <p className={`text-sm leading-relaxed ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+                <p
+                  className={`text-sm leading-relaxed ${
+                    isDark ? "text-white/60" : "text-neutral-600"
+                  }`}
+                >
                   {item.description}
                 </p>
               </motion.div>
@@ -224,10 +272,18 @@ export default function AboutPage() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-violet-500/10 to-cyan-500/5 border border-violet-500/20"
           >
-            <h2 className={`text-3xl sm:text-4xl font-bold mb-4 ${isDark ? "text-white" : "text-neutral-900"}`}>
+            <h2
+              className={`text-3xl sm:text-4xl font-bold mb-4 ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               Ready to Transform Your Workflow?
             </h2>
-            <p className={`mb-8 max-w-lg mx-auto ${isDark ? "text-white/60" : "text-neutral-600"}`}>
+            <p
+              className={`mb-8 max-w-lg mx-auto ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}
+            >
               Join thousands of teams who've already discovered a smarter way to
               manage projects.
             </p>

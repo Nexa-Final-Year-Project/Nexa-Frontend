@@ -31,7 +31,11 @@ const UserSettings = ({ user }: UserSettingsProps) => {
   if (!user) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className={`text-lg ${isDark ? "text-white/40" : "text-neutral-500"}`}>User not found</div>
+        <div
+          className={`text-lg ${isDark ? "text-white/40" : "text-neutral-500"}`}
+        >
+          User not found
+        </div>
       </div>
     );
   }
@@ -132,21 +136,49 @@ const UserSettings = ({ user }: UserSettingsProps) => {
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-2">
-          <div className={`flex items-center justify-center w-12 h-12 rounded-2xl backdrop-blur-sm ${
-            isDark 
-              ? "bg-neutral-900/60 border border-white/[0.06]" 
-              : "bg-neutral-100 border border-neutral-200"
-          }`}>
-            <Settings className={`w-6 h-6 ${isDark ? "text-white/80" : "text-neutral-700"}`} />
+          <div
+            className={`flex items-center justify-center w-12 h-12 rounded-2xl backdrop-blur-sm ${
+              isDark
+                ? "bg-neutral-900/60 border border-white/[0.06]"
+                : "bg-neutral-100 border border-neutral-200"
+            }`}
+          >
+            <Settings
+              className={`w-6 h-6 ${
+                isDark ? "text-white/80" : "text-neutral-700"
+              }`}
+            />
           </div>
           <div>
-            <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>Settings</h1>
-            <div className={`flex items-center text-sm mt-1 ${isDark ? "text-white/40" : "text-neutral-500"}`}>
-              <span className={`cursor-pointer transition-colors ${isDark ? "hover:text-white/60" : "hover:text-neutral-700"}`}>
+            <h1
+              className={`text-2xl font-bold ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
+              Settings
+            </h1>
+            <div
+              className={`flex items-center text-sm mt-1 ${
+                isDark ? "text-white/40" : "text-neutral-500"
+              }`}
+            >
+              <span
+                className={`cursor-pointer transition-colors ${
+                  isDark ? "hover:text-white/60" : "hover:text-neutral-700"
+                }`}
+              >
                 {activeCategory}
               </span>
-              <ChevronRight className={`w-3.5 h-3.5 mx-1.5 ${isDark ? "text-white/20" : "text-neutral-400"}`} />
-              <span className={`capitalize ${isDark ? "text-white/60" : "text-neutral-700"}`}>
+              <ChevronRight
+                className={`w-3.5 h-3.5 mx-1.5 ${
+                  isDark ? "text-white/20" : "text-neutral-400"
+                }`}
+              />
+              <span
+                className={`capitalize ${
+                  isDark ? "text-white/60" : "text-neutral-700"
+                }`}
+              >
                 {activeSection.replace(/-/g, " ")}
               </span>
             </div>
@@ -164,11 +196,13 @@ const UserSettings = ({ user }: UserSettingsProps) => {
 
         {/* Main Content */}
         <div className="flex-1">
-          <div className={`rounded-2xl backdrop-blur-sm overflow-hidden ${
-            isDark 
-              ? "bg-neutral-900/40 border border-white/[0.06]" 
-              : "bg-white border border-neutral-200"
-          }`}>
+          <div
+            className={`rounded-2xl backdrop-blur-sm overflow-hidden ${
+              isDark
+                ? "bg-neutral-900/40 border border-white/[0.06]"
+                : "bg-white border border-neutral-200"
+            }`}
+          >
             {renderActiveSection()}
           </div>
         </div>

@@ -460,8 +460,8 @@ export default function ReportReviewModal({
             animate="visible"
             exit="exit"
             className={`relative w-[92vw] max-w-6xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
-              isDark 
-                ? "bg-neutral-900/95 border border-white/[0.08]" 
+              isDark
+                ? "bg-neutral-900/95 border border-white/[0.08]"
                 : "bg-white border border-neutral-200"
             }`}
           >
@@ -474,8 +474,8 @@ export default function ReportReviewModal({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className={`flex items-center justify-between px-6 py-4 z-10 ${
-                isDark 
-                  ? "bg-neutral-900/90 border-b border-white/[0.06] text-white" 
+                isDark
+                  ? "bg-neutral-900/90 border-b border-white/[0.06] text-white"
                   : "bg-white border-b border-neutral-200 text-neutral-900"
               }`}
             >
@@ -484,7 +484,9 @@ export default function ReportReviewModal({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className={`text-xs uppercase tracking-wider ${isDark ? "text-white/40" : "text-neutral-500"}`}
+                  className={`text-xs uppercase tracking-wider ${
+                    isDark ? "text-white/40" : "text-neutral-500"
+                  }`}
                 >
                   Report ID
                 </motion.div>
@@ -492,7 +494,9 @@ export default function ReportReviewModal({
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.25 }}
-                  className={`text-lg font-semibold tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}
+                  className={`text-lg font-semibold tracking-tight ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
                 >
                   {report?.reportId}
                 </motion.div>
@@ -502,7 +506,13 @@ export default function ReportReviewModal({
                   transition={{ delay: 0.3 }}
                   className="flex items-center gap-2 mt-1"
                 >
-                  <span className={`text-sm ${isDark ? "text-white/50" : "text-neutral-500"}`}>Status:</span>
+                  <span
+                    className={`text-sm ${
+                      isDark ? "text-white/50" : "text-neutral-500"
+                    }`}
+                  >
+                    Status:
+                  </span>
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                       status === "approved"
@@ -528,8 +538,8 @@ export default function ReportReviewModal({
                   value={internalSearch}
                   onChange={(e) => setInternalSearch(e.target.value)}
                   className={`px-3 py-2 rounded-xl transition-all ${
-                    isDark 
-                      ? "bg-white/[0.04] text-white placeholder:text-white/30 border border-white/[0.08] focus:border-violet-500/50" 
+                    isDark
+                      ? "bg-white/[0.04] text-white placeholder:text-white/30 border border-white/[0.08] focus:border-violet-500/50"
                       : "bg-neutral-100 text-neutral-900 placeholder:text-neutral-400 border border-neutral-200 focus:border-violet-500"
                   }`}
                 />

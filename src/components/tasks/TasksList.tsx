@@ -25,12 +25,16 @@ const getStatusIcon = (status: string) => {
   switch (status?.toLowerCase()) {
     case "completed":
     case "done":
-      return <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />;
+      return (
+        <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+      );
     case "in progress":
     case "in-progress":
       return <Clock className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />;
     case "blocked":
-      return <AlertCircle className="w-4 h-4 text-rose-500 dark:text-rose-400" />;
+      return (
+        <AlertCircle className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+      );
     default:
       return <Circle className="w-4 h-4 text-neutral-400 dark:text-white/40" />;
   }
@@ -49,7 +53,9 @@ const TasksList = ({ tasks }: { tasks: Task[] }) => {
         <div className="w-16 h-16 rounded-2xl bg-neutral-100 dark:bg-white/[0.03] border border-neutral-200 dark:border-white/[0.06] flex items-center justify-center mb-4">
           <CheckCircle2 className="w-8 h-8 text-neutral-300 dark:text-white/20" />
         </div>
-        <p className="text-neutral-500 dark:text-white/40 text-sm">No tasks assigned yet</p>
+        <p className="text-neutral-500 dark:text-white/40 text-sm">
+          No tasks assigned yet
+        </p>
       </div>
     );
   }

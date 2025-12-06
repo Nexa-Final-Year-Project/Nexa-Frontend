@@ -285,7 +285,13 @@ export default function SprintDetailModal({
     >
       <div className="flex items-center gap-2">
         <Icon className="w-4 h-4 text-neutral-500" />
-        <span className={`text-sm font-medium ${isDark ? "text-white/90" : "text-neutral-900"}`}>{title}</span>
+        <span
+          className={`text-sm font-medium ${
+            isDark ? "text-white/90" : "text-neutral-900"
+          }`}
+        >
+          {title}
+        </span>
         {badge}
       </div>
       {expandedSections.has(id) ? (
@@ -368,21 +374,35 @@ export default function SprintDetailModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className={`absolute inset-0 backdrop-blur-sm ${isDark ? "bg-black/60" : "bg-black/30"}`}
+        className={`absolute inset-0 backdrop-blur-sm ${
+          isDark ? "bg-black/60" : "bg-black/30"
+        }`}
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className={`relative w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
-        isDark 
-          ? "bg-neutral-950 border border-white/[0.08]" 
-          : "bg-white border border-neutral-200"
-      }`}>
+      <div
+        className={`relative w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
+          isDark
+            ? "bg-neutral-950 border border-white/[0.08]"
+            : "bg-white border border-neutral-200"
+        }`}
+      >
         {/* Header */}
-        <div className={`flex items-start justify-between p-6 ${isDark ? "border-b border-white/[0.06]" : "border-b border-neutral-200"}`}>
+        <div
+          className={`flex items-start justify-between p-6 ${
+            isDark
+              ? "border-b border-white/[0.06]"
+              : "border-b border-neutral-200"
+          }`}
+        >
           <div className="flex-1 min-w-0 pr-4">
             <div className="flex items-center gap-3 mb-2">
-              <h2 className={`text-xl font-semibold truncate ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <h2
+                className={`text-xl font-semibold truncate ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 {sprint.name || sprint.sprintId}
               </h2>
               <div
@@ -417,9 +437,15 @@ export default function SprintDetailModal({
           </div>
           <button
             onClick={onClose}
-            className={`p-2 rounded-lg transition-colors ${isDark ? "hover:bg-white/[0.05]" : "hover:bg-neutral-100"}`}
+            className={`p-2 rounded-lg transition-colors ${
+              isDark ? "hover:bg-white/[0.05]" : "hover:bg-neutral-100"
+            }`}
           >
-            <X className={`w-5 h-5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`} />
+            <X
+              className={`w-5 h-5 ${
+                isDark ? "text-neutral-400" : "text-neutral-500"
+              }`}
+            />
           </button>
         </div>
 
@@ -427,8 +453,18 @@ export default function SprintDetailModal({
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Summary */}
           {(sprint.summary || sprint.aiSummary) && (
-            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
-              <p className={`text-sm leading-relaxed ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
+            <div
+              className={`rounded-xl p-4 ${
+                isDark
+                  ? "bg-white/[0.02] border border-white/[0.04]"
+                  : "bg-neutral-50 border border-neutral-200"
+              }`}
+            >
+              <p
+                className={`text-sm leading-relaxed ${
+                  isDark ? "text-neutral-300" : "text-neutral-700"
+                }`}
+              >
                 {sprint.summary || sprint.aiSummary}
               </p>
             </div>
@@ -437,12 +473,22 @@ export default function SprintDetailModal({
           {/* Key Metrics Row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {/* Tasks */}
-            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
+            <div
+              className={`rounded-xl p-4 ${
+                isDark
+                  ? "bg-white/[0.02] border border-white/[0.04]"
+                  : "bg-neutral-50 border border-neutral-200"
+              }`}
+            >
               <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-2">
                 <Target className="w-3.5 h-3.5" />
                 Selected Tasks
               </div>
-              <div className={`text-2xl font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`text-2xl font-semibold ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 {selectedCount}
               </div>
               {deferredCount > 0 && (
@@ -453,12 +499,22 @@ export default function SprintDetailModal({
             </div>
 
             {/* Total Effort */}
-            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
+            <div
+              className={`rounded-xl p-4 ${
+                isDark
+                  ? "bg-white/[0.02] border border-white/[0.04]"
+                  : "bg-neutral-50 border border-neutral-200"
+              }`}
+            >
               <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-2">
                 <Clock className="w-3.5 h-3.5" />
                 Total Effort
               </div>
-              <div className={`text-2xl font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`text-2xl font-semibold ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 {sprint.totalEffort || 0}
                 <span className="text-sm text-neutral-500 font-normal ml-1">
                   hrs
@@ -467,23 +523,43 @@ export default function SprintDetailModal({
             </div>
 
             {/* Velocity */}
-            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
+            <div
+              className={`rounded-xl p-4 ${
+                isDark
+                  ? "bg-white/[0.02] border border-white/[0.04]"
+                  : "bg-neutral-50 border border-neutral-200"
+              }`}
+            >
               <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-2">
                 <TrendingUp className="w-3.5 h-3.5" />
                 Velocity
               </div>
-              <div className={`text-2xl font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`text-2xl font-semibold ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 {sprint.velocity || sprint.predictedVelocity || 0}
               </div>
             </div>
 
             {/* Capacity */}
-            <div className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
+            <div
+              className={`rounded-xl p-4 ${
+                isDark
+                  ? "bg-white/[0.02] border border-white/[0.04]"
+                  : "bg-neutral-50 border border-neutral-200"
+              }`}
+            >
               <div className="flex items-center gap-1.5 text-neutral-500 text-xs mb-2">
                 <Users className="w-3.5 h-3.5" />
                 Team Capacity
               </div>
-              <div className={`text-2xl font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`text-2xl font-semibold ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 {Math.round(sprint.capacity?.totalCapacityHours || 0)}
                 <span className="text-sm text-neutral-500 font-normal ml-1">
                   hrs
@@ -542,14 +618,26 @@ export default function SprintDetailModal({
 
           {/* Burndown Forecast */}
           {sprint.burndownForecast && sprint.burndownForecast.length > 0 && (
-            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
               <SectionHeader
                 id="burndown"
                 icon={BarChart3}
                 title="Burndown Forecast"
               />
               {expandedSections.has("burndown") && (
-                <div className={`mt-3 rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}>
+                <div
+                  className={`mt-3 rounded-xl p-4 ${
+                    isDark
+                      ? "bg-white/[0.02] border border-white/[0.04]"
+                      : "bg-neutral-50 border border-neutral-200"
+                  }`}
+                >
                   <BurndownChart />
                 </div>
               )}
@@ -558,13 +646,23 @@ export default function SprintDetailModal({
 
           {/* Goals */}
           {sprint.goals && sprint.goals.length > 0 && (
-            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
               <SectionHeader
                 id="goals"
                 icon={Target}
                 title="Sprint Goals"
                 badge={
-                  <span className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${isDark ? "bg-white/[0.05]" : "bg-neutral-100"}`}>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${
+                      isDark ? "bg-white/[0.05]" : "bg-neutral-100"
+                    }`}
+                  >
                     {sprint.goals.length}
                   </span>
                 }
@@ -574,14 +672,22 @@ export default function SprintDetailModal({
                   {sprint.goals.map((goal, idx) => (
                     <div
                       key={idx}
-                      className={`flex items-start gap-3 rounded-xl p-3 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}
+                      className={`flex items-start gap-3 rounded-xl p-3 ${
+                        isDark
+                          ? "bg-white/[0.02] border border-white/[0.04]"
+                          : "bg-neutral-50 border border-neutral-200"
+                      }`}
                     >
                       <div className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-xs text-emerald-400 font-medium">
                           {idx + 1}
                         </span>
                       </div>
-                      <p className={`text-sm leading-relaxed ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
+                      <p
+                        className={`text-sm leading-relaxed ${
+                          isDark ? "text-neutral-300" : "text-neutral-700"
+                        }`}
+                      >
                         {goal}
                       </p>
                     </div>
@@ -592,13 +698,23 @@ export default function SprintDetailModal({
           )}
 
           {/* Team Workload */}
-          <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
+          <div
+            className={`pt-4 ${
+              isDark
+                ? "border-t border-white/[0.04]"
+                : "border-t border-neutral-200"
+            }`}
+          >
             <SectionHeader
               id="team"
               icon={Users}
               title="Team Workload"
               badge={
-                <span className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${isDark ? "bg-white/[0.05]" : "bg-neutral-100"}`}>
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs text-neutral-400 ${
+                    isDark ? "bg-white/[0.05]" : "bg-neutral-100"
+                  }`}
+                >
                   {allMembers.length} members
                 </span>
               }
@@ -622,7 +738,11 @@ export default function SprintDetailModal({
                   return (
                     <div
                       key={member.projectMemberId}
-                      className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}
+                      className={`rounded-xl p-4 ${
+                        isDark
+                          ? "bg-white/[0.02] border border-white/[0.04]"
+                          : "bg-neutral-50 border border-neutral-200"
+                      }`}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
@@ -631,12 +751,22 @@ export default function SprintDetailModal({
                               src={member.avatar}
                               alt={member.name}
                             />
-                            <AvatarFallback className={`text-sm ${isDark ? "bg-neutral-800 text-neutral-400" : "bg-neutral-100 text-neutral-600"}`}>
+                            <AvatarFallback
+                              className={`text-sm ${
+                                isDark
+                                  ? "bg-neutral-800 text-neutral-400"
+                                  : "bg-neutral-100 text-neutral-600"
+                              }`}
+                            >
                               {(member.name || "?").slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <div className={`text-sm font-medium ${isDark ? "text-white/90" : "text-neutral-900"}`}>
+                            <div
+                              className={`text-sm font-medium ${
+                                isDark ? "text-white/90" : "text-neutral-900"
+                              }`}
+                            >
                               {member.name}
                             </div>
                             <div className="text-xs text-neutral-500 capitalize">
@@ -645,7 +775,11 @@ export default function SprintDetailModal({
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className={`text-sm font-semibold ${isDark ? "text-white/90" : "text-neutral-900"}`}>
+                          <div
+                            className={`text-sm font-semibold ${
+                              isDark ? "text-white/90" : "text-neutral-900"
+                            }`}
+                          >
                             {member.plannedHours || 0}
                             <span className="text-neutral-500 font-normal">
                               {" "}
@@ -661,7 +795,11 @@ export default function SprintDetailModal({
                         </div>
                       </div>
                       {/* Workload bar */}
-                      <div className={`h-1.5 rounded-full overflow-hidden ${isDark ? "bg-white/[0.05]" : "bg-neutral-200"}`}>
+                      <div
+                        className={`h-1.5 rounded-full overflow-hidden ${
+                          isDark ? "bg-white/[0.05]" : "bg-neutral-200"
+                        }`}
+                      >
                         <div
                           className={`h-full rounded-full transition-all ${
                             isOverloaded
@@ -691,7 +829,13 @@ export default function SprintDetailModal({
 
           {/* Selected Tasks */}
           {sprint.selectedTasks && sprint.selectedTasks.length > 0 && (
-            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
               <SectionHeader
                 id="tasks"
                 icon={ListTodo}
@@ -711,7 +855,11 @@ export default function SprintDetailModal({
                     return (
                       <div
                         key={task.taskId}
-                        className={`rounded-xl p-4 ${isDark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-neutral-50 border border-neutral-200"}`}
+                        className={`rounded-xl p-4 ${
+                          isDark
+                            ? "bg-white/[0.02] border border-white/[0.04]"
+                            : "bg-neutral-50 border border-neutral-200"
+                        }`}
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
@@ -726,7 +874,11 @@ export default function SprintDetailModal({
                                 {task.estimatedHours}h
                               </span>
                             </div>
-                            <p className={`text-sm line-clamp-2 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                            <p
+                              className={`text-sm line-clamp-2 ${
+                                isDark ? "text-neutral-400" : "text-neutral-600"
+                              }`}
+                            >
                               {task.reason}
                             </p>
                           </div>
@@ -737,13 +889,25 @@ export default function SprintDetailModal({
                                   src={assignee.avatar || undefined}
                                   alt={assignee.name}
                                 />
-                                <AvatarFallback className={`text-[10px] ${isDark ? "bg-neutral-800 text-neutral-400" : "bg-neutral-100 text-neutral-600"}`}>
+                                <AvatarFallback
+                                  className={`text-[10px] ${
+                                    isDark
+                                      ? "bg-neutral-800 text-neutral-400"
+                                      : "bg-neutral-100 text-neutral-600"
+                                  }`}
+                                >
                                   {(assignee.name || "?")
                                     .slice(0, 2)
                                     .toUpperCase()}
                                 </AvatarFallback>
                               </Avatar>
-                              <span className={`text-xs ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                              <span
+                                className={`text-xs ${
+                                  isDark
+                                    ? "text-neutral-400"
+                                    : "text-neutral-600"
+                                }`}
+                              >
                                 {assignee.name}
                               </span>
                             </div>
@@ -759,7 +923,13 @@ export default function SprintDetailModal({
 
           {/* Deferred Tasks */}
           {sprint.deferredTasks && sprint.deferredTasks.length > 0 && (
-            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
               <SectionHeader
                 id="deferred"
                 icon={AlertCircle}
@@ -782,7 +952,13 @@ export default function SprintDetailModal({
                           {task.taskId}
                         </span>
                       </div>
-                      <p className={`text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>{task.reason}</p>
+                      <p
+                        className={`text-sm ${
+                          isDark ? "text-neutral-400" : "text-neutral-600"
+                        }`}
+                      >
+                        {task.reason}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -792,7 +968,13 @@ export default function SprintDetailModal({
 
           {/* Recommendations */}
           {sprint.recommendations && sprint.recommendations.length > 0 && (
-            <div className={`pt-4 ${isDark ? "border-t border-white/[0.04]" : "border-t border-neutral-200"}`}>
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
               <SectionHeader
                 id="recommendations"
                 icon={Flame}
@@ -811,7 +993,13 @@ export default function SprintDetailModal({
                       className="bg-blue-500/5 border border-blue-500/10 rounded-xl p-3 flex items-start gap-3"
                     >
                       <Zap className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
-                      <p className={`text-sm ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>{rec}</p>
+                      <p
+                        className={`text-sm ${
+                          isDark ? "text-neutral-300" : "text-neutral-700"
+                        }`}
+                      >
+                        {rec}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -821,11 +1009,17 @@ export default function SprintDetailModal({
         </div>
 
         {/* Footer */}
-        <div className={`flex items-center justify-end gap-3 px-6 py-4 ${isDark ? "border-t border-white/[0.06] bg-white/[0.01]" : "border-t border-neutral-200 bg-neutral-50"}`}>
+        <div
+          className={`flex items-center justify-end gap-3 px-6 py-4 ${
+            isDark
+              ? "border-t border-white/[0.06] bg-white/[0.01]"
+              : "border-t border-neutral-200 bg-neutral-50"
+          }`}
+        >
           <Button
             onClick={onClose}
             className={`transition-all duration-200 cursor-pointer ${
-              isDark 
+              isDark
                 ? "border border-neutral-600/50 bg-neutral-800/30 text-neutral-300 hover:bg-neutral-700/50 hover:border-neutral-500"
                 : "border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-100 hover:border-neutral-400"
             }`}

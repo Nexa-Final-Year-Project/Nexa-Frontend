@@ -19,7 +19,9 @@ const MyProjects = ({ projects }: { projects: Project[] }) => {
             <FolderKanban className="w-6 h-6 text-emerald-500 dark:text-emerald-400" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">My Projects</h2>
+            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
+              My Projects
+            </h2>
             <p className="text-xs text-neutral-500 dark:text-white/40">
               Projects you're actively working on
             </p>

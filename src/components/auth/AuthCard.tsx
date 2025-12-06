@@ -56,7 +56,9 @@ export const AuthCard = ({ title, subtitle, children }: AuthCardProps) => {
           <h1 className="text-3xl font-bold text-neutral-900 dark:text-white tracking-tight">
             {title}
           </h1>
-          <p className="text-sm text-neutral-500 dark:text-white/50">{subtitle}</p>
+          <p className="text-sm text-neutral-500 dark:text-white/50">
+            {subtitle}
+          </p>
         </motion.div>
 
         {/* Children with stagger animation */}

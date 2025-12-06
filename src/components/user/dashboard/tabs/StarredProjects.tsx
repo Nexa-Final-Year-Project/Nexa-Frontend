@@ -20,10 +20,15 @@ const StarredProjects = ({ projects }: { projects: Project[] }) => {
             flex items-center justify-center
           "
           >
-            <Star className="w-5 h-5 text-amber-500 dark:text-amber-400" fill="currentColor" />
+            <Star
+              className="w-5 h-5 text-amber-500 dark:text-amber-400"
+              fill="currentColor"
+            />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Starred Projects</h2>
+            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
+              Starred Projects
+            </h2>
             <p className="text-xs text-neutral-500 dark:text-white/40">
               Your favorite and pinned projects
             </p>

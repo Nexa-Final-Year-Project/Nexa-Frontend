@@ -426,7 +426,9 @@ export default function AssignmentReviewModal({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`absolute inset-0 backdrop-blur-sm ${isDark ? "bg-black/70" : "bg-black/30"}`}
+            className={`absolute inset-0 backdrop-blur-sm ${
+              isDark ? "bg-black/70" : "bg-black/30"
+            }`}
             onClick={onClose}
           />
           <motion.div
@@ -435,27 +437,37 @@ export default function AssignmentReviewModal({
             animate="visible"
             exit="exit"
             className={`relative w-[90vw] max-w-4xl max-h-[88vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
-              isDark 
-                ? "bg-neutral-900/95 border border-white/[0.08]" 
+              isDark
+                ? "bg-neutral-900/95 border border-white/[0.08]"
                 : "bg-white border border-neutral-200"
             }`}
           >
             {/* Header */}
-            <div className={`sticky top-0 z-20 backdrop-blur-xl p-5 ${
-              isDark 
-                ? "bg-neutral-900/95 border-b border-white/[0.06]" 
-                : "bg-white border-b border-neutral-200"
-            }`}>
+            <div
+              className={`sticky top-0 z-20 backdrop-blur-xl p-5 ${
+                isDark
+                  ? "bg-neutral-900/95 border-b border-white/[0.06]"
+                  : "bg-white border-b border-neutral-200"
+              }`}
+            >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center border border-emerald-500/20">
                     <User className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h2 className={`text-lg font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                    <h2
+                      className={`text-lg font-semibold ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
                       Assignment Review
                     </h2>
-                    <p className={`text-sm ${isDark ? "text-white/50" : "text-neutral-500"}`}>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-white/50" : "text-neutral-500"
+                      }`}
+                    >
                       Review & confirm task assignment suggestions
                     </p>
                     {isApproved && (
@@ -473,8 +485,8 @@ export default function AssignmentReviewModal({
                   whileTap={{ scale: 0.9 }}
                   onClick={onClose}
                   className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
-                    isDark 
-                      ? "bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-white/50 hover:text-white" 
+                    isDark
+                      ? "bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-white/50 hover:text-white"
                       : "bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 text-neutral-500 hover:text-neutral-700"
                   }`}
                 >
@@ -485,14 +497,18 @@ export default function AssignmentReviewModal({
               {/* Search & Actions Bar */}
               <div className="flex items-center gap-3 mt-4">
                 <div className="relative flex-1">
-                  <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${isDark ? "text-white/30" : "text-neutral-400"}`} />
+                  <Search
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                      isDark ? "text-white/30" : "text-neutral-400"
+                    }`}
+                  />
                   <Input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search assignments..."
                     className={`w-full pl-10 pr-4 py-2.5 rounded-xl focus:ring-1 ${
-                      isDark 
-                        ? "bg-white/[0.03] border border-white/[0.06] text-white placeholder:text-white/30 focus:border-emerald-500/30 focus:ring-emerald-500/20" 
+                      isDark
+                        ? "bg-white/[0.03] border border-white/[0.06] text-white placeholder:text-white/30 focus:border-emerald-500/30 focus:ring-emerald-500/20"
                         : "bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-emerald-500/20"
                     }`}
                   />
@@ -514,8 +530,8 @@ export default function AssignmentReviewModal({
                   onClick={saveAndClose}
                   disabled={isSaving}
                   className={`px-4 py-2.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-2 ${
-                    isDark 
-                      ? "border border-white/[0.08] bg-white/[0.02] text-white hover:bg-white/[0.04]" 
+                    isDark
+                      ? "border border-white/[0.08] bg-white/[0.02] text-white hover:bg-white/[0.04]"
                       : "border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50"
                   }`}
                 >
