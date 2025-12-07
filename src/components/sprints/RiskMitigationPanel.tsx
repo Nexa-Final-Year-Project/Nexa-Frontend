@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTheme } from "next-themes";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -34,6 +35,9 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
   criticalDependencies = [],
   deadlineThreats = [],
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  
   const [risks, setRisks] = useState<Risk[]>([
     {
       id: "delay",
@@ -155,21 +159,33 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
   return (
     <div className="space-y-4">
       {/* Risk Summary */}
-      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+      <div className={`flex items-center justify-between p-3 rounded-lg border ${
+        isDark
+          ? "bg-white/5 border-white/10"
+          : "bg-neutral-100 border-neutral-200"
+      }`}>
         <div>
-          <p className="text-sm font-medium text-white">
+          <p className={`text-sm font-medium ${
+            isDark ? "text-white" : "text-neutral-900"
+          }`}>
             Risk Mitigation Status
           </p>
-          <p className="text-xs text-white/60">
+          <p className={`text-xs ${
+            isDark ? "text-white/60" : "text-neutral-600"
+          }`}>
             {acknowledgedCount} of {risks.length} risks acknowledged
           </p>
         </div>
         <div className="flex items-center gap-2">
           <div className="text-right">
-            <p className="text-lg font-semibold text-white">
+            <p className={`text-lg font-semibold ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}>
               {acknowledgedCount}
             </p>
-            <p className="text-xs text-white/60">Acknowledged</p>
+            <p className={`text-xs ${
+              isDark ? "text-white/60" : "text-neutral-600"
+            }`}>Acknowledged</p>
           </div>
         </div>
       </div>
@@ -190,24 +206,34 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className="font-medium text-white text-sm">
+                    <p className={`font-medium text-sm ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}>
                       {risk.title}
                     </p>
                     {risk.description && (
-                      <p className="text-xs text-white/60 mt-1">
+                      <p className={`text-xs mt-1 ${
+                        isDark ? "text-white/60" : "text-neutral-600"
+                      }`}>
                         {risk.description}
                       </p>
                     )}
                   </div>
                   <button
                     onClick={() => removeRisk(risk.id)}
-                    className="flex-shrink-0 text-white/40 hover:text-white/60 transition-colors"
+                    className={`flex-shrink-0 transition-colors ${
+                      isDark
+                        ? "text-white/40 hover:text-white/60"
+                        : "text-neutral-400 hover:text-neutral-600"
+                    }`}
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
                 <div className="mt-2">
-                  <p className="text-xs text-white/70">
+                  <p className={`text-xs ${
+                    isDark ? "text-white/70" : "text-neutral-700"
+                  }`}>
                     <span className="font-semibold">Mitigation:</span>{" "}
                     {risk.mitigation}
                   </p>
@@ -243,20 +269,32 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
           Add Custom Risk
         </Button>
       ) : (
-        <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-2">
+        <div className={`p-3 rounded-lg border space-y-2 ${
+          isDark
+            ? "bg-white/5 border-white/10"
+            : "bg-neutral-100 border-neutral-200"
+        }`}>
           <input
             type="text"
             placeholder="Risk title..."
             value={newRiskTitle}
             onChange={(e) => setNewRiskTitle(e.target.value)}
-            className="w-full px-2 py-1.5 rounded bg-white/10 border border-white/20 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/50"
+            className={`w-full px-2 py-1.5 rounded border text-sm transition-all focus:outline-none focus:ring-1 ${
+              isDark
+                ? "bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:ring-blue-500/50"
+                : "bg-white border-neutral-300 text-neutral-900 placeholder:text-neutral-500 focus:ring-blue-500"
+            }`}
           />
           <textarea
             placeholder="Mitigation strategy..."
             value={newRiskMitigation}
             onChange={(e) => setNewRiskMitigation(e.target.value)}
             rows={2}
-            className="w-full px-2 py-1.5 rounded bg-white/10 border border-white/20 text-white text-sm placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/50 resize-none"
+            className={`w-full px-2 py-1.5 rounded border text-sm resize-none transition-all focus:outline-none focus:ring-1 ${
+              isDark
+                ? "bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:ring-blue-500/50"
+                : "bg-white border-neutral-300 text-neutral-900 placeholder:text-neutral-500 focus:ring-blue-500"
+            }`}
           />
           <div className="flex gap-2">
             <Button

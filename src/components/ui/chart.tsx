@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
+import { useTheme } from "next-themes";
 
 import { cn } from "@/lib/utils";
 
@@ -127,6 +128,8 @@ function ChartTooltipContent({
     labelKey?: string;
   }) {
   const { config } = useChart();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const tooltipLabel = React.useMemo(() => {
     if (hideLabel || !payload?.length) {
@@ -173,7 +176,10 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "border-white/[0.1] bg-neutral-900/95 backdrop-blur-md min-w-[8rem] items-start gap-1.5 rounded-xl border px-3 py-2 text-xs shadow-xl shadow-black/20",
+        "min-w-[8rem] items-start gap-1.5 rounded-xl border px-3 py-2 text-xs shadow-xl",
+        isDark
+          ? "border-white/[0.1] bg-neutral-900/95 text-white backdrop-blur-md shadow-black/20"
+          : "border-neutral-300 bg-white/95 text-neutral-900 backdrop-blur-sm shadow-neutral-900/10",
         className
       )}
     >
