@@ -186,24 +186,24 @@ export default function SprintDetailModal({
       return {
         label: "High Risk",
         color: "rose",
-        bg: "bg-rose-500/10",
-        border: "border-rose-500/20",
-        text: "text-rose-400",
+        bg: isDark ? "bg-rose-500/10" : "bg-red-50",
+        border: isDark ? "border-rose-500/20" : "border-red-200",
+        text: isDark ? "text-rose-400" : "text-red-600",
       };
     if (riskPercent >= 25)
       return {
         label: "Medium Risk",
         color: "amber",
-        bg: "bg-amber-500/10",
-        border: "border-amber-500/20",
-        text: "text-amber-400",
+        bg: isDark ? "bg-amber-500/10" : "bg-amber-50",
+        border: isDark ? "border-amber-500/20" : "border-amber-200",
+        text: isDark ? "text-amber-400" : "text-amber-600",
       };
     return {
       label: "Low Risk",
       color: "emerald",
-      bg: "bg-emerald-500/10",
-      border: "border-emerald-500/20",
-      text: "text-emerald-400",
+      bg: isDark ? "bg-emerald-500/10" : "bg-emerald-50",
+      border: isDark ? "border-emerald-500/20" : "border-emerald-200",
+      text: isDark ? "text-emerald-400" : "text-emerald-600",
     };
   };
   const risk = getRiskConfig();
@@ -332,7 +332,7 @@ export default function SprintDetailModal({
           <polyline
             points={idealPoints}
             fill="none"
-            stroke="rgba(255,255,255,0.1)"
+            stroke={isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
             strokeWidth="1"
             strokeDasharray="4,4"
           />
@@ -340,7 +340,7 @@ export default function SprintDetailModal({
           <polyline
             points={points}
             fill="none"
-            stroke="rgba(59,130,246,0.8)"
+            stroke={isDark ? "rgba(59,130,246,0.8)" : "rgba(37,99,235,0.8)"}
             strokeWidth="2"
             strokeLinejoin="round"
             strokeLinecap="round"
@@ -354,8 +354,8 @@ export default function SprintDetailModal({
               x2="0%"
               y2="100%"
             >
-              <stop offset="0%" stopColor="rgba(59,130,246,0.2)" />
-              <stop offset="100%" stopColor="rgba(59,130,246,0)" />
+              <stop offset="0%" stopColor={isDark ? "rgba(59,130,246,0.2)" : "rgba(37,99,235,0.15)"} />
+              <stop offset="100%" stopColor={isDark ? "rgba(59,130,246,0)" : "rgba(37,99,235,0)"} />
             </linearGradient>
           </defs>
           <polygon
@@ -363,7 +363,7 @@ export default function SprintDetailModal({
             fill="url(#burndownGradient)"
           />
         </svg>
-        <div className="flex justify-between text-xs text-neutral-500 mt-1">
+        <div className={`flex justify-between text-xs mt-1 ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
           <span>{format(parseISO(forecast[0].date), "MMM d")}</span>
           <span>
             {format(parseISO(forecast[forecast.length - 1].date), "MMM d")}
@@ -687,7 +687,7 @@ export default function SprintDetailModal({
                         </span>
                       </div>
                       <p
-                        className={`text-sm leading-relaxed ${
+                        className={`text-sm leading-relaxed break-words min-w-0 ${
                           isDark ? "text-neutral-300" : "text-neutral-700"
                         }`}
                       >

@@ -1,5 +1,6 @@
 import { Modal } from "@/components/ui/modal/Modal";
 import React, { useEffect, useState, useRef } from "react";
+import { useTheme } from "next-themes";
 import { useProjects } from "@/hooks/projects/useProjects";
 import { useSprints } from "@/hooks/sprints/useSprints";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,8 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { projects, fetchAllProjects } = useProjects();
   const { generateSprints } = useSprints();
 
@@ -98,15 +101,35 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
     >
       <div className="py-4 min-h-[400px] flex flex-col max-h-[80vh] overflow-y-auto">
         {/* Header Description */}
-        <div className="flex items-start gap-4 mb-6 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
-          <div className="p-2.5 rounded-xl bg-emerald-500/10">
-            <Sparkles className="w-5 h-5 text-emerald-400" />
+        <div className={`flex items-start gap-4 mb-6 p-4 rounded-xl border ${
+          isDark 
+            ? "bg-emerald-500/5 border-emerald-500/10" 
+            : "bg-emerald-50 border-emerald-200"
+        }`}>
+          <div className={`p-2.5 rounded-xl ${
+            isDark 
+              ? "bg-emerald-500/10" 
+              : "bg-emerald-100"
+          }`}>
+            <Sparkles className={`w-5 h-5 ${
+              isDark 
+                ? "text-emerald-400" 
+                : "text-emerald-600"
+            }`} />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-white mb-1">
+            <h3 className={`text-sm font-medium mb-1 ${
+              isDark 
+                ? "text-white" 
+                : "text-emerald-900"
+            }`}>
               AI-Powered Sprint Generation
             </h3>
-            <p className="text-sm text-white/50">
+            <p className={`text-sm ${
+              isDark 
+                ? "text-white/50" 
+                : "text-emerald-700/60"
+            }`}>
               Our AI will analyze your project's tasks, team capacity, and
               historical velocity to create an optimized sprint plan with
               balanced workload distribution.
@@ -116,12 +139,16 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
         {/* Project Selection */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-white mb-2">
+          <label className={`block text-sm font-medium mb-2 ${
+            isDark ? "text-white" : "text-neutral-900"
+          }`}>
             Select Project
           </label>
           <div className="relative" ref={comboboxRef}>
             <div className="relative">
-              <FolderKanban className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <FolderKanban className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                isDark ? "text-white/40" : "text-neutral-400"
+              }`} />
               <input
                 type="text"
                 placeholder="Search or select a project..."
@@ -157,13 +184,23 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                     setDropdownOpen(false);
                   }
                 }}
-                className="w-full pl-10 pr-10 py-3 rounded-xl border border-white/[0.08] bg-neutral-900/60 text-white placeholder:text-white/30 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all"
+                className={`w-full pl-10 pr-10 py-3 rounded-xl border transition-all focus:outline-none focus:ring-1 ${
+                  isDark
+                    ? "border-white/[0.08] bg-neutral-900/60 text-white placeholder:text-white/30 focus:border-emerald-500/40 focus:ring-emerald-500/20"
+                    : "border-neutral-300 bg-neutral-50 text-neutral-900 placeholder:text-neutral-500 focus:border-emerald-500 focus:ring-emerald-500/20"
+                }`}
               />
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                isDark ? "text-white/40" : "text-neutral-400"
+              }`} />
             </div>
 
             {dropdownOpen && (
-              <ul className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-white/[0.08] bg-neutral-900 p-1 shadow-xl">
+              <ul className={`absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border p-1 shadow-xl ${
+                isDark
+                  ? "border-white/[0.08] bg-neutral-900"
+                  : "border-neutral-300 bg-white"
+              }`}>
                 {(projects || [])
                   .filter((p) =>
                     p.name.toLowerCase().includes((query || "").toLowerCase())
@@ -184,11 +221,17 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                         onMouseEnter={() => setHighlightedIndex(idx)}
                         className={`cursor-pointer rounded-lg px-3 py-2.5 text-sm transition-colors ${
                           isHighlighted
-                            ? "bg-emerald-500/20 text-white"
-                            : "text-white/70 hover:bg-white/[0.04]"
+                            ? isDark
+                              ? "bg-emerald-500/20 text-white"
+                              : "bg-emerald-100 text-emerald-900"
+                            : isDark
+                            ? "text-white/70 hover:bg-white/[0.04]"
+                            : "text-neutral-700 hover:bg-neutral-100"
                         } ${
                           isSelected
-                            ? "bg-emerald-500/10 border-l-2 border-emerald-500"
+                            ? isDark
+                              ? "bg-emerald-500/10 border-l-2 border-emerald-500"
+                              : "bg-emerald-50 border-l-2 border-emerald-500"
                             : ""
                         }`}
                       >
@@ -202,7 +245,9 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                 {(projects || []).filter((p) =>
                   p.name.toLowerCase().includes((query || "").toLowerCase())
                 ).length === 0 && (
-                  <li className="px-3 py-2.5 text-sm text-white/40">
+                  <li className={`px-3 py-2.5 text-sm ${
+                    isDark ? "text-white/40" : "text-neutral-500"
+                  }`}>
                     No projects found
                   </li>
                 )}
@@ -212,16 +257,24 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
           {/* Selected Project Info */}
           {selectedProject && (
-            <div className="mt-4 p-4 rounded-xl bg-neutral-900/40 border border-white/[0.06]">
+            <div className={`mt-4 p-4 rounded-xl border ${
+              isDark
+                ? "bg-neutral-900/40 border-white/[0.06]"
+                : "bg-neutral-100 border-neutral-300"
+            }`}>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 flex items-center justify-center">
                   <FolderKanban className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <p className="font-medium text-white">
+                  <p className={`font-medium ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}>
                     {selectedProject.name}
                   </p>
-                  <p className="text-xs text-white/40">
+                  <p className={`text-xs ${
+                    isDark ? "text-white/40" : "text-neutral-600"
+                  }`}>
                     {selectedProject.description || "No description"}
                   </p>
                 </div>
@@ -233,8 +286,12 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
         {/* Sprint Configuration */}
         {selectedProjectId && (
           <div className="space-y-4 mb-6">
-            <h4 className="text-sm font-medium text-white flex items-center gap-2">
-              <Target className="w-4 h-4 text-emerald-400" />
+            <h4 className={`text-sm font-medium flex items-center gap-2 ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}>
+              <Target className={`w-4 h-4 ${
+                isDark ? "text-emerald-400" : "text-emerald-600"
+              }`} />
               Sprint Configuration
             </h4>
 
@@ -242,27 +299,39 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               {/* Start Date */}
               <div>
-                <label className="block text-xs font-medium text-white/60 mb-1.5">
+                <label className={`block text-xs font-medium mb-1.5 ${
+                  isDark ? "text-white/60" : "text-neutral-600"
+                }`}>
                   Start Date
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <Calendar className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                    isDark ? "text-white/40" : "text-neutral-400"
+                  }`} />
                   <input
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-white/[0.08] bg-neutral-900/60 text-white text-sm focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all"
+                    className={`w-full pl-10 pr-3 py-2.5 rounded-xl border text-sm transition-all focus:outline-none focus:ring-1 ${
+                      isDark
+                        ? "border-white/[0.08] bg-neutral-900/60 text-white focus:border-emerald-500/40 focus:ring-emerald-500/20"
+                        : "border-neutral-300 bg-neutral-50 text-neutral-900 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    }`}
                   />
                 </div>
               </div>
 
               {/* Sprint Length */}
               <div>
-                <label className="block text-xs font-medium text-white/60 mb-1.5">
+                <label className={`block text-xs font-medium mb-1.5 ${
+                  isDark ? "text-white/60" : "text-neutral-600"
+                }`}>
                   Sprint Length (days)
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <Calendar className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                    isDark ? "text-white/40" : "text-neutral-400"
+                  }`} />
                   <input
                     type="number"
                     min={1}
@@ -271,7 +340,11 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                     onChange={(e) =>
                       setSprintLengthDays(Number(e.target.value))
                     }
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-white/[0.08] bg-neutral-900/60 text-white text-sm focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all"
+                    className={`w-full pl-10 pr-3 py-2.5 rounded-xl border text-sm transition-all focus:outline-none focus:ring-1 ${
+                      isDark
+                        ? "border-white/[0.08] bg-neutral-900/60 text-white focus:border-emerald-500/40 focus:ring-emerald-500/20"
+                        : "border-neutral-300 bg-neutral-50 text-neutral-900 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    }`}
                   />
                 </div>
               </div>
@@ -281,29 +354,41 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               {/* Work Hours Per Day */}
               <div>
-                <label className="block text-xs font-medium text-white/60 mb-1.5">
+                <label className={`block text-xs font-medium mb-1.5 ${
+                  isDark ? "text-white/60" : "text-neutral-600"
+                }`}>
                   Work Hours / Day
                 </label>
                 <div className="relative">
-                  <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <Clock className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                    isDark ? "text-white/40" : "text-neutral-400"
+                  }`} />
                   <input
                     type="number"
                     min={1}
                     max={12}
                     value={workHoursPerDay}
                     onChange={(e) => setWorkHoursPerDay(Number(e.target.value))}
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-white/[0.08] bg-neutral-900/60 text-white text-sm focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all"
+                    className={`w-full pl-10 pr-3 py-2.5 rounded-xl border text-sm transition-all focus:outline-none focus:ring-1 ${
+                      isDark
+                        ? "border-white/[0.08] bg-neutral-900/60 text-white focus:border-emerald-500/40 focus:ring-emerald-500/20"
+                        : "border-neutral-300 bg-neutral-50 text-neutral-900 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    }`}
                   />
                 </div>
               </div>
 
               {/* Max Tasks Per Member */}
               <div>
-                <label className="block text-xs font-medium text-white/60 mb-1.5">
+                <label className={`block text-xs font-medium mb-1.5 ${
+                  isDark ? "text-white/60" : "text-neutral-600"
+                }`}>
                   Max Tasks / Member
                 </label>
                 <div className="relative">
-                  <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <Users className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                    isDark ? "text-white/40" : "text-neutral-400"
+                  }`} />
                   <input
                     type="number"
                     min={1}
@@ -312,7 +397,11 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                     onChange={(e) =>
                       setMaxTasksPerMember(Number(e.target.value))
                     }
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-white/[0.08] bg-neutral-900/60 text-white text-sm focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all"
+                    className={`w-full pl-10 pr-3 py-2.5 rounded-xl border text-sm transition-all focus:outline-none focus:ring-1 ${
+                      isDark
+                        ? "border-white/[0.08] bg-neutral-900/60 text-white focus:border-emerald-500/40 focus:ring-emerald-500/20"
+                        : "border-neutral-300 bg-neutral-50 text-neutral-900 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    }`}
                   />
                 </div>
               </div>
@@ -320,17 +409,25 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
             {/* Sprint Goals */}
             <div>
-              <label className="block text-xs font-medium text-white/60 mb-1.5">
+              <label className={`block text-xs font-medium mb-1.5 ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}>
                 Sprint Goals (comma separated)
               </label>
               <div className="relative">
-                <Target className="absolute left-3 top-3 w-4 h-4 text-white/40" />
+                <Target className={`absolute left-3 top-3 w-4 h-4 ${
+                  isDark ? "text-white/40" : "text-neutral-400"
+                }`} />
                 <textarea
                   value={sprintGoals}
                   onChange={(e) => setSprintGoals(e.target.value)}
                   placeholder="e.g., Deliver login feature, Resolve P1 bugs, Complete API integration"
                   rows={2}
-                  className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-white/[0.08] bg-neutral-900/60 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all resize-none"
+                  className={`w-full pl-10 pr-3 py-2.5 rounded-xl border text-sm transition-all focus:outline-none focus:ring-1 resize-none ${
+                    isDark
+                      ? "border-white/[0.08] bg-neutral-900/60 text-white placeholder:text-white/30 focus:border-emerald-500/40 focus:ring-emerald-500/20"
+                      : "border-neutral-300 bg-neutral-50 text-neutral-900 placeholder:text-neutral-500 focus:border-emerald-500 focus:ring-emerald-500/20"
+                  }`}
                 />
               </div>
             </div>
@@ -342,7 +439,11 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
           <Button
             onClick={handleGenerate}
             disabled={!selectedProjectId || loading}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className={`w-full py-3 rounded-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all ${
+              isDark
+                ? "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white"
+                : "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white"
+            }`}
           >
             {loading ? (
               <div className="flex items-center justify-center gap-2">
