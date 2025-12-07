@@ -37,7 +37,7 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
 }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  
+
   const [risks, setRisks] = useState<Risk[]>([
     {
       id: "delay",
@@ -159,33 +159,45 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
   return (
     <div className="space-y-4">
       {/* Risk Summary */}
-      <div className={`flex items-center justify-between p-3 rounded-lg border ${
-        isDark
-          ? "bg-white/5 border-white/10"
-          : "bg-neutral-100 border-neutral-200"
-      }`}>
+      <div
+        className={`flex items-center justify-between p-3 rounded-lg border ${
+          isDark
+            ? "bg-white/5 border-white/10"
+            : "bg-neutral-100 border-neutral-200"
+        }`}
+      >
         <div>
-          <p className={`text-sm font-medium ${
-            isDark ? "text-white" : "text-neutral-900"
-          }`}>
+          <p
+            className={`text-sm font-medium ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
             Risk Mitigation Status
           </p>
-          <p className={`text-xs ${
-            isDark ? "text-white/60" : "text-neutral-600"
-          }`}>
+          <p
+            className={`text-xs ${
+              isDark ? "text-white/60" : "text-neutral-600"
+            }`}
+          >
             {acknowledgedCount} of {risks.length} risks acknowledged
           </p>
         </div>
         <div className="flex items-center gap-2">
           <div className="text-right">
-            <p className={`text-lg font-semibold ${
-              isDark ? "text-white" : "text-neutral-900"
-            }`}>
+            <p
+              className={`text-lg font-semibold ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               {acknowledgedCount}
             </p>
-            <p className={`text-xs ${
-              isDark ? "text-white/60" : "text-neutral-600"
-            }`}>Acknowledged</p>
+            <p
+              className={`text-xs ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}
+            >
+              Acknowledged
+            </p>
           </div>
         </div>
       </div>
@@ -206,15 +218,19 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className={`font-medium text-sm ${
-                      isDark ? "text-white" : "text-neutral-900"
-                    }`}>
+                    <p
+                      className={`font-medium text-sm ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
                       {risk.title}
                     </p>
                     {risk.description && (
-                      <p className={`text-xs mt-1 ${
-                        isDark ? "text-white/60" : "text-neutral-600"
-                      }`}>
+                      <p
+                        className={`text-xs mt-1 ${
+                          isDark ? "text-white/60" : "text-neutral-600"
+                        }`}
+                      >
                         {risk.description}
                       </p>
                     )}
@@ -231,9 +247,11 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
                   </button>
                 </div>
                 <div className="mt-2">
-                  <p className={`text-xs ${
-                    isDark ? "text-white/70" : "text-neutral-700"
-                  }`}>
+                  <p
+                    className={`text-xs ${
+                      isDark ? "text-white/70" : "text-neutral-700"
+                    }`}
+                  >
                     <span className="font-semibold">Mitigation:</span>{" "}
                     {risk.mitigation}
                   </p>
@@ -269,11 +287,13 @@ const RiskMitigationPanel: React.FC<RiskMitigationPanelProps> = ({
           Add Custom Risk
         </Button>
       ) : (
-        <div className={`p-3 rounded-lg border space-y-2 ${
-          isDark
-            ? "bg-white/5 border-white/10"
-            : "bg-neutral-100 border-neutral-200"
-        }`}>
+        <div
+          className={`p-3 rounded-lg border space-y-2 ${
+            isDark
+              ? "bg-white/5 border-white/10"
+              : "bg-neutral-100 border-neutral-200"
+          }`}
+        >
           <input
             type="text"
             placeholder="Risk title..."

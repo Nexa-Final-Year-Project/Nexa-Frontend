@@ -23,7 +23,7 @@ const BurndownChart: React.FC<BurndownChartProps> = ({
 }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  
+
   const chartData = useMemo(() => {
     if (!burndownForecast.length) return null;
 
@@ -63,11 +63,13 @@ const BurndownChart: React.FC<BurndownChartProps> = ({
 
   if (!burndownForecast.length || !chartData) {
     return (
-      <div className={`p-6 rounded-lg border flex items-center justify-center ${
-        isDark
-          ? "bg-white/5 border-white/10 text-white/60"
-          : "bg-neutral-100 border-neutral-200 text-neutral-600"
-      }`}>
+      <div
+        className={`p-6 rounded-lg border flex items-center justify-center ${
+          isDark
+            ? "bg-white/5 border-white/10 text-white/60"
+            : "bg-neutral-100 border-neutral-200 text-neutral-600"
+        }`}
+      >
         <p className="text-sm">No burndown forecast available</p>
       </div>
     );
@@ -93,44 +95,70 @@ const BurndownChart: React.FC<BurndownChartProps> = ({
     <div className="space-y-4">
       {/* Metrics Summary */}
       <div className="grid grid-cols-3 gap-2">
-        <div className={`p-3 rounded-lg border ${
-          isDark
-            ? "bg-white/5 border-white/10"
-            : "bg-neutral-100 border-neutral-200"
-        }`}>
-          <p className={`text-xs ${
-            isDark ? "text-white/60" : "text-neutral-600"
-          }`}>Total Effort</p>
-          <p className={`text-lg font-semibold ${
-            isDark ? "text-white" : "text-neutral-900"
-          }`}>{totalEffort}h</p>
+        <div
+          className={`p-3 rounded-lg border ${
+            isDark
+              ? "bg-white/5 border-white/10"
+              : "bg-neutral-100 border-neutral-200"
+          }`}
+        >
+          <p
+            className={`text-xs ${
+              isDark ? "text-white/60" : "text-neutral-600"
+            }`}
+          >
+            Total Effort
+          </p>
+          <p
+            className={`text-lg font-semibold ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            {totalEffort}h
+          </p>
         </div>
-        <div className={`p-3 rounded-lg border ${
-          isDark
-            ? "bg-white/5 border-white/10"
-            : "bg-neutral-100 border-neutral-200"
-        }`}>
-          <p className={`text-xs ${
-            isDark ? "text-white/60" : "text-neutral-600"
-          }`}>Remaining</p>
-          <p className={`text-lg font-semibold ${
-            isDark ? "text-white" : "text-neutral-900"
-          }`}>
+        <div
+          className={`p-3 rounded-lg border ${
+            isDark
+              ? "bg-white/5 border-white/10"
+              : "bg-neutral-100 border-neutral-200"
+          }`}
+        >
+          <p
+            className={`text-xs ${
+              isDark ? "text-white/60" : "text-neutral-600"
+            }`}
+          >
+            Remaining
+          </p>
+          <p
+            className={`text-lg font-semibold ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
             {finalRemainingHours.toFixed(1)}h
           </p>
         </div>
-        <div className={`p-3 rounded-lg border ${
-          isDark
-            ? "bg-white/5 border-white/10"
-            : "bg-neutral-100 border-neutral-200"
-        }`}>
-          <p className={`text-xs ${
-            isDark ? "text-white/60" : "text-neutral-600"
-          }`}>Burndown Rate</p>
+        <div
+          className={`p-3 rounded-lg border ${
+            isDark
+              ? "bg-white/5 border-white/10"
+              : "bg-neutral-100 border-neutral-200"
+          }`}
+        >
+          <p
+            className={`text-xs ${
+              isDark ? "text-white/60" : "text-neutral-600"
+            }`}
+          >
+            Burndown Rate
+          </p>
           <div className="flex items-center gap-1">
-            <p className={`text-lg font-semibold ${
-              isDark ? "text-white" : "text-neutral-900"
-            }`}>
+            <p
+              className={`text-lg font-semibold ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               {burndownRate.toFixed(0)}%
             </p>
             {isOnTrack ? (
@@ -143,11 +171,13 @@ const BurndownChart: React.FC<BurndownChartProps> = ({
       </div>
 
       {/* Chart */}
-      <div className={`p-4 rounded-lg border overflow-x-auto ${
-        isDark
-          ? "bg-white/5 border-white/10"
-          : "bg-neutral-100 border-neutral-200"
-      }`}>
+      <div
+        className={`p-4 rounded-lg border overflow-x-auto ${
+          isDark
+            ? "bg-white/5 border-white/10"
+            : "bg-neutral-100 border-neutral-200"
+        }`}
+      >
         <svg
           width={chartData.chartWidth + 60}
           height={chartData.chartHeight + 60}
@@ -269,24 +299,34 @@ const BurndownChart: React.FC<BurndownChartProps> = ({
       <div className="flex gap-6 text-sm">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-          <span className={isDark ? "text-white/70" : "text-neutral-700"}>Actual Burndown</span>
+          <span className={isDark ? "text-white/70" : "text-neutral-700"}>
+            Actual Burndown
+          </span>
         </div>
         <div className="flex items-center gap-2">
-          <div className={`w-3 border-t-2 border-dashed ${
-            isDark ? "border-white/30" : "border-neutral-400"
-          }`}></div>
-          <span className={isDark ? "text-white/70" : "text-neutral-700"}>Ideal Burndown</span>
+          <div
+            className={`w-3 border-t-2 border-dashed ${
+              isDark ? "border-white/30" : "border-neutral-400"
+            }`}
+          ></div>
+          <span className={isDark ? "text-white/70" : "text-neutral-700"}>
+            Ideal Burndown
+          </span>
         </div>
         <div className="flex items-center gap-2">
           {isOnTrack ? (
             <>
               <TrendingDown className="w-4 h-4 text-green-500" />
-              <span className={isDark ? "text-green-400" : "text-green-600"}>On Track</span>
+              <span className={isDark ? "text-green-400" : "text-green-600"}>
+                On Track
+              </span>
             </>
           ) : (
             <>
               <TrendingUp className="w-4 h-4 text-red-500" />
-              <span className={isDark ? "text-red-400" : "text-red-600"}>Behind Schedule</span>
+              <span className={isDark ? "text-red-400" : "text-red-600"}>
+                Behind Schedule
+              </span>
             </>
           )}
         </div>
