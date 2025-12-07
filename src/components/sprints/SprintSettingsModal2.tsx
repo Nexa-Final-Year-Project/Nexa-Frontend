@@ -112,15 +112,15 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
 
               <div className="mt-4">
                 <h4 className="text-sm font-medium mb-2">Goals</h4>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col gap-2">
                   {form.values.goals && form.values.goals.length ? (
                     form.values.goals.map((g, i) => (
-                      <span
+                      <div
                         key={i}
-                        className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary"
+                        className="px-3 py-2 text-sm rounded-lg bg-primary/10 text-primary border border-primary/20 break-words"
                       >
                         {g}
-                      </span>
+                      </div>
                     ))
                   ) : (
                     <span className="text-sm text-muted-foreground">

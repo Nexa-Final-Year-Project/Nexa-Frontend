@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon, PlusIcon, XIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,6 +35,8 @@ export const FormField = ({
   field: FormFieldType;
   form: any;
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [showPassword, setShowPassword] = useState(false);
   const [newItem, setNewItem] = useState("");
 
@@ -57,7 +60,13 @@ export const FormField = ({
     case "email":
       return (
         <div className="space-y-1">
-          <Label className="text-sm font-medium">{field.label}</Label>
+          <Label
+            className={`text-sm font-medium ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            {field.label}
+          </Label>
           <Input
             type={field.type}
             placeholder={field.placeholder}
@@ -71,7 +80,13 @@ export const FormField = ({
     case "textarea":
       return (
         <div className="space-y-1">
-          <Label className="text-sm font-medium">{field.label}</Label>
+          <Label
+            className={`text-sm font-medium ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            {field.label}
+          </Label>
           <Textarea
             placeholder={field.placeholder}
             disabled={field.disabled}
@@ -83,7 +98,13 @@ export const FormField = ({
     case "password":
       return (
         <div className="space-y-1 relative">
-          <Label className="text-sm font-medium">{field.label}</Label>
+          <Label
+            className={`text-sm font-medium ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            {field.label}
+          </Label>
           <Input
             type={showPassword ? "text" : "password"}
             placeholder={field.placeholder}
@@ -91,7 +112,9 @@ export const FormField = ({
           />
           <button
             type="button"
-            className="absolute right-3 top-8 text-gray-500"
+            className={`absolute right-3 top-8 ${
+              isDark ? "text-gray-500" : "text-gray-400 hover:text-gray-600"
+            }`}
             onClick={() => setShowPassword((p) => !p)}
           >
             {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
@@ -102,7 +125,13 @@ export const FormField = ({
     case "select":
       return (
         <div className="space-y-1">
-          <Label className="text-sm font-medium">{field.label}</Label>
+          <Label
+            className={`text-sm font-medium ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            {field.label}
+          </Label>
           <Select
             value={form.values[field.name]}
             onValueChange={(val) => form.setFieldValue(field.name, val)}
@@ -128,7 +157,13 @@ export const FormField = ({
     case "date":
       return (
         <div className="space-y-1">
-          <Label className="text-sm font-medium">{field.label}</Label>
+          <Label
+            className={`text-sm font-medium ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            {field.label}
+          </Label>
           <Input type="date" {...form.getInputProps(field.name)} />
         </div>
       );
@@ -140,7 +175,11 @@ export const FormField = ({
             checked={form.values[field.name]}
             onCheckedChange={(val) => form.setFieldValue(field.name, val)}
           />
-          <label className="text-sm">{field.label}</label>
+          <label
+            className={`text-sm ${isDark ? "text-white" : "text-neutral-900"}`}
+          >
+            {field.label}
+          </label>
         </div>
       );
 

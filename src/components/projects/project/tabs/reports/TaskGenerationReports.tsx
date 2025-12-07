@@ -493,18 +493,26 @@ export default function TaskGenerationReports({
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-2xl font-semibold text-slate-100">
+          <h2
+            className={`text-2xl font-semibold ${
+              isDark ? "text-slate-100" : "text-neutral-900"
+            }`}
+          >
             Task Generation Reports
           </h2>
-          <p className="text-sm text-slate-400 mt-1">
+          <p
+            className={`text-sm mt-1 ${
+              isDark ? "text-slate-400" : "text-neutral-600"
+            }`}
+          >
             Minimal list view — click an item to open review modal
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
           {hasLegacy && (
             <Button
               onClick={migrateLegacyLocal}
-              className="bg-amber-500 text-black hover:bg-amber-600"
+              className="bg-amber-500 text-black hover:bg-amber-600 w-full sm:w-auto"
               title="Tag local reports with your ownership"
             >
               Migrate Legacy
@@ -514,7 +522,11 @@ export default function TaskGenerationReports({
             <Button
               variant="outline"
               onClick={undoLegacyMigration}
-              className="border-white/20 text-white hover:bg-white/10"
+              className={`w-full sm:w-auto border ${
+                isDark
+                  ? "border-white/20 text-white hover:bg-white/10"
+                  : "border-neutral-300 text-neutral-700 hover:bg-neutral-100"
+              }`}
             >
               Undo Migration
             </Button>
@@ -526,7 +538,11 @@ export default function TaskGenerationReports({
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="w-64 bg-white/10 text-white placeholder:text-white/40 border-white/20"
+            className={`w-full sm:w-64 border ${
+              isDark
+                ? "bg-white/10 text-white placeholder:text-white/40 border-white/20"
+                : "bg-white text-neutral-900 placeholder:text-neutral-500 border-neutral-300"
+            }`}
           />
           <Select
             value={filterStatus}
@@ -536,7 +552,7 @@ export default function TaskGenerationReports({
             }}
           >
             <SelectTrigger
-              className={`w-44 border ${
+              className={`w-full sm:w-44 border ${
                 isDark
                   ? "bg-white/10 text-white border-white/20"
                   : "bg-neutral-100 text-neutral-900 border-neutral-300"
@@ -559,7 +575,7 @@ export default function TaskGenerationReports({
           </Select>
           <Select value={sortBy} onValueChange={(v) => setSortBy(v)}>
             <SelectTrigger
-              className={`w-40 border ${
+              className={`w-full sm:w-40 border ${
                 isDark
                   ? "bg-white/10 text-white border-white/20"
                   : "bg-neutral-100 text-neutral-900 border-neutral-300"
@@ -629,21 +645,35 @@ export default function TaskGenerationReports({
                   className="cursor-pointer"
                 >
                   <div
-                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition-colors shadow-[0_0_0_1px_rgba(255,255,255,0.03)] ${
+                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition-colors ${
                       isDark
-                        ? "bg-neutral-900/70 border-neutral-700 hover:bg-neutral-800/70 hover:border-neutral-600"
-                        : "bg-neutral-50 border-neutral-300 hover:bg-neutral-100 hover:border-neutral-400"
+                        ? "bg-neutral-900/70 border-neutral-700 hover:bg-neutral-800/70 hover:border-neutral-600 shadow-[0_0_0_1px_rgba(255,255,255,0.03)]"
+                        : "bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400 shadow-sm"
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="h-10 w-10 rounded-md bg-neutral-800/80 border border-neutral-700 flex items-center justify-center text-neutral-200 text-sm font-medium flex-shrink-0 shadow-inner">
+                      <div
+                        className={`h-10 w-10 rounded-md border flex items-center justify-center text-sm font-medium flex-shrink-0 shadow-inner ${
+                          isDark
+                            ? "bg-neutral-800/80 border-neutral-700 text-neutral-200"
+                            : "bg-violet-100 border-violet-200 text-violet-700"
+                        }`}
+                      >
                         RG
                       </div>
                       <div className="min-w-0">
-                        <div className="text-sm font-medium text-neutral-100 truncate">
+                        <div
+                          className={`text-sm font-medium truncate ${
+                            isDark ? "text-neutral-100" : "text-neutral-900"
+                          }`}
+                        >
                           {r.displayTitle || `Report ${r.reportId}`}
                         </div>
-                        <div className="text-xs text-neutral-400 truncate mt-1">
+                        <div
+                          className={`text-xs truncate mt-1 ${
+                            isDark ? "text-neutral-400" : "text-neutral-600"
+                          }`}
+                        >
                           {r.meta?.backlogSummary}
                         </div>
                       </div>
@@ -652,16 +682,26 @@ export default function TaskGenerationReports({
                     <div className="flex items-center gap-4">
                       <div
                         className={`text-xs font-medium ${
-                          normalizeStatus(r.status) === "approved"
-                            ? "text-neutral-200"
+                          isDark
+                            ? normalizeStatus(r.status) === "approved"
+                              ? "text-neutral-200"
+                              : normalizeStatus(r.status) === "rejected"
+                              ? "text-neutral-400"
+                              : "text-neutral-300"
+                            : normalizeStatus(r.status) === "approved"
+                            ? "text-emerald-600"
                             : normalizeStatus(r.status) === "rejected"
-                            ? "text-neutral-400"
-                            : "text-neutral-300"
+                            ? "text-rose-600"
+                            : "text-amber-600"
                         }`}
                       >
                         {formatStatusDisplay(r.status)}
                       </div>
-                      <div className="text-xxs text-neutral-500">
+                      <div
+                        className={`text-xxs ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      >
                         {new Date(
                           r.createdAt || Date.now()
                         ).toLocaleDateString()}
@@ -685,21 +725,33 @@ export default function TaskGenerationReports({
 
           {/* Pagination */}
           {filteredReportsCount(reports, search, filterStatus) > pageSize && (
-            <div className="mt-3 flex items-center justify-between text-gray-400 text-sm px-3">
+            <div
+              className={`mt-3 flex items-center justify-between text-sm px-3 ${
+                isDark ? "text-gray-400" : "text-neutral-600"
+              }`}
+            >
               <div>
                 {filteredReportsCount(reports, search, filterStatus)} reports
               </div>
               <div className="flex items-center gap-2">
                 <Button
                   onClick={() => setPage(Math.max(1, page - 1))}
-                  className="px-2 py-1 rounded bg-white/10 text-white hover:bg-white/20"
+                  className={`px-2 py-1 rounded ${
+                    isDark
+                      ? "bg-white/10 text-white hover:bg-white/20"
+                      : "bg-neutral-200 text-neutral-900 hover:bg-neutral-300"
+                  }`}
                 >
                   Prev
                 </Button>
                 <div>Page {page}</div>
                 <Button
                   onClick={() => setPage(page + 1)}
-                  className="px-2 py-1 rounded bg-white/10 text-white hover:bg-white/20"
+                  className={`px-2 py-1 rounded ${
+                    isDark
+                      ? "bg-white/10 text-white hover:bg-white/20"
+                      : "bg-neutral-200 text-neutral-900 hover:bg-neutral-300"
+                  }`}
                 >
                   Next
                 </Button>

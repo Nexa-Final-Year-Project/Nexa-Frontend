@@ -7,8 +7,11 @@ import { BarChartLabel } from "@/components/ui/charts/BarChartLabel";
 import OverviewCard from "../OverviewCard";
 import { Task } from "@/types/task";
 import { BarChartComponent } from "@/components/ui/charts/BarChartComponent";
+import { useTheme } from "next-themes";
 
 const PriorityChart = ({ tasks }: { tasks: Task[] }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [priorityData, setPriorityData] = useState<
     Array<{ type: string; count: number; fill: string }>
   >([]);
@@ -95,10 +98,18 @@ const PriorityChart = ({ tasks }: { tasks: Task[] }) => {
                   className="w-3 h-3 rounded-full mr-2"
                   style={{ backgroundColor: item.fill }}
                 />
-                <span className="text-sm font-medium dark:text-gray-300">
+                <span
+                  className={`text-sm font-medium ${
+                    isDark ? "text-gray-300" : "text-neutral-700"
+                  }`}
+                >
                   {item.type}:
                 </span>
-                <span className="ml-auto font-semibold dark:text-white">
+                <span
+                  className={`ml-auto font-semibold ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {item.count} ({Math.round((item.count / totalTasks) * 100)}%)
                 </span>
               </div>
@@ -106,7 +117,11 @@ const PriorityChart = ({ tasks }: { tasks: Task[] }) => {
           </div>
 
           {totalTasks > 0 && (
-            <div className="mt-4 pt-4 border-t">
+            <div
+              className={`mt-4 pt-4 border-t ${
+                isDark ? "border-white/10" : "border-neutral-200"
+              }`}
+            >
               {highPriorityCount > 0 ? (
                 <div className="flex items-center text-red-600 justify-center">
                   <AlertCircle className="w-4 h-4 mr-1" />
@@ -128,7 +143,11 @@ const PriorityChart = ({ tasks }: { tasks: Task[] }) => {
         </div>
       </div>
 
-      <div className="mt-4 text-xs text-gray-500">
+      <div
+        className={`mt-4 text-xs ${
+          isDark ? "text-gray-500" : "text-neutral-500"
+        }`}
+      >
         <p>Priority classification based on business impact and urgency</p>
       </div>
     </OverviewCard>

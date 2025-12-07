@@ -58,23 +58,35 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 mb-10 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-sm"
+          className={`inline-flex items-center gap-2 px-4 py-2 mb-10 rounded-full border backdrop-blur-sm ${
+            isDark
+              ? "border-white/10 bg-white/[0.03]"
+              : "border-neutral-300 bg-neutral-100"
+          }`}
         >
           <Sparkles className="w-3.5 h-3.5 text-violet-400" />
-          <span className="text-sm text-white/60">
+          <span
+            className={`text-sm ${
+              isDark ? "text-white/60" : "text-neutral-600"
+            }`}
+          >
             AI-Powered Project Management
           </span>
-          <ChevronRight className="w-3.5 h-3.5 text-white/30" />
+          <ChevronRight
+            className={`w-3.5 h-3.5 ${
+              isDark ? "text-white/30" : "text-neutral-400"
+            }`}
+          />
         </motion.div>
 
-        {/* Main Heading - LARGER */}
+        {/* Main Heading - Better proportions */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-6xl md:text-8xl lg:text-9xl font-bold mb-8 tracking-tight leading-[0.95]"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-8 tracking-tight leading-[1.1]"
         >
-          <span className={isDark ? "text-white" : "text-neutral-700"}>
+          <span className={isDark ? "text-white" : "text-neutral-900"}>
             The Future of
           </span>
           <br />
@@ -83,7 +95,7 @@ const Hero = () => {
               className={`text-transparent bg-clip-text ${
                 isDark
                   ? "bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500"
-                  : "bg-gradient-to-r from-indigo-700 via-purple-900 to-pink-900"
+                  : "bg-gradient-to-r from-indigo-600 via-purple-700 to-pink-700"
               }`}
             >
               Project Management
@@ -96,7 +108,9 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-white/50"
+          className={`text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed ${
+            isDark ? "text-white/50" : "text-neutral-600"
+          }`}
         >
           Harness the power of AI to automate workflows, predict bottlenecks,
           and deliver projects faster. Built for teams that refuse to settle.
@@ -115,7 +129,13 @@ const Hero = () => {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </Link>
-          <button className="group flex items-center gap-2 px-8 py-4 text-white/70 font-medium rounded-xl border border-white/10 hover:border-white/20 hover:text-white hover:bg-white/[0.03] transition-all duration-300">
+          <button
+            className={`group flex items-center gap-2 px-8 py-4 font-medium rounded-xl border transition-all duration-300 ${
+              isDark
+                ? "text-white/70 border-white/10 hover:border-white/20 hover:text-white hover:bg-white/[0.03]"
+                : "text-neutral-700 border-neutral-300 hover:border-neutral-400 hover:text-neutral-900 hover:bg-neutral-100"
+            }`}
+          >
             <Play className="w-4 h-4" />
             Watch Demo
           </button>
@@ -138,9 +158,15 @@ const Hero = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
-              className="flex items-center gap-2 text-sm text-white/40"
+              className={`flex items-center gap-2 text-sm ${
+                isDark ? "text-white/40" : "text-neutral-600"
+              }`}
             >
-              <item.icon className="w-4 h-4 text-white/30" />
+              <item.icon
+                className={`w-4 h-4 ${
+                  isDark ? "text-white/30" : "text-neutral-500"
+                }`}
+              />
               <span>{item.text}</span>
             </motion.div>
           ))}
@@ -151,7 +177,11 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.9 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 p-8 rounded-2xl border border-white/[0.06] bg-white/[0.02]"
+          className={`grid grid-cols-2 md:grid-cols-4 gap-8 p-8 rounded-2xl border ${
+            isDark
+              ? "border-white/[0.06] bg-white/[0.02]"
+              : "border-neutral-300 bg-neutral-100"
+          }`}
         >
           {[
             { value: "10K+", label: "Active Teams" },
@@ -166,10 +196,20 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1 + index * 0.1 }}
             >
-              <div className="text-3xl md:text-4xl font-bold text-white mb-1">
+              <div
+                className={`text-3xl md:text-4xl font-bold mb-1 ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 {stat.value}
               </div>
-              <div className="text-sm text-white/40">{stat.label}</div>
+              <div
+                className={`text-sm ${
+                  isDark ? "text-white/40" : "text-neutral-600"
+                }`}
+              >
+                {stat.label}
+              </div>
             </motion.div>
           ))}
         </motion.div>

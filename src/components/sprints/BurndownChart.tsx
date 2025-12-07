@@ -116,6 +116,7 @@ const BurndownChart: React.FC<BurndownChartProps> = ({
           width={chartData.chartWidth + 60}
           height={chartData.chartHeight + 60}
           className="min-w-full"
+          shapeRendering="geometricPrecision"
         >
           {/* Grid lines */}
           {Array.from({ length: 5 }).map((_, i) => {
@@ -174,10 +175,17 @@ const BurndownChart: React.FC<BurndownChartProps> = ({
             strokeOpacity="0.3"
             strokeWidth="2"
             strokeDasharray="5,5"
+            vectorEffect="non-scaling-stroke"
           />
 
           {/* Actual burndown line */}
-          <path d={actualPath} fill="none" stroke="#3b82f6" strokeWidth="2" />
+          <path
+            d={actualPath}
+            fill="none"
+            stroke="#3b82f6"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          />
 
           {/* Data points */}
           {chartData.actualPoints.map((point, index) => (

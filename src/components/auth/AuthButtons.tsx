@@ -7,6 +7,7 @@ import {
   SocialProvider,
 } from "@/lib/constants/auth/providersConstants";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 
 const resolveBaseUrl = () => {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -26,6 +27,8 @@ export function SocialButton({
   onClick: () => void;
   className?: string;
 }) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const providerConfig = providers[provider];
   if (!providerConfig) {
     return null;
@@ -42,17 +45,31 @@ export function SocialButton({
         variant="outline"
         color={brandColor}
         fullWidth
-        className={`relative overflow-hidden !bg-white/[0.03] !text-white !border-white/[0.08] hover:!bg-white/[0.08] hover:!border-white/[0.15] rounded-xl py-3 transition-all duration-300 group ${className}`}
+        className={`relative overflow-hidden transition-all duration-300 group rounded-xl py-3 border ${
+          isDark
+            ? "!bg-white/[0.03] !text-white !border-white/[0.08] hover:!bg-white/[0.08] hover:!border-white/[0.15]"
+            : "!bg-neutral-100 !text-neutral-900 !border-neutral-300 hover:!bg-neutral-200 hover:!border-neutral-400"
+        }`}
         onClick={onClick}
         Icon={
           <Icon
             size={20}
-            className="text-white/70 group-hover:text-white transition-colors"
+            className={`transition-colors ${
+              isDark
+                ? "text-white/70 group-hover:text-white"
+                : "text-neutral-600 group-hover:text-neutral-900"
+            }`}
           />
         }
         iconPosition="left"
       >
-        <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">
+        <span
+          className={`text-sm font-medium transition-colors ${
+            isDark
+              ? "text-white/80 group-hover:text-white"
+              : "text-neutral-700 group-hover:text-neutral-900"
+          }`}
+        >
           Continue with {label}
         </span>
       </Button>

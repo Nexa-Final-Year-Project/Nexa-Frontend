@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,19 +22,19 @@ import {
 } from "lucide-react";
 
 // Animation variants
-const overlayVariants = {
+const overlayVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
   exit: { opacity: 0 },
 };
 
-const modalVariants = {
+const modalVariants: Variants = {
   hidden: { opacity: 0, scale: 0.95, y: 20 },
   visible: {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { type: "spring", damping: 25, stiffness: 300 },
+    transition: { type: "spring" as const, damping: 25, stiffness: 300 },
   },
   exit: {
     opacity: 0,
@@ -44,7 +44,7 @@ const modalVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 10 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
@@ -570,24 +570,42 @@ export default function AssignmentReviewModal({
                       transition={{ delay: idx * 0.05 }}
                       className={`group p-4 rounded-xl border transition-all duration-200 ${
                         it.approved
-                          ? "bg-emerald-500/5 border-emerald-500/20"
-                          : "bg-white/[0.02] border-white/[0.06] hover:border-white/[0.1]"
+                          ? isDark
+                            ? "bg-emerald-500/5 border-emerald-500/20"
+                            : "bg-emerald-50 border-emerald-300"
+                          : isDark
+                          ? "bg-white/[0.02] border-white/[0.06] hover:border-white/[0.1]"
+                          : "bg-white border-neutral-200 hover:border-neutral-300"
                       }`}
                     >
                       {/* Card Header */}
                       <div className="flex items-start justify-between gap-4 mb-4">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-sm font-medium text-white truncate">
+                            <h3
+                              className={`text-sm font-medium truncate ${
+                                isDark ? "text-white" : "text-neutral-900"
+                              }`}
+                            >
                               {it.task_title || "Untitled task"}
                             </h3>
                             {it.approved && (
-                              <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                              <span
+                                className={`px-2 py-0.5 text-xs rounded-full border ${
+                                  isDark
+                                    ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                                    : "bg-emerald-100 text-emerald-700 border-emerald-300"
+                                }`}
+                              >
                                 Approved
                               </span>
                             )}
                           </div>
-                          <div className="flex items-center gap-3 text-xs text-white/40">
+                          <div
+                            className={`flex items-center gap-3 text-xs ${
+                              isDark ? "text-white/40" : "text-neutral-500"
+                            }`}
+                          >
                             <div className="flex items-center gap-1">
                               <User className="w-3 h-3" />
                               <span>{it.member_name || "Unassigned"}</span>
@@ -603,10 +621,14 @@ export default function AssignmentReviewModal({
                         <div className="flex items-center gap-2">
                           <Button
                             onClick={() => toggleApprove(items.indexOf(it))}
-                            className={`px-3 py-1.5 text-xs rounded-lg cursor-pointer transition-all duration-200 flex items-center gap-1.5 ${
+                            className={`px-3 py-1.5 text-xs rounded-lg cursor-pointer transition-all duration-200 flex items-center gap-1.5 border ${
                               it.approved
-                                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30"
-                                : "bg-white/[0.04] text-white/70 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white"
+                                ? isDark
+                                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30"
+                                  : "bg-emerald-100 text-emerald-700 border-emerald-300 hover:bg-emerald-200"
+                                : isDark
+                                ? "bg-white/[0.04] text-white/70 border-white/[0.08] hover:bg-white/[0.08] hover:text-white"
+                                : "bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50"
                             }`}
                           >
                             <CheckCircle2 className="w-3.5 h-3.5" />
@@ -614,7 +636,11 @@ export default function AssignmentReviewModal({
                           </Button>
                           <Button
                             onClick={() => removeItem(items.indexOf(it))}
-                            className="px-3 py-1.5 text-xs rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 hover:border-rose-500/30 transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+                            className={`px-3 py-1.5 text-xs rounded-lg border transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                              isDark
+                                ? "bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20 hover:border-rose-500/30"
+                                : "bg-rose-50 text-rose-700 border-rose-300 hover:bg-rose-100 hover:border-rose-400"
+                            }`}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                             Delete
@@ -625,7 +651,11 @@ export default function AssignmentReviewModal({
                       {/* Editable Fields */}
                       <div className="space-y-3">
                         <div>
-                          <label className="text-xs text-white/40 mb-1.5 block">
+                          <label
+                            className={`text-xs mb-1.5 block ${
+                              isDark ? "text-white/40" : "text-neutral-500"
+                            }`}
+                          >
                             Task Title
                           </label>
                           <Input
@@ -638,11 +668,19 @@ export default function AssignmentReviewModal({
                               };
                               setItems(c);
                             }}
-                            className="w-full bg-white/[0.03] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white focus:border-emerald-500/30 focus:ring-1 focus:ring-emerald-500/20"
+                            className={`w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 ${
+                              isDark
+                                ? "bg-white/[0.03] border-white/[0.06] text-white focus:border-emerald-500/30 focus:ring-emerald-500/20"
+                                : "bg-white border-neutral-300 text-neutral-900 focus:border-emerald-500 focus:ring-emerald-500/20"
+                            }`}
                           />
                         </div>
                         <div>
-                          <label className="text-xs text-white/40 mb-1.5 block">
+                          <label
+                            className={`text-xs mb-1.5 block ${
+                              isDark ? "text-white/40" : "text-neutral-500"
+                            }`}
+                          >
                             Assigned Member
                           </label>
                           <Input
@@ -655,11 +693,19 @@ export default function AssignmentReviewModal({
                               };
                               setItems(c);
                             }}
-                            className="w-full bg-white/[0.03] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white focus:border-emerald-500/30 focus:ring-1 focus:ring-emerald-500/20"
+                            className={`w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 ${
+                              isDark
+                                ? "bg-white/[0.03] border-white/[0.06] text-white focus:border-emerald-500/30 focus:ring-emerald-500/20"
+                                : "bg-white border-neutral-300 text-neutral-900 focus:border-emerald-500 focus:ring-emerald-500/20"
+                            }`}
                           />
                         </div>
                         <div>
-                          <label className="text-xs text-white/40 mb-1.5 block">
+                          <label
+                            className={`text-xs mb-1.5 block ${
+                              isDark ? "text-white/40" : "text-neutral-500"
+                            }`}
+                          >
                             Assignment Reason
                           </label>
                           <Textarea
@@ -672,82 +718,204 @@ export default function AssignmentReviewModal({
                               };
                               setItems(c);
                             }}
-                            className="w-full bg-white/[0.03] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white focus:border-emerald-500/30 focus:ring-1 focus:ring-emerald-500/20 resize-none"
+                            className={`w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 resize-none ${
+                              isDark
+                                ? "bg-white/[0.03] border-white/[0.06] text-white focus:border-emerald-500/30 focus:ring-emerald-500/20"
+                                : "bg-white border-neutral-300 text-neutral-900 focus:border-emerald-500 focus:ring-emerald-500/20"
+                            }`}
                             rows={2}
                           />
                         </div>
 
                         {/* Expandable Details */}
                         <details className="group/details">
-                          <summary className="flex items-center gap-2 cursor-pointer text-xs text-white/40 hover:text-white/60 transition-colors">
+                          <summary
+                            className={`flex items-center gap-2 cursor-pointer text-xs transition-colors ${
+                              isDark
+                                ? "text-white/40 hover:text-white/60"
+                                : "text-neutral-500 hover:text-neutral-700"
+                            }`}
+                          >
                             <ChevronDown className="w-3.5 h-3.5 transition-transform group-open/details:rotate-180" />
                             Show task details
                           </summary>
                           <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
-                            className="mt-3 p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]"
+                            className={`mt-3 p-3 rounded-lg border ${
+                              isDark
+                                ? "bg-white/[0.02] border-white/[0.04]"
+                                : "bg-neutral-50 border-neutral-200"
+                            }`}
                           >
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
                               <div>
-                                <span className="text-white/30">Priority</span>
-                                <p className="text-white/70">
+                                <span
+                                  className={
+                                    isDark
+                                      ? "text-white/30"
+                                      : "text-neutral-500"
+                                  }
+                                >
+                                  Priority
+                                </span>
+                                <p
+                                  className={
+                                    isDark
+                                      ? "text-white/70"
+                                      : "text-neutral-700"
+                                  }
+                                >
                                   {it.priority || "—"}
                                 </p>
                               </div>
                               <div>
-                                <span className="text-white/30">Role</span>
-                                <p className="text-white/70">
+                                <span
+                                  className={
+                                    isDark
+                                      ? "text-white/30"
+                                      : "text-neutral-500"
+                                  }
+                                >
+                                  Role
+                                </span>
+                                <p
+                                  className={
+                                    isDark
+                                      ? "text-white/70"
+                                      : "text-neutral-700"
+                                  }
+                                >
                                   {it.role || "—"}
                                 </p>
                               </div>
                               <div>
-                                <span className="text-white/30">
+                                <span
+                                  className={
+                                    isDark
+                                      ? "text-white/30"
+                                      : "text-neutral-500"
+                                  }
+                                >
                                   Complexity
                                 </span>
-                                <p className="text-white/70">
+                                <p
+                                  className={
+                                    isDark
+                                      ? "text-white/70"
+                                      : "text-neutral-700"
+                                  }
+                                >
                                   {it.complexity || "—"}
                                 </p>
                               </div>
                               <div>
-                                <span className="text-white/30">Type</span>
-                                <p className="text-white/70">
+                                <span
+                                  className={
+                                    isDark
+                                      ? "text-white/30"
+                                      : "text-neutral-500"
+                                  }
+                                >
+                                  Type
+                                </span>
+                                <p
+                                  className={
+                                    isDark
+                                      ? "text-white/70"
+                                      : "text-neutral-700"
+                                  }
+                                >
                                   {it.type || "—"}
                                 </p>
                               </div>
                               <div>
-                                <span className="text-white/30">
+                                <span
+                                  className={
+                                    isDark
+                                      ? "text-white/30"
+                                      : "text-neutral-500"
+                                  }
+                                >
                                   Risk Level
                                 </span>
-                                <p className="text-white/70">
+                                <p
+                                  className={
+                                    isDark
+                                      ? "text-white/70"
+                                      : "text-neutral-700"
+                                  }
+                                >
                                   {it.riskLevel || "—"}
                                 </p>
                               </div>
                               <div>
-                                <span className="text-white/30">
+                                <span
+                                  className={
+                                    isDark
+                                      ? "text-white/30"
+                                      : "text-neutral-500"
+                                  }
+                                >
                                   Estimated Hours
                                 </span>
-                                <p className="text-white/70">
+                                <p
+                                  className={
+                                    isDark
+                                      ? "text-white/70"
+                                      : "text-neutral-700"
+                                  }
+                                >
                                   {it.estimatedHours ?? "—"}
                                 </p>
                               </div>
                             </div>
                             {it.definitionOfDone && (
-                              <div className="mt-3 pt-3 border-t border-white/[0.04]">
-                                <span className="text-xs text-white/30">
+                              <div
+                                className={`mt-3 pt-3 border-t ${
+                                  isDark
+                                    ? "border-white/[0.04]"
+                                    : "border-neutral-200"
+                                }`}
+                              >
+                                <span
+                                  className={`text-xs ${
+                                    isDark
+                                      ? "text-white/30"
+                                      : "text-neutral-500"
+                                  }`}
+                                >
                                   Definition of Done
                                 </span>
-                                <p className="text-xs text-white/70 mt-1 whitespace-pre-wrap">
+                                <p
+                                  className={`text-xs mt-1 whitespace-pre-wrap ${
+                                    isDark
+                                      ? "text-white/70"
+                                      : "text-neutral-700"
+                                  }`}
+                                >
                                   {it.definitionOfDone}
                                 </p>
                               </div>
                             )}
                             {(it.tags?.length > 0 ||
                               it.potentialBlockers?.length > 0) && (
-                              <div className="mt-3 pt-3 border-t border-white/[0.04] flex flex-wrap gap-4">
+                              <div
+                                className={`mt-3 pt-3 border-t flex flex-wrap gap-4 ${
+                                  isDark
+                                    ? "border-white/[0.04]"
+                                    : "border-neutral-200"
+                                }`}
+                              >
                                 {it.tags?.length > 0 && (
                                   <div>
-                                    <span className="text-xs text-white/30 block mb-1.5">
+                                    <span
+                                      className={`text-xs block mb-1.5 ${
+                                        isDark
+                                          ? "text-white/30"
+                                          : "text-neutral-500"
+                                      }`}
+                                    >
                                       Tags
                                     </span>
                                     <div className="flex flex-wrap gap-1">
@@ -764,7 +932,13 @@ export default function AssignmentReviewModal({
                                 )}
                                 {it.potentialBlockers?.length > 0 && (
                                   <div>
-                                    <span className="text-xs text-white/30 block mb-1.5">
+                                    <span
+                                      className={`text-xs block mb-1.5 ${
+                                        isDark
+                                          ? "text-white/30"
+                                          : "text-neutral-500"
+                                      }`}
+                                    >
                                       Potential Blockers
                                     </span>
                                     <div className="flex flex-wrap gap-1">

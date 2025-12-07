@@ -1,10 +1,16 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ThemeToggle } from "@/theme/ThemeToggle";
 import { useAuthStore } from "@/store/auth/authStore";
-import { LogIn, LayoutDashboard, ArrowRight } from "lucide-react";
+import {
+  LogIn,
+  LayoutDashboard,
+  ArrowRight,
+  Menu as MenuIcon,
+  X,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
@@ -16,25 +22,30 @@ const Header = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const isLoggedIn = !!user;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <motion.nav
       className={cn(
-        "rounded-3xl border backdrop-blur-xl px-6 py-3",
+        "rounded-3xl border backdrop-blur-xl px-4 sm:px-6 py-3",
         isDark
           ? "bg-neutral-900/60 border-white/[0.06]"
           : "bg-white/80 border-neutral-200/80"
       )}
     >
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-12">
+        {/* Logo */}
+        <div className="flex-shrink-0">
           <Logo />
-          <div className="hidden md:block">
-            <Menu />
-          </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Desktop Menu - Centered */}
+        <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2">
+          <Menu />
+        </div>
+
+        {/* Right Actions */}
+        <div className="flex items-center gap-2 sm:gap-3">
           {isLoggedIn ? (
             // Show Dashboard button when logged in
             <Link href={`/u/${user?.uid}`}>
@@ -77,8 +88,44 @@ const Header = () => {
             </Link>
           )}
           <ThemeToggle />
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className={cn(
+              "lg:hidden p-2 rounded-lg transition-colors",
+              isDark
+                ? "hover:bg-white/10 text-white"
+                : "hover:bg-neutral-100 text-neutral-900"
+            )}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <MenuIcon className="w-5 h-5" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Drawer */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className={cn(
+              "lg:hidden mt-4 pt-4 border-t",
+              isDark ? "border-white/10" : "border-neutral-200"
+            )}
+          >
+            <Menu mobile onItemClick={() => setMobileMenuOpen(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };

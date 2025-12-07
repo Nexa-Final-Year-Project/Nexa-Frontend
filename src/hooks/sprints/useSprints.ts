@@ -53,7 +53,7 @@ export const useSprints = (projectId?: string) => {
         return response;
       } catch (err) {
         removeSprint(tempId);
-        setError(err);
+        setError(err instanceof Error ? err : new Error("An error occurred"));
         toast.error("Failed to create sprint");
         throw err;
       } finally {

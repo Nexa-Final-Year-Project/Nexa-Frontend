@@ -36,6 +36,7 @@ const Overview = ({
   members?: any[];
 }) => {
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   // Memoize to avoid recalculating on every render
   const stats = useMemo(() => {
     const totalTasks = tasks.length;
@@ -102,24 +103,38 @@ const Overview = ({
       </div>
 
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div className="flex items-center gap-4">
           <div
-            className="
+            className={`
             w-12 h-12 rounded-xl
-            bg-gradient-to-br from-violet-500/20 to-cyan-500/20
-            border border-violet-500/30
-            flex items-center justify-center
-            shadow-[0_0_20px_rgba(139,92,246,0.2)]
-          "
+            bg-gradient-to-br border flex items-center justify-center
+            ${
+              isDark
+                ? "from-violet-500/20 to-cyan-500/20 border-violet-500/30 shadow-[0_0_20px_rgba(139,92,246,0.2)]"
+                : "from-violet-100 to-cyan-100 border-violet-300 shadow-lg"
+            }
+          `}
           >
-            <BarChart3 className="w-6 h-6 text-violet-400" />
+            <BarChart3
+              className={`w-6 h-6 ${
+                isDark ? "text-violet-400" : "text-violet-600"
+              }`}
+            />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
+            <h1
+              className={`text-2xl font-bold tracking-tight ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               Project Overview
             </h1>
-            <p className="text-sm text-white/40 mt-0.5">
+            <p
+              className={`text-sm mt-0.5 ${
+                isDark ? "text-white/40" : "text-neutral-500"
+              }`}
+            >
               Analytics and insights for your project
             </p>
           </div>
@@ -129,21 +144,25 @@ const Overview = ({
           variant="outline"
           size="sm"
           onClick={() => setOpen(true)}
-          className="
+          className={`
             flex items-center gap-2
             px-5 py-2.5 h-auto
-            text-sm font-medium text-white
-            bg-gradient-to-r from-emerald-600/20 to-cyan-600/10
-            border border-emerald-500/30
-            rounded-xl cursor-pointer
-            hover:from-emerald-600/30 hover:to-cyan-600/20
-            hover:border-emerald-500/50
-            hover:shadow-[0_0_25px_rgba(16,185,129,0.3)]
+            text-sm font-medium
+            bg-gradient-to-r border rounded-xl cursor-pointer
             transition-all duration-300
-            group
-          "
+            group w-full sm:w-auto justify-center sm:justify-start
+            ${
+              isDark
+                ? "from-emerald-600/20 to-cyan-600/10 border-emerald-500/30 text-white hover:from-emerald-600/30 hover:to-cyan-600/20 hover:border-emerald-500/50 hover:shadow-[0_0_25px_rgba(16,185,129,0.3)]"
+                : "from-emerald-100 to-cyan-100 border-emerald-300 text-emerald-700 hover:from-emerald-200 hover:to-cyan-200 hover:border-emerald-400 hover:shadow-lg"
+            }
+          `}
         >
-          <Sparkles className="w-4 h-4 text-emerald-400 group-hover:animate-pulse" />
+          <Sparkles
+            className={`w-4 h-4 group-hover:animate-pulse ${
+              isDark ? "text-emerald-400" : "text-emerald-600"
+            }`}
+          />
           Generate Tasks
         </Button>
       </div>

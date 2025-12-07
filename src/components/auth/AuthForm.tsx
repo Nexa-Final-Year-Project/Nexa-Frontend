@@ -5,6 +5,7 @@ import { Form } from "@/components/ui/form/Form";
 import { FormField } from "@/types/form";
 import { Button } from "@mantine/core";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 
 interface AuthFormProps {
   fields: FormField[];
@@ -23,8 +24,10 @@ export const AuthForm = ({
   error,
   className = "",
 }: AuthFormProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const initialValues = Object.fromEntries(
-    fields.map(field => [field.name, ""])
+    fields.map((field) => [field.name, ""])
   );
 
   return (
@@ -33,7 +36,11 @@ export const AuthForm = ({
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="p-4 text-sm text-red-300 bg-red-500/20 rounded-lg"
+          className={`p-4 text-sm rounded-lg ${
+            isDark
+              ? "text-red-300 bg-red-500/20"
+              : "text-red-700 bg-red-100 border border-red-300"
+          }`}
         >
           {error}
         </motion.div>
@@ -44,9 +51,7 @@ export const AuthForm = ({
         onSubmit={onSubmit}
         initialValues={initialValues}
         submitButtonText={submitButtonText}
-
       />
-      
     </div>
   );
 };

@@ -71,7 +71,11 @@ const Stats = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 text-sm text-white/60 mb-6"
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm mb-6 ${
+              isDark
+                ? "bg-white/[0.03] border-white/10 text-white/60"
+                : "bg-neutral-100 border-neutral-300 text-neutral-600"
+            }`}
           >
             <TrendingUp className="w-4 h-4 text-emerald-400" />
             Proven Results

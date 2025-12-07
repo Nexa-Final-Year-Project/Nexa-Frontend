@@ -306,7 +306,7 @@ export default function SprintDetailModal({
   );
 
   // Mini Burndown Chart
-  const BurndownChart = () => {
+  const MiniBurndownChart = () => {
     const forecast = sprint.burndownForecast || [];
     if (forecast.length < 2) return null;
 
@@ -641,7 +641,7 @@ export default function SprintDetailModal({
                       : "bg-neutral-50 border border-neutral-200"
                   }`}
                 >
-                  <BurndownChart />
+                  <MiniBurndownChart />
                 </div>
               )}
             </div>

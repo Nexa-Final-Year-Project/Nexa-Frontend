@@ -30,32 +30,42 @@ const LoginPage = () => {
   // 💡 The submit button text should be "Submit" for the login form
 
   return (
-    <motion.div
-      variants={staggerContainer}
-      initial="hidden"
-      animate="visible"
-      className="w-full max-w-md"
-    >
-      <AuthCard title="Welcome back" subtitle="Sign in to your account">
-        <div className="space-y-4">
-          <SocialButtons className="my-4" />
-          <AuthDivider />
-          <AuthForm
-            className="dark:text-white"
-            fields={LOGIN_FIELDS}
-            onSubmit={handleSubmit}
-            // 💡 Set the correct text to "Submit"
-            submitButtonText="Submit"
-          />
+    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden py-8 px-4">
+      {/* Background gradient mesh */}
+      <div className="fixed inset-0 -z-20 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 dark:block hidden" />
+      <div
+        className="fixed inset-0 -z-10 opacity-30 dark:block hidden"
+        style={{
+          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                          radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)`,
+        }}
+      />
 
-          <AuthFooter
-            text="Don't have an account?"
-            linkText="Register"
-            href="/register"
-          />
-        </div>
-      </AuthCard>
-    </motion.div>
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+        className="w-full max-w-lg flex-1 flex items-center justify-center"
+      >
+        <AuthCard title="Welcome back" subtitle="Sign in to your account">
+          <div className="space-y-4">
+            <SocialButtons className="my-4" />
+            <AuthDivider />
+            <AuthForm
+              fields={LOGIN_FIELDS}
+              onSubmit={handleSubmit}
+              submitButtonText="Submit"
+            />
+
+            <AuthFooter
+              text="Don't have an account?"
+              linkText="Register"
+              href="/register"
+            />
+          </div>
+        </AuthCard>
+      </motion.div>
+    </div>
   );
 };
 
