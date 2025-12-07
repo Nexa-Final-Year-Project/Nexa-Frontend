@@ -147,11 +147,19 @@ export const UserSettingsSidebar = ({
                             ${
                               isActive
                                 ? item.destructive
-                                  ? "bg-rose-500/20 text-rose-400"
-                                  : "bg-white/10 text-white"
+                                  ? isDark
+                                    ? "bg-rose-500/20 text-rose-400"
+                                    : "bg-red-100 text-red-600"
+                                  : isDark
+                                  ? "bg-white/10 text-white"
+                                  : "bg-neutral-200 text-neutral-900"
                                 : item.destructive
-                                ? "bg-rose-500/10 text-rose-400/60 group-hover:text-rose-400"
-                                : "bg-white/[0.04] text-white/50 group-hover:text-white/80"
+                                ? isDark
+                                  ? "bg-rose-500/10 text-rose-400/60 group-hover:text-rose-400"
+                                  : "bg-red-100/50 text-red-600/60 group-hover:text-red-600"
+                                : isDark
+                                ? "bg-white/[0.04] text-white/50 group-hover:text-white/80"
+                                : "bg-neutral-200/50 text-neutral-600 group-hover:text-neutral-900"
                             }
                           `}
                           >
@@ -163,11 +171,19 @@ export const UserSettingsSidebar = ({
                             ${
                               isActive
                                 ? item.destructive
-                                  ? "text-rose-400"
-                                  : "text-white"
+                                  ? isDark
+                                    ? "text-rose-400"
+                                    : "text-red-600"
+                                  : isDark
+                                  ? "text-white"
+                                  : "text-neutral-900"
                                 : item.destructive
-                                ? "text-rose-400/60 group-hover:text-rose-400"
-                                : "text-white/60 group-hover:text-white/90"
+                                ? isDark
+                                  ? "text-rose-400/60 group-hover:text-rose-400"
+                                  : "text-red-600/60 group-hover:text-red-600"
+                                : isDark
+                                ? "text-white/60 group-hover:text-white/90"
+                                : "text-neutral-600 group-hover:text-neutral-900"
                             }
                           `}
                           >
@@ -181,9 +197,15 @@ export const UserSettingsSidebar = ({
                           ${
                             isActive
                               ? item.destructive
-                                ? "text-rose-400/60"
-                                : "text-white/40"
-                              : "text-white/20 opacity-0 group-hover:opacity-100"
+                                ? isDark
+                                  ? "text-rose-400/60"
+                                  : "text-red-600/60"
+                                : isDark
+                                ? "text-white/40"
+                                : "text-neutral-400"
+                              : isDark
+                              ? "text-white/20 opacity-0 group-hover:opacity-100"
+                              : "text-neutral-400/40 opacity-0 group-hover:opacity-100"
                           }
                         `}
                         />

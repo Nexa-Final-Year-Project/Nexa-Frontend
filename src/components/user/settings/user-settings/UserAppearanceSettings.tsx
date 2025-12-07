@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import {
   Sun,
@@ -25,6 +26,8 @@ export const UserPreferencesSettings = ({
   onThemeChange,
   onNotificationToggle,
 }: UserPreferencesSettingsProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const themeOptions = [
     {
       label: "Light",
@@ -65,14 +68,24 @@ export const UserPreferencesSettings = ({
   ];
 
   return (
-    <div className="p-8 space-y-10">
+    <div className={`p-8 space-y-10 ${isDark ? "" : ""}`}>
       {/* Theme Selector Section */}
       <div>
         <div className="flex items-center gap-3 mb-1">
           <div className="w-1 h-6 rounded-full bg-gradient-to-b from-amber-400 to-orange-600" />
-          <h2 className="text-xl font-bold text-white">Appearance</h2>
+          <h2
+            className={`text-xl font-bold ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            Appearance
+          </h2>
         </div>
-        <p className="text-sm text-white/40 ml-4 mb-6">
+        <p
+          className={`text-sm ml-4 mb-6 ${
+            isDark ? "text-white/40" : "text-neutral-600"
+          }`}
+        >
           Customize how the app looks on your device
         </p>
 
@@ -84,11 +97,15 @@ export const UserPreferencesSettings = ({
                 key={option.value}
                 onClick={() => onThemeChange(option.value)}
                 className={`
-                  group relative p-5 rounded-2xl text-left transition-all duration-300 cursor-pointer
+                  group relative p-5 rounded-2xl text-left transition-all duration-300 cursor-pointer border-2
                   ${
                     isActive
-                      ? "bg-white/[0.08] border-2 border-white/[0.15]"
-                      : "bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.1]"
+                      ? isDark
+                        ? "bg-white/[0.08] border-white/[0.15]"
+                        : "bg-neutral-100 border-neutral-400"
+                      : isDark
+                      ? "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.1]"
+                      : "bg-neutral-50 border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300"
                   }
                 `}
               >
@@ -106,7 +123,9 @@ export const UserPreferencesSettings = ({
                   ${
                     isActive
                       ? `bg-gradient-to-br ${option.gradient} text-white shadow-lg`
-                      : "bg-white/[0.06] text-white/50 group-hover:text-white/70"
+                      : isDark
+                      ? "bg-white/[0.06] text-white/50 group-hover:text-white/70"
+                      : "bg-neutral-200 text-neutral-600 group-hover:text-neutral-700"
                   }
                 `}
                 >
@@ -115,12 +134,24 @@ export const UserPreferencesSettings = ({
 
                 <h3
                   className={`font-semibold mb-1 transition-colors ${
-                    isActive ? "text-white" : "text-white/70"
+                    isActive
+                      ? isDark
+                        ? "text-white"
+                        : "text-neutral-900"
+                      : isDark
+                      ? "text-white/70"
+                      : "text-neutral-600"
                   }`}
                 >
                   {option.label}
                 </h3>
-                <p className="text-xs text-white/40">{option.description}</p>
+                <p
+                  className={`text-xs ${
+                    isDark ? "text-white/40" : "text-neutral-600"
+                  }`}
+                >
+                  {option.description}
+                </p>
               </button>
             );
           })}
@@ -128,17 +159,29 @@ export const UserPreferencesSettings = ({
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+      <div
+        className={`h-px bg-gradient-to-r from-transparent via-${
+          isDark ? "white/[0.08]" : "neutral-300"
+        } to-transparent`}
+      />
 
       {/* Notifications Section */}
       <div>
         <div className="flex items-center gap-3 mb-1">
           <div className="w-1 h-6 rounded-full bg-gradient-to-b from-blue-400 to-blue-600" />
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+          <h2
+            className={`text-xl font-bold flex items-center gap-2 ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
             Notifications
           </h2>
         </div>
-        <p className="text-sm text-white/40 ml-4 mb-6">
+        <p
+          className={`text-sm ml-4 mb-6 ${
+            isDark ? "text-white/40" : "text-neutral-600"
+          }`}
+        >
           Choose how you want to be notified
         </p>
 
@@ -151,7 +194,11 @@ export const UserPreferencesSettings = ({
             return (
               <div
                 key={option.key}
-                className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
+                className={`flex items-center justify-between p-4 rounded-xl border transition-colors ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.06] hover:border-white/[0.1]"
+                    : "bg-neutral-50 border-neutral-200 hover:border-neutral-300"
+                }`}
               >
                 <div className="flex items-center gap-4">
                   <div
@@ -159,16 +206,30 @@ export const UserPreferencesSettings = ({
                     w-10 h-10 rounded-xl flex items-center justify-center transition-colors
                     ${
                       value
-                        ? "bg-emerald-500/20 text-emerald-400"
-                        : "bg-white/[0.06] text-white/40"
+                        ? isDark
+                          ? "bg-emerald-500/20 text-emerald-400"
+                          : "bg-emerald-100 text-emerald-600"
+                        : isDark
+                        ? "bg-white/[0.06] text-white/40"
+                        : "bg-neutral-200 text-neutral-500"
                     }
                   `}
                   >
                     {option.icon}
                   </div>
                   <div>
-                    <p className="font-medium text-white">{option.label}</p>
-                    <p className="text-xs text-white/40">
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
+                      {option.label}
+                    </p>
+                    <p
+                      className={`text-xs ${
+                        isDark ? "text-white/40" : "text-neutral-600"
+                      }`}
+                    >
                       {option.description}
                     </p>
                   </div>
@@ -176,7 +237,9 @@ export const UserPreferencesSettings = ({
                 <Switch
                   checked={value}
                   onCheckedChange={(v) => onNotificationToggle(option.key, v)}
-                  className="data-[state=checked]:bg-emerald-500"
+                  className={`data-[state=checked]:${
+                    isDark ? "bg-emerald-500" : "bg-emerald-600"
+                  }`}
                 />
               </div>
             );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import {
   Bell,
@@ -41,6 +42,9 @@ const notificationDescriptions: Record<
 export const UserNotificationSettings = ({
   notifications,
 }: UserNotificationsSettingsProps) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   const onToggle = (method: "email" | "push", type: string, value: boolean) => {
     if (method === "email") {
       notifications.email[type as keyof typeof notifications.email] = value;
@@ -56,12 +60,24 @@ export const UserNotificationSettings = ({
       <div>
         <div className="flex items-center gap-3 mb-1">
           <div className="w-1 h-6 rounded-full bg-gradient-to-b from-blue-400 to-blue-600" />
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Mail className="w-5 h-5 text-white/60" />
+          <h2
+            className={`text-xl font-bold flex items-center gap-2 ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            <Mail
+              className={`w-5 h-5 ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}
+            />
             Email Notifications
           </h2>
         </div>
-        <p className="text-sm text-white/40 ml-4 mb-6">
+        <p
+          className={`text-sm ml-4 mb-6 ${
+            isDark ? "text-white/40" : "text-neutral-600"
+          }`}
+        >
           Choose which emails you'd like to receive
         </p>
 
@@ -71,7 +87,11 @@ export const UserNotificationSettings = ({
             return (
               <div
                 key={type}
-                className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
+                className={`flex items-center justify-between p-4 rounded-xl border transition-colors ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.06] hover:border-white/[0.1]"
+                    : "bg-neutral-50 border-neutral-200 hover:border-neutral-300"
+                }`}
               >
                 <div className="flex items-center gap-4">
                   <div
@@ -79,22 +99,40 @@ export const UserNotificationSettings = ({
                     w-10 h-10 rounded-xl flex items-center justify-center transition-colors
                     ${
                       value
-                        ? "bg-blue-500/20 text-blue-400"
-                        : "bg-white/[0.06] text-white/40"
+                        ? isDark
+                          ? "bg-blue-500/20 text-blue-400"
+                          : "bg-blue-100 text-blue-600"
+                        : isDark
+                        ? "bg-white/[0.06] text-white/40"
+                        : "bg-neutral-200 text-neutral-500"
                     }
                   `}
                   >
                     {info?.icon}
                   </div>
                   <div>
-                    <p className="font-medium text-white">{info?.title}</p>
-                    <p className="text-xs text-white/40">{info?.description}</p>
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
+                      {info?.title}
+                    </p>
+                    <p
+                      className={`text-xs ${
+                        isDark ? "text-white/40" : "text-neutral-600"
+                      }`}
+                    >
+                      {info?.description}
+                    </p>
                   </div>
                 </div>
                 <Switch
                   checked={value}
                   onCheckedChange={(v) => onToggle("email", type, v)}
-                  className="data-[state=checked]:bg-blue-500"
+                  className={`data-[state=checked]:${
+                    isDark ? "bg-blue-500" : "bg-blue-600"
+                  }`}
                 />
               </div>
             );
@@ -103,18 +141,34 @@ export const UserNotificationSettings = ({
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+      <div
+        className={`h-px bg-gradient-to-r from-transparent via-${
+          isDark ? "white/[0.08]" : "neutral-300"
+        } to-transparent`}
+      />
 
       {/* Push Notifications */}
       <div>
         <div className="flex items-center gap-3 mb-1">
           <div className="w-1 h-6 rounded-full bg-gradient-to-b from-emerald-400 to-emerald-600" />
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Smartphone className="w-5 h-5 text-white/60" />
+          <h2
+            className={`text-xl font-bold flex items-center gap-2 ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
+            <Smartphone
+              className={`w-5 h-5 ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}
+            />
             Push Notifications
           </h2>
         </div>
-        <p className="text-sm text-white/40 ml-4 mb-6">
+        <p
+          className={`text-sm ml-4 mb-6 ${
+            isDark ? "text-white/40" : "text-neutral-600"
+          }`}
+        >
           Get notified on your device
         </p>
 
@@ -124,7 +178,11 @@ export const UserNotificationSettings = ({
             return (
               <div
                 key={type}
-                className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-colors"
+                className={`flex items-center justify-between p-4 rounded-xl border transition-colors ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.06] hover:border-white/[0.1]"
+                    : "bg-neutral-50 border-neutral-200 hover:border-neutral-300"
+                }`}
               >
                 <div className="flex items-center gap-4">
                   <div
@@ -132,22 +190,40 @@ export const UserNotificationSettings = ({
                     w-10 h-10 rounded-xl flex items-center justify-center transition-colors
                     ${
                       value
-                        ? "bg-emerald-500/20 text-emerald-400"
-                        : "bg-white/[0.06] text-white/40"
+                        ? isDark
+                          ? "bg-emerald-500/20 text-emerald-400"
+                          : "bg-emerald-100 text-emerald-600"
+                        : isDark
+                        ? "bg-white/[0.06] text-white/40"
+                        : "bg-neutral-200 text-neutral-500"
                     }
                   `}
                   >
                     {info?.icon}
                   </div>
                   <div>
-                    <p className="font-medium text-white">{info?.title}</p>
-                    <p className="text-xs text-white/40">{info?.description}</p>
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
+                      {info?.title}
+                    </p>
+                    <p
+                      className={`text-xs ${
+                        isDark ? "text-white/40" : "text-neutral-600"
+                      }`}
+                    >
+                      {info?.description}
+                    </p>
                   </div>
                 </div>
                 <Switch
                   checked={value}
                   onCheckedChange={(v) => onToggle("push", type, v)}
-                  className="data-[state=checked]:bg-emerald-500"
+                  className={`data-[state=checked]:${
+                    isDark ? "bg-emerald-500" : "bg-emerald-600"
+                  }`}
                 />
               </div>
             );
