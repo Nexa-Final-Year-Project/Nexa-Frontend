@@ -45,7 +45,9 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
   const isDark = theme === "dark";
   const [isEditing, setIsEditing] = useState(false);
   const [newGoal, setNewGoal] = useState("");
-  const [activeTab, setActiveTab] = useState<"overview" | "details" | "team">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "details" | "team">(
+    "overview"
+  );
 
   const form = useForm({
     initialValues: {
@@ -122,115 +124,217 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
   const totalDays = differenceInDays(endDate, startDate);
   const daysElapsed = Math.max(0, differenceInDays(today, startDate));
   const daysRemaining = Math.max(0, differenceInDays(endDate, today));
-  const progressPercent = totalDays > 0 ? Math.min(100, Math.round((daysElapsed / totalDays) * 100)) : 0;
+  const progressPercent =
+    totalDays > 0
+      ? Math.min(100, Math.round((daysElapsed / totalDays) * 100))
+      : 0;
   const selectedTasksCount = (sprint as any)?.selectedTasks?.length || 0;
   const velocity = (sprint as any)?.velocity || 0;
   const healthScore = (sprint as any)?.sprintHealthScore || 0;
 
   return (
-    <Modal 
-      title="" 
-      open={open} 
-      onOpenChange={onClose} 
-      size="xl"
-    >
+    <Modal title="" open={open} onOpenChange={onClose} size="xl">
       <div className={`relative ${isDark ? "bg-neutral-950" : "bg-white"}`}>
         {/* Gradient Background Effect */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-20 ${
-            isDark ? "bg-blue-500" : "bg-blue-400"
-          }`} style={{ transform: "translate(30%, -30%)" }} />
-          <div className={`absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20 ${
-            isDark ? "bg-purple-500" : "bg-purple-400"
-          }`} style={{ transform: "translate(-30%, 30%)" }} />
+          <div
+            className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-20 ${
+              isDark ? "bg-blue-500" : "bg-blue-400"
+            }`}
+            style={{ transform: "translate(30%, -30%)" }}
+          />
+          <div
+            className={`absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20 ${
+              isDark ? "bg-purple-500" : "bg-purple-400"
+            }`}
+            style={{ transform: "translate(-30%, 30%)" }}
+          />
         </div>
 
         {/* Hero Header Section */}
-        <div className={`relative border-b ${
-          isDark ? "border-white/[0.08] bg-gradient-to-br from-neutral-900/50 to-neutral-900/30" : "border-neutral-200 bg-gradient-to-br from-neutral-50 to-white"
-        }`}>
+        <div
+          className={`relative border-b ${
+            isDark
+              ? "border-white/[0.08] bg-gradient-to-br from-neutral-900/50 to-neutral-900/30"
+              : "border-neutral-200 bg-gradient-to-br from-neutral-50 to-white"
+          }`}
+        >
           <div className="px-8 pt-8 pb-6">
             <div className="flex items-start justify-between mb-6">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`p-3 rounded-xl ${
-                    isDark ? "bg-blue-500/10 border border-blue-500/20" : "bg-blue-50 border border-blue-200"
-                  }`}>
-                    <Target className={`w-6 h-6 ${isDark ? "text-blue-400" : "text-blue-600"}`} />
+                  <div
+                    className={`p-3 rounded-xl ${
+                      isDark
+                        ? "bg-blue-500/10 border border-blue-500/20"
+                        : "bg-blue-50 border border-blue-200"
+                    }`}
+                  >
+                    <Target
+                      className={`w-6 h-6 ${
+                        isDark ? "text-blue-400" : "text-blue-600"
+                      }`}
+                    />
                   </div>
                   <div>
                     {isEditing ? (
                       <input
                         value={form.values.name}
-                        onChange={(e) => form.setFieldValue("name", e.target.value)}
+                        onChange={(e) =>
+                          form.setFieldValue("name", e.target.value)
+                        }
                         className={`text-2xl font-bold border-b-2 bg-transparent focus:outline-none ${
-                          isDark 
-                            ? "text-white border-blue-500/50 focus:border-blue-500" 
+                          isDark
+                            ? "text-white border-blue-500/50 focus:border-blue-500"
                             : "text-neutral-900 border-blue-400 focus:border-blue-600"
                         }`}
                         placeholder="Sprint Name"
                       />
                     ) : (
-                      <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                      <h1
+                        className={`text-2xl font-bold ${
+                          isDark ? "text-white" : "text-neutral-900"
+                        }`}
+                      >
                         {sprint.name || "Sprint Settings"}
                       </h1>
                     )}
-                    <p className={`text-sm mt-1 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                    <p
+                      className={`text-sm mt-1 ${
+                        isDark ? "text-neutral-400" : "text-neutral-600"
+                      }`}
+                    >
                       Configure sprint parameters and monitor progress
                     </p>
                   </div>
                 </div>
-                
+
                 {/* Quick Stats Bar */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-                  <div className={`rounded-xl p-3 ${
-                    isDark ? "bg-white/[0.03] border border-white/[0.06]" : "bg-neutral-50 border border-neutral-200"
-                  }`}>
+                  <div
+                    className={`rounded-xl p-3 ${
+                      isDark
+                        ? "bg-white/[0.03] border border-white/[0.06]"
+                        : "bg-neutral-50 border border-neutral-200"
+                    }`}
+                  >
                     <div className="flex items-center gap-2 mb-1">
-                      <Calendar className={`w-3.5 h-3.5 ${isDark ? "text-neutral-500" : "text-neutral-600"}`} />
-                      <span className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>Duration</span>
+                      <Calendar
+                        className={`w-3.5 h-3.5 ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      />
+                      <span
+                        className={`text-xs ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      >
+                        Duration
+                      </span>
                     </div>
-                    <p className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
-                      {totalDays} <span className="text-sm font-normal">days</span>
+                    <p
+                      className={`text-lg font-bold ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
+                      {totalDays}{" "}
+                      <span className="text-sm font-normal">days</span>
                     </p>
                   </div>
-                  
-                  <div className={`rounded-xl p-3 ${
-                    isDark ? "bg-white/[0.03] border border-white/[0.06]" : "bg-neutral-50 border border-neutral-200"
-                  }`}>
+
+                  <div
+                    className={`rounded-xl p-3 ${
+                      isDark
+                        ? "bg-white/[0.03] border border-white/[0.06]"
+                        : "bg-neutral-50 border border-neutral-200"
+                    }`}
+                  >
                     <div className="flex items-center gap-2 mb-1">
-                      <Clock className={`w-3.5 h-3.5 ${isDark ? "text-neutral-500" : "text-neutral-600"}`} />
-                      <span className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>Remaining</span>
+                      <Clock
+                        className={`w-3.5 h-3.5 ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      />
+                      <span
+                        className={`text-xs ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      >
+                        Remaining
+                      </span>
                     </div>
-                    <p className={`text-lg font-bold ${
-                      daysRemaining < 3 
-                        ? (isDark ? "text-red-400" : "text-red-600")
-                        : (isDark ? "text-white" : "text-neutral-900")
-                    }`}>
-                      {daysRemaining} <span className="text-sm font-normal">days</span>
+                    <p
+                      className={`text-lg font-bold ${
+                        daysRemaining < 3
+                          ? isDark
+                            ? "text-red-400"
+                            : "text-red-600"
+                          : isDark
+                          ? "text-white"
+                          : "text-neutral-900"
+                      }`}
+                    >
+                      {daysRemaining}{" "}
+                      <span className="text-sm font-normal">days</span>
                     </p>
                   </div>
-                  
-                  <div className={`rounded-xl p-3 ${
-                    isDark ? "bg-white/[0.03] border border-white/[0.06]" : "bg-neutral-50 border border-neutral-200"
-                  }`}>
+
+                  <div
+                    className={`rounded-xl p-3 ${
+                      isDark
+                        ? "bg-white/[0.03] border border-white/[0.06]"
+                        : "bg-neutral-50 border border-neutral-200"
+                    }`}
+                  >
                     <div className="flex items-center gap-2 mb-1">
-                      <Target className={`w-3.5 h-3.5 ${isDark ? "text-neutral-500" : "text-neutral-600"}`} />
-                      <span className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>Tasks</span>
+                      <Target
+                        className={`w-3.5 h-3.5 ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      />
+                      <span
+                        className={`text-xs ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      >
+                        Tasks
+                      </span>
                     </div>
-                    <p className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                    <p
+                      className={`text-lg font-bold ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
                       {selectedTasksCount}
                     </p>
                   </div>
-                  
-                  <div className={`rounded-xl p-3 ${
-                    isDark ? "bg-white/[0.03] border border-white/[0.06]" : "bg-neutral-50 border border-neutral-200"
-                  }`}>
+
+                  <div
+                    className={`rounded-xl p-3 ${
+                      isDark
+                        ? "bg-white/[0.03] border border-white/[0.06]"
+                        : "bg-neutral-50 border border-neutral-200"
+                    }`}
+                  >
                     <div className="flex items-center gap-2 mb-1">
-                      <TrendingUp className={`w-3.5 h-3.5 ${isDark ? "text-neutral-500" : "text-neutral-600"}`} />
-                      <span className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>Velocity</span>
+                      <TrendingUp
+                        className={`w-3.5 h-3.5 ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      />
+                      <span
+                        className={`text-xs ${
+                          isDark ? "text-neutral-500" : "text-neutral-600"
+                        }`}
+                      >
+                        Velocity
+                      </span>
                     </div>
-                    <p className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                    <p
+                      className={`text-lg font-bold ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
                       {velocity}
                     </p>
                   </div>
@@ -242,16 +346,26 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                   onClick={() => setIsEditing(!isEditing)}
                   className={`p-2.5 rounded-xl transition-all ${
                     isEditing
-                      ? (isDark ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" : "bg-blue-100 text-blue-600 border border-blue-300")
-                      : (isDark ? "bg-white/[0.05] text-neutral-400 hover:bg-white/[0.1] hover:text-white" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200")
+                      ? isDark
+                        ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                        : "bg-blue-100 text-blue-600 border border-blue-300"
+                      : isDark
+                      ? "bg-white/[0.05] text-neutral-400 hover:bg-white/[0.1] hover:text-white"
+                      : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
                   }`}
                 >
-                  {isEditing ? <Save className="w-5 h-5" /> : <Edit2 className="w-5 h-5" />}
+                  {isEditing ? (
+                    <Save className="w-5 h-5" />
+                  ) : (
+                    <Edit2 className="w-5 h-5" />
+                  )}
                 </button>
                 <button
                   onClick={onClose}
                   className={`p-2.5 rounded-xl transition-all ${
-                    isDark ? "bg-white/[0.05] text-neutral-400 hover:bg-white/[0.1] hover:text-white" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                    isDark
+                      ? "bg-white/[0.05] text-neutral-400 hover:bg-white/[0.1] hover:text-white"
+                      : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
                   }`}
                 >
                   <X className="w-5 h-5" />
@@ -262,26 +376,44 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
             {/* Progress Bar */}
             <div className="mt-6">
               <div className="flex items-center justify-between mb-2">
-                <span className={`text-xs font-medium ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                <span
+                  className={`text-xs font-medium ${
+                    isDark ? "text-neutral-400" : "text-neutral-600"
+                  }`}
+                >
                   Sprint Progress
                 </span>
-                <span className={`text-xs font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                <span
+                  className={`text-xs font-bold ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {progressPercent}%
                 </span>
               </div>
-              <div className={`h-2 rounded-full overflow-hidden ${
-                isDark ? "bg-white/[0.05]" : "bg-neutral-200"
-              }`}>
+              <div
+                className={`h-2 rounded-full overflow-hidden ${
+                  isDark ? "bg-white/[0.05]" : "bg-neutral-200"
+                }`}
+              >
                 <div
                   className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500 rounded-full"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
               <div className="flex items-center justify-between mt-2">
-                <span className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+                <span
+                  className={`text-xs ${
+                    isDark ? "text-neutral-500" : "text-neutral-600"
+                  }`}
+                >
                   {format(startDate, "MMM d, yyyy")}
                 </span>
-                <span className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+                <span
+                  className={`text-xs ${
+                    isDark ? "text-neutral-500" : "text-neutral-600"
+                  }`}
+                >
                   {format(endDate, "MMM d, yyyy")}
                 </span>
               </div>
@@ -302,16 +434,22 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                     onClick={() => setActiveTab(tab.id as any)}
                     className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all relative ${
                       isActive
-                        ? (isDark ? "text-white" : "text-neutral-900")
-                        : (isDark ? "text-neutral-500 hover:text-neutral-300" : "text-neutral-600 hover:text-neutral-900")
+                        ? isDark
+                          ? "text-white"
+                          : "text-neutral-900"
+                        : isDark
+                        ? "text-neutral-500 hover:text-neutral-300"
+                        : "text-neutral-600 hover:text-neutral-900"
                     }`}
                   >
                     <Icon className="w-4 h-4" />
                     {tab.label}
                     {isActive && (
-                      <div className={`absolute bottom-0 left-0 right-0 h-0.5 ${
-                        isDark ? "bg-blue-500" : "bg-blue-600"
-                      }`} />
+                      <div
+                        className={`absolute bottom-0 left-0 right-0 h-0.5 ${
+                          isDark ? "bg-blue-500" : "bg-blue-600"
+                        }`}
+                      />
                     )}
                   </button>
                 );
@@ -325,41 +463,71 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
           {activeTab === "overview" && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Health Score Card */}
-              <div className={`lg:col-span-2 rounded-2xl p-6 border ${
-                isDark 
-                  ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]" 
-                  : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
-              }`}>
+              <div
+                className={`lg:col-span-2 rounded-2xl p-6 border ${
+                  isDark
+                    ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]"
+                    : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
+                }`}
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${
-                      isDark ? "bg-emerald-500/10" : "bg-emerald-50"
-                    }`}>
-                      <Activity className={`w-5 h-5 ${
-                        isDark ? "text-emerald-400" : "text-emerald-600"
-                      }`} />
+                    <div
+                      className={`p-2 rounded-lg ${
+                        isDark ? "bg-emerald-500/10" : "bg-emerald-50"
+                      }`}
+                    >
+                      <Activity
+                        className={`w-5 h-5 ${
+                          isDark ? "text-emerald-400" : "text-emerald-600"
+                        }`}
+                      />
                     </div>
                     <div>
-                      <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                      <h3
+                        className={`text-lg font-bold ${
+                          isDark ? "text-white" : "text-neutral-900"
+                        }`}
+                      >
                         Sprint Health
                       </h3>
-                      <p className={`text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                      <p
+                        className={`text-sm ${
+                          isDark ? "text-neutral-400" : "text-neutral-600"
+                        }`}
+                      >
                         Overall sprint wellbeing score
                       </p>
                     </div>
                   </div>
                   <div className={`text-right`}>
-                    <div className={`text-3xl font-bold ${
-                      healthScore >= 70 
-                        ? (isDark ? "text-emerald-400" : "text-emerald-600")
-                        : healthScore >= 40
-                        ? (isDark ? "text-yellow-400" : "text-yellow-600")
-                        : (isDark ? "text-red-400" : "text-red-600")
-                    }`}>
+                    <div
+                      className={`text-3xl font-bold ${
+                        healthScore >= 70
+                          ? isDark
+                            ? "text-emerald-400"
+                            : "text-emerald-600"
+                          : healthScore >= 40
+                          ? isDark
+                            ? "text-yellow-400"
+                            : "text-yellow-600"
+                          : isDark
+                          ? "text-red-400"
+                          : "text-red-600"
+                      }`}
+                    >
                       {healthScore}%
                     </div>
-                    <p className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
-                      {healthScore >= 70 ? "Healthy" : healthScore >= 40 ? "At Risk" : "Critical"}
+                    <p
+                      className={`text-xs ${
+                        isDark ? "text-neutral-500" : "text-neutral-600"
+                      }`}
+                    >
+                      {healthScore >= 70
+                        ? "Healthy"
+                        : healthScore >= 40
+                        ? "At Risk"
+                        : "Critical"}
                     </p>
                   </div>
                 </div>
@@ -367,46 +535,73 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
               </div>
 
               {/* AI Summary Card */}
-              <div className={`rounded-2xl p-6 border ${
-                isDark 
-                  ? "bg-gradient-to-br from-purple-500/10 to-blue-500/10 border-purple-500/20" 
-                  : "bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200"
-              }`}>
+              <div
+                className={`rounded-2xl p-6 border ${
+                  isDark
+                    ? "bg-gradient-to-br from-purple-500/10 to-blue-500/10 border-purple-500/20"
+                    : "bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200"
+                }`}
+              >
                 <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className={`w-5 h-5 ${isDark ? "text-purple-400" : "text-purple-600"}`} />
-                  <h3 className={`text-sm font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  <Sparkles
+                    className={`w-5 h-5 ${
+                      isDark ? "text-purple-400" : "text-purple-600"
+                    }`}
+                  />
+                  <h3
+                    className={`text-sm font-bold ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  >
                     AI Insights
                   </h3>
                 </div>
-                <p className={`text-sm leading-relaxed ${
-                  isDark ? "text-neutral-300" : "text-neutral-700"
-                }`}>
-                  {(sprint as any)?.aiSummary || "This sprint is well-balanced with optimal task distribution. Team velocity is stable and on track for completion."}
+                <p
+                  className={`text-sm leading-relaxed ${
+                    isDark ? "text-neutral-300" : "text-neutral-700"
+                  }`}
+                >
+                  {(sprint as any)?.aiSummary ||
+                    "This sprint is well-balanced with optimal task distribution. Team velocity is stable and on track for completion."}
                 </p>
               </div>
 
               {/* Goals Section */}
-              <div className={`lg:col-span-2 rounded-2xl p-6 border ${
-                isDark 
-                  ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]" 
-                  : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
-              }`}>
+              <div
+                className={`lg:col-span-2 rounded-2xl p-6 border ${
+                  isDark
+                    ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]"
+                    : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
+                }`}
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${
-                      isDark ? "bg-blue-500/10" : "bg-blue-50"
-                    }`}>
-                      <Target className={`w-5 h-5 ${
-                        isDark ? "text-blue-400" : "text-blue-600"
-                      }`} />
+                    <div
+                      className={`p-2 rounded-lg ${
+                        isDark ? "bg-blue-500/10" : "bg-blue-50"
+                      }`}
+                    >
+                      <Target
+                        className={`w-5 h-5 ${
+                          isDark ? "text-blue-400" : "text-blue-600"
+                        }`}
+                      />
                     </div>
-                    <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                    <h3
+                      className={`text-lg font-bold ${
+                        isDark ? "text-white" : "text-neutral-900"
+                      }`}
+                    >
                       Sprint Goals
                     </h3>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    isDark ? "bg-blue-500/10 text-blue-400" : "bg-blue-100 text-blue-600"
-                  }`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      isDark
+                        ? "bg-blue-500/10 text-blue-400"
+                        : "bg-blue-100 text-blue-600"
+                    }`}
+                  >
                     {form.values.goals.length} goals
                   </span>
                 </div>
@@ -449,16 +644,22 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                             : "bg-white border-neutral-200 hover:border-neutral-300"
                         }`}
                       >
-                        <div className={`mt-1 p-1 rounded-lg ${
-                          isDark ? "bg-emerald-500/10" : "bg-emerald-50"
-                        }`}>
-                          <CheckCircle2 className={`w-4 h-4 ${
-                            isDark ? "text-emerald-400" : "text-emerald-600"
-                          }`} />
+                        <div
+                          className={`mt-1 p-1 rounded-lg ${
+                            isDark ? "bg-emerald-500/10" : "bg-emerald-50"
+                          }`}
+                        >
+                          <CheckCircle2
+                            className={`w-4 h-4 ${
+                              isDark ? "text-emerald-400" : "text-emerald-600"
+                            }`}
+                          />
                         </div>
-                        <p className={`flex-1 text-sm leading-relaxed break-words min-w-0 ${
-                          isDark ? "text-neutral-300" : "text-neutral-700"
-                        }`}>
+                        <p
+                          className={`flex-1 text-sm leading-relaxed break-words min-w-0 ${
+                            isDark ? "text-neutral-300" : "text-neutral-700"
+                          }`}
+                        >
                           {goal}
                         </p>
                         {isEditing && (
@@ -476,7 +677,11 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                       </div>
                     ))
                   ) : (
-                    <div className={`text-center py-12 ${isDark ? "text-neutral-500" : "text-neutral-400"}`}>
+                    <div
+                      className={`text-center py-12 ${
+                        isDark ? "text-neutral-500" : "text-neutral-400"
+                      }`}
+                    >
                       <Target className="w-12 h-12 mx-auto mb-3 opacity-30" />
                       <p className="text-sm">No goals set for this sprint</p>
                     </div>
@@ -485,20 +690,30 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
               </div>
 
               {/* Team Members Card */}
-              <div className={`rounded-2xl p-6 border ${
-                isDark 
-                  ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]" 
-                  : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
-              }`}>
+              <div
+                className={`rounded-2xl p-6 border ${
+                  isDark
+                    ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]"
+                    : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
+                }`}
+              >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`p-2 rounded-lg ${
-                    isDark ? "bg-purple-500/10" : "bg-purple-50"
-                  }`}>
-                    <Users className={`w-5 h-5 ${
-                      isDark ? "text-purple-400" : "text-purple-600"
-                    }`} />
+                  <div
+                    className={`p-2 rounded-lg ${
+                      isDark ? "bg-purple-500/10" : "bg-purple-50"
+                    }`}
+                  >
+                    <Users
+                      className={`w-5 h-5 ${
+                        isDark ? "text-purple-400" : "text-purple-600"
+                      }`}
+                    />
                   </div>
-                  <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  <h3
+                    className={`text-lg font-bold ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  >
                     Team
                   </h3>
                 </div>
@@ -511,29 +726,39 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                           isDark ? "bg-white/[0.02]" : "bg-white"
                         }`}
                       >
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
-                          isDark ? "bg-purple-500/20 text-purple-400" : "bg-purple-100 text-purple-600"
-                        }`}>
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+                            isDark
+                              ? "bg-purple-500/20 text-purple-400"
+                              : "bg-purple-100 text-purple-600"
+                          }`}
+                        >
                           {member.name?.[0]?.toUpperCase() || "?"}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className={`text-sm font-medium truncate ${
-                            isDark ? "text-white" : "text-neutral-900"
-                          }`}>
+                          <p
+                            className={`text-sm font-medium truncate ${
+                              isDark ? "text-white" : "text-neutral-900"
+                            }`}
+                          >
                             {member.name}
                           </p>
-                          <p className={`text-xs ${
-                            isDark ? "text-neutral-500" : "text-neutral-600"
-                          }`}>
+                          <p
+                            className={`text-xs ${
+                              isDark ? "text-neutral-500" : "text-neutral-600"
+                            }`}
+                          >
                             {member.role || "Member"}
                           </p>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <p className={`text-sm text-center py-8 ${
-                      isDark ? "text-neutral-500" : "text-neutral-400"
-                    }`}>
+                    <p
+                      className={`text-sm text-center py-8 ${
+                        isDark ? "text-neutral-500" : "text-neutral-400"
+                      }`}
+                    >
                       No team members assigned
                     </p>
                   )}
@@ -544,12 +769,18 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
 
           {activeTab === "details" && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className={`rounded-2xl p-6 border ${
-                isDark 
-                  ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]" 
-                  : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
-              }`}>
-                <h3 className={`text-lg font-bold mb-4 ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`rounded-2xl p-6 border ${
+                  isDark
+                    ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]"
+                    : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
+                }`}
+              >
+                <h3
+                  className={`text-lg font-bold mb-4 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   Sprint Configuration
                 </h3>
                 <div className="space-y-4">
@@ -560,56 +791,98 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
               </div>
 
               <div className="space-y-6">
-                <div className={`rounded-2xl p-6 border ${
-                  isDark 
-                    ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]" 
-                    : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
-                }`}>
-                  <h3 className={`text-lg font-bold mb-4 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                <div
+                  className={`rounded-2xl p-6 border ${
+                    isDark
+                      ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]"
+                      : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
+                  }`}
+                >
+                  <h3
+                    className={`text-lg font-bold mb-4 ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  >
                     Status
                   </h3>
-                  <div className={`text-center py-8 ${
-                    isDark ? "text-white" : "text-neutral-900"
-                  }`}>
-                    <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-lg font-bold ${
-                      isDark ? "bg-blue-500/20 text-blue-400" : "bg-blue-100 text-blue-600"
-                    }`}>
+                  <div
+                    className={`text-center py-8 ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  >
+                    <div
+                      className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-lg font-bold ${
+                        isDark
+                          ? "bg-blue-500/20 text-blue-400"
+                          : "bg-blue-100 text-blue-600"
+                      }`}
+                    >
                       <Zap className="w-5 h-5" />
                       {(sprint as any)?.status || "Active"}
                     </div>
                   </div>
                 </div>
 
-                <div className={`rounded-2xl p-6 border ${
-                  isDark 
-                    ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]" 
-                    : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
-                }`}>
-                  <h3 className={`text-lg font-bold mb-4 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                <div
+                  className={`rounded-2xl p-6 border ${
+                    isDark
+                      ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08]"
+                      : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200"
+                  }`}
+                >
+                  <h3
+                    className={`text-lg font-bold mb-4 ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  >
                     Quick Stats
                   </h3>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className={`text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                      <span
+                        className={`text-sm ${
+                          isDark ? "text-neutral-400" : "text-neutral-600"
+                        }`}
+                      >
                         Total Tasks
                       </span>
-                      <span className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                      <span
+                        className={`text-lg font-bold ${
+                          isDark ? "text-white" : "text-neutral-900"
+                        }`}
+                      >
                         {selectedTasksCount}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className={`text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                      <span
+                        className={`text-sm ${
+                          isDark ? "text-neutral-400" : "text-neutral-600"
+                        }`}
+                      >
                         Velocity
                       </span>
-                      <span className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                      <span
+                        className={`text-lg font-bold ${
+                          isDark ? "text-white" : "text-neutral-900"
+                        }`}
+                      >
                         {velocity}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className={`text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                      <span
+                        className={`text-sm ${
+                          isDark ? "text-neutral-400" : "text-neutral-600"
+                        }`}
+                      >
                         Progress
                       </span>
-                      <span className={`text-lg font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                      <span
+                        className={`text-lg font-bold ${
+                          isDark ? "text-white" : "text-neutral-900"
+                        }`}
+                      >
                         {progressPercent}%
                       </span>
                     </div>
@@ -626,30 +899,52 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                   <div
                     key={member._id}
                     className={`rounded-2xl p-6 border transition-all hover:scale-[1.02] ${
-                      isDark 
-                        ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08] hover:border-white/[0.15]" 
+                      isDark
+                        ? "bg-gradient-to-br from-white/[0.03] to-white/[0.01] border-white/[0.08] hover:border-white/[0.15]"
                         : "bg-gradient-to-br from-neutral-50 to-white border-neutral-200 hover:border-neutral-300"
                     }`}
                   >
                     <div className="flex flex-col items-center text-center">
-                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center font-bold text-2xl mb-4 ${
-                        isDark ? "bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-blue-400" : "bg-gradient-to-br from-blue-100 to-purple-100 text-blue-600"
-                      }`}>
+                      <div
+                        className={`w-16 h-16 rounded-2xl flex items-center justify-center font-bold text-2xl mb-4 ${
+                          isDark
+                            ? "bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-blue-400"
+                            : "bg-gradient-to-br from-blue-100 to-purple-100 text-blue-600"
+                        }`}
+                      >
                         {member.name?.[0]?.toUpperCase() || "?"}
                       </div>
-                      <h4 className={`text-lg font-bold mb-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                      <h4
+                        className={`text-lg font-bold mb-1 ${
+                          isDark ? "text-white" : "text-neutral-900"
+                        }`}
+                      >
                         {member.name}
                       </h4>
-                      <p className={`text-sm mb-3 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                      <p
+                        className={`text-sm mb-3 ${
+                          isDark ? "text-neutral-400" : "text-neutral-600"
+                        }`}
+                      >
                         {member.role || "Team Member"}
                       </p>
-                      <div className={`w-full px-3 py-2 rounded-lg ${
-                        isDark ? "bg-white/[0.05]" : "bg-neutral-100"
-                      }`}>
-                        <p className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+                      <div
+                        className={`w-full px-3 py-2 rounded-lg ${
+                          isDark ? "bg-white/[0.05]" : "bg-neutral-100"
+                        }`}
+                      >
+                        <p
+                          className={`text-xs ${
+                            isDark ? "text-neutral-500" : "text-neutral-600"
+                          }`}
+                        >
                           Member ID
                         </p>
-                        <p className={`text-xs font-mono ${isDark ? "text-neutral-400" : "text-neutral-700"}`}>
+                        <p
+                          className={`text-xs font-mono ${
+                            isDark ? "text-neutral-400" : "text-neutral-700"
+                          }`}
+                        >
                           {member._id.slice(0, 8)}...
                         </p>
                       </div>
@@ -657,9 +952,15 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                   </div>
                 ))
               ) : (
-                <div className={`col-span-full text-center py-16 ${isDark ? "text-neutral-500" : "text-neutral-400"}`}>
+                <div
+                  className={`col-span-full text-center py-16 ${
+                    isDark ? "text-neutral-500" : "text-neutral-400"
+                  }`}
+                >
                   <Users className="w-16 h-16 mx-auto mb-4 opacity-30" />
-                  <p className="text-lg">No team members assigned to this sprint</p>
+                  <p className="text-lg">
+                    No team members assigned to this sprint
+                  </p>
                 </div>
               )}
             </div>
@@ -667,9 +968,13 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className={`border-t px-8 py-5 ${
-          isDark ? "border-white/[0.08] bg-neutral-900/50" : "border-neutral-200 bg-neutral-50"
-        }`}>
+        <div
+          className={`border-t px-8 py-5 ${
+            isDark
+              ? "border-white/[0.08] bg-neutral-900/50"
+              : "border-neutral-200 bg-neutral-50"
+          }`}
+        >
           <div className="flex justify-end items-center gap-3">
             <button
               onClick={onClose}
@@ -704,18 +1009,26 @@ function AdvancedHealthBar({
 }) {
   const v = typeof value === "number" ? value : Number(value) || 0;
   const pct = Math.max(0, Math.min(100, Math.round(v)));
-  
+
   const getHealthColor = () => {
-    if (pct >= 70) return isDark ? "from-emerald-500 to-emerald-400" : "from-emerald-600 to-emerald-500";
-    if (pct >= 40) return isDark ? "from-yellow-500 to-yellow-400" : "from-yellow-600 to-yellow-500";
+    if (pct >= 70)
+      return isDark
+        ? "from-emerald-500 to-emerald-400"
+        : "from-emerald-600 to-emerald-500";
+    if (pct >= 40)
+      return isDark
+        ? "from-yellow-500 to-yellow-400"
+        : "from-yellow-600 to-yellow-500";
     return isDark ? "from-red-500 to-red-400" : "from-red-600 to-red-500";
   };
 
   return (
     <div>
-      <div className={`relative h-3 w-full rounded-full overflow-hidden ${
-        isDark ? "bg-white/[0.05]" : "bg-neutral-200"
-      }`}>
+      <div
+        className={`relative h-3 w-full rounded-full overflow-hidden ${
+          isDark ? "bg-white/[0.05]" : "bg-neutral-200"
+        }`}
+      >
         <div
           className={`absolute left-0 top-0 h-full bg-gradient-to-r ${getHealthColor()} transition-all duration-500`}
           style={{ width: `${pct}%` }}
@@ -724,17 +1037,39 @@ function AdvancedHealthBar({
       <div className="flex items-center justify-between mt-3">
         <div className="flex items-center gap-2">
           {pct >= 70 ? (
-            <CheckCircle2 className={`w-4 h-4 ${isDark ? "text-emerald-400" : "text-emerald-600"}`} />
+            <CheckCircle2
+              className={`w-4 h-4 ${
+                isDark ? "text-emerald-400" : "text-emerald-600"
+              }`}
+            />
           ) : pct >= 40 ? (
-            <AlertCircle className={`w-4 h-4 ${isDark ? "text-yellow-400" : "text-yellow-600"}`} />
+            <AlertCircle
+              className={`w-4 h-4 ${
+                isDark ? "text-yellow-400" : "text-yellow-600"
+              }`}
+            />
           ) : (
-            <AlertCircle className={`w-4 h-4 ${isDark ? "text-red-400" : "text-red-600"}`} />
+            <AlertCircle
+              className={`w-4 h-4 ${isDark ? "text-red-400" : "text-red-600"}`}
+            />
           )}
-          <span className={`text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
-            {pct >= 70 ? "Excellent health" : pct >= 40 ? "Needs attention" : "Requires action"}
+          <span
+            className={`text-sm ${
+              isDark ? "text-neutral-400" : "text-neutral-600"
+            }`}
+          >
+            {pct >= 70
+              ? "Excellent health"
+              : pct >= 40
+              ? "Needs attention"
+              : "Requires action"}
           </span>
         </div>
-        <span className={`text-xs font-medium ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+        <span
+          className={`text-xs font-medium ${
+            isDark ? "text-neutral-500" : "text-neutral-600"
+          }`}
+        >
           {pct}%
         </span>
       </div>
