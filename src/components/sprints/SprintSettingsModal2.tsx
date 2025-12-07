@@ -25,7 +25,7 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
 }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  
+
   const form = useForm({
     initialValues: {
       name: "",
@@ -81,27 +81,57 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
 
   return (
     <Modal title="Sprint Settings" open={open} onOpenChange={onClose} size="lg">
-      <div className={`max-h-[75vh] overflow-y-auto hide-scrollbar p-4 ${isDark ? "bg-neutral-950" : "bg-white"}`}>
-        <div className={`rounded-2xl border p-6 space-y-6 ${
-          isDark
-            ? "bg-neutral-900/80 border-white/[0.08]"
-            : "bg-white border-neutral-200"
-        }`}>
+      <div
+        className={`max-h-[75vh] overflow-y-auto hide-scrollbar p-4 ${
+          isDark ? "bg-neutral-950" : "bg-white"
+        }`}
+      >
+        <div
+          className={`rounded-2xl border p-6 space-y-6 ${
+            isDark
+              ? "bg-neutral-900/80 border-white/[0.08]"
+              : "bg-white border-neutral-200"
+          }`}
+        >
           {/* Header - Responsive */}
-          <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b ${
-            isDark ? "border-white/[0.06]" : "border-neutral-200"
-          }`}>
+          <div
+            className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b ${
+              isDark ? "border-white/[0.06]" : "border-neutral-200"
+            }`}
+          >
             <div className="flex-1 min-w-0">
-              <h2 className={`text-lg font-bold truncate ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <h2
+                className={`text-lg font-bold truncate ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 {sprint.name || "Sprint"}
               </h2>
-              <p className={`text-sm mt-1 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+              <p
+                className={`text-sm mt-1 ${
+                  isDark ? "text-neutral-400" : "text-neutral-600"
+                }`}
+              >
                 Edit sprint settings and manage members.
               </p>
             </div>
-            <div className={`whitespace-nowrap text-right text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
-              <div className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-500"}`}>Dates</div>
-              <div className={`font-medium ${isDark ? "text-white" : "text-neutral-900"}`}>
+            <div
+              className={`whitespace-nowrap text-right text-sm ${
+                isDark ? "text-neutral-400" : "text-neutral-600"
+              }`}
+            >
+              <div
+                className={`text-xs ${
+                  isDark ? "text-neutral-500" : "text-neutral-500"
+                }`}
+              >
+                Dates
+              </div>
+              <div
+                className={`font-medium ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 {sprint.startDate
                   ? format(parseISO(sprint.startDate), "MMM d")
                   : "-"}
@@ -117,7 +147,11 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left: Form Fields */}
             <div className="lg:col-span-2 space-y-4">
-              <h3 className={`text-sm font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <h3
+                className={`text-sm font-semibold ${
+                  isDark ? "text-white" : "text-neutral-900"
+                }`}
+              >
                 Basic Information
               </h3>
               <div className="space-y-3">
@@ -127,8 +161,16 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
               </div>
 
               {/* Goals Section */}
-              <div className={`mt-6 pt-6 border-t ${isDark ? "border-white/[0.06]" : "border-neutral-200"}`}>
-                <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`mt-6 pt-6 border-t ${
+                  isDark ? "border-white/[0.06]" : "border-neutral-200"
+                }`}
+              >
+                <h4
+                  className={`text-sm font-medium mb-3 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   Goals
                 </h4>
                 <div className="flex flex-col gap-2 max-h-32 overflow-y-auto pr-2">
@@ -146,7 +188,11 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                       </div>
                     ))
                   ) : (
-                    <p className={`text-sm ${isDark ? "text-neutral-500" : "text-neutral-400"}`}>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-neutral-500" : "text-neutral-400"
+                      }`}
+                    >
                       No goals added
                     </p>
                   )}
@@ -154,8 +200,16 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
               </div>
 
               {/* Assigned Members */}
-              <div className={`mt-6 pt-6 border-t ${isDark ? "border-white/[0.06]" : "border-neutral-200"}`}>
-                <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`mt-6 pt-6 border-t ${
+                  isDark ? "border-white/[0.06]" : "border-neutral-200"
+                }`}
+              >
+                <h4
+                  className={`text-sm font-medium mb-3 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   Assigned Members
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -173,7 +227,11 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
                       </div>
                     ))
                   ) : (
-                    <p className={`text-sm ${isDark ? "text-neutral-500" : "text-neutral-400"}`}>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-neutral-500" : "text-neutral-400"
+                      }`}
+                    >
                       No members assigned
                     </p>
                   )}
@@ -184,68 +242,125 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
             {/* Right: Summary Cards - Stack on mobile */}
             <aside className="space-y-3">
               {/* Velocity Card */}
-              <div className={`rounded-xl p-4 border ${
-                isDark
-                  ? "bg-white/[0.02] border-white/[0.05]"
-                  : "bg-neutral-50 border-neutral-200"
-              }`}>
-                <div className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>Velocity</div>
-                <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`rounded-xl p-4 border ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.05]"
+                    : "bg-neutral-50 border-neutral-200"
+                }`}
+              >
+                <div
+                  className={`text-xs ${
+                    isDark ? "text-neutral-500" : "text-neutral-600"
+                  }`}
+                >
+                  Velocity
+                </div>
+                <div
+                  className={`text-2xl font-bold ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {(sprint as any).velocity ?? "—"}
                 </div>
               </div>
 
               {/* Status Card */}
-              <div className={`rounded-xl p-4 border ${
-                isDark
-                  ? "bg-white/[0.02] border-white/[0.05]"
-                  : "bg-neutral-50 border-neutral-200"
-              }`}>
-                <div className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>Status</div>
-                <div className={`text-sm font-medium ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`rounded-xl p-4 border ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.05]"
+                    : "bg-neutral-50 border-neutral-200"
+                }`}
+              >
+                <div
+                  className={`text-xs ${
+                    isDark ? "text-neutral-500" : "text-neutral-600"
+                  }`}
+                >
+                  Status
+                </div>
+                <div
+                  className={`text-sm font-medium ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {(sprint as any).status ?? "—"}
                 </div>
               </div>
 
               {/* Sprint Health Card */}
-              <div className={`rounded-xl p-4 border ${
-                isDark
-                  ? "bg-white/[0.02] border-white/[0.05]"
-                  : "bg-neutral-50 border-neutral-200"
-              }`}>
-                <div className={`text-xs mb-2 ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+              <div
+                className={`rounded-xl p-4 border ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.05]"
+                    : "bg-neutral-50 border-neutral-200"
+                }`}
+              >
+                <div
+                  className={`text-xs mb-2 ${
+                    isDark ? "text-neutral-500" : "text-neutral-600"
+                  }`}
+                >
                   Sprint Health
                 </div>
-                <HealthBar value={(sprint as any).sprintHealthScore} isDark={isDark} />
+                <HealthBar
+                  value={(sprint as any).sprintHealthScore}
+                  isDark={isDark}
+                />
               </div>
 
               {/* AI Summary Card */}
-              <div className={`rounded-xl p-4 border ${
-                isDark
-                  ? "bg-white/[0.02] border-white/[0.05]"
-                  : "bg-neutral-50 border-neutral-200"
-              }`}>
-                <h5 className={`text-sm font-medium mb-2 ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`rounded-xl p-4 border ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.05]"
+                    : "bg-neutral-50 border-neutral-200"
+                }`}
+              >
+                <h5
+                  className={`text-sm font-medium mb-2 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   AI Summary
                 </h5>
-                <p className={`text-xs line-clamp-2 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                <p
+                  className={`text-xs line-clamp-2 ${
+                    isDark ? "text-neutral-400" : "text-neutral-600"
+                  }`}
+                >
                   {(sprint as any).aiSummary || "No summary available"}
                 </p>
               </div>
 
               {/* Tasks Card */}
-              <div className={`rounded-xl p-4 border ${
-                isDark
-                  ? "bg-white/[0.02] border-white/[0.05]"
-                  : "bg-neutral-50 border-neutral-200"
-              }`}>
-                <h5 className={`text-sm font-medium ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <div
+                className={`rounded-xl p-4 border ${
+                  isDark
+                    ? "bg-white/[0.02] border-white/[0.05]"
+                    : "bg-neutral-50 border-neutral-200"
+                }`}
+              >
+                <h5
+                  className={`text-sm font-medium ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   Tasks
                 </h5>
-                <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                <div
+                  className={`text-2xl font-bold ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {(sprint as any).selectedTasks?.length || 0}
                 </div>
-                <p className={`text-xs mt-1 ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+                <p
+                  className={`text-xs mt-1 ${
+                    isDark ? "text-neutral-500" : "text-neutral-600"
+                  }`}
+                >
                   in sprint
                 </p>
               </div>
@@ -253,9 +368,11 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
           </div>
 
           {/* Action Buttons - Responsive */}
-          <div className={`flex flex-col-reverse sm:flex-row justify-end items-center gap-3 pt-4 border-t ${
-            isDark ? "border-white/[0.06]" : "border-neutral-200"
-          }`}>
+          <div
+            className={`flex flex-col-reverse sm:flex-row justify-end items-center gap-3 pt-4 border-t ${
+              isDark ? "border-white/[0.06]" : "border-neutral-200"
+            }`}
+          >
             <button
               onClick={onClose}
               className={`w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -279,18 +396,32 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
   );
 };
 
-function HealthBar({ value, isDark }: { value?: number | string; isDark: boolean }) {
+function HealthBar({
+  value,
+  isDark,
+}: {
+  value?: number | string;
+  isDark: boolean;
+}) {
   const v = typeof value === "number" ? value : Number(value) || 0;
   const pct = Math.max(0, Math.min(100, Math.round(v)));
   return (
     <div>
-      <div className={`relative h-2 w-full rounded-full overflow-hidden ${isDark ? "bg-neutral-700" : "bg-neutral-300"}`}>
+      <div
+        className={`relative h-2 w-full rounded-full overflow-hidden ${
+          isDark ? "bg-neutral-700" : "bg-neutral-300"
+        }`}
+      >
         <div
           className="absolute left-0 top-0 h-full bg-gradient-to-r from-emerald-500 to-emerald-400"
           style={{ width: `${pct}%` }}
         />
       </div>
-      <div className={`text-xs mt-1.5 font-medium ${isDark ? "text-emerald-400" : "text-emerald-600"}`}>
+      <div
+        className={`text-xs mt-1.5 font-medium ${
+          isDark ? "text-emerald-400" : "text-emerald-600"
+        }`}
+      >
         {pct}% healthy
       </div>
     </div>
