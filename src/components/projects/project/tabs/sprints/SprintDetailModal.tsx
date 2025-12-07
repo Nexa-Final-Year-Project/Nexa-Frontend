@@ -354,8 +354,16 @@ export default function SprintDetailModal({
               x2="0%"
               y2="100%"
             >
-              <stop offset="0%" stopColor={isDark ? "rgba(59,130,246,0.2)" : "rgba(37,99,235,0.15)"} />
-              <stop offset="100%" stopColor={isDark ? "rgba(59,130,246,0)" : "rgba(37,99,235,0)"} />
+              <stop
+                offset="0%"
+                stopColor={
+                  isDark ? "rgba(59,130,246,0.2)" : "rgba(37,99,235,0.15)"
+                }
+              />
+              <stop
+                offset="100%"
+                stopColor={isDark ? "rgba(59,130,246,0)" : "rgba(37,99,235,0)"}
+              />
             </linearGradient>
           </defs>
           <polygon
@@ -363,7 +371,11 @@ export default function SprintDetailModal({
             fill="url(#burndownGradient)"
           />
         </svg>
-        <div className={`flex justify-between text-xs mt-1 ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+        <div
+          className={`flex justify-between text-xs mt-1 ${
+            isDark ? "text-neutral-500" : "text-neutral-600"
+          }`}
+        >
           <span>{format(parseISO(forecast[0].date), "MMM d")}</span>
           <span>
             {format(parseISO(forecast[forecast.length - 1].date), "MMM d")}

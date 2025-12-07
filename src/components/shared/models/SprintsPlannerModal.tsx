@@ -101,35 +101,37 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
     >
       <div className="py-4 min-h-[400px] flex flex-col max-h-[80vh] overflow-y-auto">
         {/* Header Description */}
-        <div className={`flex items-start gap-4 mb-6 p-4 rounded-xl border ${
-          isDark 
-            ? "bg-emerald-500/5 border-emerald-500/10" 
-            : "bg-emerald-50 border-emerald-200"
-        }`}>
-          <div className={`p-2.5 rounded-xl ${
-            isDark 
-              ? "bg-emerald-500/10" 
-              : "bg-emerald-100"
-          }`}>
-            <Sparkles className={`w-5 h-5 ${
-              isDark 
-                ? "text-emerald-400" 
-                : "text-emerald-600"
-            }`} />
+        <div
+          className={`flex items-start gap-4 mb-6 p-4 rounded-xl border ${
+            isDark
+              ? "bg-emerald-500/5 border-emerald-500/10"
+              : "bg-emerald-50 border-emerald-200"
+          }`}
+        >
+          <div
+            className={`p-2.5 rounded-xl ${
+              isDark ? "bg-emerald-500/10" : "bg-emerald-100"
+            }`}
+          >
+            <Sparkles
+              className={`w-5 h-5 ${
+                isDark ? "text-emerald-400" : "text-emerald-600"
+              }`}
+            />
           </div>
           <div>
-            <h3 className={`text-sm font-medium mb-1 ${
-              isDark 
-                ? "text-white" 
-                : "text-emerald-900"
-            }`}>
+            <h3
+              className={`text-sm font-medium mb-1 ${
+                isDark ? "text-white" : "text-emerald-900"
+              }`}
+            >
               AI-Powered Sprint Generation
             </h3>
-            <p className={`text-sm ${
-              isDark 
-                ? "text-white/50" 
-                : "text-emerald-700/60"
-            }`}>
+            <p
+              className={`text-sm ${
+                isDark ? "text-white/50" : "text-emerald-700/60"
+              }`}
+            >
               Our AI will analyze your project's tasks, team capacity, and
               historical velocity to create an optimized sprint plan with
               balanced workload distribution.
@@ -139,16 +141,20 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
         {/* Project Selection */}
         <div className="mb-6">
-          <label className={`block text-sm font-medium mb-2 ${
-            isDark ? "text-white" : "text-neutral-900"
-          }`}>
+          <label
+            className={`block text-sm font-medium mb-2 ${
+              isDark ? "text-white" : "text-neutral-900"
+            }`}
+          >
             Select Project
           </label>
           <div className="relative" ref={comboboxRef}>
             <div className="relative">
-              <FolderKanban className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
-                isDark ? "text-white/40" : "text-neutral-400"
-              }`} />
+              <FolderKanban
+                className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                  isDark ? "text-white/40" : "text-neutral-400"
+                }`}
+              />
               <input
                 type="text"
                 placeholder="Search or select a project..."
@@ -190,17 +196,21 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                     : "border-neutral-300 bg-neutral-50 text-neutral-900 placeholder:text-neutral-500 focus:border-emerald-500 focus:ring-emerald-500/20"
                 }`}
               />
-              <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
-                isDark ? "text-white/40" : "text-neutral-400"
-              }`} />
+              <ChevronDown
+                className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                  isDark ? "text-white/40" : "text-neutral-400"
+                }`}
+              />
             </div>
 
             {dropdownOpen && (
-              <ul className={`absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border p-1 shadow-xl ${
-                isDark
-                  ? "border-white/[0.08] bg-neutral-900"
-                  : "border-neutral-300 bg-white"
-              }`}>
+              <ul
+                className={`absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border p-1 shadow-xl ${
+                  isDark
+                    ? "border-white/[0.08] bg-neutral-900"
+                    : "border-neutral-300 bg-white"
+                }`}
+              >
                 {(projects || [])
                   .filter((p) =>
                     p.name.toLowerCase().includes((query || "").toLowerCase())
@@ -245,9 +255,11 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                 {(projects || []).filter((p) =>
                   p.name.toLowerCase().includes((query || "").toLowerCase())
                 ).length === 0 && (
-                  <li className={`px-3 py-2.5 text-sm ${
-                    isDark ? "text-white/40" : "text-neutral-500"
-                  }`}>
+                  <li
+                    className={`px-3 py-2.5 text-sm ${
+                      isDark ? "text-white/40" : "text-neutral-500"
+                    }`}
+                  >
                     No projects found
                   </li>
                 )}
@@ -257,24 +269,30 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
           {/* Selected Project Info */}
           {selectedProject && (
-            <div className={`mt-4 p-4 rounded-xl border ${
-              isDark
-                ? "bg-neutral-900/40 border-white/[0.06]"
-                : "bg-neutral-100 border-neutral-300"
-            }`}>
+            <div
+              className={`mt-4 p-4 rounded-xl border ${
+                isDark
+                  ? "bg-neutral-900/40 border-white/[0.06]"
+                  : "bg-neutral-100 border-neutral-300"
+              }`}
+            >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 flex items-center justify-center">
                   <FolderKanban className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <p className={`font-medium ${
-                    isDark ? "text-white" : "text-neutral-900"
-                  }`}>
+                  <p
+                    className={`font-medium ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  >
                     {selectedProject.name}
                   </p>
-                  <p className={`text-xs ${
-                    isDark ? "text-white/40" : "text-neutral-600"
-                  }`}>
+                  <p
+                    className={`text-xs ${
+                      isDark ? "text-white/40" : "text-neutral-600"
+                    }`}
+                  >
                     {selectedProject.description || "No description"}
                   </p>
                 </div>
@@ -286,12 +304,16 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
         {/* Sprint Configuration */}
         {selectedProjectId && (
           <div className="space-y-4 mb-6">
-            <h4 className={`text-sm font-medium flex items-center gap-2 ${
-              isDark ? "text-white" : "text-neutral-900"
-            }`}>
-              <Target className={`w-4 h-4 ${
-                isDark ? "text-emerald-400" : "text-emerald-600"
-              }`} />
+            <h4
+              className={`text-sm font-medium flex items-center gap-2 ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
+              <Target
+                className={`w-4 h-4 ${
+                  isDark ? "text-emerald-400" : "text-emerald-600"
+                }`}
+              />
               Sprint Configuration
             </h4>
 
@@ -299,15 +321,19 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               {/* Start Date */}
               <div>
-                <label className={`block text-xs font-medium mb-1.5 ${
-                  isDark ? "text-white/60" : "text-neutral-600"
-                }`}>
+                <label
+                  className={`block text-xs font-medium mb-1.5 ${
+                    isDark ? "text-white/60" : "text-neutral-600"
+                  }`}
+                >
                   Start Date
                 </label>
                 <div className="relative">
-                  <Calendar className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
-                    isDark ? "text-white/40" : "text-neutral-400"
-                  }`} />
+                  <Calendar
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                      isDark ? "text-white/40" : "text-neutral-400"
+                    }`}
+                  />
                   <input
                     type="date"
                     value={startDate}
@@ -323,15 +349,19 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
               {/* Sprint Length */}
               <div>
-                <label className={`block text-xs font-medium mb-1.5 ${
-                  isDark ? "text-white/60" : "text-neutral-600"
-                }`}>
+                <label
+                  className={`block text-xs font-medium mb-1.5 ${
+                    isDark ? "text-white/60" : "text-neutral-600"
+                  }`}
+                >
                   Sprint Length (days)
                 </label>
                 <div className="relative">
-                  <Calendar className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
-                    isDark ? "text-white/40" : "text-neutral-400"
-                  }`} />
+                  <Calendar
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                      isDark ? "text-white/40" : "text-neutral-400"
+                    }`}
+                  />
                   <input
                     type="number"
                     min={1}
@@ -354,15 +384,19 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               {/* Work Hours Per Day */}
               <div>
-                <label className={`block text-xs font-medium mb-1.5 ${
-                  isDark ? "text-white/60" : "text-neutral-600"
-                }`}>
+                <label
+                  className={`block text-xs font-medium mb-1.5 ${
+                    isDark ? "text-white/60" : "text-neutral-600"
+                  }`}
+                >
                   Work Hours / Day
                 </label>
                 <div className="relative">
-                  <Clock className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
-                    isDark ? "text-white/40" : "text-neutral-400"
-                  }`} />
+                  <Clock
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                      isDark ? "text-white/40" : "text-neutral-400"
+                    }`}
+                  />
                   <input
                     type="number"
                     min={1}
@@ -380,15 +414,19 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
               {/* Max Tasks Per Member */}
               <div>
-                <label className={`block text-xs font-medium mb-1.5 ${
-                  isDark ? "text-white/60" : "text-neutral-600"
-                }`}>
+                <label
+                  className={`block text-xs font-medium mb-1.5 ${
+                    isDark ? "text-white/60" : "text-neutral-600"
+                  }`}
+                >
                   Max Tasks / Member
                 </label>
                 <div className="relative">
-                  <Users className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
-                    isDark ? "text-white/40" : "text-neutral-400"
-                  }`} />
+                  <Users
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                      isDark ? "text-white/40" : "text-neutral-400"
+                    }`}
+                  />
                   <input
                     type="number"
                     min={1}
@@ -409,15 +447,19 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
             {/* Sprint Goals */}
             <div>
-              <label className={`block text-xs font-medium mb-1.5 ${
-                isDark ? "text-white/60" : "text-neutral-600"
-              }`}>
+              <label
+                className={`block text-xs font-medium mb-1.5 ${
+                  isDark ? "text-white/60" : "text-neutral-600"
+                }`}
+              >
                 Sprint Goals (comma separated)
               </label>
               <div className="relative">
-                <Target className={`absolute left-3 top-3 w-4 h-4 ${
-                  isDark ? "text-white/40" : "text-neutral-400"
-                }`} />
+                <Target
+                  className={`absolute left-3 top-3 w-4 h-4 ${
+                    isDark ? "text-white/40" : "text-neutral-400"
+                  }`}
+                />
                 <textarea
                   value={sprintGoals}
                   onChange={(e) => setSprintGoals(e.target.value)}
