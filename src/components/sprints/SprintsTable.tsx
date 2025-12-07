@@ -22,6 +22,7 @@ import { Play, Settings, Trash, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge/badge";
 import { Progress } from "@/components/ui/progress";
 import SprintsFilterPanel from "./SprintsFilterPanel";
+import { useTheme } from "next-themes";
 
 /* -------------------- Helpers -------------------- */
 const getSprintStatus = (sprint: SprintType) => {
@@ -72,6 +73,8 @@ export const SprintsTable = ({
   onConfigure: (sprint: SprintType) => void;
   onDelete: (sprint: SprintType) => void;
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [filters, setFilters] = useState<any>({});
   /* -------------- Filtering -------------------- */
   // const filteredSprints = useMemo(() => {
@@ -229,32 +232,28 @@ export const SprintsTable = ({
   return (
     <div className="space-y-4">
       {/* Filter Panel Trigger */}
-      <div className="flex justify-between items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className={`relative flex-1 w-full max-w-md`}>
+          <Search className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${isDark ? "text-white/30" : "text-neutral-400"}`} />
           <input
             type="text"
             placeholder="Search sprints..."
-            className="
-              w-full pl-10 pr-4 py-2.5 rounded-xl
-              bg-neutral-900/40 border border-white/[0.06]
-              text-white text-sm placeholder:text-white/30
-              focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20
-              hover:border-white/[0.1] hover:bg-neutral-900/50
-              transition-all duration-300
-            "
+            className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm transition-all duration-300
+              ${isDark
+                ? "bg-neutral-900/40 border border-white/[0.06] text-white placeholder:text-white/30 focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 hover:border-white/[0.1] hover:bg-neutral-900/50"
+                : "bg-neutral-100 border border-neutral-300 text-neutral-900 placeholder:text-neutral-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-neutral-400"
+              }`}
             onChange={(e) => setFilters({ ...filters, search: e.target.value })}
           />
         </div>
         <Button
           variant="outline"
           onClick={() => setFilterOpen(true)}
-          className="
-            flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer
-            bg-neutral-900/40 border-white/[0.06] text-white/70
-            hover:bg-violet-500/10 hover:border-violet-500/30 hover:text-white
-            transition-all duration-300
-          "
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer transition-all duration-300 whitespace-nowrap
+            ${isDark
+              ? "bg-neutral-900/40 border-white/[0.06] text-white/70 hover:bg-violet-500/10 hover:border-violet-500/30 hover:text-white"
+              : "bg-neutral-100 border-neutral-300 text-neutral-700 hover:bg-neutral-200 hover:border-neutral-400"
+            }`}
         >
           <FilterIcon className="h-4 w-4" />
           Filters
@@ -269,7 +268,11 @@ export const SprintsTable = ({
         applyFilters={applyFilters}
       />
       {/* Table */}
-      <div className="bg-neutral-900/40 border border-white/[0.06] rounded-2xl overflow-hidden backdrop-blur-sm">
+      <div className={`border rounded-2xl overflow-hidden backdrop-blur-sm
+        ${isDark
+          ? "bg-neutral-900/40 border-white/[0.06]"
+          : "bg-white border-neutral-200"
+        }`}>
         <EditableTable<SprintType>
           columns={columns}
           data={sprints}

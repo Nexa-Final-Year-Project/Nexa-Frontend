@@ -8,6 +8,7 @@ import { SPRINT_FORM_FIELDS } from "@/lib/constants/sprints/sprints";
 import { FormField } from "../ui/form/FormField";
 import { TeamMemberAvatar } from "../teams/TeamMemberAvatar";
 import { useProject } from "@/store/projects/projectStore";
+import { useTheme } from "next-themes";
 
 interface SprintSettingsModalProps {
   open: boolean;
@@ -22,6 +23,9 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
   sprint,
   onSave,
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  
   const form = useForm({
     initialValues: {
       name: "",
@@ -77,19 +81,27 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
 
   return (
     <Modal title="Sprint Settings" open={open} onOpenChange={onClose} size="lg">
-      <div className="max-h-[75vh] overflow-y-auto hide-scrollbar p-4">
-        <div className="bg-gradient-to-br from-white/6 to-white/3 dark:from-slate-900/50 dark:to-slate-900/40 backdrop-blur rounded-2xl border border-white/6 p-5 shadow-lg">
-          <div className="flex items-start justify-between gap-4 mb-4">
-            <div>
-              <h2 className="text-lg font-bold">{sprint.name || "Sprint"}</h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                Edit sprint settings, review health and velocity, and manage
-                assigned members.
+      <div className={`max-h-[75vh] overflow-y-auto hide-scrollbar p-4 ${isDark ? "bg-neutral-950" : "bg-white"}`}>
+        <div className={`rounded-2xl border p-6 space-y-6 ${
+          isDark
+            ? "bg-neutral-900/80 border-white/[0.08]"
+            : "bg-white border-neutral-200"
+        }`}>
+          {/* Header - Responsive */}
+          <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b ${
+            isDark ? "border-white/[0.06]" : "border-neutral-200"
+          }`}>
+            <div className="flex-1 min-w-0">
+              <h2 className={`text-lg font-bold truncate ${isDark ? "text-white" : "text-neutral-900"}`}>
+                {sprint.name || "Sprint"}
+              </h2>
+              <p className={`text-sm mt-1 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                Edit sprint settings and manage members.
               </p>
             </div>
-            <div className="text-right">
-              <div className="text-xs text-muted-foreground">Dates</div>
-              <div className="font-medium">
+            <div className={`whitespace-nowrap text-right text-sm ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+              <div className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-500"}`}>Dates</div>
+              <div className={`font-medium ${isDark ? "text-white" : "text-neutral-900"}`}>
                 {sprint.startDate
                   ? format(parseISO(sprint.startDate), "MMM d")
                   : "-"}
@@ -101,141 +113,165 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
             </div>
           </div>
 
+          {/* Main Content - Responsive Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left: Form Fields */}
             <div className="lg:col-span-2 space-y-4">
-              <h3 className="text-sm font-semibold">Basic Information</h3>
+              <h3 className={`text-sm font-semibold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                Basic Information
+              </h3>
               <div className="space-y-3">
                 {SPRINT_FORM_FIELDS.map((field) => (
                   <FormField key={field.name} field={field} form={form} />
                 ))}
               </div>
 
-              <div className="mt-4">
-                <h4 className="text-sm font-medium mb-2">Goals</h4>
-                <div className="flex flex-col gap-2">
+              {/* Goals Section */}
+              <div className={`mt-6 pt-6 border-t ${isDark ? "border-white/[0.06]" : "border-neutral-200"}`}>
+                <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  Goals
+                </h4>
+                <div className="flex flex-col gap-2 max-h-32 overflow-y-auto pr-2">
                   {form.values.goals && form.values.goals.length ? (
                     form.values.goals.map((g, i) => (
                       <div
                         key={i}
-                        className="px-3 py-2 text-sm rounded-lg bg-primary/10 text-primary border border-primary/20 break-words"
+                        className={`text-sm p-2 rounded-lg break-words ${
+                          isDark
+                            ? "bg-white/[0.05] text-neutral-300 border border-white/[0.05]"
+                            : "bg-neutral-100 text-neutral-700 border border-neutral-200"
+                        }`}
                       >
                         {g}
                       </div>
                     ))
                   ) : (
-                    <span className="text-sm text-muted-foreground">
-                      No goals yet
-                    </span>
+                    <p className={`text-sm ${isDark ? "text-neutral-500" : "text-neutral-400"}`}>
+                      No goals added
+                    </p>
                   )}
                 </div>
               </div>
 
-              <div className="mt-4">
-                <h4 className="text-sm font-medium mb-2">Assigned Members</h4>
-                <div className="flex -space-x-3 items-center">
-                  {assignedMemberObjs.length ? (
-                    assignedMemberObjs.map((m, i) => (
+              {/* Assigned Members */}
+              <div className={`mt-6 pt-6 border-t ${isDark ? "border-white/[0.06]" : "border-neutral-200"}`}>
+                <h4 className={`text-sm font-medium mb-3 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  Assigned Members
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {assignedMemberObjs && assignedMemberObjs.length > 0 ? (
+                    assignedMemberObjs.map((member: any) => (
                       <div
-                        key={`${m._id ?? m.email ?? m.name ?? i}`}
-                        className="mr-2"
+                        key={member._id}
+                        className={`text-xs px-2.5 py-1.5 rounded-lg ${
+                          isDark
+                            ? "bg-white/[0.08] text-white border border-white/[0.1]"
+                            : "bg-neutral-100 text-neutral-900 border border-neutral-200"
+                        }`}
                       >
-                        <TeamMemberAvatar
-                          name={m.name}
-                          role={m.role}
-                          avatarUrl={m.avatar || undefined}
-                        />
+                        {member.name}
                       </div>
                     ))
                   ) : (
-                    <span className="text-sm text-muted-foreground">
+                    <p className={`text-sm ${isDark ? "text-neutral-500" : "text-neutral-400"}`}>
                       No members assigned
-                    </span>
+                    </p>
                   )}
                 </div>
               </div>
             </div>
 
-            <aside className="space-y-4">
-              <div className="p-4 bg-white/3 dark:bg-slate-900/40 rounded-xl border border-white/6">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <div className="text-xs text-muted-foreground">
-                      Velocity
-                    </div>
-                    <div className="text-lg font-semibold">
-                      {(sprint as any).velocity ?? "—"}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs text-muted-foreground">Status</div>
-                    <div className="font-medium">
-                      {(sprint as any).status ?? "—"}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-xs text-muted-foreground mb-2">
-                    Sprint Health
-                  </div>
-                  <HealthBar value={(sprint as any).sprintHealthScore} />
+            {/* Right: Summary Cards - Stack on mobile */}
+            <aside className="space-y-3">
+              {/* Velocity Card */}
+              <div className={`rounded-xl p-4 border ${
+                isDark
+                  ? "bg-white/[0.02] border-white/[0.05]"
+                  : "bg-neutral-50 border-neutral-200"
+              }`}>
+                <div className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>Velocity</div>
+                <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  {(sprint as any).velocity ?? "—"}
                 </div>
               </div>
 
-              <div className="p-4 bg-white/3 dark:bg-slate-900/40 rounded-xl border border-white/6">
-                <h5 className="text-sm font-medium mb-2">AI Summary</h5>
-                <div className="text-sm text-muted-foreground">
-                  {(sprint as any).meta?.aiSummary ||
-                    (sprint as any).aiSummary ||
-                    "No AI summary"}
+              {/* Status Card */}
+              <div className={`rounded-xl p-4 border ${
+                isDark
+                  ? "bg-white/[0.02] border-white/[0.05]"
+                  : "bg-neutral-50 border-neutral-200"
+              }`}>
+                <div className={`text-xs ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>Status</div>
+                <div className={`text-sm font-medium ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  {(sprint as any).status ?? "—"}
                 </div>
               </div>
 
-              <div className="p-4 bg-white/3 dark:bg-slate-900/40 rounded-xl border border-white/6">
-                <h5 className="text-sm font-medium mb-2">Tasks</h5>
-                <div className="text-sm">
-                  Total:{" "}
-                  <span className="font-semibold">
-                    {(sprint as any).tasks?.length ?? 0}
-                  </span>
+              {/* Sprint Health Card */}
+              <div className={`rounded-xl p-4 border ${
+                isDark
+                  ? "bg-white/[0.02] border-white/[0.05]"
+                  : "bg-neutral-50 border-neutral-200"
+              }`}>
+                <div className={`text-xs mb-2 ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+                  Sprint Health
                 </div>
-                <div className="mt-3 flex flex-col gap-2">
-                  {[
-                    ["High", "bg-red-500"],
-                    ["Medium", "bg-amber-500"],
-                    ["Low", "bg-green-500"],
-                  ].map(([p, color]) => (
-                    <div key={p} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`inline-block h-2 w-2 rounded-full ${color}`}
-                        />
-                        <span className="text-sm">{p}</span>
-                      </div>
-                      <div className="text-sm font-medium">
-                        {
-                          ((sprint as any).tasks || []).filter(
-                            (t: any) => t.priority === p
-                          ).length
-                        }
-                      </div>
-                    </div>
-                  ))}
+                <HealthBar value={(sprint as any).sprintHealthScore} isDark={isDark} />
+              </div>
+
+              {/* AI Summary Card */}
+              <div className={`rounded-xl p-4 border ${
+                isDark
+                  ? "bg-white/[0.02] border-white/[0.05]"
+                  : "bg-neutral-50 border-neutral-200"
+              }`}>
+                <h5 className={`text-sm font-medium mb-2 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  AI Summary
+                </h5>
+                <p className={`text-xs line-clamp-2 ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                  {(sprint as any).aiSummary || "No summary available"}
+                </p>
+              </div>
+
+              {/* Tasks Card */}
+              <div className={`rounded-xl p-4 border ${
+                isDark
+                  ? "bg-white/[0.02] border-white/[0.05]"
+                  : "bg-neutral-50 border-neutral-200"
+              }`}>
+                <h5 className={`text-sm font-medium ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  Tasks
+                </h5>
+                <div className={`text-2xl font-bold ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  {(sprint as any).selectedTasks?.length || 0}
                 </div>
+                <p className={`text-xs mt-1 ${isDark ? "text-neutral-500" : "text-neutral-600"}`}>
+                  in sprint
+                </p>
               </div>
             </aside>
           </div>
 
-          <div className="flex justify-end items-center gap-3 mt-6">
-            <Button variant="ghost" onClick={onClose}>
+          {/* Action Buttons - Responsive */}
+          <div className={`flex flex-col-reverse sm:flex-row justify-end items-center gap-3 pt-4 border-t ${
+            isDark ? "border-white/[0.06]" : "border-neutral-200"
+          }`}>
+            <button
+              onClick={onClose}
+              className={`w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isDark
+                  ? "bg-white/[0.05] text-white hover:bg-white/[0.1]"
+                  : "bg-neutral-100 text-neutral-900 hover:bg-neutral-200"
+              }`}
+            >
               Cancel
-            </Button>
-            <Button
-              className="bg-gradient-to-r from-primary to-indigo-600 text-white"
+            </button>
+            <button
+              className={`w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-medium text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 transition-all`}
               onClick={handleSubmit}
             >
               Save Changes
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -243,18 +279,20 @@ export const SprintSettingsModal2: React.FC<SprintSettingsModalProps> = ({
   );
 };
 
-function HealthBar({ value }: { value?: number | string }) {
+function HealthBar({ value, isDark }: { value?: number | string; isDark: boolean }) {
   const v = typeof value === "number" ? value : Number(value) || 0;
   const pct = Math.max(0, Math.min(100, Math.round(v)));
   return (
     <div>
-      <div className="relative h-2 w-full bg-muted rounded-full overflow-hidden">
+      <div className={`relative h-2 w-full rounded-full overflow-hidden ${isDark ? "bg-neutral-700" : "bg-neutral-300"}`}>
         <div
-          className="absolute left-0 top-0 h-full bg-gradient-to-r from-green-400 to-emerald-500"
+          className="absolute left-0 top-0 h-full bg-gradient-to-r from-emerald-500 to-emerald-400"
           style={{ width: `${pct}%` }}
         />
       </div>
-      <div className="text-xs text-muted-foreground mt-1">{pct}% healthy</div>
+      <div className={`text-xs mt-1.5 font-medium ${isDark ? "text-emerald-400" : "text-emerald-600"}`}>
+        {pct}% healthy
+      </div>
     </div>
   );
 }
