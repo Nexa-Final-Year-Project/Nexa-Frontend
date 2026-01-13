@@ -8,6 +8,8 @@ import {
   SettingsIcon,
   SheetIcon,
   Calendar,
+  FileText,
+  Link2,
 } from "lucide-react";
 
 import { Tabs } from "@/components/ui/tabs";
@@ -29,6 +31,19 @@ import { Sprints } from "./tabs/sprints/Sprints";
 import { Sprint } from "@/types/sprint";
 import { useLazyGetSprintByProjectIdQuery } from "@/api/sprint/sprintApi";
 import { useSprintStore } from "@/store/sprints/sprintStore";
+import dynamic from "next/dynamic";
+
+// Dynamically import DocumentationPage to avoid SSR issues
+const DocumentationPage = dynamic(
+  () => import("@/app/projects/[projectId]/documentation/page"),
+  { ssr: false }
+);
+
+// Dynamically import IntegrationsPage
+const IntegrationsPage = dynamic(
+  () => import("@/app/projects/[projectId]/integrations/page"),
+  { ssr: false }
+);
 
 const projectTabs = (
   projectId: string,
@@ -80,6 +95,18 @@ const projectTabs = (
       content: (
         <TasksCalendar earliestYear={2025} latestYear={2025} tasks={tasks} />
       ),
+    },
+    {
+      id: "documentation",
+      label: "Documentation",
+      icon: FileText,
+      content: <DocumentationPage />,
+    },
+    {
+      id: "integrations",
+      label: "Integrations",
+      icon: Link2,
+      content: <IntegrationsPage />,
     },
     // {
     //   id: "team",
