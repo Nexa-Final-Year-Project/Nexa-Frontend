@@ -10,9 +10,13 @@ import { AuthFooter } from "@/components/auth/AuthFooter";
 import { AuthDivider } from "@/components/auth/AuthDivider";
 import { SocialButtons } from "@/components/auth/AuthButtons";
 import { useRegisterUserMutation } from "@/api/auth/authApi";
+import { useTheme } from "next-themes";
 
 const RegisterPage = () => {
   const [registerUser] = useRegisterUserMutation();
+  const { theme, resolvedTheme } = useTheme();
+  const currentTheme = theme === "system" ? resolvedTheme : theme;
+  const isDark = currentTheme === "dark";
 
   const handleSubmit = async (values: Record<string, any>) => {
     try {
@@ -27,43 +31,35 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden py-8 px-4">
-      {/* Background gradient mesh */}
-      <div className="fixed inset-0 -z-20 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 dark:block hidden" />
-      <div
-        className="fixed inset-0 -z-10 opacity-30 dark:block hidden"
-        style={{
-          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                          radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)`,
-        }}
-      />
-
+    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden py-4 px-4">
       <motion.div
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-lg flex-1 flex items-center justify-center"
+        className="w-full max-w-[460px] flex flex-col items-center gap-4"
       >
-        <AuthCard
-          title="Create an account"
-          subtitle="Get started with our platform"
-        >
+        <AuthCard title="Create your account" subtitle="Select a sign up method to get started">
           <div className="space-y-4">
-            <SocialButtons
-              className="my-4"
-              providers={["google", "slack", "github"]}
-            />
-            <AuthDivider />
+            <SocialButtons className="my-2" providers={["google", "slack", "github"]} />
+            <AuthDivider text="Or continue with email" />
             <AuthForm
               fields={EMAIL_VERIFICATION_FIELDS}
               onSubmit={handleSubmit}
-              submitButtonText="Start Playing!"
+              submitButtonText="Create account"
             />
-            <AuthFooter
-              text="Already have an account?"
-              linkText="Sign in"
-              href="/login"
-            />
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm pt-1 text-center">
+              <span className={isDark ? "text-white/60" : "text-neutral-600"}>
+                No credit card required
+              </span>
+              <span className={isDark ? "text-white/20" : "text-neutral-300"}>•</span>
+              <AuthFooter
+                text="Already have an account?"
+                linkText="Sign in"
+                href="/login"
+                className="pt-0"
+              />
+            </div>
           </div>
         </AuthCard>
       </motion.div>

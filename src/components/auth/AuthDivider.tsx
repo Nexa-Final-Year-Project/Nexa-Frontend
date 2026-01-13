@@ -15,8 +15,8 @@ export function AuthDivider({ text = "Or continue with" }: { text?: string }) {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className={`w-full h-px bg-gradient-to-r from-transparent to-transparent origin-center ${
-            isDark ? "via-white/20" : "via-neutral-300"
+          className={`w-full h-px bg-gradient-to-r from-transparent via-current to-transparent origin-center ${
+            isDark ? "text-white/15" : "text-neutral-300"
           }`}
         />
       </div>
@@ -25,8 +25,8 @@ export function AuthDivider({ text = "Or continue with" }: { text?: string }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className={`px-4 tracking-widest font-medium ${
-            isDark ? "bg-[#0a0a0f] text-white/50" : "bg-white text-neutral-500"
+          className={`px-3 tracking-[0.3em] font-semibold ${
+            isDark ? "bg-[#0a0a0f]/80 text-white/55" : "bg-white/90 text-neutral-500"
           }`}
         >
           {text}

@@ -26,7 +26,7 @@ export function AuthFooter({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.5 }}
-      className={`text-center text-sm pt-4 ${className}`}
+      className={`text-center text-sm ${className}`}
     >
       <span className={isDark ? "text-white/50" : "text-neutral-600"}>
         {text}

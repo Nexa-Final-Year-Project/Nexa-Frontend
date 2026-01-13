@@ -10,10 +10,14 @@ import { AuthFooter } from "@/components/auth/AuthFooter";
 import { SocialButtons } from "@/components/auth/AuthButtons";
 import { AuthDivider } from "@/components/auth/AuthDivider";
 import { useRegisterUserMutation } from "@/api/auth/authApi";
+import { useTheme } from "next-themes";
 
 // Login page component
 const LoginPage = () => {
   const [registerUser] = useRegisterUserMutation();
+  const { theme, resolvedTheme } = useTheme();
+  const currentTheme = theme === "system" ? resolvedTheme : theme;
+  const isDark = currentTheme === "dark";
 
   // Handle form submission
   const handleSubmit = async (values: Record<string, any>) => {
@@ -30,38 +34,40 @@ const LoginPage = () => {
   // 💡 The submit button text should be "Submit" for the login form
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden py-8 px-4">
-      {/* Background gradient mesh */}
-      <div className="fixed inset-0 -z-20 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 dark:block hidden" />
-      <div
-        className="fixed inset-0 -z-10 opacity-30 dark:block hidden"
-        style={{
-          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                          radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)`,
-        }}
-      />
-
+    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden py-4 px-4">
       <motion.div
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-lg flex-1 flex items-center justify-center"
+        className="w-full max-w-[460px] flex flex-col items-center gap-4"
       >
-        <AuthCard title="Welcome back" subtitle="Sign in to your account">
+        <AuthCard title="Sign in to NEXA" subtitle="Choose a method to continue">
           <div className="space-y-4">
-            <SocialButtons className="my-4" />
-            <AuthDivider />
+            <SocialButtons className="my-2" providers={["github", "google"]} />
+            <AuthDivider text="Or sign in with email" />
             <AuthForm
               fields={LOGIN_FIELDS}
               onSubmit={handleSubmit}
               submitButtonText="Submit"
             />
 
-            <AuthFooter
-              text="Don't have an account?"
-              linkText="Register"
-              href="/register"
-            />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm pt-1 text-center">
+              <button
+                type="button"
+                className={`transition-colors underline-offset-4 hover:underline ${
+                  isDark ? "text-white/75 hover:text-white" : "text-neutral-600 hover:text-neutral-900"
+                }`}
+              >
+                Use passkey instead
+              </button>
+              <span className={isDark ? "text-white/20" : "text-neutral-300"}>•</span>
+              <AuthFooter
+                text="Don't have an account?"
+                linkText="Register"
+                href="/register"
+                className="pt-0"
+              />
+            </div>
           </div>
         </AuthCard>
       </motion.div>
