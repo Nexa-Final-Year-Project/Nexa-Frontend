@@ -26,7 +26,9 @@ export function AuthDivider({ text = "Or continue with" }: { text?: string }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
           className={`px-3 tracking-[0.3em] font-semibold ${
-            isDark ? "bg-[#0a0a0f]/80 text-white/55" : "bg-white/90 text-neutral-500"
+            isDark
+              ? "bg-[#0a0a0f]/80 text-white/55"
+              : "bg-white/90 text-neutral-500"
           }`}
         >
           {text}

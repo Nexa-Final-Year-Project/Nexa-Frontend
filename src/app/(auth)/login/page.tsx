@@ -41,7 +41,10 @@ const LoginPage = () => {
         animate="visible"
         className="w-full max-w-[460px] flex flex-col items-center gap-4"
       >
-        <AuthCard title="Sign in to NEXA" subtitle="Choose a method to continue">
+        <AuthCard
+          title="Sign in to NEXA"
+          subtitle="Choose a method to continue"
+        >
           <div className="space-y-4">
             <SocialButtons className="my-2" providers={["github", "google"]} />
             <AuthDivider text="Or sign in with email" />
@@ -55,12 +58,16 @@ const LoginPage = () => {
               <button
                 type="button"
                 className={`transition-colors underline-offset-4 hover:underline ${
-                  isDark ? "text-white/75 hover:text-white" : "text-neutral-600 hover:text-neutral-900"
+                  isDark
+                    ? "text-white/75 hover:text-white"
+                    : "text-neutral-600 hover:text-neutral-900"
                 }`}
               >
                 Use passkey instead
               </button>
-              <span className={isDark ? "text-white/20" : "text-neutral-300"}>•</span>
+              <span className={isDark ? "text-white/20" : "text-neutral-300"}>
+                •
+              </span>
               <AuthFooter
                 text="Don't have an account?"
                 linkText="Register"

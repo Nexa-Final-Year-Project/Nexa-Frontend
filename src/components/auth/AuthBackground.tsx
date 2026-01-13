@@ -12,7 +12,9 @@ export function AuthBackground({ children }: { children: ReactNode }) {
   return (
     <div
       className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden ${
-        isDark ? "bg-[#050508]" : "bg-gradient-to-b from-white via-[#f7f8ff] to-white"
+        isDark
+          ? "bg-[#050508]"
+          : "bg-gradient-to-b from-white via-[#f7f8ff] to-white"
       }`}
     >
       {/* Base gradient */}
@@ -30,8 +32,12 @@ export function AuthBackground({ children }: { children: ReactNode }) {
         className="fixed inset-0 -z-25 opacity-[0.03]"
         style={{
           backgroundImage: `
-            linear-gradient(${isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"} 1px, transparent 1px),
-            linear-gradient(90deg, ${isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"} 1px, transparent 1px)
+            linear-gradient(${
+              isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"
+            } 1px, transparent 1px),
+            linear-gradient(90deg, ${
+              isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"
+            } 1px, transparent 1px)
           `,
           backgroundSize: "60px 60px",
         }}
@@ -61,7 +67,12 @@ export function AuthBackground({ children }: { children: ReactNode }) {
           x: [0, -30, 0],
           y: [0, 26, 0],
         }}
-        transition={{ duration: 17, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        transition={{
+          duration: 17,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
         className="fixed -z-10 w-[620px] h-[620px] rounded-full bottom-[-200px] right-[-220px]"
         style={{
           background:
@@ -73,7 +84,12 @@ export function AuthBackground({ children }: { children: ReactNode }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.12, 0.22, 0.12], scale: [1, 1.16, 1] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 4,
+        }}
         className="fixed -z-10 w-[380px] h-[380px] rounded-full top-[32%] right-[-80px]"
         style={{
           background:
@@ -145,7 +161,8 @@ export function AuthBackground({ children }: { children: ReactNode }) {
                 isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.05)"
               }`,
               opacity: 0.5 - i * 0.2,
-              clipPath: "polygon(0 30%, 45% 30%, 50% 45%, 55% 30%, 100% 30%, 100% 70%, 0 70%)",
+              clipPath:
+                "polygon(0 30%, 45% 30%, 50% 45%, 55% 30%, 100% 30%, 100% 70%, 0 70%)",
             }}
           />
         ))}

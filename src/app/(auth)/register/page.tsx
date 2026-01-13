@@ -38,9 +38,15 @@ const RegisterPage = () => {
         animate="visible"
         className="w-full max-w-[460px] flex flex-col items-center gap-4"
       >
-        <AuthCard title="Create your account" subtitle="Select a sign up method to get started">
+        <AuthCard
+          title="Create your account"
+          subtitle="Select a sign up method to get started"
+        >
           <div className="space-y-4">
-            <SocialButtons className="my-2" providers={["google", "slack", "github"]} />
+            <SocialButtons
+              className="my-2"
+              providers={["google", "slack", "github"]}
+            />
             <AuthDivider text="Or continue with email" />
             <AuthForm
               fields={EMAIL_VERIFICATION_FIELDS}
@@ -52,7 +58,9 @@ const RegisterPage = () => {
               <span className={isDark ? "text-white/60" : "text-neutral-600"}>
                 No credit card required
               </span>
-              <span className={isDark ? "text-white/20" : "text-neutral-300"}>•</span>
+              <span className={isDark ? "text-white/20" : "text-neutral-300"}>
+                •
+              </span>
               <AuthFooter
                 text="Already have an account?"
                 linkText="Sign in"
