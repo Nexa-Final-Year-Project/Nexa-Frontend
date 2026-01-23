@@ -101,7 +101,7 @@ export default function GlobalSearch() {
         activeFilters.length > 0 ? `&type=${activeFilters.join(",")}` : "";
       const res = await fetch(
         `http://localhost:5000/api/search?q=${query}${typeParam}`,
-        { credentials: "include" }
+        { credentials: "include" },
       );
       const data: SearchResult[] = await res.json();
       setResults([
@@ -115,11 +115,14 @@ export default function GlobalSearch() {
     return () => clearTimeout(handler);
   }, [query, activeFilters]);
 
-  const grouped = results.reduce((acc, item) => {
-    acc[item.entityType] = acc[item.entityType] || [];
-    acc[item.entityType].push(item);
-    return acc;
-  }, {} as Record<string, SearchResult[]>);
+  const grouped = results.reduce(
+    (acc, item) => {
+      acc[item.entityType] = acc[item.entityType] || [];
+      acc[item.entityType].push(item);
+      return acc;
+    },
+    {} as Record<string, SearchResult[]>,
+  );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -143,7 +146,7 @@ export default function GlobalSearch() {
         setResults([]);
       }
     },
-    [results, activeIndex, query]
+    [results, activeIndex, query],
   );
 
   // Shortcut "/"
@@ -162,7 +165,7 @@ export default function GlobalSearch() {
     setActiveFilters((prev) =>
       prev.includes(filter)
         ? prev.filter((f) => f !== filter)
-        : [...prev, filter]
+        : [...prev, filter],
     );
   };
 
@@ -183,7 +186,7 @@ export default function GlobalSearch() {
         </span>
       ) : (
         part
-      )
+      ),
     );
   };
 
@@ -275,8 +278,8 @@ export default function GlobalSearch() {
               ? "bg-violet-500/20 border-violet-500/40 text-violet-300"
               : "bg-violet-100 border-violet-300 text-violet-700"
             : isDark
-            ? "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]"
-            : "bg-white border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:border-neutral-300 shadow-sm";
+              ? "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]"
+              : "bg-white border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:border-neutral-300 shadow-sm";
 
           return (
             <button
@@ -410,7 +413,7 @@ export default function GlobalSearch() {
                 <div className="space-y-1">
                   {items.map((item) => {
                     const globalIndex = results.findIndex(
-                      (r) => r.id === item.id
+                      (r) => r.id === item.id,
                     );
                     const isActive = activeIndex === globalIndex;
                     return (
@@ -426,8 +429,8 @@ export default function GlobalSearch() {
                                 ? "bg-gradient-to-r from-violet-600/20 to-cyan-600/10 border border-violet-500/30 shadow-[0_0_20px_rgba(139,92,246,0.15)]"
                                 : "bg-gradient-to-r from-violet-100 to-cyan-100 border border-violet-300 shadow-[0_0_20px_rgba(139,92,246,0.1)]"
                               : isDark
-                              ? "hover:bg-white/[0.03] border border-transparent"
-                              : "hover:bg-neutral-100 border border-transparent"
+                                ? "hover:bg-white/[0.03] border border-transparent"
+                                : "hover:bg-neutral-100 border border-transparent"
                           }
                         `}
                       >
@@ -440,8 +443,8 @@ export default function GlobalSearch() {
                                 ? "bg-violet-500/20"
                                 : "bg-violet-200"
                               : isDark
-                              ? "bg-white/[0.03]"
-                              : "bg-neutral-100"
+                                ? "bg-white/[0.03]"
+                                : "bg-neutral-100"
                           }
                         `}
                         >

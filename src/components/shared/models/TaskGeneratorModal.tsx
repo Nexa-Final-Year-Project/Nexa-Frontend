@@ -135,7 +135,7 @@ const TaskGeneratorModal: React.FC<TaskGeneratorModalProps> = ({
     setSelectedModules((prev) =>
       prev.includes(module)
         ? prev.filter((m) => m !== module)
-        : [...prev, module]
+        : [...prev, module],
     );
   };
 
@@ -216,14 +216,17 @@ const TaskGeneratorModal: React.FC<TaskGeneratorModalProps> = ({
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                 Project
               </p>
-              <p className="text-base font-semibold text-foreground">{projectName}</p>
+              <p className="text-base font-semibold text-foreground">
+                {projectName}
+              </p>
             </div>
             <div className="px-3 py-1.5 rounded-full text-xs font-medium border bg-background/60 text-foreground">
               Type: {projectType}
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
-            Provide context and modules so AI can generate structured, implementation-ready tasks.
+            Provide context and modules so AI can generate structured,
+            implementation-ready tasks.
           </p>
         </div>
 

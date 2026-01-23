@@ -173,13 +173,13 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                 onFocus={() => setDropdownOpen(true)}
                 onKeyDown={(e) => {
                   const filtered = (projects || []).filter((p) =>
-                    p.name.toLowerCase().includes((query || "").toLowerCase())
+                    p.name.toLowerCase().includes((query || "").toLowerCase()),
                   );
                   if (e.key === "ArrowDown") {
                     e.preventDefault();
                     setDropdownOpen(true);
                     setHighlightedIndex((hi) =>
-                      Math.min(hi + 1, filtered.length - 1)
+                      Math.min(hi + 1, filtered.length - 1),
                     );
                   } else if (e.key === "ArrowUp") {
                     e.preventDefault();
@@ -219,7 +219,7 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
               >
                 {(projects || [])
                   .filter((p) =>
-                    p.name.toLowerCase().includes((query || "").toLowerCase())
+                    p.name.toLowerCase().includes((query || "").toLowerCase()),
                   )
                   .map((p, idx) => {
                     const isHighlighted = idx === highlightedIndex;
@@ -241,8 +241,8 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                               ? "bg-emerald-500/20 text-white"
                               : "bg-emerald-100 text-emerald-900"
                             : isDark
-                            ? "text-white/70 hover:bg-white/[0.04]"
-                            : "text-neutral-700 hover:bg-neutral-100"
+                              ? "text-white/70 hover:bg-white/[0.04]"
+                              : "text-neutral-700 hover:bg-neutral-100"
                         } ${
                           isSelected
                             ? isDark
@@ -259,7 +259,7 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                     );
                   })}
                 {(projects || []).filter((p) =>
-                  p.name.toLowerCase().includes((query || "").toLowerCase())
+                  p.name.toLowerCase().includes((query || "").toLowerCase()),
                 ).length === 0 && (
                   <li
                     className={`px-3 py-2.5 text-sm ${

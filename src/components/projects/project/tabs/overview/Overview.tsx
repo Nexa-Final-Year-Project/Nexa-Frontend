@@ -43,7 +43,7 @@ const Overview = ({
     const completedTasks = tasks.filter((t) => t.status === "Done").length;
     const highPriorityTasks = tasks.filter((t) => t.priority === "High").length;
     const inProgressTasks = tasks.filter(
-      (t) => t.status === "In Progress"
+      (t) => t.status === "In Progress",
     ).length;
 
     return [
@@ -214,7 +214,7 @@ const Overview = ({
             data.description,
             projectId,
             data.config,
-            members || []
+            members || [],
           );
         }}
       />
