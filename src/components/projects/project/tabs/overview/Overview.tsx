@@ -94,6 +94,13 @@ const Overview = ({
   const { generateTasks } = useTasks();
   const [open, setOpen] = React.useState(false);
 
+  const surfaceCard = isDark
+    ? "bg-neutral-900/50 border-white/[0.07]"
+    : "bg-white border-neutral-200 shadow-sm";
+  const hoverBorder = isDark
+    ? "hover:border-white/[0.12]"
+    : "hover:border-neutral-300";
+
   return (
     <div className="relative">
       {/* Background ambient effects */}
@@ -168,35 +175,21 @@ const Overview = ({
       </div>
 
       {/* Top Stat Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
         {stats.map((stat, i) => (
           <TopStatCard key={i} {...stat} />
         ))}
       </div>
 
       {/* Charts Section */}
-      <div className="flex lg:flex-row flex-col gap-4 mb-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-6">
         <div
-          className="
-          w-full lg:w-1/2
-          bg-neutral-900/40 border border-white/[0.06]
-          rounded-2xl p-5
-          backdrop-blur-sm
-          hover:border-white/[0.1]
-          transition-colors duration-300
-        "
+          className={`w-full rounded-2xl p-5 backdrop-blur-sm border transition-colors duration-300 ${surfaceCard} ${hoverBorder}`}
         >
           <TasksChart tasks={tasks} />
         </div>
         <div
-          className="
-          w-full lg:w-1/2
-          bg-neutral-900/40 border border-white/[0.06]
-          rounded-2xl p-5
-          backdrop-blur-sm
-          hover:border-white/[0.1]
-          transition-colors duration-300
-        "
+          className={`w-full rounded-2xl p-5 backdrop-blur-sm border transition-colors duration-300 ${surfaceCard} ${hoverBorder}`}
         >
           <PriorityChart tasks={tasks} />
         </div>
@@ -204,14 +197,7 @@ const Overview = ({
 
       {/* Task Types Section */}
       <div
-        className="
-        w-full lg:w-1/2
-        bg-neutral-900/40 border border-white/[0.06]
-        rounded-2xl p-5
-        backdrop-blur-sm
-        hover:border-white/[0.1]
-        transition-colors duration-300
-      "
+        className={`w-full rounded-2xl p-5 backdrop-blur-sm border transition-colors duration-300 ${surfaceCard} ${hoverBorder}`}
       >
         <TaskTypes tasks={tasks} />
       </div>

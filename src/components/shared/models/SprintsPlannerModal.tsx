@@ -90,6 +90,12 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
   };
 
   const selectedProject = projects?.find((p) => p._id === selectedProjectId);
+  const surface = isDark
+    ? "bg-neutral-900/60 border-white/[0.08]"
+    : "bg-white border-neutral-200 shadow-sm";
+  const subtle = isDark
+    ? "bg-white/[0.03] border-white/[0.06]"
+    : "bg-neutral-50 border-neutral-200";
 
   return (
     <Modal
@@ -99,13 +105,13 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
       size="lg"
       hideTrigger
     >
-      <div className="py-4 min-h-[400px] flex flex-col max-h-[80vh] overflow-y-auto">
+      <div className="py-4 min-h-[400px] flex flex-col max-h-[80vh] overflow-y-auto space-y-6">
         {/* Header Description */}
         <div
-          className={`flex items-start gap-4 mb-6 p-4 rounded-xl border ${
+          className={`flex items-start gap-4 p-4 rounded-2xl border shadow-sm ${
             isDark
-              ? "bg-emerald-500/5 border-emerald-500/10"
-              : "bg-emerald-50 border-emerald-200"
+              ? "bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-cyan-500/10 border-emerald-500/20"
+              : "bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 border-emerald-100"
           }`}
         >
           <div
@@ -140,7 +146,7 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
         </div>
 
         {/* Project Selection */}
-        <div className="mb-6">
+        <div className={`${surface} rounded-2xl border p-4 sm:p-5`}>
           <label
             className={`block text-sm font-medium mb-2 ${
               isDark ? "text-white" : "text-neutral-900"
@@ -192,8 +198,8 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
                 }}
                 className={`w-full pl-10 pr-10 py-3 rounded-xl border transition-all focus:outline-none focus:ring-1 ${
                   isDark
-                    ? "border-white/[0.08] bg-neutral-900/60 text-white placeholder:text-white/30 focus:border-emerald-500/40 focus:ring-emerald-500/20"
-                    : "border-neutral-300 bg-neutral-50 text-neutral-900 placeholder:text-neutral-500 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    ? "border-white/[0.08] bg-neutral-900/70 text-white placeholder:text-white/30 focus:border-emerald-500/40 focus:ring-emerald-500/20"
+                    : "border-neutral-300 bg-white text-neutral-900 placeholder:text-neutral-500 focus:border-emerald-500 focus:ring-emerald-500/20"
                 }`}
               />
               <ChevronDown
@@ -205,10 +211,10 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
             {dropdownOpen && (
               <ul
-                className={`absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border p-1 shadow-xl ${
+                className={`absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border p-1 shadow-xl scrollbar-thin ${
                   isDark
-                    ? "border-white/[0.08] bg-neutral-900"
-                    : "border-neutral-300 bg-white"
+                    ? "border-white/[0.08] bg-neutral-950/90 backdrop-blur"
+                    : "border-neutral-200 bg-white"
                 }`}
               >
                 {(projects || [])
@@ -269,13 +275,7 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
           {/* Selected Project Info */}
           {selectedProject && (
-            <div
-              className={`mt-4 p-4 rounded-xl border ${
-                isDark
-                  ? "bg-neutral-900/40 border-white/[0.06]"
-                  : "bg-neutral-100 border-neutral-300"
-              }`}
-            >
+            <div className={`mt-4 p-4 rounded-xl border ${subtle}`}>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 flex items-center justify-center">
                   <FolderKanban className="w-6 h-6 text-emerald-400" />
@@ -303,7 +303,7 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
 
         {/* Sprint Configuration */}
         {selectedProjectId && (
-          <div className="space-y-4 mb-6">
+          <div className={`${surface} rounded-2xl border p-4 sm:p-5 space-y-4`}>
             <h4
               className={`text-sm font-medium flex items-center gap-2 ${
                 isDark ? "text-white" : "text-neutral-900"
@@ -318,7 +318,7 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
             </h4>
 
             {/* Start Date & Sprint Length Row */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Start Date */}
               <div>
                 <label
@@ -381,7 +381,7 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
             </div>
 
             {/* Work Hours & Max Tasks Row */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Work Hours Per Day */}
               <div>
                 <label
@@ -477,7 +477,7 @@ const SprintPlannerModal: React.FC<SprintPlannerModalProps> = ({
         )}
 
         {/* Generate Button */}
-        <div className="pt-6 mt-auto">
+        <div className="pt-2 mt-auto">
           <Button
             onClick={handleGenerate}
             disabled={!selectedProjectId || loading}

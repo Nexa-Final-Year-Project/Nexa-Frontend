@@ -13,12 +13,13 @@ export function ProjectModal({
   return (
     <Modal
       title="Create Project"
+      description="Set up a new project space with name, description, and defaults."
       formFields={PROJECT_FIELDS}
       onSubmit={async (values) => {
         await createProject(values);
       }}
       submitButtonText="Create Project"
-      size="sm"
+      size="md"
       open={open}
       onOpenChange={onOpenChange}
       hideTrigger={true}

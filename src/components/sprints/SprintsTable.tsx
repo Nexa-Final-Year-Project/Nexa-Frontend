@@ -172,7 +172,7 @@ export const SprintsTable = ({
         <div className="flex items-center">
           {`${format(parseISO(row.startDate), "MMM d")} - ${format(
             parseISO(row.endDate),
-            "MMM d"
+            "MMM d",
           )}`}
         </div>
       ),
@@ -282,13 +282,15 @@ export const SprintsTable = ({
             : "bg-white border-neutral-200"
         }`}
       >
-        <EditableTable<SprintType>
-          columns={columns}
-          data={sprints}
-          onChange={(updated) => {
-            console.log("Updated sprints:", updated);
-          }}
-        />
+        <div className="overflow-x-auto">
+          <EditableTable<SprintType>
+            columns={columns}
+            data={sprints}
+            onChange={(updated) => {
+              console.log("Updated sprints:", updated);
+            }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ export function EditableTable<T extends { id: string | number }>({
   const handleCellChange = (
     rowIndex: number,
     accessor: keyof T | string,
-    value: any
+    value: any,
   ) => {
     const updated = [...tableData];
     const accessorStr = accessor as string;
@@ -69,7 +69,7 @@ export function EditableTable<T extends { id: string | number }>({
   };
 
   return (
-    <Table className="table-fixed w-full">
+    <Table className="w-full table-auto min-w-[720px]">
       <TableHeader>
         <TableRow>
           {columns.map((col) => (
@@ -104,7 +104,7 @@ export function EditableTable<T extends { id: string | number }>({
                 <TableCell
                   key={String(col.accessor)}
                   style={{ width: col.width || "auto" }}
-                  className="px-2 py-1 text-sm align-middle"
+                  className="px-2 py-1 text-sm align-middle whitespace-normal break-words"
                 >
                   {col.render ? (
                     col.render(row)
@@ -112,7 +112,7 @@ export function EditableTable<T extends { id: string | number }>({
                     <Input
                       className="h-8 py-0 px-2 text-sm w-full"
                       value={String(
-                        getNestedValue(row, col.accessor as string) ?? ""
+                        getNestedValue(row, col.accessor as string) ?? "",
                       )}
                       onChange={(e) =>
                         handleCellChange(rowIndex, col.accessor, e.target.value)
@@ -121,7 +121,7 @@ export function EditableTable<T extends { id: string | number }>({
                   ) : (
                     <span>
                       {String(
-                        getNestedValue(row, col.accessor as string) ?? ""
+                        getNestedValue(row, col.accessor as string) ?? "",
                       )}
                     </span>
                   )}

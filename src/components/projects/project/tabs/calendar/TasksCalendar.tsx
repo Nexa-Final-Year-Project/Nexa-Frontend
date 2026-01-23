@@ -199,13 +199,13 @@ const TasksCalendar = ({
             }`}
           >
             <CalendarDate>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CalendarDatePicker>
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-stretch gap-2 sm:gap-3 w-full sm:w-auto">
                     <CalendarMonthPicker
                       className={`
                         px-4 py-2 rounded-xl 
-                        font-medium
+                        font-medium w-full sm:w-auto sm:min-w-[160px] min-w-[140px]
                         transition-all duration-200 cursor-pointer
                         [&>button]:bg-transparent [&>button]:border-none
                         [&>button]:font-medium
@@ -219,7 +219,7 @@ const TasksCalendar = ({
                     <CalendarYearPicker
                       className={`
                         px-4 py-2 rounded-xl 
-                        font-medium
+                        font-medium w-full sm:w-auto sm:min-w-[130px] min-w-[120px]
                         transition-all duration-200 cursor-pointer
                         [&>button]:bg-transparent [&>button]:border-none
                         [&>button]:font-medium
@@ -236,6 +236,7 @@ const TasksCalendar = ({
                 </CalendarDatePicker>
                 <CalendarDatePagination
                   className={`
+                    self-end sm:self-auto
                     [&>button]:w-9 [&>button]:h-9 [&>button]:rounded-lg
                     [&>button]:border [&>button]:transition-all [&>button]:duration-200
                     ${

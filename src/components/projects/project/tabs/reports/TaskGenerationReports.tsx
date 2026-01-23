@@ -491,7 +491,7 @@ export default function TaskGenerationReports({
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between mb-4">
         <div>
           <h2
             className={`text-2xl font-semibold ${
@@ -508,7 +508,7 @@ export default function TaskGenerationReports({
             Minimal list view — click an item to open review modal
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 w-full lg:w-auto">
           {hasLegacy && (
             <Button
               onClick={migrateLegacyLocal}
@@ -538,7 +538,7 @@ export default function TaskGenerationReports({
               setSearch(e.target.value);
               setPage(1);
             }}
-            className={`w-full sm:w-64 border ${
+            className={`w-full sm:w-64 md:w-72 border ${
               isDark
                 ? "bg-white/10 text-white placeholder:text-white/40 border-white/20"
                 : "bg-white text-neutral-900 placeholder:text-neutral-500 border-neutral-300"
@@ -552,7 +552,7 @@ export default function TaskGenerationReports({
             }}
           >
             <SelectTrigger
-              className={`w-full sm:w-44 border ${
+              className={`w-full sm:w-44 md:w-48 min-w-[180px] border truncate ${
                 isDark
                   ? "bg-white/10 text-white border-white/20"
                   : "bg-neutral-100 text-neutral-900 border-neutral-300"
@@ -575,7 +575,7 @@ export default function TaskGenerationReports({
           </Select>
           <Select value={sortBy} onValueChange={(v) => setSortBy(v)}>
             <SelectTrigger
-              className={`w-full sm:w-40 border ${
+              className={`w-full sm:w-40 md:w-44 min-w-[170px] border truncate ${
                 isDark
                   ? "bg-white/10 text-white border-white/20"
                   : "bg-neutral-100 text-neutral-900 border-neutral-300"

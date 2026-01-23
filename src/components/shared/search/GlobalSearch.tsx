@@ -188,7 +188,13 @@ export default function GlobalSearch() {
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto flex flex-col items-center">
+    <div
+      className={`relative w-full max-w-2xl mx-auto flex flex-col items-center rounded-3xl border p-4 sm:p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] ${
+        isDark
+          ? "bg-neutral-950/80 border-white/[0.07]"
+          : "bg-white border-neutral-200"
+      }`}
+    >
       {/* Search input */}
       <div
         className={`
@@ -270,7 +276,7 @@ export default function GlobalSearch() {
               : "bg-violet-100 border-violet-300 text-violet-700"
             : isDark
             ? "bg-white/[0.03] border-white/[0.06] text-white/50 hover:text-white/70 hover:border-white/[0.1]"
-            : "bg-neutral-100 border-neutral-300 text-neutral-600 hover:text-neutral-900 hover:border-neutral-400";
+            : "bg-white border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:border-neutral-300 shadow-sm";
 
           return (
             <button
