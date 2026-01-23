@@ -20,10 +20,10 @@ import { useTheme } from "next-themes";
 
 const RecentProjectCard = ({
   project,
-  members,
+  members = [],
 }: {
   project: Project;
-  members: ProjectMember[];
+  members?: ProjectMember[];
 }) => {
   const appendToPath = usePathAppender();
   const { isStarred, toggleStar } = useStarredProjectsStore();
@@ -64,6 +64,8 @@ const RecentProjectCard = ({
   };
 
   const gradientClass = getProjectGradient(project.name, isDark);
+
+  const safeMembers = Array.isArray(members) ? members : [];
 
   return (
     <Card
@@ -121,8 +123,8 @@ const RecentProjectCard = ({
                 starred
                   ? "bg-amber-500/15 text-amber-500"
                   : isDark
-                  ? "bg-transparent text-white/30 hover:text-amber-400 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
-                  : "bg-transparent text-neutral-300 hover:text-amber-500 hover:bg-amber-50 opacity-0 group-hover:opacity-100"
+                    ? "bg-transparent text-white/30 hover:text-amber-400 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
+                    : "bg-transparent text-neutral-300 hover:text-amber-500 hover:bg-amber-50 opacity-0 group-hover:opacity-100",
               )}
             >
               <Star
@@ -191,21 +193,31 @@ const RecentProjectCard = ({
                 isDark ? "text-white/40" : "text-neutral-500"
               }`}
             >
-              {members.length} members
+              {safeMembers.length} members
             </span>
           </div>
 
           {/* Member avatars */}
           <div className="flex -space-x-2">
-            {members.slice(0, 3).map((member) => (
-              <TeamMemberAvatar
-                key={member._id}
-                name={member.name}
-                role={member.role}
-                avatarUrl={member.avatar || "https://via.placeholder.com/150"}
-              />
-            ))}
-            {members.length > 3 && (
+            {safeMembers.slice(0, 3).map((member, index) => {
+              const key =
+                member?._id ||
+                member?.email ||
+                member?.name ||
+                `member-${index}`;
+
+              return (
+                <TeamMemberAvatar
+                  key={key}
+                  name={member?.name}
+                  role={member?.role}
+                  avatarUrl={
+                    member?.avatar || "https://via.placeholder.com/150"
+                  }
+                />
+              );
+            })}
+            {safeMembers.length > 3 && (
               <div
                 className={`
                 w-7 h-7 rounded-full
@@ -218,7 +230,7 @@ const RecentProjectCard = ({
                 text-[10px] font-medium
               `}
               >
-                +{members.length - 3}
+                +{safeMembers.length - 3}
               </div>
             )}
           </div>

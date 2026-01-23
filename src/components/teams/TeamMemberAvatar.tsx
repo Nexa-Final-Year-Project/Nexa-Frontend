@@ -14,21 +14,25 @@ export function TeamMemberAvatar({
   role,
   avatarUrl,
 }: {
-  name: string;
-  role: string;
+  name?: string;
+  role?: string;
   avatarUrl?: string;
 }) {
+  const displayName = name?.trim() || "Unknown";
+  const displayRole = role?.trim() || "Member";
+  const initial = displayName.charAt(0).toUpperCase();
+
   return (
     <Tooltip>
       <TooltipTrigger>
         <Avatar className="hover:scale-110 transition-transform">
           <AvatarImage src={avatarUrl} />
-          <AvatarFallback>{name.charAt(0)}</AvatarFallback>
+          <AvatarFallback>{initial}</AvatarFallback>
         </Avatar>
       </TooltipTrigger>
       <TooltipContent>
-        <p className="font-medium">{name}</p>
-        <p className="text-sm text-muted-foreground">{role}</p>
+        <p className="font-medium">{displayName}</p>
+        <p className="text-sm text-muted-foreground">{displayRole}</p>
       </TooltipContent>
     </Tooltip>
   );

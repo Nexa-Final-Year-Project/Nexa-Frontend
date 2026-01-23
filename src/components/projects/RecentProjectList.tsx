@@ -181,7 +181,7 @@ const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
               .slice(0, 4)
               .map((project, index) => (
                 <RecentProjectCard
-                  key={project._id}
+                  key={project?._id || project?.id || `project-${index}`}
                   project={project}
                   members={project?.members || []}
                 />
