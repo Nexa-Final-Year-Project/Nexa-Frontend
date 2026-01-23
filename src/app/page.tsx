@@ -12,7 +12,7 @@ import Integrations from "@/components/shared/sections/Integrations";
 
 export default function Home() {
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-background text-foreground">
       {/* Background gradient mesh */}
       <div className="fixed inset-0 -z-20 bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 dark:block hidden" />
       <div
@@ -22,9 +22,17 @@ export default function Home() {
                           radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)`,
         }}
       />
+      <div className="fixed inset-0 -z-20 bg-gradient-to-b from-white via-neutral-50 to-white dark:hidden" />
+      <div
+        className="fixed inset-0 -z-10 opacity-40 dark:hidden"
+        style={{
+          backgroundImage: `radial-gradient(circle at 20% 30%, rgba(79, 70, 229, 0.10) 0%, transparent 45%),
+                          radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.10) 0%, transparent 45%)`,
+        }}
+      />
 
       {/* Navigation */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-white/5">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-neutral-200 dark:border-white/5">
         <div className="mx-auto max-w-7xl px-4 py-4">
           <Header />
         </div>

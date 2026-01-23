@@ -70,13 +70,8 @@ const Hero = () => {
               isDark ? "text-white/60" : "text-neutral-600"
             }`}
           >
-            AI-Powered Project Management
+            NEXA • AI Delivery OS
           </span>
-          <ChevronRight
-            className={`w-3.5 h-3.5 ${
-              isDark ? "text-white/30" : "text-neutral-400"
-            }`}
-          />
         </motion.div>
 
         {/* Main Heading - Better proportions */}
@@ -87,7 +82,7 @@ const Hero = () => {
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-8 tracking-tight leading-[1.1]"
         >
           <span className={isDark ? "text-white" : "text-neutral-900"}>
-            The Future of
+            Ship every sprint with
           </span>
           <br />
           <span className="relative inline-block mt-2">
@@ -98,7 +93,7 @@ const Hero = () => {
                   : "bg-gradient-to-r from-indigo-600 via-purple-700 to-pink-700"
               }`}
             >
-              Project Management
+              AI precision from NEXA
             </span>
           </span>
         </motion.h1>
@@ -112,8 +107,8 @@ const Hero = () => {
             isDark ? "text-white/50" : "text-neutral-600"
           }`}
         >
-          Harness the power of AI to automate workflows, predict bottlenecks,
-          and deliver projects faster. Built for teams that refuse to settle.
+          NEXA automates sprint planning, assignment, follow-ups, and risk
+          alerts so your team ships on time without the busywork.
         </motion.p>
 
         {/* CTA Buttons - MINIMAL */}
@@ -129,16 +124,21 @@ const Hero = () => {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </Link>
-          <button
-            className={`group flex items-center gap-2 px-8 py-4 font-medium rounded-xl border transition-all duration-300 ${
-              isDark
-                ? "text-white/70 border-white/10 hover:border-white/20 hover:text-white hover:bg-white/[0.03]"
-                : "text-neutral-700 border-neutral-300 hover:border-neutral-400 hover:text-neutral-900 hover:bg-neutral-100"
-            }`}
+          <Link
+            href="/contact?subject=demo"
+            aria-label="Watch the Nexa product demo"
           >
-            <Play className="w-4 h-4" />
-            Watch Demo
-          </button>
+            <button
+              className={`group flex items-center gap-2 px-8 py-4 font-medium rounded-xl border transition-all duration-300 ${
+                isDark
+                  ? "text-white/70 border-white/10 hover:border-white/20 hover:text-white hover:bg-white/[0.03]"
+                  : "text-neutral-700 border-neutral-300 hover:border-neutral-400 hover:text-neutral-900 hover:bg-neutral-100"
+              }`}
+            >
+              <Play className="w-4 h-4" />
+              Watch Demo
+            </button>
+          </Link>
         </motion.div>
 
         {/* Trust Indicators */}
@@ -149,9 +149,9 @@ const Hero = () => {
           className="flex flex-wrap justify-center items-center gap-8 md:gap-12 mb-16"
         >
           {[
-            { icon: Zap, text: "Setup in 2 minutes" },
-            { icon: Shield, text: "Enterprise-grade security" },
-            { icon: Sparkles, text: "AI-powered insights" },
+            { icon: Zap, text: "Launch workspaces in minutes" },
+            { icon: Shield, text: "SOC 2-ready security controls" },
+            { icon: Sparkles, text: "Human-in-the-loop AI guardrails" },
           ].map((item, index) => (
             <motion.div
               key={index}

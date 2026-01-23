@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import Header from "@/components/shared/Header/Header";
 import Footer from "@/components/shared/sections/Footer";
 import {
@@ -123,10 +124,22 @@ const additionalFeatures = [
 ];
 
 export default function ServicesPage() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div
+      className={`min-h-screen ${
+        isDark ? "bg-[#0a0a0f] text-white" : "bg-white text-neutral-900"
+      }`}
+    >
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0a0a0f]/80 border-b border-white/5 mb-8">
+      <header
+        className={`sticky top-0 z-50 backdrop-blur-md mb-8 ${
+          isDark
+            ? "bg-[#0a0a0f]/80 border-b border-white/5"
+            : "bg-white/85 border-b border-neutral-200"
+        }`}
+      >
         <div className="mx-auto max-w-4xl p-4">
           <Header />
         </div>
@@ -143,13 +156,21 @@ export default function ServicesPage() {
             <span className="inline-block px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6">
               Our Services
             </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <h1
+              className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               Everything You Need to
               <span className="block bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">
                 Deliver Faster
               </span>
             </h1>
-            <p className="text-lg text-white/60 max-w-2xl mx-auto">
+            <p
+              className={`text-lg max-w-2xl mx-auto ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}
+            >
               From AI-powered planning to real-time analytics, Nexa provides the
               complete toolkit for modern project management.
             </p>
@@ -165,20 +186,36 @@ export default function ServicesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative p-6 rounded-2xl bg-neutral-900/40 border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300"
+                className={`group relative p-6 rounded-2xl transition-all duration-300 border ${
+                  isDark
+                    ? "bg-neutral-900/40 border-white/[0.06] hover:border-white/[0.12]"
+                    : "bg-neutral-50 border-neutral-200 hover:border-neutral-300"
+                }`}
               >
                 {/* Icon */}
                 <div
                   className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} bg-opacity-20 flex items-center justify-center mb-5`}
                 >
-                  <service.icon className="w-7 h-7 text-white" />
+                  <service.icon
+                    className={`w-7 h-7 ${
+                      isDark ? "text-white" : "text-neutral-900"
+                    }`}
+                  />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-semibold text-white mb-3">
+                <h3
+                  className={`text-xl font-semibold mb-3 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
                   {service.title}
                 </h3>
-                <p className="text-white/60 text-sm leading-relaxed mb-5">
+                <p
+                  className={`text-sm leading-relaxed mb-5 ${
+                    isDark ? "text-white/60" : "text-neutral-600"
+                  }`}
+                >
                   {service.description}
                 </p>
 
@@ -187,7 +224,9 @@ export default function ServicesPage() {
                   {service.features.map((feature) => (
                     <li
                       key={feature}
-                      className="flex items-center gap-2 text-sm text-white/50"
+                      className={`flex items-center gap-2 text-sm ${
+                        isDark ? "text-white/50" : "text-neutral-600"
+                      }`}
                     >
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                       {feature}
@@ -210,10 +249,14 @@ export default function ServicesPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-center mb-10"
           >
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+            <h2
+              className={`text-2xl sm:text-3xl font-bold mb-3 ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               Plus Many More Features
             </h2>
-            <p className="text-white/60">
+            <p className={isDark ? "text-white/60" : "text-neutral-600"}>
               Tools designed to boost your team's productivity
             </p>
           </motion.div>
@@ -225,13 +268,29 @@ export default function ServicesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                className="p-5 rounded-xl bg-neutral-900/30 border border-white/[0.04] text-center hover:border-white/[0.08] transition-colors"
+                className={`p-5 rounded-xl text-center transition-colors border ${
+                  isDark
+                    ? "bg-neutral-900/30 border-white/[0.04] hover:border-white/[0.08]"
+                    : "bg-neutral-50 border-neutral-200 hover:border-neutral-300"
+                }`}
               >
                 <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center mx-auto mb-3">
                   <feature.icon className="w-5 h-5 text-violet-400" />
                 </div>
-                <h3 className="font-medium text-white mb-1">{feature.title}</h3>
-                <p className="text-xs text-white/50">{feature.description}</p>
+                <h3
+                  className={`font-medium mb-1 ${
+                    isDark ? "text-white" : "text-neutral-900"
+                  }`}
+                >
+                  {feature.title}
+                </h3>
+                <p
+                  className={`text-xs ${
+                    isDark ? "text-white/50" : "text-neutral-600"
+                  }`}
+                >
+                  {feature.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -243,12 +302,25 @@ export default function ServicesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-cyan-500/10 to-violet-500/5 border border-cyan-500/20"
+            className={
+              `p-8 sm:p-12 rounded-3xl border ` +
+              (isDark
+                ? "bg-gradient-to-br from-cyan-500/10 to-violet-500/5 border-cyan-500/20"
+                : "bg-gradient-to-br from-cyan-50 to-violet-50 border-cyan-200/60")
+            }
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2
+              className={`text-3xl sm:text-4xl font-bold mb-4 ${
+                isDark ? "text-white" : "text-neutral-900"
+              }`}
+            >
               Start Free, Scale When Ready
             </h2>
-            <p className="text-white/60 mb-8 max-w-lg mx-auto">
+            <p
+              className={`mb-8 max-w-lg mx-auto ${
+                isDark ? "text-white/60" : "text-neutral-600"
+              }`}
+            >
               Try Nexa free with up to 5 team members. Upgrade anytime as your
               team grows.
             </p>
@@ -262,7 +334,11 @@ export default function ServicesPage() {
               </a>
               <a
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white font-medium hover:bg-white/[0.08] transition-all"
+                className={`inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-medium transition-all ${
+                  isDark
+                    ? "bg-white/[0.06] border border-white/[0.08] text-white hover:bg-white/[0.08]"
+                    : "bg-neutral-100 border border-neutral-200 text-neutral-900 hover:bg-neutral-200"
+                }`}
               >
                 Contact Sales
               </a>
