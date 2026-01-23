@@ -52,7 +52,7 @@ export default function DocumentationPage() {
 
   const [documentations, setDocumentations] = useState<DocumentationType[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<DocumentationType | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);

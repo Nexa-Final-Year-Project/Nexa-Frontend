@@ -102,7 +102,7 @@ export default function ReportReviewModal({
           summary.backlogCompleteness
         }%. The focus is heavily weighted toward ${
           Object.keys(report?.workloadDifficulty || {}).find(
-            (k) => (report?.workloadDifficulty?.[k] || 0) > 0
+            (k) => (report?.workloadDifficulty?.[k] || 0) > 0,
           ) || "development"
         }.`
       : null) ||
@@ -139,7 +139,7 @@ export default function ReportReviewModal({
   // Handle decisionLog - can be array of strings OR array of {timestamp, message} objects
   const rawDecisionLog = report?.decisionLog || meta?.decisionLog || [];
   const initialDecisionLog = rawDecisionLog.map((d: any) =>
-    typeof d === "string" ? d : d?.message || JSON.stringify(d)
+    typeof d === "string" ? d : d?.message || JSON.stringify(d),
   );
   const [decisionLog, setDecisionLog] = useState<string[]>(initialDecisionLog);
 
@@ -169,7 +169,7 @@ export default function ReportReviewModal({
     .filter(
       ({ d }) =>
         !internalSearch ||
-        d.toLowerCase().includes(internalSearch.toLowerCase())
+        d.toLowerCase().includes(internalSearch.toLowerCase()),
     )
     .map(({ idx }) => idx);
 
@@ -227,7 +227,7 @@ export default function ReportReviewModal({
   const saveDraft = async () => {
     if (!canEdit) {
       toast.error(
-        "You cannot save this report — it belongs to another account"
+        "You cannot save this report — it belongs to another account",
       );
       return;
     }
@@ -255,7 +255,7 @@ export default function ReportReviewModal({
 
       // Update localStorage
       const local = JSON.parse(
-        localStorage.getItem("generationReports") || "[]"
+        localStorage.getItem("generationReports") || "[]",
       );
       const updated = (local || []).map((r: any) => {
         if (r.reportId !== report.reportId) return r;
@@ -289,7 +289,7 @@ export default function ReportReviewModal({
   const approveAndAssign = async () => {
     if (!canEdit) {
       toast.error(
-        "You cannot approve this report — it belongs to another account"
+        "You cannot approve this report — it belongs to another account",
       );
       return;
     }
@@ -300,14 +300,14 @@ export default function ReportReviewModal({
       "approveAndAssign: extracted mongoId:",
       mongoId,
       "from report:",
-      { _id: report?._id, id: report?.id, reportId: report?.reportId }
+      { _id: report?._id, id: report?.id, reportId: report?.reportId },
     );
 
     if (!mongoId) {
       toast.error("Report not synced to database. Cannot approve.");
       console.error(
         "approveAndAssign: could not extract MongoDB ID from report",
-        report
+        report,
       );
       return;
     }
@@ -331,7 +331,7 @@ export default function ReportReviewModal({
       } catch (saveErr: any) {
         console.warn(
           "approveAndAssign: save failed (continuing with approval):",
-          saveErr?.message
+          saveErr?.message,
         );
       }
 
@@ -347,7 +347,7 @@ export default function ReportReviewModal({
 
       // Update localStorage
       const local = JSON.parse(
-        localStorage.getItem("generationReports") || "[]"
+        localStorage.getItem("generationReports") || "[]",
       );
       const updated = (local || []).map((r: any) => {
         if (r.reportId !== report.reportId) return r;
@@ -383,7 +383,7 @@ export default function ReportReviewModal({
       toast.error(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to approve report"
+          "Failed to approve report",
       );
     } finally {
       setIsSaving(false);
@@ -393,7 +393,7 @@ export default function ReportReviewModal({
   const rejectReport = async () => {
     if (!canEdit) {
       toast.error(
-        "You cannot reject this report — it belongs to another account"
+        "You cannot reject this report — it belongs to another account",
       );
       return;
     }
@@ -406,7 +406,7 @@ export default function ReportReviewModal({
       }
 
       const local = JSON.parse(
-        localStorage.getItem("generationReports") || "[]"
+        localStorage.getItem("generationReports") || "[]",
       );
       const updated = (local || []).map((r: any) => {
         if (r.reportId !== report.reportId) return r;
@@ -518,8 +518,8 @@ export default function ReportReviewModal({
                       status === "approved"
                         ? "bg-emerald-500/20 text-emerald-400"
                         : status === "rejected"
-                        ? "bg-rose-500/20 text-rose-400"
-                        : "bg-amber-500/20 text-amber-400"
+                          ? "bg-rose-500/20 text-rose-400"
+                          : "bg-amber-500/20 text-amber-400"
                     }`}
                   >
                     {status}
@@ -580,7 +580,7 @@ export default function ReportReviewModal({
                           [JSON.stringify(report, null, 2)],
                           {
                             type: "application/json",
-                          }
+                          },
                         );
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement("a");
@@ -873,7 +873,7 @@ export default function ReportReviewModal({
                           {count}
                         </div>
                       </motion.div>
-                    )
+                    ),
                   )}
                 </motion.div>
 
@@ -982,7 +982,7 @@ export default function ReportReviewModal({
                               !internalSearch ||
                               d
                                 .toLowerCase()
-                                .includes(internalSearch.toLowerCase())
+                                .includes(internalSearch.toLowerCase()),
                           )
                           .map((d, i) => (
                             <motion.li
@@ -1203,7 +1203,7 @@ export default function ReportReviewModal({
                                 )}
                               </td>
                             </motion.tr>
-                          )
+                          ),
                         )}
                       </tbody>
                     </table>
@@ -1221,7 +1221,7 @@ export default function ReportReviewModal({
                   setAssignmentReasons(updated);
                   try {
                     const local = JSON.parse(
-                      localStorage.getItem("generationReports") || "[]"
+                      localStorage.getItem("generationReports") || "[]",
                     );
                     const updatedAll = (local || []).map((r: any) => {
                       if (r.reportId !== report.reportId) return r;
@@ -1234,11 +1234,11 @@ export default function ReportReviewModal({
                     });
                     localStorage.setItem(
                       "generationReports",
-                      JSON.stringify(updatedAll)
+                      JSON.stringify(updatedAll),
                     );
                     try {
                       window.dispatchEvent(
-                        new Event("generationReports:changed")
+                        new Event("generationReports:changed"),
                       );
                     } catch (e) {}
                   } catch (e) {}

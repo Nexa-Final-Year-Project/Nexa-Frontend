@@ -24,15 +24,17 @@ const DashboardProjectList = ({
   const projectList: Project[] = Array.isArray(projects)
     ? projects
     : projects && Array.isArray((projects as any).projects)
-    ? (projects as any).projects
-    : projects && Array.isArray((projects as any).data)
-    ? (projects as any).data
-    : [];
+      ? (projects as any).projects
+      : projects && Array.isArray((projects as any).data)
+        ? (projects as any).data
+        : [];
 
   useEffect(() => {
     if (showStarred) {
       setFilteredProjects(
-        projectList.filter((project) => starredProjectIds.includes(project._id))
+        projectList.filter((project) =>
+          starredProjectIds.includes(project._id),
+        ),
       );
     } else {
       setFilteredProjects(projectList);
@@ -90,7 +92,7 @@ const DashboardProjectList = ({
                   "flex-shrink-0 p-2 rounded-lg transition-all duration-200",
                   starred
                     ? "bg-amber-500/20 text-amber-500 dark:text-amber-400"
-                    : "bg-neutral-100 dark:bg-white/[0.04] text-neutral-400 dark:text-white/30 hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-500/10"
+                    : "bg-neutral-100 dark:bg-white/[0.04] text-neutral-400 dark:text-white/30 hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-500/10",
                 )}
               >
                 <Star

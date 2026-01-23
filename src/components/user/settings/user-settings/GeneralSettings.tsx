@@ -42,8 +42,8 @@ export const UserGeneralSettings = ({
         !value
           ? "Email is required"
           : !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)
-          ? "Invalid email format"
-          : null,
+            ? "Invalid email format"
+            : null,
       span: 12,
     },
     {

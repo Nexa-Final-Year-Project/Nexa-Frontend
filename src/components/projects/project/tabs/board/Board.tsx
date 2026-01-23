@@ -96,7 +96,7 @@ const Board = ({
       ownerId: string;
       dateType: "due" | "start";
       date: string;
-    }
+    },
   ) => {
     const newTask: Task = {
       _id: `task-${Date.now()}`,
@@ -134,8 +134,8 @@ const Board = ({
     } catch (error) {
       setTasks(
         tasks.map((task) =>
-          task._id === taskId ? { ...task, status: prevStatus } : task
-        )
+          task._id === taskId ? { ...task, status: prevStatus } : task,
+        ),
       );
     }
   };
@@ -207,7 +207,7 @@ const Board = ({
             .map((column) => {
               // Find tasks for this column
               const columnTasks = filteredTasks.filter(
-                (task) => task.status === column.id
+                (task) => task.status === column.id,
               );
 
               // If no tasks, create a dummy placeholder task to enable drag-and-drop
@@ -234,7 +234,7 @@ const Board = ({
             // Find the task that moved by comparing with previous state
             updatedData.forEach((updatedItem) => {
               const originalTask = tasks.find(
-                (task) => task._id === updatedItem.id
+                (task) => task._id === updatedItem.id,
               );
               if (originalTask && originalTask.status !== updatedItem.column) {
                 // Task moved to a different column
@@ -244,87 +244,89 @@ const Board = ({
           }}
           className="auto-cols-[minmax(260px,1fr)] sm:auto-cols-[minmax(300px,1fr)] grid-flow-col gap-4 p-3 min-w-full"
         >
-        {(column) => {
-          const columnTasks = filteredTasks.filter(
-            (task) => task.status === column.id
-          );
-          const hasPlaceholder = columnTasks.length === 0;
+          {(column) => {
+            const columnTasks = filteredTasks.filter(
+              (task) => task.status === column.id,
+            );
+            const hasPlaceholder = columnTasks.length === 0;
 
-          return (
-            <KanbanBoard
-              id={column.id}
-              key={column.id}
-              className="min-w-[260px] sm:min-w-[300px]"
-            >
-              <ColumnHeader
-                column={column}
-                taskCount={columnTasks.length}
-                onAddTask={() => setAddingColumn(column.id)}
-              />
-
-              <KanbanCards id={column.id}>
-                {(kanbanItem) => {
-                  // Skip rendering for placeholder tasks
-                  if (kanbanItem.isPlaceholder) {
-                    return null;
-                  }
-
-                  const task = tasks.find((t) => t._id === kanbanItem.id);
-                  if (!task) return null;
-
-                  return (
-                    <KanbanCard
-                      key={task._id}
-                      id={task._id}
-                      column={column.id}
-                      name={task.title}
-                      className="glass-card !cursor-pointer group"
-                    >
-                      <TaskCard
-                        task={task}
-                        isEditing={editingId === task._id}
-                        editValue={editValue}
-                        onEditChange={setEditValue}
-                        onStartEdit={() => {
-                          setEditingId(task._id);
-                          setEditValue(task.title);
-                        }}
-                        onSaveEdit={() => handleEditTask(task._id)}
-                        onCancelEdit={() => setEditingId(null)}
-                        onDelete={() => handleDeleteTask(task._id)}
-                        handleEditTaskModal={handleEditTaskModal}
-                        members={members}
-                      />
-                    </KanbanCard>
-                  );
-                }}
-              </KanbanCards>
-
-              {/* Rest of your column code remains the same */}
-              {addingColumn === column.id && (
-                <CreateTaskCard
+            return (
+              <KanbanBoard
+                id={column.id}
+                key={column.id}
+                className="min-w-[260px] sm:min-w-[300px]"
+              >
+                <ColumnHeader
                   column={column}
-                  users={users}
-                  onCreate={(taskData) => handleCreateTask(column.id, taskData)}
-                  onCancel={() => setAddingColumn(null)}
-                  isLoading={isLoading}
+                  taskCount={columnTasks.length}
+                  onAddTask={() => setAddingColumn(column.id)}
                 />
-              )}
 
-              {!addingColumn && (
-                <div className="flex items-center justify-start gap-2 p-2">
-                  <Button
-                    className="mt-2 text-sm dark:text-gray-100 gap-2 justify-start cursor-pointer"
-                    variant="outline"
-                    onClick={() => setAddingColumn(column.id)}
-                  >
-                    + Create
-                  </Button>
-                </div>
-              )}
-            </KanbanBoard>
-          );
-        }}
+                <KanbanCards id={column.id}>
+                  {(kanbanItem) => {
+                    // Skip rendering for placeholder tasks
+                    if (kanbanItem.isPlaceholder) {
+                      return null;
+                    }
+
+                    const task = tasks.find((t) => t._id === kanbanItem.id);
+                    if (!task) return null;
+
+                    return (
+                      <KanbanCard
+                        key={task._id}
+                        id={task._id}
+                        column={column.id}
+                        name={task.title}
+                        className="glass-card !cursor-pointer group"
+                      >
+                        <TaskCard
+                          task={task}
+                          isEditing={editingId === task._id}
+                          editValue={editValue}
+                          onEditChange={setEditValue}
+                          onStartEdit={() => {
+                            setEditingId(task._id);
+                            setEditValue(task.title);
+                          }}
+                          onSaveEdit={() => handleEditTask(task._id)}
+                          onCancelEdit={() => setEditingId(null)}
+                          onDelete={() => handleDeleteTask(task._id)}
+                          handleEditTaskModal={handleEditTaskModal}
+                          members={members}
+                        />
+                      </KanbanCard>
+                    );
+                  }}
+                </KanbanCards>
+
+                {/* Rest of your column code remains the same */}
+                {addingColumn === column.id && (
+                  <CreateTaskCard
+                    column={column}
+                    users={users}
+                    onCreate={(taskData) =>
+                      handleCreateTask(column.id, taskData)
+                    }
+                    onCancel={() => setAddingColumn(null)}
+                    isLoading={isLoading}
+                  />
+                )}
+
+                {!addingColumn && (
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <Button
+                      className="mt-2 text-sm dark:text-gray-100 gap-2 justify-start cursor-pointer"
+                      variant="outline"
+                      onClick={() => setAddingColumn(column.id)}
+                    >
+                      + Create
+                    </Button>
+                  </div>
+                )}
+              </KanbanBoard>
+            );
+          }}
         </KanbanProvider>
       </div>
       {editModal && (

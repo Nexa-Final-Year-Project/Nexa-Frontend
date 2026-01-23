@@ -104,7 +104,7 @@ export default function TaskGenerationReports({
   // Assignment review modal state (for direct editing from delete modal)
   const [assignmentModalOpen, setAssignmentModalOpen] = useState(false);
   const [reportForAssignment, setReportForAssignment] = useState<any | null>(
-    null
+    null,
   );
 
   // Prevent duplicate fetches
@@ -145,7 +145,7 @@ export default function TaskGenerationReports({
               }`,
             },
             credentials: "include",
-          }
+          },
         );
 
         let backendReports: any[] = [];
@@ -157,8 +157,8 @@ export default function TaskGenerationReports({
         // Build a set of backend report IDs to avoid adding localStorage duplicates
         const backendIds = new Set(
           backendReports.flatMap((r: any) =>
-            [r._id, r.reportId].filter(Boolean)
-          )
+            [r._id, r.reportId].filter(Boolean),
+          ),
         );
 
         // Get localStorage reports (these are partial - only have reportId, meta, success, etc.)
@@ -166,7 +166,7 @@ export default function TaskGenerationReports({
         let localOnlyReports: any[] = [];
         try {
           const local = JSON.parse(
-            localStorage.getItem("generationReports") || "[]"
+            localStorage.getItem("generationReports") || "[]",
           );
           const { user } = useAuthStore.getState();
 
@@ -176,14 +176,14 @@ export default function TaskGenerationReports({
               const id = r.reportId || r._id;
               // Keep only if NOT in backend (i.e., truly new/not-synced)
               return !id || !backendIds.has(id);
-            }
+            },
           );
 
           // Update localStorage to remove synced entries
           if (cleanedLocal.length !== (local || []).length) {
             localStorage.setItem(
               "generationReports",
-              JSON.stringify(cleanedLocal)
+              JSON.stringify(cleanedLocal),
             );
           }
 
@@ -218,7 +218,7 @@ export default function TaskGenerationReports({
                 r.displayTitle ||
                 makeDisplayTitle(r, projectId) ||
                 `Generation Report • ${new Date(
-                  r.createdAt || Date.now()
+                  r.createdAt || Date.now(),
                 ).toLocaleString()}`,
               uniqueKey: id || `report-${idx}`,
               // Normalize status
@@ -237,11 +237,11 @@ export default function TaskGenerationReports({
         // Update legacy detection
         try {
           const local = JSON.parse(
-            localStorage.getItem("generationReports") || "[]"
+            localStorage.getItem("generationReports") || "[]",
           );
           setHasLegacy(
             Array.isArray(local) &&
-              local.some((r: any) => !r.ownerId && !r.ownerEmail)
+              local.some((r: any) => !r.ownerId && !r.ownerEmail),
           );
         } catch (e) {
           setHasLegacy(false);
@@ -251,7 +251,7 @@ export default function TaskGenerationReports({
         // Fallback to localStorage only
         try {
           const local = JSON.parse(
-            localStorage.getItem("generationReports") || "[]"
+            localStorage.getItem("generationReports") || "[]",
           );
           const { user } = useAuthStore.getState();
           const ownedLocal = (Array.isArray(local) ? local : [])
@@ -270,7 +270,7 @@ export default function TaskGenerationReports({
               r.displayTitle ||
               makeDisplayTitle(r, projectId) ||
               `Generation Report • ${new Date(
-                r.createdAt || Date.now()
+                r.createdAt || Date.now(),
               ).toLocaleString()}`,
             uniqueKey: r._id || r.reportId || `report-${idx}`,
             status: normalizeStatus(r.status),
@@ -284,7 +284,7 @@ export default function TaskGenerationReports({
         fetchingRef.current = false;
       }
     },
-    [projectId]
+    [projectId],
   );
 
   // Single useEffect for initial fetch
@@ -320,10 +320,10 @@ export default function TaskGenerationReports({
         // if not yet present, try from localStorage
         try {
           const local = JSON.parse(
-            localStorage.getItem("generationReports") || "[]"
+            localStorage.getItem("generationReports") || "[]",
           );
           const lr = (local || []).find(
-            (x: any) => x.reportId === openReportId
+            (x: any) => x.reportId === openReportId,
           );
           if (lr) setSelected(lr);
         } catch (e) {}
@@ -341,17 +341,19 @@ export default function TaskGenerationReports({
   // Clean up local storage and state after deletion
   const cleanupAfterDelete = (r: any) => {
     setReports((prev) =>
-      prev.filter((x: any) => x.reportId !== r.reportId && x._id !== r._id)
+      prev.filter((x: any) => x.reportId !== r.reportId && x._id !== r._id),
     );
     try {
       const local = JSON.parse(
-        localStorage.getItem("generationReports") || "[]"
+        localStorage.getItem("generationReports") || "[]",
       );
       localStorage.setItem(
         "generationReports",
         JSON.stringify(
-          local.filter((x: any) => x.reportId !== r.reportId && x._id !== r._id)
-        )
+          local.filter(
+            (x: any) => x.reportId !== r.reportId && x._id !== r._id,
+          ),
+        ),
       );
       window.dispatchEvent(new Event("generationReports:changed"));
     } catch (e) {}
@@ -403,7 +405,7 @@ export default function TaskGenerationReports({
     }
     try {
       const local = JSON.parse(
-        localStorage.getItem("generationReports") || "[]"
+        localStorage.getItem("generationReports") || "[]",
       );
       setLegacyBackup(local);
       const migrated = (local || []).map((r: any) => {
@@ -426,7 +428,7 @@ export default function TaskGenerationReports({
       window.dispatchEvent(new Event("generationReports:changed"));
       setHasLegacy(
         Array.isArray(legacyBackup) &&
-          legacyBackup.some((r: any) => !r.ownerId && !r.ownerEmail)
+          legacyBackup.some((r: any) => !r.ownerId && !r.ownerEmail),
       );
       setLegacyBackup(null);
       toast.success("Legacy migration undone");
@@ -453,7 +455,7 @@ export default function TaskGenerationReports({
     statusFilter: string,
     sort: string,
     pageNum: number,
-    size: number
+    size: number,
   ) {
     const filtered = list.filter((r) => {
       // Use normalized status for filtering
@@ -635,7 +637,7 @@ export default function TaskGenerationReports({
                 filterStatus,
                 sortBy,
                 page,
-                pageSize
+                pageSize,
               ).map((r, idx) => (
                 <li
                   key={r.uniqueKey || r._id || r.reportId || `report-${idx}`}
@@ -684,13 +686,13 @@ export default function TaskGenerationReports({
                             ? normalizeStatus(r.status) === "approved"
                               ? "text-neutral-200"
                               : normalizeStatus(r.status) === "rejected"
-                              ? "text-neutral-400"
-                              : "text-neutral-300"
+                                ? "text-neutral-400"
+                                : "text-neutral-300"
                             : normalizeStatus(r.status) === "approved"
-                            ? "text-emerald-600"
-                            : normalizeStatus(r.status) === "rejected"
-                            ? "text-rose-600"
-                            : "text-amber-600"
+                              ? "text-emerald-600"
+                              : normalizeStatus(r.status) === "rejected"
+                                ? "text-rose-600"
+                                : "text-amber-600"
                         }`}
                       >
                         {formatStatusDisplay(r.status)}
@@ -701,7 +703,7 @@ export default function TaskGenerationReports({
                         }`}
                       >
                         {new Date(
-                          r.createdAt || Date.now()
+                          r.createdAt || Date.now(),
                         ).toLocaleDateString()}
                       </div>
                       <Button

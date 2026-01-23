@@ -41,19 +41,19 @@ const OverviewTab = () => {
     const startOfToday = new Date(
       now.getFullYear(),
       now.getMonth(),
-      now.getDate()
+      now.getDate(),
     );
     const startOfWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const startOfLastWeek = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
 
     // Today's activities
     const todayCount = activityLogs.filter(
-      (log) => new Date(log.timestamp) >= startOfToday
+      (log) => new Date(log.timestamp) >= startOfToday,
     ).length;
 
     // This week's activities
     const thisWeekCount = activityLogs.filter(
-      (log) => new Date(log.timestamp) >= startOfWeek
+      (log) => new Date(log.timestamp) >= startOfWeek,
     ).length;
 
     // Last week's activities (for trend calculation)
@@ -67,8 +67,8 @@ const OverviewTab = () => {
       lastWeekCount > 0
         ? Math.round(((thisWeekCount - lastWeekCount) / lastWeekCount) * 100)
         : thisWeekCount > 0
-        ? 100
-        : 0;
+          ? 100
+          : 0;
 
     // Active projects (from projects hook)
     const activeProjects = Array.isArray(projects) ? projects.length : 0;

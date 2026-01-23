@@ -2,11 +2,20 @@
 
 import React from "react";
 import { useTheme } from "next-themes";
-import { Command, Menu as MenuIcon, Plus as PlusIcon, Search as SearchIcon } from "lucide-react";
+import {
+  Command,
+  Menu as MenuIcon,
+  Plus as PlusIcon,
+  Search as SearchIcon,
+} from "lucide-react";
 import { AppSidebar } from "@/components/shared/sidebar/Sidebar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import ProfileDropdown from "@/components/user/profile/ProfileDropdown";
 import { useAuthStore } from "@/store/auth/authStore";
 import { useModalStore } from "@/store/modal/modalStore";

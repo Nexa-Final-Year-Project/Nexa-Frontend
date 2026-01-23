@@ -24,7 +24,11 @@ export const StorageSection = ({
           {storageUsed} of {storageLimit} used.
         </p>
       </div>
-      <Button variant="outline" onClick={onClearCache} className="w-full sm:w-auto">
+      <Button
+        variant="outline"
+        onClick={onClearCache}
+        className="w-full sm:w-auto"
+      >
         Clear Cache
       </Button>
     </div>

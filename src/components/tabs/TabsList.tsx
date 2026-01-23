@@ -80,8 +80,8 @@ export function TabsListReusable({ tabs }: TabsListReusableProps) {
                       ? "bg-white/[0.08] text-white/60 border border-white/[0.06]"
                       : "bg-neutral-200 text-neutral-600 border border-neutral-300"
                     : isDark
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                    : "bg-emerald-50 text-emerald-600 border border-emerald-200"
+                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                      : "bg-emerald-50 text-emerald-600 border border-emerald-200"
                 }
               `}
               variant="secondary"
