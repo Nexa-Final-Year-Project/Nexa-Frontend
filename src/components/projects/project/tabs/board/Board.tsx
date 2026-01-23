@@ -200,49 +200,50 @@ const Board = ({
           setSelectedStatuses([]);
         }}
       />
-      <KanbanProvider
-        columns={columns}
-        data={columns
-          .map((column) => {
-            // Find tasks for this column
-            const columnTasks = filteredTasks.filter(
-              (task) => task.status === column.id
-            );
+      <div className="w-full overflow-x-auto pb-4">
+        <KanbanProvider
+          columns={columns}
+          data={columns
+            .map((column) => {
+              // Find tasks for this column
+              const columnTasks = filteredTasks.filter(
+                (task) => task.status === column.id
+              );
 
-            // If no tasks, create a dummy placeholder task to enable drag-and-drop
-            if (columnTasks.length === 0) {
-              return {
-                id: `placeholder-${column.id}`,
-                name: "placeholder",
-                column: column.id,
-                isPlaceholder: true, // Add a flag to identify placeholder tasks
-              };
-            }
+              // If no tasks, create a dummy placeholder task to enable drag-and-drop
+              if (columnTasks.length === 0) {
+                return {
+                  id: `placeholder-${column.id}`,
+                  name: "placeholder",
+                  column: column.id,
+                  isPlaceholder: true, // Add a flag to identify placeholder tasks
+                };
+              }
 
-            // Return actual tasks
-            return columnTasks.map((task) => ({
-              ...task,
-              id: task._id,
-              name: task.title,
-              column: task.status,
-              isPlaceholder: false,
-            }));
-          })
-          .flat()} // Flatten the array of arrays
-        onDataChange={(updatedData) => {
-          // Find the task that moved by comparing with previous state
-          updatedData.forEach((updatedItem) => {
-            const originalTask = tasks.find(
-              (task) => task._id === updatedItem.id
-            );
-            if (originalTask && originalTask.status !== updatedItem.column) {
-              // Task moved to a different column
-              handleTaskMove(updatedItem.id, updatedItem.column);
-            }
-          });
-        }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4"
-      >
+              // Return actual tasks
+              return columnTasks.map((task) => ({
+                ...task,
+                id: task._id,
+                name: task.title,
+                column: task.status,
+                isPlaceholder: false,
+              }));
+            })
+            .flat()} // Flatten the array of arrays
+          onDataChange={(updatedData) => {
+            // Find the task that moved by comparing with previous state
+            updatedData.forEach((updatedItem) => {
+              const originalTask = tasks.find(
+                (task) => task._id === updatedItem.id
+              );
+              if (originalTask && originalTask.status !== updatedItem.column) {
+                // Task moved to a different column
+                handleTaskMove(updatedItem.id, updatedItem.column);
+              }
+            });
+          }}
+          className="auto-cols-[minmax(260px,1fr)] sm:auto-cols-[minmax(300px,1fr)] grid-flow-col gap-4 p-3 min-w-full"
+        >
         {(column) => {
           const columnTasks = filteredTasks.filter(
             (task) => task.status === column.id
@@ -250,7 +251,11 @@ const Board = ({
           const hasPlaceholder = columnTasks.length === 0;
 
           return (
-            <KanbanBoard id={column.id} key={column.id}>
+            <KanbanBoard
+              id={column.id}
+              key={column.id}
+              className="min-w-[260px] sm:min-w-[300px]"
+            >
               <ColumnHeader
                 column={column}
                 taskCount={columnTasks.length}
@@ -320,7 +325,8 @@ const Board = ({
             </KanbanBoard>
           );
         }}
-      </KanbanProvider>
+        </KanbanProvider>
+      </div>
       {editModal && (
         <EditTaskModal
           open={editModal}

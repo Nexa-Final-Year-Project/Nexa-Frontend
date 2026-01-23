@@ -56,7 +56,7 @@ export const UserGeneralSettings = ({
   ];
 
   return (
-    <div className="p-8 space-y-10">
+    <div className="p-6 sm:p-8 space-y-10">
       {/* Profile Avatar Section */}
       <div className="text-left">
         <div className="flex items-center gap-3 mb-1">
@@ -78,13 +78,13 @@ export const UserGeneralSettings = ({
         </p>
 
         <div
-          className={`rounded-xl border p-6 ${
+          className={`rounded-xl border p-5 sm:p-6 ${
             isDark
               ? "bg-white/[0.02] border-white/[0.06]"
               : "bg-neutral-50 border-neutral-200"
           }`}
         >
-          <div className="flex items-center gap-8">
+          <div className="flex flex-col lg:flex-row items-start gap-6 lg:gap-8">
             {/* Avatar Display */}
             <div className="relative group">
               <Avatar
@@ -111,7 +111,7 @@ export const UserGeneralSettings = ({
             </div>
 
             {/* Upload Info */}
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-4 w-full min-w-0">
               <div>
                 <h3
                   className={`text-sm font-medium mb-1 ${
@@ -129,7 +129,7 @@ export const UserGeneralSettings = ({
                 </p>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3">
                 <button
                   className={`
                   flex items-center gap-2 px-4 py-2.5 rounded-xl border
@@ -145,8 +145,8 @@ export const UserGeneralSettings = ({
                   Choose File
                 </button>
                 <span
-                  className={`text-xs ${
-                    isDark ? "text-white/30" : "text-neutral-400"
+                  className={`text-xs max-w-xs leading-5 ${
+                    isDark ? "text-white/40" : "text-neutral-500"
                   }`}
                 >
                   JPG, PNG or GIF • Max 5MB

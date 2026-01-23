@@ -346,6 +346,7 @@ export default function DocumentationPage() {
             variant="outline"
             size="sm"
             disabled={loading}
+            className="w-full sm:w-auto"
           >
             <RefreshCw
               className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
@@ -499,7 +500,7 @@ export default function DocumentationPage() {
               </div>
 
               {selectedDoc && (
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Button variant="outline" size="sm" onClick={startEditing}>
                     <Edit className="h-4 w-4 mr-2" />
                     Edit
@@ -548,7 +549,7 @@ export default function DocumentationPage() {
           <CardContent>
             {selectedDoc ? (
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid grid-cols-4 lg:grid-cols-7">
+                <TabsList className="flex flex-wrap gap-2 overflow-x-auto scrollbar-none px-1 py-1">
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="architecture">Architecture</TabsTrigger>
                   <TabsTrigger value="sprints">Sprints</TabsTrigger>
@@ -599,7 +600,7 @@ export default function DocumentationPage() {
                   </div>
                 )}
 
-                <div className="mt-4 max-h-[600px] overflow-y-auto prose prose-sm dark:prose-invert max-w-none">
+                <div className="mt-4 max-h-[70vh] overflow-y-auto prose prose-sm dark:prose-invert max-w-none">
                   <TabsContent value="overview">
                     <ReactMarkdown>
                       {selectedDoc.content?.projectOverview ||

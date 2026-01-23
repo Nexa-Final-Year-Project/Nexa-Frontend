@@ -46,7 +46,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 relative">
+    <div className="flex flex-col gap-6 relative w-full min-w-0">
       {/* Header Section */}
       <div className="relative">
         <div className="flex items-center gap-3 mb-6">

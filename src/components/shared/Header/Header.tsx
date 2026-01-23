@@ -47,13 +47,13 @@ const Header = () => {
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
           {isLoggedIn ? (
-            // Show Dashboard button when logged in
-            <Link href={`/u/${user?.uid}`}>
+            // Hide primary dashboard pill on small screens (available in mobile drawer)
+            <Link href={`/u/${user?.uid}`} className="hidden md:block">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className={cn(
-                  "group relative px-5 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 overflow-hidden transition-all duration-300",
+                  "group relative px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-medium text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 overflow-hidden transition-all duration-300 min-w-0",
                   isDark
                     ? "bg-white text-neutral-900"
                     : "bg-neutral-900 text-white"
@@ -65,13 +65,13 @@ const Header = () => {
               </motion.button>
             </Link>
           ) : (
-            // Show Login button when not logged in - minimal elegant style
-            <Link href="/login">
+            // Hide primary sign-in pill on small screens (available in mobile drawer)
+            <Link href="/login" className="hidden md:block">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className={cn(
-                  "group relative px-5 py-2.5 rounded-xl border font-medium text-sm flex items-center gap-2 transition-all duration-300 backdrop-blur-sm",
+                  "group relative px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border font-medium text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 transition-all duration-300 backdrop-blur-sm min-w-0",
                   isDark
                     ? "bg-white/[0.08] border-white/[0.1] hover:bg-white/[0.12] hover:border-white/[0.15] text-white"
                     : "bg-neutral-900 border-neutral-800 hover:bg-neutral-800 text-white"
@@ -123,6 +123,37 @@ const Header = () => {
             )}
           >
             <Menu mobile onItemClick={() => setMobileMenuOpen(false)} />
+            <div className="mt-3 flex flex-col gap-2">
+              {isLoggedIn ? (
+                <Link href={`/u/${user?.uid}`} onClick={() => setMobileMenuOpen(false)}>
+                  <button
+                    className={cn(
+                      "w-full px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2",
+                      isDark
+                        ? "bg-white text-neutral-900"
+                        : "bg-neutral-900 text-white"
+                    )}
+                  >
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
+                  </button>
+                </Link>
+              ) : (
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <button
+                    className={cn(
+                      "w-full px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 border",
+                      isDark
+                        ? "bg-white/[0.08] border-white/[0.12] text-white"
+                        : "bg-neutral-900 border-neutral-800 text-white"
+                    )}
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Sign In
+                  </button>
+                </Link>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

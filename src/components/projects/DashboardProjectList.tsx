@@ -66,7 +66,7 @@ const DashboardProjectList = ({
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 w-full">
       {filteredProjects
         .slice(0, showAll ? projectList.length : 4)
         .map((project) => {
@@ -77,7 +77,7 @@ const DashboardProjectList = ({
               href={`${currentPath}/p/${project._id}`}
               key={project._id}
               className="
-                group relative flex items-center gap-4 p-4 
+                group relative flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 
                 rounded-xl bg-white dark:bg-neutral-900/40 border border-neutral-200 dark:border-white/[0.06]
                 hover:bg-neutral-50 dark:hover:bg-neutral-900/60 hover:border-neutral-300 dark:hover:border-white/[0.1]
                 transition-all duration-200 cursor-pointer shadow-sm dark:shadow-none
@@ -105,7 +105,7 @@ const DashboardProjectList = ({
               </div>
 
               {/* Content */}
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 w-full">
                 <h3 className="font-medium text-neutral-900 dark:text-white group-hover:text-neutral-800 dark:group-hover:text-white/90 truncate">
                   {project.name}
                 </h3>

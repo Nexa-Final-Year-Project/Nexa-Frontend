@@ -73,7 +73,7 @@ const TasksList = ({ tasks }: { tasks: Task[] }) => {
             backdrop-blur-sm shadow-sm dark:shadow-none
           "
         >
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4 w-full">
             <div className="flex items-start gap-3 flex-1 min-w-0">
               <div className="mt-0.5">{getStatusIcon(task.status)}</div>
               <div className="flex-1 min-w-0">
@@ -104,7 +104,7 @@ const TasksList = ({ tasks }: { tasks: Task[] }) => {
               className="
               w-8 h-8 rounded-lg flex items-center justify-center
               bg-neutral-100 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04]
-              opacity-0 group-hover:opacity-100 transition-opacity duration-300
+              opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 self-end sm:self-auto
             "
             >
               <ArrowRight className="w-4 h-4 text-neutral-400 dark:text-white/40" />

@@ -18,15 +18,17 @@ export const AutoArchiveSection = ({
   onChangeDuration,
 }: AutoArchiveSectionProps) => {
   return (
-    <div className="">
-      <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
+    <div>
+      <h3 className="text-lg font-semibold flex items-center gap-2 mb-3 text-neutral-900 dark:text-white">
         <Archive className="w-5 h-5 text-orange-500" /> Auto-Archive
       </h3>
 
-      <div className="flex items-center justify-between p-4 rounded-lg border shadow-sm mb-4">
-        <div>
-          <span className="font-medium">Automatically Archive</span>
-          <p className="text-xs text-gray-500">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg border shadow-sm mb-4 bg-white dark:bg-white/5 border-neutral-200 dark:border-white/10">
+        <div className="min-w-0">
+          <span className="font-medium text-neutral-900 dark:text-white">
+            Automatically Archive
+          </span>
+          <p className="text-xs text-neutral-600 dark:text-white/60">
             Auto-archive inactive items after the selected duration.
           </p>
         </div>
@@ -34,7 +36,7 @@ export const AutoArchiveSection = ({
       </div>
 
       {autoArchive && (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {["30", "60", "90"].map((days) => (
             <Button
               key={days}

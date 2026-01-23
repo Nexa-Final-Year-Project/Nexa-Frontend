@@ -70,7 +70,7 @@ const RecentProjectCard = ({
   return (
     <Card
       className={`
-      group relative overflow-hidden
+      group relative overflow-hidden h-full flex flex-col
       ${
         isDark
           ? "bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.1]"
@@ -123,8 +123,8 @@ const RecentProjectCard = ({
                 starred
                   ? "bg-amber-500/15 text-amber-500"
                   : isDark
-                    ? "bg-transparent text-white/30 hover:text-amber-400 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
-                    : "bg-transparent text-neutral-300 hover:text-amber-500 hover:bg-amber-50 opacity-0 group-hover:opacity-100",
+                    ? "bg-transparent text-white/30 hover:text-amber-400 hover:bg-amber-500/10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                    : "bg-transparent text-neutral-300 hover:text-amber-500 hover:bg-amber-50 opacity-100 sm:opacity-0 sm:group-hover:opacity-100",
               )}
             >
               <Star
@@ -143,7 +143,7 @@ const RecentProjectCard = ({
                     ? "bg-transparent text-white/30 hover:text-white hover:bg-white/[0.06]"
                     : "bg-transparent text-neutral-300 hover:text-neutral-700 hover:bg-neutral-100"
                 }
-                opacity-0 group-hover:opacity-100
+                opacity-100 sm:opacity-0 sm:group-hover:opacity-100
                 transition-all duration-200
               `}
               onClick={(e) => {

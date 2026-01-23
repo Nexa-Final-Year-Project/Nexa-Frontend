@@ -11,27 +11,25 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import ReportReviewModal from "./ReportReviewModal";
-import DeleteReportModal from "@/components/shared/modals/DeleteReportModal";
 import AssignmentReviewModal from "../AssignmentReviewModal";
-import { ProjectMember } from "@/types/project";
+import DeleteReportModal from "@/components/shared/modals/DeleteReportModal";
 import { useAuthStore } from "@/store/auth/authStore";
 import { reportsApi } from "@/api/reports/reportsApi";
 import toast from "@/lib/customToast";
+import { ProjectMember } from "@/types/project";
 
-type GenerationReportMeta = any;
+const normalizeStatus = (status?: string | null) => {
+  const normalized = (status || "").toLowerCase().replace(/\s+/g, "_");
+  if (normalized === "pending" || normalized === "pendingreview") {
+    return "pending_review";
+  }
+  if (["approved", "rejected", "pending_review"].includes(normalized)) {
+    return normalized as "approved" | "rejected" | "pending_review";
+  }
+  return normalized || "pending_review";
+};
 
-// Helper to normalize status for display and filtering
-function normalizeStatus(status: string | undefined | null): string {
-  if (!status) return "pending_review";
-  const lower = status.toLowerCase().replace(/\s+/g, "_");
-  // Map various formats to consistent lowercase snake_case
-  if (lower.includes("approved")) return "approved";
-  if (lower.includes("reject")) return "rejected";
-  return "pending_review";
-}
-
-// Helper to format status for display
-function formatStatusDisplay(status: string | undefined | null): string {
+function formatStatusDisplay(status?: string) {
   const normalized = normalizeStatus(status);
   switch (normalized) {
     case "approved":
@@ -645,7 +643,7 @@ export default function TaskGenerationReports({
                   className="cursor-pointer"
                 >
                   <div
-                    className={`flex items-center justify-between gap-4 p-4 rounded-xl border transition-colors ${
+                    className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-4 rounded-xl border transition-colors ${
                       isDark
                         ? "bg-neutral-900/70 border-neutral-700 hover:bg-neutral-800/70 hover:border-neutral-600 shadow-[0_0_0_1px_rgba(255,255,255,0.03)]"
                         : "bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400 shadow-sm"
@@ -679,7 +677,7 @@ export default function TaskGenerationReports({
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 text-sm sm:text-xs">
                       <div
                         className={`text-xs font-medium ${
                           isDark
@@ -698,7 +696,7 @@ export default function TaskGenerationReports({
                         {formatStatusDisplay(r.status)}
                       </div>
                       <div
-                        className={`text-xxs ${
+                        className={`text-[11px] ${
                           isDark ? "text-neutral-500" : "text-neutral-600"
                         }`}
                       >
@@ -711,7 +709,7 @@ export default function TaskGenerationReports({
                           e.stopPropagation();
                           openDeleteModal(r);
                         }}
-                        className="px-2 py-1 text-xxs rounded bg-red-600/90 text-white hover:bg-red-600 cursor-pointer"
+                        className="px-3 py-1 text-xs rounded bg-red-600/90 text-white hover:bg-red-600 cursor-pointer"
                         title="Delete report"
                       >
                         Delete

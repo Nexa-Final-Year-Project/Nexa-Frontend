@@ -84,7 +84,7 @@ const OverviewTab = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* Section Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div className="flex items-start gap-4">
           <div className="relative group">
             <div
@@ -124,7 +124,7 @@ const OverviewTab = () => {
         </div>
         <Link
           href="/activity"
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm transition-all group ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm transition-all group w-full md:w-auto justify-center ${
             isDark
               ? "bg-white/[0.04] border border-white/[0.06] text-white/60 hover:text-white hover:bg-white/[0.06] hover:border-white/[0.1]"
               : "bg-neutral-100 border border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-200/70 hover:border-neutral-300"
@@ -136,7 +136,7 @@ const OverviewTab = () => {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
         <div
           className={`
           relative overflow-hidden

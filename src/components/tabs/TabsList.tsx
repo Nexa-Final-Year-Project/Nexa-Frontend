@@ -23,14 +23,14 @@ export function TabsListReusable({ tabs }: TabsListReusableProps) {
   return (
     <TabsList
       className={`
-      relative flex items-center gap-1 p-1.5
+      relative flex flex-wrap sm:flex-nowrap items-center gap-1 p-1.5
       ${
         isDark
           ? "bg-white/[0.02] border border-white/[0.06]"
           : "bg-neutral-100/80 border border-neutral-200"
       }
       rounded-2xl mb-6
-      overflow-x-auto scrollbar-none
+      overflow-x-auto scrollbar-none max-w-full w-full min-w-0
       backdrop-blur-sm
     `}
     >
@@ -39,8 +39,8 @@ export function TabsListReusable({ tabs }: TabsListReusableProps) {
           key={tab.id}
           value={tab.id}
           className={`
-            relative flex items-center gap-2 px-4 py-2.5 rounded-xl
-            text-sm font-medium
+            relative flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl
+            text-xs sm:text-sm font-medium
             ${
               isDark
                 ? "text-white/50 hover:text-white/70 hover:bg-white/[0.03]"
@@ -48,6 +48,7 @@ export function TabsListReusable({ tabs }: TabsListReusableProps) {
             }
             transition-all duration-300 cursor-pointer
             whitespace-nowrap
+            flex-shrink-0
             ${
               isDark
                 ? "data-[state=active]:text-white data-[state=active]:bg-white/[0.08] data-[state=active]:border data-[state=active]:border-white/[0.1]"

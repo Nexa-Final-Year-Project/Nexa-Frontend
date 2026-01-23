@@ -124,7 +124,7 @@ export const GeneralSettings = ({
         </p>
 
         <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-6">
-          <div className="flex items-center gap-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
             {/* Avatar Display */}
             <div className="relative group">
               <Avatar className="h-24 w-24 rounded-2xl border-2 border-white/[0.08] shadow-lg">
@@ -139,7 +139,7 @@ export const GeneralSettings = ({
             </div>
 
             {/* Upload Info */}
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-4 w-full">
               <div>
                 <h3 className="text-sm font-medium text-white mb-1">
                   Upload a new avatar
@@ -149,20 +149,20 @@ export const GeneralSettings = ({
                 </p>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full">
                 <button
                   className="
                   flex items-center gap-2 px-4 py-2.5 rounded-xl
                   bg-white/[0.06] border border-white/[0.08]
                   text-sm font-medium text-white/80
                   hover:bg-white/[0.1] hover:border-white/[0.12]
-                  transition-all duration-200 cursor-pointer
+                  transition-all duration-200 cursor-pointer w-full sm:w-auto justify-center sm:justify-start
                 "
                 >
                   <ImageIcon className="w-4 h-4" />
                   Choose File
                 </button>
-                <span className="text-xs text-white/30">
+                <span className="text-xs text-white/30 leading-relaxed">
                   JPG, PNG or GIF • Max 5MB
                 </span>
               </div>

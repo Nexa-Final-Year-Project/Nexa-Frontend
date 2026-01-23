@@ -445,7 +445,7 @@ export default function ReportReviewModal({
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center">
+        <div className="fixed inset-0 z-[1000] flex items-start sm:items-center justify-center p-3 sm:p-6 overflow-y-auto">
           <motion.div
             variants={overlayVariants}
             initial="hidden"
@@ -459,7 +459,7 @@ export default function ReportReviewModal({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`relative w-[95vw] sm:w-[92vw] max-w-6xl max-h-[85vh] sm:max-h-[90vh] rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
+            className={`relative w-full sm:w-[92vw] max-w-6xl max-h-[90vh] rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
               isDark
                 ? "bg-neutral-900/95 border border-white/[0.08]"
                 : "bg-white border border-neutral-200"
@@ -473,13 +473,13 @@ export default function ReportReviewModal({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className={`flex items-center justify-between px-6 py-4 z-10 ${
+              className={`flex flex-col lg:flex-row gap-3 lg:gap-4 items-start lg:items-center justify-between px-4 sm:px-6 py-4 z-10 ${
                 isDark
                   ? "bg-neutral-900/90 border-b border-white/[0.06] text-white"
                   : "bg-white border-b border-neutral-200 text-neutral-900"
               }`}
             >
-              <div>
+              <div className="min-w-0 max-w-full">
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -494,7 +494,7 @@ export default function ReportReviewModal({
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.25 }}
-                  className={`text-lg font-semibold tracking-tight ${
+                  className={`text-base sm:text-lg font-semibold tracking-tight break-words ${
                     isDark ? "text-white" : "text-neutral-900"
                   }`}
                 >
@@ -531,7 +531,7 @@ export default function ReportReviewModal({
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto"
+                className="flex flex-col md:flex-row md:flex-wrap items-stretch md:items-center gap-2 w-full lg:w-auto"
               >
                 <Input
                   placeholder="Search inside report..."
@@ -543,7 +543,7 @@ export default function ReportReviewModal({
                       : "bg-neutral-100 text-neutral-900 placeholder:text-neutral-400 border border-neutral-200 focus:border-violet-500"
                   }`}
                 />
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -603,7 +603,7 @@ export default function ReportReviewModal({
                 </div>
 
                 {/* Show Edit button if approved, otherwise show Approve/Reject/Save */}
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto flex-wrap">
                   {isApproved && !isEditing ? (
                     <>
                       <motion.div
@@ -727,7 +727,7 @@ export default function ReportReviewModal({
               variants={contentVariants}
               initial="hidden"
               animate="visible"
-              className="p-6 overflow-y-auto"
+              className="p-4 sm:p-6 overflow-y-auto"
             >
               <motion.div
                 variants={itemVariants}

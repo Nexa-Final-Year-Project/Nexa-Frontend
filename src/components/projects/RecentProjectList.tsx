@@ -31,7 +31,7 @@ const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
   return (
     <div className="flex flex-col gap-5">
       {/* Section Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div className="flex items-center gap-3">
           <div
             className={`
@@ -68,13 +68,13 @@ const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end flex-wrap">
           {/* View All Button */}
           <Button
             variant="ghost"
             onClick={handleViewAllProjects}
             className={`
-              h-9 px-4 rounded-xl
+              h-10 px-4 rounded-xl w-full sm:w-auto justify-center
               text-sm font-medium
               ${
                 isDark
@@ -95,7 +95,7 @@ const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
               <Button
                 variant="ghost"
                 className={`
-                  h-9 w-9 p-0 rounded-xl cursor-pointer
+                  h-10 w-10 p-0 rounded-xl cursor-pointer
                   ${
                     isDark
                       ? "bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.1]"
@@ -175,7 +175,7 @@ const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
       </div>
 
       {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
         {Array.isArray(projects)
           ? projects
               .slice(0, 4)

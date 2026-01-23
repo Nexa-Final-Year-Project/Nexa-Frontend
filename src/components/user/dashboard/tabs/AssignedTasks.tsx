@@ -17,7 +17,7 @@ const AssignedTasks = () => {
   }, [fetchUserTasks]);
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div className="flex items-center gap-3">
           <div
             className="
@@ -46,7 +46,7 @@ const AssignedTasks = () => {
             bg-neutral-100 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.06]
             hover:bg-neutral-200/70 dark:hover:bg-white/[0.05] hover:text-neutral-800 dark:hover:text-white/80 hover:border-neutral-300 dark:hover:border-white/[0.1]
             transition-all duration-300 cursor-pointer
-            group
+            group w-full sm:w-auto justify-center
           "
         >
           View All
