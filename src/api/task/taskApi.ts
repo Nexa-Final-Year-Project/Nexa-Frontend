@@ -11,7 +11,8 @@ export const taskApi = baseApi.injectEndpoints({
     //get Tasks by ID
     getTaskById: builder.query({
       query: (id) => ({
-        url: `/tasks/${id}`,
+        // Backend route is explicit to avoid conflict with `/tasks/:projectId`
+        url: `/tasks/id/${id}`,
         method: "GET",
       }),
     }),
