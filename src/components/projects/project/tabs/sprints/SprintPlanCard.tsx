@@ -26,6 +26,7 @@ import {
   AvatarFallback,
 } from "@/components/ui/avatar/avatar";
 import { ProjectMember } from "@/types/project";
+import BlockerHealthPill from "@/components/sprints/BlockerHealthPill";
 
 // Sprint data from the AI planner response
 interface SprintPlanData {
@@ -37,6 +38,10 @@ interface SprintPlanData {
   status?: string;
   startDate: string;
   endDate: string;
+  blockerSnapshot?: any;
+  blockerHealthScore?: number | null;
+  blockerStatus?: string | null;
+  blockerUpdatedAt?: string | null;
   capacity?: {
     totalCapacityHours: number;
     memberCapacities: Array<{
@@ -182,6 +187,24 @@ export default function SprintPlanCard({
   const confidence = sprint.aiConfidence
     ? Math.round(sprint.aiConfidence * 100)
     : null;
+
+  // Blocker snapshot (best-effort; may arrive async after sprint creation)
+  const blockerResult =
+    (sprint as any)?.blockerSnapshot?.result || (sprint as any)?.blockerSnapshot;
+  const blockerScore =
+    (sprint as any)?.blockerHealthScore ??
+    blockerResult?.sprintHealthScore ??
+    null;
+  const blockerStatus = (sprint as any)?.blockerStatus ?? blockerResult?.status;
+  const blockerCount = Array.isArray(blockerResult?.blockers)
+    ? blockerResult.blockers.length
+    : Array.isArray((sprint as any)?.blockerSnapshot?.result?.blockers)
+    ? (sprint as any)?.blockerSnapshot?.result?.blockers.length
+    : null;
+  const blockerUpdatedAt =
+    (sprint as any)?.blockerUpdatedAt ??
+    (sprint as any)?.blockerSnapshot?.computedAt ??
+    null;
 
   return (
     <div
@@ -406,6 +429,17 @@ export default function SprintPlanCard({
             <AlertTriangle className="w-3 h-3" />
             {Math.round(riskPercent)}%
           </div>
+
+          {/* Blocker Health */}
+          {(blockerScore !== null || blockerStatus || typeof blockerCount === "number") && (
+            <BlockerHealthPill
+              compact
+              blockerStatus={blockerStatus}
+              blockerHealthScore={typeof blockerScore === "number" ? blockerScore : null}
+              blockerCount={typeof blockerCount === "number" ? blockerCount : null}
+              blockerUpdatedAt={typeof blockerUpdatedAt === "string" ? blockerUpdatedAt : null}
+            />
+          )}
 
           {/* AI Confidence */}
           {confidence !== null && (

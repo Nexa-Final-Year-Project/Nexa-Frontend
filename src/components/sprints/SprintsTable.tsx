@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge/badge";
 import { Progress } from "@/components/ui/progress";
 import SprintsFilterPanel from "./SprintsFilterPanel";
 import { useTheme } from "next-themes";
+import BlockerHealthPill from "./BlockerHealthPill";
 
 /* -------------------- Helpers -------------------- */
 const getSprintStatus = (sprint: SprintType) => {
@@ -199,6 +200,32 @@ export const SprintsTable = ({
               {getStatusLabel(status)}
             </Badge>
           </div>
+        );
+      },
+    },
+    {
+      header: "Blockers",
+      accessor: "blockers",
+      width: "10%",
+      render: (row: SprintType) => {
+        const blockerResult =
+          (row as any)?.blockerSnapshot?.result || (row as any)?.blockerSnapshot;
+        const score =
+          (row as any)?.blockerHealthScore ??
+          blockerResult?.sprintHealthScore ??
+          null;
+        const status = (row as any)?.blockerStatus ?? blockerResult?.status;
+        const count = Array.isArray(blockerResult?.blockers)
+          ? blockerResult.blockers.length
+          : null;
+        return (
+          <BlockerHealthPill
+            compact
+            blockerStatus={status}
+            blockerHealthScore={typeof score === "number" ? score : null}
+            blockerCount={typeof count === "number" ? count : null}
+            blockerUpdatedAt={(row as any)?.blockerUpdatedAt || null}
+          />
         );
       },
     },

@@ -5,6 +5,7 @@ import { Card } from "../ui/card/Card";
 import { CardHeader } from "../ui/card/CardHeader";
 import { CardTitle } from "../ui/card/CardTitle";
 import { Sprint as SprintType } from "@/types/sprint";
+import BlockerHealthPill from "./BlockerHealthPill";
 import { Progress } from "../ui/progress";
 import { CardContent } from "../ui/card/CardContent";
 import { format, parseISO } from "date-fns";
@@ -38,6 +39,29 @@ export const LatestSprintCard = ({
             <Badge variant="secondary" className="mb-2">
               Latest Sprint
             </Badge>
+            <div className="mb-2">
+              {(() => {
+                const blockerResult =
+                  (sprint as any)?.blockerSnapshot?.result ||
+                  (sprint as any)?.blockerSnapshot;
+                const score =
+                  (sprint as any)?.blockerHealthScore ??
+                  blockerResult?.sprintHealthScore ??
+                  null;
+                const status = (sprint as any)?.blockerStatus ?? blockerResult?.status;
+                const count = Array.isArray(blockerResult?.blockers)
+                  ? blockerResult.blockers.length
+                  : null;
+                return (
+                  <BlockerHealthPill
+                    blockerStatus={status}
+                    blockerHealthScore={typeof score === "number" ? score : null}
+                    blockerCount={typeof count === "number" ? count : null}
+                    blockerUpdatedAt={(sprint as any)?.blockerUpdatedAt || null}
+                  />
+                );
+              })()}
+            </div>
             <CardTitle
               className={`text-2xl font-bold uppercase font-mono truncate ${
                 isDark ? "text-white" : "text-neutral-900"
