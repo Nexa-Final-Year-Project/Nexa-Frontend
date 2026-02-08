@@ -46,7 +46,7 @@ const LoginPage = () => {
           subtitle="Choose a method to continue"
         >
           <div className="space-y-4">
-            <SocialButtons className="my-2" providers={["github", "google"]} />
+            <SocialButtons className="my-2" providers={["slack", "google"]} />
             <AuthDivider text="Or sign in with email" />
             <AuthForm
               fields={LOGIN_FIELDS}
@@ -54,7 +54,7 @@ const LoginPage = () => {
               submitButtonText="Submit"
             />
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm pt-1 text-center">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm pt-1 text-center leading-snug">
               <button
                 type="button"
                 className={`transition-colors underline-offset-4 hover:underline ${
@@ -65,7 +65,12 @@ const LoginPage = () => {
               >
                 Use passkey instead
               </button>
-              <span className={isDark ? "text-white/20" : "text-neutral-300"}>
+              <span
+                className={
+                  isDark ? "text-white/30" : "text-neutral-300"
+                }
+                aria-hidden
+              >
                 •
               </span>
               <AuthFooter

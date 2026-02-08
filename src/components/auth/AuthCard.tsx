@@ -55,14 +55,14 @@ export const AuthCard = ({ title, subtitle, children }: AuthCardProps) => {
           />
 
           <div className="relative p-6 sm:p-7 md:p-8 space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col items-center gap-3 text-center">
+              <Logo size={48} textSize="text-2xl" />
               <div className="inline-flex items-center gap-2.5 rounded-full px-3 py-1 text-[11px] font-semibold shadow-sm border border-white/10 bg-white/5 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-white text-neutral-700">
                 <span className="h-2 w-2 rounded-full bg-gradient-to-r from-violet-500 to-cyan-400" />
                 <span className={isDark ? "text-white/80" : "text-neutral-700"}>
                   NEXA Secure Access
                 </span>
               </div>
-              <Logo size={42} textSize="text-xl" />
             </div>
 
             <div className="space-y-3 text-center">
