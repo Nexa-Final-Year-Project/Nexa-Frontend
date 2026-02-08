@@ -10,6 +10,12 @@ export type Sprint = {
   goals: Array<string>;
   status?: string;
 
+  // Blocker Agent snapshot fields (optional)
+  blockerSnapshot?: any;
+  blockerHealthScore?: number | null;
+  blockerStatus?: string | null;
+  blockerUpdatedAt?: string | null;
+
   // AI Planner fields
   summary?: string;
   aiSummary?: string;

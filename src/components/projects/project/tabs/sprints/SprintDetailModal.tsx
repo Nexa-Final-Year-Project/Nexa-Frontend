@@ -41,6 +41,7 @@ import { ProjectMember } from "@/types/project";
 import BurndownChart from "@/components/sprints/BurndownChart";
 import RiskMitigationPanel from "@/components/sprints/RiskMitigationPanel";
 import MemberPerformancePanel from "@/components/sprints/MemberPerformancePanel";
+import BlockerHealthPill from "@/components/sprints/BlockerHealthPill";
 
 // Sprint data from the AI planner response
 interface SprintPlanData {
@@ -96,6 +97,10 @@ interface SprintPlanData {
   predictedVelocity?: number;
   aiConfidence?: number;
   sprintRiskScore?: number;
+  blockerSnapshot?: any;
+  blockerHealthScore?: number | null;
+  blockerStatus?: string | null;
+  blockerUpdatedAt?: string | null;
   burndownForecast?: Array<{
     date: string;
     remainingHours: number;
@@ -132,7 +137,7 @@ export default function SprintDetailModal({
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set(["overview", "tasks", "team"])
+    new Set(["overview", "tasks", "team", "blockers"])
   );
 
   if (!open || !sprint) return null;
@@ -269,6 +274,34 @@ export default function SprintDetailModal({
   const confidence = sprint.aiConfidence
     ? Math.round(sprint.aiConfidence * 100)
     : null;
+
+  // Blocker snapshot (best-effort; may arrive async after sprint creation)
+  const blockerResult =
+    (sprint as any)?.blockerSnapshot?.result || (sprint as any)?.blockerSnapshot;
+  const blockerScore =
+    (sprint as any)?.blockerHealthScore ??
+    blockerResult?.sprintHealthScore ??
+    null;
+  const blockerStatus = (sprint as any)?.blockerStatus ?? blockerResult?.status;
+  const blockerUpdatedAt =
+    (sprint as any)?.blockerUpdatedAt ??
+    (sprint as any)?.blockerSnapshot?.computedAt ??
+    null;
+  const blockerCount = Array.isArray(blockerResult?.blockers)
+    ? blockerResult.blockers.length
+    : null;
+  const blockerSummary: string | null =
+    (blockerResult?.aiSummary as string) ||
+    (blockerResult?.summary as string) ||
+    null;
+  const blockerActions: string[] = Array.isArray(blockerResult?.actionPlan)
+    ? blockerResult.actionPlan
+    : Array.isArray(blockerResult?.actions)
+    ? blockerResult.actions
+    : [];
+  const blockersList: any[] = Array.isArray(blockerResult?.blockers)
+    ? blockerResult.blockers
+    : [];
 
   // Section Header Component
   const SectionHeader = ({
@@ -584,7 +617,7 @@ export default function SprintDetailModal({
           </div>
 
           {/* Risk & Confidence Row */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Risk Analysis */}
             <div className={`${risk.bg} border ${risk.border} rounded-xl p-4`}>
               <div className="flex items-center justify-between mb-3">
@@ -629,7 +662,190 @@ export default function SprintDetailModal({
                   : "AI-optimized planning"}
               </p>
             </div>
+
+            {/* Blocker Health */}
+            <div
+              className={`rounded-xl p-4 ${
+                isDark
+                  ? "bg-white/[0.02] border border-white/[0.04]"
+                  : "bg-neutral-50 border border-neutral-200"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-neutral-500" />
+                  <span
+                    className={`text-sm font-medium ${
+                      isDark ? "text-white/80" : "text-neutral-700"
+                    }`}
+                  >
+                    Blocker Health
+                  </span>
+                </div>
+                <BlockerHealthPill
+                  blockerStatus={blockerStatus}
+                  blockerHealthScore={typeof blockerScore === "number" ? blockerScore : null}
+                  blockerCount={typeof blockerCount === "number" ? blockerCount : null}
+                  blockerUpdatedAt={typeof blockerUpdatedAt === "string" ? blockerUpdatedAt : null}
+                  className="ml-2"
+                />
+              </div>
+              <p className="text-xs text-neutral-400">
+                {typeof blockerCount === "number"
+                  ? `${blockerCount} blocker(s) detected`
+                  : "Waiting for blocker snapshot…"}
+              </p>
+            </div>
           </div>
+
+          {/* Blocker Report */}
+          {(blockerSummary || blockersList.length > 0 || blockerActions.length > 0) && (
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
+              <SectionHeader
+                id="blockers"
+                icon={Shield}
+                title="Blocker Report"
+                badge={
+                  <span className="ml-2">
+                    <BlockerHealthPill
+                      compact
+                      blockerStatus={blockerStatus}
+                      blockerHealthScore={typeof blockerScore === "number" ? blockerScore : null}
+                      blockerCount={typeof blockerCount === "number" ? blockerCount : null}
+                      blockerUpdatedAt={typeof blockerUpdatedAt === "string" ? blockerUpdatedAt : null}
+                    />
+                  </span>
+                }
+              />
+              {expandedSections.has("blockers") && (
+                <div
+                  className={`mt-3 rounded-xl p-4 space-y-4 ${
+                    isDark
+                      ? "bg-white/[0.02] border border-white/[0.04]"
+                      : "bg-neutral-50 border border-neutral-200"
+                  }`}
+                >
+                  {blockerSummary && (
+                    <div>
+                      <div className="text-xs text-neutral-500 mb-1">
+                        AI Summary
+                      </div>
+                      <p
+                        className={`text-sm leading-relaxed ${
+                          isDark ? "text-neutral-300" : "text-neutral-700"
+                        }`}
+                      >
+                        {blockerSummary}
+                      </p>
+                    </div>
+                  )}
+
+                  {blockerActions.length > 0 && (
+                    <div>
+                      <div className="text-xs text-neutral-500 mb-2">
+                        Recommended Actions
+                      </div>
+                      <ul className="space-y-1">
+                        {blockerActions.slice(0, 5).map((a, idx) => (
+                          <li
+                            key={idx}
+                            className={`text-sm flex items-start gap-2 ${
+                              isDark ? "text-neutral-300" : "text-neutral-700"
+                            }`}
+                          >
+                            <span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-400/70 flex-shrink-0" />
+                            <span className="min-w-0 break-words">{a}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {blockersList.length > 0 && (
+                    <div>
+                      <div className="text-xs text-neutral-500 mb-2">
+                        Top Blockers
+                      </div>
+                      <div className="space-y-2">
+                        {blockersList.slice(0, 6).map((b: any, idx: number) => {
+                          const sev = String(b?.severity || "Low");
+                          const sevStyle =
+                            sev === "High"
+                              ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                              : sev === "Medium"
+                              ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                              : "bg-neutral-500/10 text-neutral-400 border border-neutral-500/20";
+                          const title =
+                            b?.taskTitle ||
+                            b?.taskId ||
+                            b?.entityId ||
+                            "Unknown";
+                          const type = b?.type || "Blocker";
+                          const desc = b?.description || "";
+                          return (
+                            <div
+                              key={idx}
+                              className={`rounded-xl p-3 ${
+                                isDark
+                                  ? "bg-black/20 border border-white/[0.04]"
+                                  : "bg-white border border-neutral-200"
+                              }`}
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="min-w-0">
+                                  <div className="flex items-center gap-2 mb-1 min-w-0">
+                                    <span className={`px-2 py-0.5 rounded-full text-[11px] ${sevStyle}`}>
+                                      {sev}
+                                    </span>
+                                    <span
+                                      className={`text-sm font-medium truncate ${
+                                        isDark ? "text-white/90" : "text-neutral-900"
+                                      }`}
+                                    >
+                                      {type}
+                                    </span>
+                                  </div>
+                                  <div className="text-xs text-neutral-500 truncate">
+                                    {title}
+                                  </div>
+                                </div>
+                                {typeof b?.confidence === "number" && (
+                                  <div className="text-xs text-neutral-500 flex-shrink-0">
+                                    {Math.round(b.confidence * 100)}%
+                                  </div>
+                                )}
+                              </div>
+                              {desc && (
+                                <p
+                                  className={`text-sm mt-2 leading-relaxed ${
+                                    isDark ? "text-neutral-300" : "text-neutral-700"
+                                  }`}
+                                >
+                                  {desc}
+                                </p>
+                              )}
+                              {b?.recommendedAction && (
+                                <p className="text-xs text-neutral-500 mt-2">
+                                  <span className="font-medium">Action:</span>{" "}
+                                  {b.recommendedAction}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Burndown Forecast */}
           {sprint.burndownForecast && sprint.burndownForecast.length > 0 && (
