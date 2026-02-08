@@ -66,9 +66,7 @@ const LoginPage = () => {
                 Use passkey instead
               </button>
               <span
-                className={
-                  isDark ? "text-white/30" : "text-neutral-300"
-                }
+                className={isDark ? "text-white/30" : "text-neutral-300"}
                 aria-hidden
               >
                 •
