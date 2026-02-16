@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import url(https://db.onlinewebfonts.com/c/0fadaa21fcac88ceee0bb8da992c221b?family=Salesforce+Sans);
+@import "quill/dist/quill.snow.css";
 @config "../../tailwind.config.mjs";
 @import "tailwindcss";
 
@@ -11,6 +12,42 @@
 
 .mantine-Popover-dropdown {
   z-index: 1000 !important;
+}
+
+/* Quill (Snow) - better dark mode + match app look */
+.dark .ql-toolbar.ql-snow {
+  background: oklch(0.12 0.005 280);
+  border-color: oklch(1 0 0 / 10%);
+}
+
+.dark .ql-container.ql-snow {
+  border-color: oklch(1 0 0 / 10%);
+}
+
+.dark .ql-editor {
+  color: oklch(0.95 0 0);
+}
+
+.dark .ql-snow .ql-stroke {
+  stroke: oklch(0.85 0 0);
+}
+
+.dark .ql-snow .ql-fill {
+  fill: oklch(0.85 0 0);
+}
+
+.dark .ql-snow .ql-picker {
+  color: oklch(0.9 0 0);
+}
+
+.dark .ql-snow .ql-picker-options {
+  background: oklch(0.12 0.005 280);
+  border-color: oklch(1 0 0 / 12%);
+}
+
+.dark .ql-snow .ql-picker-item:hover,
+.dark .ql-snow .ql-picker-item.ql-selected {
+  background: oklch(0.18 0.005 280);
 }
 
 @layer base {

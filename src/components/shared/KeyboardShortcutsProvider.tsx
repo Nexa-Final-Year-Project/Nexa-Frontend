@@ -45,7 +45,11 @@ export function KeyboardShortcutsProvider({
       // Get the target element
       const target = e.target as HTMLElement;
       const tagName = target.tagName.toLowerCase();
+      // IMPORTANT: ProseMirror/TipTap often fires key events from nested spans/text nodes
+      // where `isContentEditable` is false. Use closest() to detect contenteditable ancestors.
+      const isInsideContentEditable = !!target.closest?.('[contenteditable="true"]');
       const isEditable =
+        isInsideContentEditable ||
         target.isContentEditable ||
         tagName === "input" ||
         tagName === "textarea" ||

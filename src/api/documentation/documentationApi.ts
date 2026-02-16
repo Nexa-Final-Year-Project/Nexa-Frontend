@@ -1,35 +1,53 @@
 import { baseApi } from "../baseApi";
+import type { JSONContent } from '@tiptap/core';
 
-export interface DocumentationType {
+export interface DocumentType {
   _id: string;
   projectId: string;
   title: string;
-  documentType: "Technical" | "Product" | "Client-Facing";
+  documentType: string;
   audience: "Developers" | "Managers" | "Clients" | "Mixed";
   depthLevel: "Brief" | "Standard" | "Detailed";
   content: {
-    projectOverview: string;
-    problemStatement: string;
-    systemArchitecture: string;
-    techStack: string;
-    sprintBreakdown: string;
-    taskWorkflow: string;
-    aiFeatures: string;
-    apiOverview: string;
-    databaseModels: string;
-    authSecurity: string;
-    deploymentNotes: string;
-    futureRoadmap: string;
-    appendix: string;
+    richText?: JSONContent | null;
+    markdown?: string;
+    sections?: Array<{
+      level: number;
+      title: string;
+      content: string;
+    }>;
+    wordCount?: number;
+    projectOverview?: string;
+    problemStatement?: string;
+    systemArchitecture?: string;
+    techStack?: string;
+    sprintBreakdown?: string;
+    taskWorkflow?: string;
+    aiFeatures?: string;
+    apiOverview?: string;
+    databaseModels?: string;
+    authSecurity?: string;
+    deploymentNotes?: string;
+    futureRoadmap?: string;
+    appendix?: string;
   };
-  metadata: {
-    projectName: string;
-    projectDescription: string;
-    owner: string;
-    timeline: string;
-    sprintCount: number;
-    taskCount: number;
-    teamSize: number;
+  userRequirements?: string;
+  customSections?: Array<{
+    title: string;
+    description: string;
+  }>;
+  additionalNotes?: string;
+  sprintId?: string;
+  metadata?: {
+    projectName?: string;
+    projectDescription?: string;
+    owner?: string;
+    timeline?: string;
+    sprintCount?: number;
+    taskCount?: number;
+    teamSize?: number;
+    model?: string;
+    generatedAt?: number;
   };
   generatedBy: {
     _id: string;
@@ -42,19 +60,37 @@ export interface DocumentationType {
   generationError: string | null;
   createdAt: string;
   updatedAt: string;
+  activeEditors?: Array<{
+    userId: string;
+    userName: string;
+    userAvatar: string;
+    socketId: string;
+    lastActive: string;
+  }>;
+  versions?: Array<{
+    content: JSONContent;
+    editedBy: string;
+    editedByName: string;
+    createdAt: string;
+  }>;
 }
 
 export interface GenerateDocumentationRequest {
-  documentType?: "Technical" | "Product" | "Client-Facing";
-  audience?: "Developers" | "Managers" | "Clients" | "Mixed";
-  depthLevel?: "Brief" | "Standard" | "Detailed";
-  customInputs?: Record<string, any>;
+  documentType: string;
+  sprintId?: string;
+  userRequirements?: string;
+  customSections?: Array<{
+    title: string;
+    description: string;
+  }>;
+  additionalNotes?: string;
+  includeDataSummary?: boolean;
 }
 
 export interface DocumentationResponse {
   success: boolean;
   message?: string;
-  data?: DocumentationType | DocumentationType[];
+  data?: DocumentType | DocumentType[];
   error?: string;
 }
 
@@ -179,8 +215,9 @@ export const getDocumentation = async (
 export const updateDocumentation = async (
   documentationId: string,
   updates: {
-    content?: Partial<DocumentationType["content"]>;
+    content?: Partial<DocumentType["content"]>;
     title?: string;
+    richText?: any;
   }
 ): Promise<DocumentationResponse> => {
   try {

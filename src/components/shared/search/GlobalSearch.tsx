@@ -152,6 +152,11 @@ export default function GlobalSearch() {
   // Shortcut "/"
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      // Don’t steal keys while user is typing in TipTap/inputs
+      if (target?.closest?.('[contenteditable="true"], input, textarea, select')) {
+        return;
+      }
       if (e.key === "/") {
         e.preventDefault();
         inputRef.current?.focus();

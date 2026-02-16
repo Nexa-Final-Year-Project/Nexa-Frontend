@@ -99,32 +99,40 @@ export function AuthBackground({ children }: { children: ReactNode }) {
 
       {/* Animated floating particles */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 0 }}
-            animate={{
-              opacity: [0, 0.45, 0],
-              y: [0, -140],
-              x: [0, Math.random() * 36 - 18],
-            }}
-            transition={{
-              duration: 6 + Math.random() * 4,
-              delay: i * 1.4,
-              repeat: Infinity,
-              ease: "easeOut",
-            }}
-            className="absolute rounded-full"
-            style={{
-              left: `${5 + i * 8}%`,
-              bottom: "6%",
-              width: `${2 + Math.random() * 3}px`,
-              height: `${2 + Math.random() * 3}px`,
-              background:
-                i % 2 === 0 ? "rgba(139,92,246,0.6)" : "rgba(34,211,238,0.5)",
-            }}
-          />
-        ))}
+        {[...Array(12)].map((_, i) => {
+          // Use deterministic values based on index for SSR consistency
+          const seedRandom = (seed: number) => {
+            const x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+          };
+          
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 0 }}
+              animate={{
+                opacity: [0, 0.45, 0],
+                y: [0, -140],
+                x: [0, seedRandom(i + 1) * 36 - 18],
+              }}
+              transition={{
+                duration: 6 + seedRandom(i + 10) * 4,
+                delay: i * 1.4,
+                repeat: Infinity,
+                ease: "easeOut",
+              }}
+              className="absolute rounded-full"
+              style={{
+                left: `${5 + i * 8}%`,
+                bottom: "6%",
+                width: `${2 + seedRandom(i + 20) * 3}px`,
+                height: `${2 + seedRandom(i + 30) * 3}px`,
+                background:
+                  i % 2 === 0 ? "rgba(139,92,246,0.6)" : "rgba(34,211,238,0.5)",
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Center glow */}

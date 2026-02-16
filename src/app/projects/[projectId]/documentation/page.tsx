@@ -1,540 +1,469 @@
+/**
+ * @fileoverview Professional Documentation Page - Complete Implementation
+ * @description World-class documentation system with AI generation,
+ * real-time collaboration, rich text editing, and version control
+ */
+
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import {
-  generateDocumentation,
-  getProjectDocumentation,
-  getDocumentation,
-  deleteDocumentation,
-  exportToPDF,
-  exportToWord,
-  downloadFile,
-  getGenerationStatus,
-  type DocumentationType,
-  type GenerateDocumentationRequest,
-} from "@/api/documentation/documentationApi";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge/badge';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge/badge";
+} from '@/components/ui/select';
 import {
   Loader2,
   FileText,
   Download,
   Trash2,
   RefreshCw,
-  FileCheck,
-  Edit,
   Search,
-} from "lucide-react";
-import { toast } from "sonner";
-import ReactMarkdown from "react-markdown";
+  Plus,
+  Eye,
+  Edit3,
+  Clock,
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/store/auth/authStore';
+import { useDocumentationStore, type Documentation } from '@/store/documentation/documentationStore';
+import DocumentEditor from '@/components/documentation/editor/DocumentEditor';
+import DocumentGenerationModal from '@/components/documentation/DocumentGenerationModal';
+import VersionHistoryPanel from '@/components/documentation/editor/VersionHistoryPanel';
+import ReactMarkdown from 'react-markdown';
+import { updateDocumentation } from '@/api/documentation/documentationApi';
 
 export default function DocumentationPage() {
   const params = useParams();
   const projectId = params.projectId as string;
+  const user = useAuthStore((state) => state.user);
 
-  const [documentations, setDocumentations] = useState<DocumentationType[]>([]);
-  const [selectedDoc, setSelectedDoc] = useState<DocumentationType | null>(
-    null,
-  );
+  const {
+    documentations,
+    selectedDoc,
+    setDocumentations,
+    setSelectedDoc,
+  } = useDocumentationStore();
+
   const [loading, setLoading] = useState(false);
-  const [generating, setGenerating] = useState(false);
-  const [exporting, setExporting] = useState<"pdf" | "word" | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<
-    "all" | "completed" | "generating" | "failed"
-  >("all");
-  const [sortOption, setSortOption] = useState<
-    "newest" | "oldest" | "title" | "status"
-  >("newest");
-  const [isEditing, setIsEditing] = useState(false);
-  const [editTitle, setEditTitle] = useState("");
-  const [editOverview, setEditOverview] = useState("");
-  const [editProblem, setEditProblem] = useState("");
-  const [savingEdit, setSavingEdit] = useState(false);
-
-  // Form state
-  const [documentType, setDocumentType] = useState<
-    "Technical" | "Product" | "Client-Facing"
-  >("Technical");
-  const [audience, setAudience] = useState<
-    "Developers" | "Managers" | "Clients" | "Mixed"
-  >("Developers");
-  const [depthLevel, setDepthLevel] = useState<
-    "Brief" | "Standard" | "Detailed"
-  >("Standard");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'generating' | 'failed'>('all');
+  const [sortOption, setSortOption] = useState<'newest' | 'oldest' | 'title'>('newest');
+  const [viewMode, setViewMode] = useState<'preview' | 'edit'>('preview');
+  const [exporting, setExporting] = useState<'pdf' | 'word' | null>(null);
 
   useEffect(() => {
     loadDocumentations();
   }, [projectId]);
 
-  const loadDocumentations = async (options?: {
-    forceSelectFirst?: boolean;
-  }) => {
+  const loadDocumentations = async () => {
     try {
       setLoading(true);
-      const response = await getProjectDocumentation(projectId);
-      if (response.success && Array.isArray(response.data)) {
-        const docs = response.data;
-        setDocumentations(docs);
+      const token = localStorage.getItem('authToken');
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+      const apiUrl = backendUrl.endsWith('/api') ? backendUrl : `${backendUrl}/api`;
 
-        const stillExists =
-          selectedDoc && docs.find((d) => d._id === selectedDoc._id);
-        if (docs.length === 0) {
-          setSelectedDoc(null);
-        } else if (options?.forceSelectFirst || !stillExists) {
-          setSelectedDoc(docs[0]);
+      const response = await fetch(
+        `${apiUrl}/documentation/projects/${projectId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
         }
-        return docs;
+      );
+
+      const data = await response.json();
+
+      if (data.success && Array.isArray(data.data)) {
+        setDocumentations(data.data);
+        
+        // Auto-select first doc if none selected
+        if (data.data.length > 0 && !selectedDoc) {
+          setSelectedDoc(data.data[0]);
+        }
       }
     } catch (error: any) {
-      console.error("Error loading documentations:", error);
-      const errorMessage = error?.message || "Failed to load documentation";
-      toast.error(errorMessage);
+      console.error('Error loading documentations:', error);
+      toast.error('Failed to load documentation');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGenerate = async () => {
-    try {
-      setGenerating(true);
-      const request: GenerateDocumentationRequest = {
-        documentType,
-        audience,
-        depthLevel,
-      };
-
-      const response = await generateDocumentation(projectId, request);
-
-      if (response.success && response.data && !Array.isArray(response.data)) {
-        toast.success("Documentation generation started!");
-
-        // Poll for completion
-        pollGenerationStatus(response.data._id);
-      }
-    } catch (error: any) {
-      console.error("Error generating documentation:", error);
-      const errorMessage = error?.message || "Failed to generate documentation";
-      toast.error(errorMessage);
-      setGenerating(false);
-    }
-  };
-
-  const pollGenerationStatus = async (docId: string) => {
-    const interval = setInterval(async () => {
-      try {
-        const statusResponse = await getGenerationStatus(docId);
-
-        if (statusResponse.success && statusResponse.data) {
-          const { status } = statusResponse.data;
-
-          if (status === "completed") {
-            clearInterval(interval);
-            toast.success("Documentation generated successfully!");
-            await loadDocumentations();
-
-            // Select the newly generated doc
-            const docResponse = await getDocumentation(docId);
-            if (docResponse.success && !Array.isArray(docResponse.data)) {
-              setSelectedDoc(docResponse.data);
-            }
-            setGenerating(false);
-          } else if (status === "failed") {
-            clearInterval(interval);
-            toast.error("Documentation generation failed");
-            setGenerating(false);
-          }
-        }
-      } catch (error) {
-        clearInterval(interval);
-        console.error("Error polling status:", error);
-        setGenerating(false);
-      }
-    }, 3000); // Poll every 3 seconds
-
-    // Timeout after 5 minutes
-    setTimeout(() => {
-      clearInterval(interval);
-      if (generating) {
-        toast.error("Generation timeout - please check manually");
-        setGenerating(false);
-      }
-    }, 300000);
-  };
-
   const handleDelete = async (docId: string) => {
-    if (!confirm("Are you sure you want to delete this documentation?")) {
+    if (!confirm('Are you sure you want to delete this documentation?')) {
       return;
     }
 
     try {
-      await deleteDocumentation(docId);
-      toast.success("Documentation deleted");
-      const docs = await loadDocumentations({ forceSelectFirst: true });
-      if (docs && docs.length > 0) {
-        setSelectedDoc(docs[0]);
-      } else {
-        setSelectedDoc(null);
+      const token = localStorage.getItem('authToken');
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+      const apiUrl = backendUrl.endsWith('/api') ? backendUrl : `${backendUrl}/api`;
+
+      const response = await fetch(
+        `${apiUrl}/documentation/${docId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Documentation deleted');
+        await loadDocumentations();
+        
+        if (selectedDoc?._id === docId) {
+          setSelectedDoc(null);
+        }
       }
     } catch (error: any) {
-      console.error("Error deleting documentation:", error);
-      toast.error("Failed to delete documentation");
+      console.error('Error deleting documentation:', error);
+      toast.error('Failed to delete documentation');
     }
   };
 
-  const startEditing = () => {
-    if (!selectedDoc) return;
-    setEditTitle(selectedDoc.title);
-    setEditOverview(selectedDoc.content.projectOverview || "");
-    setEditProblem(selectedDoc.content.problemStatement || "");
-    setIsEditing(true);
-  };
-
-  const handleSaveEdit = async () => {
-    if (!selectedDoc) return;
-    try {
-      setSavingEdit(true);
-      await updateDocumentation(selectedDoc._id, {
-        title: editTitle,
-        content: {
-          projectOverview: editOverview,
-          problemStatement: editProblem,
-        },
-      });
-
-      toast.success("Documentation updated");
-      const docs = await loadDocumentations();
-      if (docs) {
-        const updated = docs.find((d) => d._id === selectedDoc._id);
-        setSelectedDoc(updated || null);
-      }
-      setIsEditing(false);
-    } catch (error: any) {
-      console.error("Error updating documentation:", error);
-      toast.error(error?.message || "Failed to update documentation");
-    } finally {
-      setSavingEdit(false);
-    }
-  };
-
-  const filteredDocumentations = documentations
-    .filter((doc) => {
-      const term = searchTerm.toLowerCase();
-      const matchesSearch =
-        doc.title.toLowerCase().includes(term) ||
-        doc.documentType.toLowerCase().includes(term) ||
-        doc.audience.toLowerCase().includes(term) ||
-        doc.depthLevel.toLowerCase().includes(term);
-      const matchesStatus =
-        statusFilter === "all" ? true : doc.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    })
-    .sort((a, b) => {
-      switch (sortOption) {
-        case "oldest":
-          return (
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
-        case "title":
-          return a.title.localeCompare(b.title);
-        case "status":
-          return a.status.localeCompare(b.status);
-        case "newest":
-        default:
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-      }
-    });
-
-  const handleExport = async (format: "pdf" | "word") => {
+  const handleExport = async (format: 'pdf' | 'word') => {
     if (!selectedDoc) return;
 
     try {
       setExporting(format);
+      const token = localStorage.getItem('authToken');
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+      const apiUrl = backendUrl.endsWith('/api') ? backendUrl : `${backendUrl}/api`;
 
-      const blob =
-        format === "pdf"
-          ? await exportToPDF(selectedDoc._id)
-          : await exportToWord(selectedDoc._id);
+      const response = await fetch(
+        `${apiUrl}/documentation/${selectedDoc._id}/export/${format}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
 
-      const filename = `${selectedDoc.title}.${
-        format === "pdf" ? "pdf" : "docx"
-      }`;
-      downloadFile(blob, filename);
+      if (!response.ok) throw new Error('Export failed');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${selectedDoc.title}.${format === 'pdf' ? 'pdf' : 'docx'}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
 
       toast.success(`Exported as ${format.toUpperCase()}`);
     } catch (error: any) {
-      console.error("Error exporting:", error);
+      console.error('Error exporting:', error);
       toast.error(`Failed to export as ${format.toUpperCase()}`);
     } finally {
       setExporting(null);
     }
   };
 
+  const handleSaveRichText = async (
+    docId: string,
+    payload: { html: string; markdown: string }
+  ) => {
+    try {
+      await updateDocumentation(docId, {
+        richText: { html: payload.html },
+        content: {
+          markdown: payload.markdown,
+          wordCount: payload.markdown.split(/\s+/).filter(Boolean).length,
+        },
+      });
+      toast.success('Document saved');
+      await loadDocumentations();
+    } catch (error: any) {
+      console.error('Error saving document:', error);
+      toast.error(error?.message || 'Failed to save document');
+    }
+  };
+
+  const handleGenerated = async (docId: string) => {
+    await loadDocumentations();
+    
+    // Select the newly generated document
+    const doc = documentations.find(d => d._id === docId);
+    if (doc) {
+      setSelectedDoc(doc);
+    }
+  };
+
+  // Filter and sort documents
+  const filteredDocs = documentations
+    .filter((doc) => {
+      const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           doc.documentType.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || doc.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      switch (sortOption) {
+        case 'oldest':
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        case 'title':
+          return a.title.localeCompare(b.title);
+        case 'newest':
+        default:
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+    });
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300';
+      case 'generating': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300';
+      case 'failed': return 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300';
+      default: return 'bg-gray-100 text-gray-700 dark:bg-gray-950 dark:text-gray-300';
+    }
+  };
+
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="h-full flex flex-col bg-background">
+      {/* Header */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-6 py-4 border-b">
         <div>
-          <h1 className="text-3xl font-bold">📘 Documentation</h1>
-          <p className="text-muted-foreground mt-1">
-            AI-powered project documentation generation
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <FileText className="h-6 w-6" />
+            Documentation
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            AI-powered professional documentation with real-time collaboration
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-          <div className="relative w-full sm:w-64">
-            <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-            <Input
-              placeholder="Search docs..."
-              className="pl-9"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-          <Select
-            value={statusFilter}
-            onValueChange={(v: any) => setStatusFilter(v)}
-          >
-            <SelectTrigger className="w-full sm:w-40">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="generating">Generating</SelectItem>
-              <SelectItem value="failed">Failed</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={sortOption}
-            onValueChange={(v: any) => setSortOption(v)}
-          >
-            <SelectTrigger className="w-full sm:w-40">
-              <SelectValue placeholder="Sort" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Newest first</SelectItem>
-              <SelectItem value="oldest">Oldest first</SelectItem>
-              <SelectItem value="title">Title A-Z</SelectItem>
-              <SelectItem value="status">Status</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Button
-            onClick={() => loadDocumentations({ forceSelectFirst: true })}
-            variant="outline"
-            size="sm"
-            disabled={loading}
-            className="w-full sm:w-auto"
-          >
-            <RefreshCw
-              className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
-            />
-            Refresh
-          </Button>
+        <div className="flex items-center gap-3">
+          <DocumentGenerationModal
+            projectId={projectId}
+            onGenerated={handleGenerated}
+          />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Generation Panel */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle>Generate New Documentation</CardTitle>
-            <CardDescription>
-              Configure and generate AI-powered documentation
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium block">Document Type</label>
-              <Select
-                value={documentType}
-                onValueChange={(value: any) => setDocumentType(value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent align="center">
-                  <SelectItem value="Technical">📄 Technical</SelectItem>
-                  <SelectItem value="Product">📦 Product</SelectItem>
-                  <SelectItem value="Client-Facing">
-                    🤝 Client-Facing
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar - Document List */}
+        <div className="w-80 border-r flex flex-col bg-muted/30">
+          {/* Search and Filters */}
+          <div className="p-4 space-y-3 border-b">
+            <div className="relative">
+              <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
+              <Input
+                placeholder="Search documents..."
+                className="pl-9"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium block">Audience</label>
+            <div className="flex gap-2">
               <Select
-                value={audience}
-                onValueChange={(value: any) => setAudience(value)}
+                value={statusFilter}
+                onValueChange={(v: any) => setStatusFilter(v)}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="flex-1 h-9">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent align="center">
-                  <SelectItem value="Developers">👨‍💻 Developers</SelectItem>
-                  <SelectItem value="Managers">👔 Managers</SelectItem>
-                  <SelectItem value="Clients">🎯 Clients</SelectItem>
-                  <SelectItem value="Mixed">👥 Mixed</SelectItem>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="generating">Generating</SelectItem>
+                  <SelectItem value="failed">Failed</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium block">Depth Level</label>
               <Select
-                value={depthLevel}
-                onValueChange={(value: any) => setDepthLevel(value)}
+                value={sortOption}
+                onValueChange={(v: any) => setSortOption(v)}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="flex-1 h-9">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent align="center">
-                  <SelectItem value="Brief">⚡ Brief</SelectItem>
-                  <SelectItem value="Standard">📊 Standard</SelectItem>
-                  <SelectItem value="Detailed">📚 Detailed</SelectItem>
+                <SelectContent>
+                  <SelectItem value="newest">Newest</SelectItem>
+                  <SelectItem value="oldest">Oldest</SelectItem>
+                  <SelectItem value="title">Title</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
 
-            <Button
-              onClick={handleGenerate}
-              disabled={generating}
-              className="w-full"
-            >
-              {generating ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Generating...
-                </>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadDocumentations}
+                disabled={loading}
+              >
+                <RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} />
+              </Button>
+            </div>
+          </div>
+
+          {/* Document List */}
+          <ScrollArea className="flex-1">
+            <div className="p-4 space-y-2">
+              {loading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                </div>
+              ) : filteredDocs.length === 0 ? (
+                <div className="text-center py-12">
+                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-sm text-muted-foreground">
+                    No documents found
+                  </p>
+                </div>
               ) : (
-                <>
-                  <FileCheck className="h-4 w-4 mr-2" />
-                  Generate Documentation
-                </>
-              )}
-            </Button>
-
-            {/* Recent Documentations */}
-            <div className="pt-4 border-t">
-              <h3 className="text-sm font-medium mb-3">Recent Documentation</h3>
-              <div className="space-y-2 max-h-[300px] overflow-y-auto">
-                {filteredDocumentations.map((doc) => (
+                filteredDocs.map((doc) => (
                   <div
                     key={doc._id}
-                    className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                    className={cn(
+                      'p-3 rounded-lg border cursor-pointer transition-all',
+                      'hover:shadow-md hover:border-primary/50',
                       selectedDoc?._id === doc._id
-                        ? "bg-primary/10 border-primary"
-                        : "hover:bg-muted"
-                    }`}
+                        ? 'bg-primary/10 border-primary shadow-md'
+                        : 'bg-card hover:bg-muted/50'
+                    )}
                     onClick={() => setSelectedDoc(doc)}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">
-                          {doc.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(doc.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <p className="font-medium text-sm line-clamp-2 flex-1">
+                        {doc.title}
+                      </p>
                       <Badge
-                        variant={
-                          doc.status === "completed" ? "default" : "secondary"
-                        }
+                        className={cn('text-xs flex-shrink-0', getStatusColor(doc.status))}
+                        variant="secondary"
                       >
                         {doc.status}
                       </Badge>
                     </div>
+                    
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      <span>{new Date(doc.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    
+                    {doc.documentType && (
+                      <Badge variant="outline" className="mt-2 text-xs">
+                        {doc.documentType}
+                      </Badge>
+                    )}
                   </div>
-                ))}
-
-                {filteredDocumentations.length === 0 && !loading && (
-                  <p className="text-sm text-muted-foreground text-center py-4">
-                    No documentation found
-                  </p>
-                )}
-              </div>
+                ))
+              )}
             </div>
-          </CardContent>
-        </Card>
+          </ScrollArea>
+        </div>
 
-        {/* Preview Panel */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>
-                  {selectedDoc?.title || "No Documentation Selected"}
-                </CardTitle>
-                {selectedDoc && (
-                  <CardDescription className="mt-2 flex gap-2">
-                    <Badge>{selectedDoc.documentType}</Badge>
-                    <Badge variant="outline">{selectedDoc.audience}</Badge>
-                    <Badge variant="outline">{selectedDoc.depthLevel}</Badge>
-                  </CardDescription>
-                )}
-              </div>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col">
+          {selectedDoc ? (
+            <>
+              {/* Document Header */}
+              <div className="px-6 py-4 border-b bg-muted/20">
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
+                  {/* Left: meta */}
+                  <div className="min-w-0 flex items-center gap-2 flex-wrap justify-center lg:justify-start">
+                    <Badge variant="outline" className="text-xs">
+                      {selectedDoc.documentType}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">
+                      v{selectedDoc.version}
+                    </span>
+                    {selectedDoc.generatedBy && (
+                      <span className="text-xs text-muted-foreground truncate">
+                        by {selectedDoc.generatedBy.name}
+                      </span>
+                    )}
+                  </div>
 
-              {selectedDoc && (
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" onClick={startEditing}>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit
-                  </Button>
+                  {/* Center: title */}
+                  <div className="min-w-0 text-center">
+                    <h2 className="text-xl font-bold truncate">{selectedDoc.title}</h2>
+                  </div>
+
+                  {/* Right: actions */}
+                  <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-end">
+                  {/* View Mode Toggle */}
+                  <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+                    <Button
+                      variant={viewMode === 'preview' ? 'default' : 'ghost'}
+                      size="sm"
+                      onClick={() => setViewMode('preview')}
+                      className="gap-2 h-8"
+                    >
+                      <Eye className="h-4 w-4" />
+                      Preview
+                    </Button>
+                    <Button
+                      variant={viewMode === 'edit' ? 'default' : 'ghost'}
+                      size="sm"
+                      onClick={() => setViewMode('edit')}
+                      className="gap-2 h-8"
+                      disabled={selectedDoc.status !== 'completed'}
+                    >
+                      <Edit3 className="h-4 w-4" />
+                      Edit
+                    </Button>
+                  </div>
+
+                  <Separator orientation="vertical" className="h-8" />
+
+                  {/* Version History */}
+                  <VersionHistoryPanel
+                    documentId={selectedDoc._id}
+                    currentVersion={selectedDoc.version}
+                  />
+
+                  <Separator orientation="vertical" className="h-8" />
+
+                  {/* Export Buttons */}
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleExport("pdf")}
-                    disabled={!!exporting}
+                    onClick={() => handleExport('pdf')}
+                    disabled={!!exporting || selectedDoc.status !== 'completed'}
+                    className="gap-2"
                   >
-                    {exporting === "pdf" ? (
+                    {exporting === 'pdf' ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <>
-                        <Download className="h-4 w-4 mr-2" />
-                        PDF
-                      </>
+                      <Download className="h-4 w-4" />
                     )}
+                    PDF
                   </Button>
+
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleExport("word")}
-                    disabled={!!exporting}
+                    onClick={() => handleExport('word')}
+                    disabled={!!exporting || selectedDoc.status !== 'completed'}
+                    className="gap-2"
                   >
-                    {exporting === "word" ? (
+                    {exporting === 'word' ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <>
-                        <Download className="h-4 w-4 mr-2" />
-                        Word
-                      </>
+                      <Download className="h-4 w-4" />
                     )}
+                    Word
                   </Button>
+
+                  <Separator orientation="vertical" className="h-8" />
+
+                  {/* Delete */}
                   <Button
                     variant="destructive"
                     size="sm"
@@ -542,141 +471,79 @@ export default function DocumentationPage() {
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
-                </div>
-              )}
-            </div>
-          </CardHeader>
-          <CardContent>
-            {selectedDoc ? (
-              <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="flex flex-wrap gap-2 overflow-x-auto scrollbar-none px-1 py-1">
-                  <TabsTrigger value="overview">Overview</TabsTrigger>
-                  <TabsTrigger value="architecture">Architecture</TabsTrigger>
-                  <TabsTrigger value="sprints">Sprints</TabsTrigger>
-                  <TabsTrigger value="tasks">Tasks</TabsTrigger>
-                  <TabsTrigger value="ai">AI Features</TabsTrigger>
-                  <TabsTrigger value="api">API</TabsTrigger>
-                  <TabsTrigger value="more">More</TabsTrigger>
-                </TabsList>
-
-                {isEditing && (
-                  <div className="grid gap-4 border rounded-lg p-4 mb-4">
-                    <Input
-                      value={editTitle}
-                      onChange={(e) => setEditTitle(e.target.value)}
-                      placeholder="Title"
-                    />
-                    <Textarea
-                      value={editOverview}
-                      onChange={(e) => setEditOverview(e.target.value)}
-                      placeholder="Project overview (markdown)"
-                      rows={4}
-                    />
-                    <Textarea
-                      value={editProblem}
-                      onChange={(e) => setEditProblem(e.target.value)}
-                      placeholder="Problem statement (markdown)"
-                      rows={4}
-                    />
-                    <div className="flex gap-2 justify-end">
-                      <Button
-                        variant="outline"
-                        onClick={() => setIsEditing(false)}
-                        disabled={savingEdit}
-                      >
-                        Cancel
-                      </Button>
-                      <Button onClick={handleSaveEdit} disabled={savingEdit}>
-                        {savingEdit ? (
-                          <>
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Saving
-                          </>
-                        ) : (
-                          "Save changes"
-                        )}
-                      </Button>
-                    </div>
                   </div>
-                )}
-
-                <div className="mt-4 max-h-[70vh] overflow-y-auto prose prose-sm dark:prose-invert max-w-none">
-                  <TabsContent value="overview">
-                    <ReactMarkdown>
-                      {selectedDoc.content?.projectOverview ||
-                        "No overview available."}
-                    </ReactMarkdown>
-                    <ReactMarkdown>
-                      {selectedDoc.content?.problemStatement || ""}
-                    </ReactMarkdown>
-                  </TabsContent>
-
-                  <TabsContent value="architecture">
-                    <ReactMarkdown>
-                      {selectedDoc.content?.systemArchitecture || ""}
-                    </ReactMarkdown>
-                    <ReactMarkdown>
-                      {selectedDoc.content?.techStack || ""}
-                    </ReactMarkdown>
-                  </TabsContent>
-
-                  <TabsContent value="sprints">
-                    <ReactMarkdown>
-                      {selectedDoc.content?.sprintBreakdown || ""}
-                    </ReactMarkdown>
-                  </TabsContent>
-
-                  <TabsContent value="tasks">
-                    <ReactMarkdown>
-                      {selectedDoc.content?.taskWorkflow || ""}
-                    </ReactMarkdown>
-                  </TabsContent>
-
-                  <TabsContent value="ai">
-                    <ReactMarkdown>
-                      {selectedDoc.content?.aiFeatures || ""}
-                    </ReactMarkdown>
-                  </TabsContent>
-
-                  <TabsContent value="api">
-                    <ReactMarkdown>
-                      {selectedDoc.content?.apiOverview || ""}
-                    </ReactMarkdown>
-                    <ReactMarkdown>
-                      {selectedDoc.content?.databaseModels || ""}
-                    </ReactMarkdown>
-                  </TabsContent>
-
-                  <TabsContent value="more">
-                    <ReactMarkdown>
-                      {selectedDoc.content?.authSecurity || ""}
-                    </ReactMarkdown>
-                    <ReactMarkdown>
-                      {selectedDoc.content?.deploymentNotes || ""}
-                    </ReactMarkdown>
-                    <ReactMarkdown>
-                      {selectedDoc.content?.futureRoadmap || ""}
-                    </ReactMarkdown>
-                    <ReactMarkdown>
-                      {selectedDoc.content?.appendix || ""}
-                    </ReactMarkdown>
-                  </TabsContent>
                 </div>
-              </Tabs>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <FileText className="h-16 w-16 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">
-                  No Documentation Selected
-                </h3>
-                <p className="text-sm text-muted-foreground max-w-md">
-                  Generate new documentation or select an existing one from the
-                  sidebar to preview and export.
-                </p>
               </div>
-            )}
-          </CardContent>
-        </Card>
+
+              {/* Document Content */}
+              <div className="flex-1 overflow-hidden">
+                {selectedDoc.status === 'generating' ? (
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+                    <h3 className="text-lg font-medium mb-2">Generating Document...</h3>
+                    <p className="text-sm text-muted-foreground">
+                      AI is crafting your professional documentation
+                    </p>
+                  </div>
+                ) : selectedDoc.status === 'failed' ? (
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <div className="bg-destructive/10 rounded-full p-4 mb-4">
+                      <Trash2 className="h-12 w-12 text-destructive" />
+                    </div>
+                    <h3 className="text-lg font-medium mb-2">Generation Failed</h3>
+                    <p className="text-sm text-muted-foreground max-w-md text-center">
+                      {selectedDoc.generationError || 'An error occurred during generation'}
+                    </p>
+                  </div>
+                ) : viewMode === 'edit' ? (
+                  <DocumentEditor
+                    documentId={selectedDoc._id}
+                    initialContent={selectedDoc.content.richText}
+                    markdownContent={selectedDoc.content.markdown}
+                    readOnly={false}
+                    onSave={(content) => handleSaveRichText(selectedDoc._id, content)}
+                  />
+                ) : (
+                  // Preview Mode - Show generated markdown
+                  <ScrollArea className="h-full">
+                    <div className="mx-auto max-w-4xl p-8">
+                      <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <ReactMarkdown>
+                          {selectedDoc.content.markdown || 
+                           selectedDoc.content.projectOverview || 
+                           'No content available'}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                )}
+              </div>
+            </>
+          ) : (
+            // No Document Selected
+            <div className="flex flex-col items-center justify-center h-full text-center p-12">
+              <div className="bg-primary/10 rounded-full p-6 mb-6">
+                <FileText className="h-16 w-16 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold mb-2">
+                No Document Selected
+              </h3>
+              <p className="text-muted-foreground max-w-md mb-6">
+                Select a document from the sidebar or generate a new one to get started
+              </p>
+              <DocumentGenerationModal
+                projectId={projectId}
+                onGenerated={handleGenerated}
+                trigger={
+                  <Button size="lg" className="gap-2">
+                    <Plus className="h-5 w-5" />
+                    Generate Your First Document
+                  </Button>
+                }
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

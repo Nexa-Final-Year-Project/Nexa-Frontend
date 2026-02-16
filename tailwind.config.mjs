@@ -63,6 +63,8 @@ export default {
         "slide-up": "slideUp 0.4s ease-out",
         "stagger-children": "stagger 0.5s ease-out forwards",
         "neon-pulse": "neonPulse 2s infinite",
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
       keyframes: {
         fadeIn: {
@@ -86,6 +88,14 @@ export default {
             textShadow: "0 0 16px currentColor",
             boxShadow: "0 0 24px hsl(var(--neon-primary) / 0.8)",
           },
+        },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       // New glass/neon-specific utilities

@@ -4,14 +4,20 @@ export type NotificationType =
   | "mention"
   | "sprint"
   | "project"
-  | "system";
+  | "system"
+  | "Task"
+  | "Sprint"
+  | "AI"
+  | "Blocker";
 
 export type Notification = {
   _id: string;
-  userId: string;
-  type: NotificationType;
-  title: string;
-  message: string;
+  user?: string; // Backend uses 'user' field for userId
+  userId?: string; // Keep for backwards compatibility
+  type?: NotificationType;
+  content?: string; // Backend uses 'content' field
+  title?: string; // Keep for backwards compatibility
+  message?: string; // Keep for backwards compatibility
   read: boolean;
   createdAt: string;
   updatedAt?: string;

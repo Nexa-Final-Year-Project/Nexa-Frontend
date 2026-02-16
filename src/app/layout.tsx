@@ -23,11 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <ColorSchemeScript />
       </head>
-      <body className="!bg-background">
+      <body className="!bg-background" suppressHydrationWarning>
         <ReduxProvider>
           <Providers>
             <KeyboardShortcutsProvider>

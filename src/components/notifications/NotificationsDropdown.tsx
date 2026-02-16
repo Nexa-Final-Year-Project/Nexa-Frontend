@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Bell,
   ExternalLink,
@@ -8,6 +8,8 @@ import {
   Check,
   BellOff,
   Sparkles,
+  Shield,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +23,9 @@ import {
   useMarkAsRead,
   useDeleteNotification,
   useMarkAllAsRead,
+  useSetNotifications,
 } from "@/store/notifications/notificationStore";
+import { useNotificationAPI } from "@/hooks/notifications/useNotificationAPI";
 import { useRouter } from "next/navigation";
 import {
   Avatar,
@@ -36,11 +40,54 @@ export const NotificationsDropdown = () => {
   const markAsRead = useMarkAsRead();
   const deleteNotification = useDeleteNotification();
   const markAllAsRead = useMarkAllAsRead();
+  const setNotifications = useSetNotifications();
+  const notificationAPI = useNotificationAPI();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  // Load notifications on mount
+  useEffect(() => {
+    const loadNotifications = async () => {
+      const data = await notificationAPI.fetchNotifications();
+      setNotifications(data);
+    };
+    loadNotifications();
+    
+    // Refresh every 30 seconds
+    const interval = setInterval(loadNotifications, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Filter unread notifications
   const unreadNotifications = notifications.filter((n) => !n.read);
+
+  // Get notification icon based on type
+  const getNotificationIcon = (type?: string) => {
+    switch (type) {
+      case "Blocker":
+      case "blocker":
+        return Shield;
+      case "Sprint":
+      case "sprint":
+        return AlertTriangle;
+      default:
+        return Sparkles;
+    }
+  };
+
+  // Get notification color based on type
+  const getNotificationColor = (type?: string) => {
+    switch (type) {
+      case "Blocker":
+      case "blocker":
+        return "from-rose-500/20 to-rose-600/10 text-rose-400";
+      case "Sprint":
+      case "sprint":
+        return "from-blue-500/20 to-blue-600/10 text-blue-400";
+      default:
+        return "from-violet-500/20 to-violet-600/10 text-violet-400";
+    }
+  };
 
   const handleNotificationClick = (notification: any) => {
     if (!notification.read) {
@@ -197,7 +244,13 @@ export const NotificationsDropdown = () => {
             ) : (
               <div className="py-2">
                 <AnimatePresence>
-                  {unreadNotifications.map((notification, index) => (
+                  {unreadNotifications.map((notification, index) => {
+                    const NotificationIcon = getNotificationIcon(notification.type);
+                    const iconColorClass = getNotificationColor(notification.type);
+                    const displayMessage = notification.content || notification.message || "";
+                    const displayTitle = notification.title || (notification.type === "Blocker" ? "Blocker Alert" : "Notification");
+                    
+                    return (
                     <motion.div
                       key={notification._id}
                       initial={{ opacity: 0, x: -20 }}
@@ -213,22 +266,16 @@ export const NotificationsDropdown = () => {
                         {/* Unread indicator */}
                         <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-violet-500 to-violet-600 rounded-r-full" />
 
-                        {/* Avatar */}
-                        <Avatar className="h-10 w-10 flex-shrink-0 ring-2 ring-white/[0.06]">
-                          <AvatarImage
-                            src={notification.avatarUrl}
-                            alt={notification.senderName}
-                          />
-                          <AvatarFallback className="bg-gradient-to-br from-violet-500/20 to-cyan-500/10 text-violet-300 text-xs font-medium">
-                            {getInitials(notification.senderName)}
-                          </AvatarFallback>
-                        </Avatar>
+                        {/* Avatar/Icon */}
+                        <div className={`h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-br ${iconColorClass} ring-2 ring-white/[0.06] flex items-center justify-center`}>
+                          <NotificationIcon className="w-5 h-5" />
+                        </div>
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start gap-2">
                             <p className="font-medium text-sm text-white group-hover:text-violet-300 transition-colors">
-                              {notification.title}
+                              {displayTitle}
                             </p>
                             <motion.button
                               whileHover={{ scale: 1.1 }}
@@ -243,7 +290,7 @@ export const NotificationsDropdown = () => {
                             </motion.button>
                           </div>
                           <p className="text-xs text-white/50 mt-1 line-clamp-2 leading-relaxed">
-                            {notification.message}
+                            {displayMessage}
                           </p>
                           <p className="text-[10px] text-white/30 mt-2 font-medium">
                             {formatTime(notification.createdAt)}
@@ -251,7 +298,7 @@ export const NotificationsDropdown = () => {
                         </div>
                       </div>
                     </motion.div>
-                  ))}
+                  )})}
                 </AnimatePresence>
               </div>
             )}

@@ -30,6 +30,7 @@ import {
   Flame,
   Award,
   Scale,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +43,10 @@ import BurndownChart from "@/components/sprints/BurndownChart";
 import RiskMitigationPanel from "@/components/sprints/RiskMitigationPanel";
 import MemberPerformancePanel from "@/components/sprints/MemberPerformancePanel";
 import BlockerHealthPill from "@/components/sprints/BlockerHealthPill";
+import BlockerHistoryChart from "@/components/sprints/BlockerHistoryChart";
+import { useAuthStore } from "@/store/auth/authStore";
+import axios from "axios";
+import toast from "@/lib/customToast";
 
 // Sprint data from the AI planner response
 interface SprintPlanData {
@@ -136,11 +141,51 @@ export default function SprintDetailModal({
 }: SprintDetailModalProps) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const { user } = useAuthStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(["overview", "tasks", "team", "blockers"])
   );
+  const [isRefreshingBlockers, setIsRefreshingBlockers] = useState(false);
+  const [localBlockerData, setLocalBlockerData] = useState<any>(null);
 
   if (!open || !sprint) return null;
+
+  // Check if current user is a Project Manager
+  const currentUserMember = members.find((m) => m.email === user?.email);
+  const isProjectManager = currentUserMember?.role === "Project-Manager";
+
+  // Handle manual blocker refresh
+  const handleRefreshBlockers = async () => {
+    if (!sprint._id || !isProjectManager) return;
+    
+    setIsRefreshingBlockers(true);
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/sprint/${sprint._id}/blockers/refresh`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setLocalBlockerData(response.data.blocker);
+        toast.success("Blocker scan refreshed successfully", {
+          description: "Latest blocker analysis is now available",
+        });
+      }
+    } catch (error: any) {
+      console.error("Failed to refresh blocker scan:", error);
+      toast.error("Failed to refresh blocker scan", {
+        description: error.response?.data?.message || "Please try again later",
+      });
+    } finally {
+      setIsRefreshingBlockers(false);
+    }
+  };
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => {
@@ -276,16 +321,18 @@ export default function SprintDetailModal({
     : null;
 
   // Blocker snapshot (best-effort; may arrive async after sprint creation)
+  // Use local data if available (from manual refresh), otherwise use sprint data
+  const blockerData = localBlockerData || sprint;
   const blockerResult =
-    (sprint as any)?.blockerSnapshot?.result || (sprint as any)?.blockerSnapshot;
+    (blockerData as any)?.blockerSnapshot?.result || (blockerData as any)?.blockerSnapshot;
   const blockerScore =
-    (sprint as any)?.blockerHealthScore ??
+    (blockerData as any)?.blockerHealthScore ??
     blockerResult?.sprintHealthScore ??
     null;
-  const blockerStatus = (sprint as any)?.blockerStatus ?? blockerResult?.status;
+  const blockerStatus = (blockerData as any)?.blockerStatus ?? blockerResult?.status;
   const blockerUpdatedAt =
-    (sprint as any)?.blockerUpdatedAt ??
-    (sprint as any)?.blockerSnapshot?.computedAt ??
+    (blockerData as any)?.blockerUpdatedAt ??
+    (blockerData as any)?.blockerSnapshot?.computedAt ??
     null;
   const blockerCount = Array.isArray(blockerResult?.blockers)
     ? blockerResult.blockers.length
@@ -707,22 +754,45 @@ export default function SprintDetailModal({
                   : "border-t border-neutral-200"
               }`}
             >
-              <SectionHeader
-                id="blockers"
-                icon={Shield}
-                title="Blocker Report"
-                badge={
-                  <span className="ml-2">
-                    <BlockerHealthPill
-                      compact
-                      blockerStatus={blockerStatus}
-                      blockerHealthScore={typeof blockerScore === "number" ? blockerScore : null}
-                      blockerCount={typeof blockerCount === "number" ? blockerCount : null}
-                      blockerUpdatedAt={typeof blockerUpdatedAt === "string" ? blockerUpdatedAt : null}
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <SectionHeader
+                    id="blockers"
+                    icon={Shield}
+                    title="Blocker Report"
+                    badge={
+                      <span className="ml-2">
+                        <BlockerHealthPill
+                          compact
+                          blockerStatus={blockerStatus}
+                          blockerHealthScore={typeof blockerScore === "number" ? blockerScore : null}
+                          blockerCount={typeof blockerCount === "number" ? blockerCount : null}
+                          blockerUpdatedAt={typeof blockerUpdatedAt === "string" ? blockerUpdatedAt : null}
+                        />
+                      </span>
+                    }
+                  />
+                </div>
+                {isProjectManager && (
+                  <Button
+                    onClick={handleRefreshBlockers}
+                    disabled={isRefreshingBlockers}
+                    size="sm"
+                    className={`ml-3 transition-all duration-200 ${
+                      isDark
+                        ? "border border-neutral-600/50 bg-neutral-800/30 text-neutral-300 hover:bg-neutral-700/50 hover:border-neutral-500"
+                        : "border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-100 hover:border-neutral-400"
+                    }`}
+                  >
+                    <RefreshCw
+                      className={`w-3.5 h-3.5 mr-1.5 ${
+                        isRefreshingBlockers ? "animate-spin" : ""
+                      }`}
                     />
-                  </span>
-                }
-              />
+                    {isRefreshingBlockers ? "Scanning..." : "Refresh Scan"}
+                  </Button>
+                )}
+              </div>
               {expandedSections.has("blockers") && (
                 <div
                   className={`mt-3 rounded-xl p-4 space-y-4 ${
@@ -842,6 +912,28 @@ export default function SprintDetailModal({
                       </div>
                     </div>
                   )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Blocker History Trend */}
+          {sprint._id && (
+            <div
+              className={`pt-4 ${
+                isDark
+                  ? "border-t border-white/[0.04]"
+                  : "border-t border-neutral-200"
+              }`}
+            >
+              <SectionHeader
+                id="blocker-history"
+                icon={BarChart3}
+                title="Blocker Health Timeline"
+              />
+              {expandedSections.has("blocker-history") && (
+                <div className="mt-3">
+                  <BlockerHistoryChart sprintId={sprint._id} />
                 </div>
               )}
             </div>
