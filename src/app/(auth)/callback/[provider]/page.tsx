@@ -34,7 +34,9 @@ export default function OAuthCallbackPage() {
 
   const buildUserData = (decoded: DecodedToken, fallbackUid: string) => {
     const rawUid = decoded.user_id || fallbackUid;
-    const uid = rawUid.includes("-") ? rawUid.split("-").slice(1).join("-") : rawUid;
+    const uid = rawUid.includes("-")
+      ? rawUid.split("-").slice(1).join("-")
+      : rawUid;
 
     return {
       uid,

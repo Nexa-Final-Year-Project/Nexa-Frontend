@@ -80,7 +80,7 @@ export const useActivityLogs = () => {
         setLoading(false);
       }
     },
-    [fetchActivityLogs, setActivityLogs]
+    [fetchActivityLogs, setActivityLogs],
   );
 
   const getActivityLog = useCallback(
@@ -93,7 +93,7 @@ export const useActivityLogs = () => {
         throw error;
       }
     },
-    [fetchActivityLogById]
+    [fetchActivityLogById],
   );
 
   const createActivityLog = useCallback(
@@ -122,7 +122,12 @@ export const useActivityLogs = () => {
         setLoading(false);
       }
     },
-    [createActivityLogApi, addActivityLog, updateActivityLog, removeActivityLog]
+    [
+      createActivityLogApi,
+      addActivityLog,
+      updateActivityLog,
+      removeActivityLog,
+    ],
   );
 
   const deleteActivityLog = useCallback(
@@ -137,7 +142,7 @@ export const useActivityLogs = () => {
         throw error;
       }
     },
-    [deleteActivityLogApi, removeActivityLog]
+    [deleteActivityLogApi, removeActivityLog],
   );
 
   return {
