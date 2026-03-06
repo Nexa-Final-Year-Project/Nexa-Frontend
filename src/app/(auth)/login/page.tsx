@@ -46,7 +46,10 @@ const LoginPage = () => {
           subtitle="Choose a method to continue"
         >
           <div className="space-y-4">
-            <SocialButtons className="my-2" providers={["slack", "google"]} />
+            <SocialButtons
+              className="my-2"
+              providers={["google", "slack", "github"]}
+            />
             <AuthDivider text="Or sign in with email" />
             <AuthForm
               fields={LOGIN_FIELDS}

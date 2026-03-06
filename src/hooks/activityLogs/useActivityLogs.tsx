@@ -26,6 +26,40 @@ export const useActivityLogs = () => {
     updateActivityLog,
   } = useActivityLogStore();
 
+  const normalizeError = (err: unknown) => {
+    if (!err) return new Error("Unknown error occurred");
+
+    if (err instanceof Error) {
+      return err;
+    }
+
+    if (typeof err === "object") {
+      const maybeErr = err as {
+        status?: number;
+        error?: string;
+        data?: { message?: string; error?: string };
+      };
+
+      const fromData = maybeErr.data?.message || maybeErr.data?.error;
+      const fromError = maybeErr.error;
+      const status = maybeErr.status;
+
+      if (fromData) {
+        return new Error(fromData);
+      }
+
+      if (fromError) {
+        return new Error(fromError);
+      }
+
+      if (status) {
+        return new Error(`Request failed with status ${status}`);
+      }
+    }
+
+    return new Error(String(err));
+  };
+
   const fetchAllActivityLogs = useCallback(
     async (params: Record<string, any>) => {
       setLoading(true);
@@ -36,9 +70,12 @@ export const useActivityLogs = () => {
         const activityLogsData = response.logs || response;
         setActivityLogs(activityLogsData || []);
         return activityLogsData;
-      } catch (error) {
-        console.error("Failed to fetch activityLogs:", error);
-        throw error;
+      } catch (err) {
+        const normalizedError = normalizeError(err);
+        console.error("Failed to fetch activityLogs:", normalizedError.message);
+        setError(normalizedError);
+        setActivityLogs([]);
+        return [];
       } finally {
         setLoading(false);
       }

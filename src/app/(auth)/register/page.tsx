@@ -54,7 +54,7 @@ const RegisterPage = () => {
               submitButtonText="Create account"
             />
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm pt-1 text-center">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 text-[11px] sm:text-xs pt-1 text-center whitespace-nowrap">
               <span className={isDark ? "text-white/60" : "text-neutral-600"}>
                 No credit card required
               </span>
@@ -65,7 +65,7 @@ const RegisterPage = () => {
                 text="Already have an account?"
                 linkText="Sign in"
                 href="/login"
-                className="pt-0"
+                className="pt-0 !text-[11px] sm:!text-xs whitespace-nowrap"
               />
             </div>
           </div>
