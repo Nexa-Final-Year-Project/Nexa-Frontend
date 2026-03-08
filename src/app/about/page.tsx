@@ -23,6 +23,7 @@ const stats = [
   { label: "Customer Rating", value: "4.9/5", icon: Award },
 ];
 
+// Core values that define our mission and culture
 const values = [
   {
     icon: Target,
