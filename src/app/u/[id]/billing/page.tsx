@@ -304,7 +304,9 @@ export default function BillingPage() {
 
         {subscription && !subscription.canChangePaidPlan && (
           <div className="mb-6 p-4 rounded-xl border text-sm border-amber-500/30 bg-amber-500/10 text-amber-300">
-            Plan changes are locked until {formatDateLabel(subscription.planChangeAvailableAt)}. You can switch plans after your current monthly cycle ends.
+            Plan changes are locked until{" "}
+            {formatDateLabel(subscription.planChangeAvailableAt)}. You can
+            switch plans after your current monthly cycle ends.
           </div>
         )}
 
@@ -422,7 +424,9 @@ export default function BillingPage() {
               const isCurrentPlan = subscription?.planId === plan.id;
               const isPaidPlan = plan.id !== "free";
               const isLockedByCycle =
-                !isCurrentPlan && isPaidPlan && !subscription?.canChangePaidPlan;
+                !isCurrentPlan &&
+                isPaidPlan &&
+                !subscription?.canChangePaidPlan;
 
               return (
                 <div
@@ -531,11 +535,11 @@ export default function BillingPage() {
                       ? "Current Plan"
                       : isLockedByCycle
                         ? `Available ${formatDateLabel(subscription?.planChangeAvailableAt)}`
-                      : activePlanId === plan.id
-                        ? "Redirecting..."
-                        : isPaidPlan
-                          ? `Choose ${plan.name}`
-                          : "Free Plan"}
+                        : activePlanId === plan.id
+                          ? "Redirecting..."
+                          : isPaidPlan
+                            ? `Choose ${plan.name}`
+                            : "Free Plan"}
                   </Button>
                 </div>
               );
