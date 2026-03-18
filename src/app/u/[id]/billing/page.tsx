@@ -36,6 +36,9 @@ type MySubscription = {
   tokensLimit: number | null;
   stripeCustomerId: string | null;
   lastPaymentAt: string | null;
+  currentPeriodEnd: string | null;
+  canChangePaidPlan: boolean;
+  planChangeAvailableAt: string | null;
 };
 
 const stripePromise = loadStripe(
@@ -66,6 +69,17 @@ export default function BillingPage() {
     const rawId = (params as { id?: string | string[] })?.id;
     return Array.isArray(rawId) ? rawId[0] : rawId || "";
   }, [params]);
+
+  const formatDateLabel = (value: string | null | undefined) => {
+    if (!value) return "next billing cycle";
+    const parsedDate = new Date(value);
+    if (Number.isNaN(parsedDate.getTime())) return "next billing cycle";
+    return parsedDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
 
   const fetchBillingData = async () => {
     try {
@@ -288,6 +302,12 @@ export default function BillingPage() {
           </div>
         )}
 
+        {subscription && !subscription.canChangePaidPlan && (
+          <div className="mb-6 p-4 rounded-xl border text-sm border-amber-500/30 bg-amber-500/10 text-amber-300">
+            Plan changes are locked until {formatDateLabel(subscription.planChangeAvailableAt)}. You can switch plans after your current monthly cycle ends.
+          </div>
+        )}
+
         {/* Current Plan */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -401,6 +421,8 @@ export default function BillingPage() {
             plans.map((plan) => {
               const isCurrentPlan = subscription?.planId === plan.id;
               const isPaidPlan = plan.id !== "free";
+              const isLockedByCycle =
+                !isCurrentPlan && isPaidPlan && !subscription?.canChangePaidPlan;
 
               return (
                 <div
@@ -493,20 +515,27 @@ export default function BillingPage() {
                           ? "bg-primary text-primary-foreground"
                           : "bg-secondary text-secondary-foreground",
                     )}
-                    disabled={isCurrentPlan || activePlanId === plan.id}
+                    disabled={
+                      isCurrentPlan ||
+                      activePlanId === plan.id ||
+                      isLockedByCycle ||
+                      !isPaidPlan
+                    }
                     onClick={() => {
-                      if (!isCurrentPlan && isPaidPlan) {
+                      if (!isCurrentPlan && isPaidPlan && !isLockedByCycle) {
                         handlePlanCheckout(plan.id);
                       }
                     }}
                   >
                     {isCurrentPlan
                       ? "Current Plan"
+                      : isLockedByCycle
+                        ? `Available ${formatDateLabel(subscription?.planChangeAvailableAt)}`
                       : activePlanId === plan.id
                         ? "Redirecting..."
                         : isPaidPlan
                           ? `Choose ${plan.name}`
-                          : "Start Free"}
+                          : "Free Plan"}
                   </Button>
                 </div>
               );
@@ -521,10 +550,10 @@ export default function BillingPage() {
           transition={{ delay: 0.4 }}
           className="mt-6 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-start gap-3"
         >
-          <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-medium text-amber-300">Plan Summary</p>
-            <p className="text-xs text-amber-200/60 mt-1">
+            <p className="text-sm font-medium text-amber-500">Plan Summary</p>
+            <p className="text-xs text-amber-500/80 mt-1">
               Free includes Task Generator + core AI support. Pro enables
               Sprint, Task, Doc, and Blocker agents with limited tokens. Premium
               unlocks all agents with unlimited users and unlimited tokens.

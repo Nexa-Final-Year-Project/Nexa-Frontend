@@ -3,7 +3,6 @@
 import {
   Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
   Sparkles,
   Settings,
@@ -235,22 +234,6 @@ export function NavUser(props: NavUserProps) {
                     }`}
                   />
                   <span>Account</span>
-                </DropdownMenuItem>
-              </Link>
-              <Link href={`/u/${userId}/billing`}>
-                <DropdownMenuItem
-                  className={`rounded-lg cursor-pointer py-2.5 ${
-                    isDark
-                      ? "text-white/70 hover:text-white hover:bg-white/[0.04]"
-                      : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
-                  } focus:bg-transparent`}
-                >
-                  <CreditCard
-                    className={`w-4 h-4 mr-3 ${
-                      isDark ? "text-white/40" : "text-neutral-400"
-                    }`}
-                  />
-                  <span>Billing</span>
                 </DropdownMenuItem>
               </Link>
               <Link href="/notifications">
