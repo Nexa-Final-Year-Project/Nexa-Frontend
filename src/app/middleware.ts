@@ -17,6 +17,13 @@ const STATIC_FILES = ["/_next", "/images", "/favicon.ico", "/robots.txt"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const apiBaseRaw =
+    process.env.NEXT_PUBLIC_API_URL ||
+    process.env.NEXT_PUBLIC_BACKEND_URL ||
+    "http://localhost:5000/api";
+  const apiBase = apiBaseRaw.endsWith("/api")
+    ? apiBaseRaw
+    : `${apiBaseRaw}/api`;
 
   // ✅ Match cookie name with backend
   const token = request.cookies.get("token")?.value;
@@ -28,7 +35,7 @@ export async function middleware(request: NextRequest) {
 
   // Public route check
   const isPublicRoute = PUBLIC_ROUTES.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   // Redirect unauthenticated users away from protected routes
@@ -43,17 +50,14 @@ export async function middleware(request: NextRequest) {
 
   // If token exists, verify it
   try {
-    const resp = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/verify-token`,
-      {
-        method: "POST", // ✅ Must specify
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ token }),
-      }
-    );
+    const resp = await fetch(`${apiBase}/auth/verify-token`, {
+      method: "POST", // ✅ Must specify
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ token }),
+    });
 
     if (!resp.ok) {
       throw new Error("Token verification failed");

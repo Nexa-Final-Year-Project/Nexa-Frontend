@@ -199,7 +199,7 @@ export function NavUser(props: NavUserProps) {
             </DropdownMenuLabel>
 
             <DropdownMenuGroup>
-              <Link href={`/u/${userId}/upgrade`}>
+              <Link href={`/u/${userId}/billing`}>
                 <DropdownMenuItem
                   className={`rounded-lg cursor-pointer py-2.5 ${
                     isDark
