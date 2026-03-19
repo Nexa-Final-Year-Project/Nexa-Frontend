@@ -176,7 +176,7 @@ export default function SectionSelector({ documentType, onSelectionChange }: Sec
         </Badge>
       </div>
       
-      <ScrollArea className="h-[500px] pr-4">
+      <ScrollArea className="h-[300px] sm:h-[500px] pr-4">
         <Accordion type="multiple" className="w-full" defaultValue={structure.map(s => s.section)}>
           {structure.map((section) => {
             const selectedCount = getSelectedCount(section);

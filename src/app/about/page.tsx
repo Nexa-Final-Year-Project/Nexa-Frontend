@@ -51,6 +51,7 @@ const values = [
   },
 ];
 
+// team values
 const team = [
   {
     name: "The Vision",
