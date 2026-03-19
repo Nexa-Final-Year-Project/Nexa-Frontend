@@ -73,6 +73,7 @@ const team = [
   },
 ];
 
+// About Function:
 export default function AboutPage() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
