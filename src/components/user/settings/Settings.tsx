@@ -22,7 +22,7 @@ interface UserSettingsProps {
 }
 
 const UserSettings = ({ user }: UserSettingsProps) => {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
   const [activeSection, setActiveSection] = useState("general");
   const [activeCategory, setActiveCategory] = useState("Profile");
@@ -47,6 +47,7 @@ const UserSettings = ({ user }: UserSettingsProps) => {
     theme: user.theme || "system",
     notifications: user.notifications || { email: true, push: false },
     twoFactorEnabled: user.twoFactorEnabled || false,
+    loginAlerts: (user as any).loginAlerts || false,
   };
 
   const sectionCategories: Record<string, string> = {
@@ -72,6 +73,13 @@ const UserSettings = ({ user }: UserSettingsProps) => {
     }
   };
 
+  const handleThemeChange = async (
+    nextTheme: "light" | "dark" | "system"
+  ) => {
+    setTheme(nextTheme);
+    await handleUpdateUser({ theme: nextTheme });
+  };
+
   const renderActiveSection = () => {
     switch (activeSection) {
       case "general":
@@ -89,7 +97,7 @@ const UserSettings = ({ user }: UserSettingsProps) => {
               theme: initialValues.theme,
               notifications: initialValues.notifications,
             }}
-            onThemeChange={(theme) => handleUpdateUser({ theme })}
+            onThemeChange={handleThemeChange}
             onNotificationToggle={(key, value) =>
               handleUpdateUser({
                 notifications: { ...initialValues.notifications, [key]: value },
@@ -102,7 +110,7 @@ const UserSettings = ({ user }: UserSettingsProps) => {
           <UserSecuritySettings
             security={{
               twoFactor: initialValues.twoFactorEnabled,
-              loginAlerts: true,
+              loginAlerts: initialValues.loginAlerts,
             }}
             onToggle={(field, value) => handleUpdateUser({ [field]: value })}
           />

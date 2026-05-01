@@ -24,19 +24,22 @@ import {
   Sparkles,
   TrendingUp,
   Loader2,
+  Archive,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
+import { useModalStore } from "@/store/modal/modalStore";
 
 type ViewMode = "grid" | "list";
-type FilterType = "all" | "starred" | "recent" | "owned";
+type FilterType = "all" | "starred" | "recent" | "owned" | "archived";
 
 export default function ProjectsPage() {
   const { data: projectsData, isLoading, error } = useGetProjectsQuery({});
   const { user } = useAuthStore();
   const { isStarred, toggleStar, starredProjectIds } =
     useStarredProjectsStore();
+  const { openModal } = useModalStore();
   const router = useRouter();
 
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -70,11 +73,17 @@ export default function ProjectsPage() {
 
     // Apply category filter
     switch (activeFilter) {
+      case "archived":
+        result = result.filter((p) => p.status === "Archived");
+        break;
       case "starred":
-        result = result.filter((p) => starredProjectIds.includes(p._id));
+        result = result.filter(
+          (p) => p.status !== "Archived" && starredProjectIds.includes(p._id)
+        );
         break;
       case "recent":
         result = result
+          .filter((p) => p.status !== "Archived")
           .slice()
           .sort(
             (a, b) =>
@@ -85,9 +94,13 @@ export default function ProjectsPage() {
         break;
       case "owned":
         result = result.filter(
-          (p) => p.owner === user?.id || p.owner === (user as any)?._id
+          (p) =>
+            p.status !== "Archived" &&
+            (p.owner === user?.id || p.owner === (user as any)?._id)
         );
         break;
+      default:
+        result = result.filter((p) => p.status !== "Archived");
     }
 
     return result;
@@ -99,6 +112,7 @@ export default function ProjectsPage() {
       { key: "starred", label: "Starred", icon: Star },
       { key: "recent", label: "Recent", icon: Clock },
       { key: "owned", label: "My Projects", icon: Users },
+      { key: "archived", label: "Archived", icon: Archive },
     ];
 
   // Get gradient based on project name
@@ -218,20 +232,19 @@ export default function ProjectsPage() {
                 </div>
               </div>
             </div>
-            <Link href="/u/projects">
-              <Button
-                variant="outline"
-                className={cn(
-                  "font-medium transition-all",
-                  isDark
-                    ? "border-white/10 text-white hover:bg-white/[0.04] hover:border-white/20"
-                    : "border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300"
-                )}
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                New Project
-              </Button>
-            </Link>
+            <Button
+              onClick={() => openModal("project.create")}
+              variant="outline"
+              className={cn(
+                "font-medium transition-all",
+                isDark
+                  ? "border-white/10 text-white hover:bg-white/[0.04] hover:border-white/20"
+                  : "border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300"
+              )}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              New Project
+            </Button>
           </motion.div>
         </div>
 
@@ -245,14 +258,14 @@ export default function ProjectsPage() {
           {/* Search Bar */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-neutral-500" />
               <input
                 type="text"
                 placeholder="Search projects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={cn(
-                  "w-full pl-12 pr-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2",
+                  "w-full pl-11 pr-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2",
                   isDark
                     ? "bg-neutral-900/60 border-white/10 text-white placeholder-neutral-500 focus:border-white/20 focus:ring-white/10"
                     : "bg-white border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-neutral-300 focus:ring-neutral-200/50"
@@ -378,6 +391,8 @@ export default function ProjectsPage() {
                 ? "No projects found"
                 : activeFilter === "starred"
                 ? "No starred projects"
+                : activeFilter === "archived"
+                ? "No archived projects"
                 : "No projects yet"}
             </h3>
             <p className="text-neutral-500 text-center max-w-md mb-6">
@@ -385,22 +400,23 @@ export default function ProjectsPage() {
                 ? `No projects match "${searchQuery}". Try a different search.`
                 : activeFilter === "starred"
                 ? "Star your favorite projects to quickly access them here."
+                : activeFilter === "archived"
+                ? "Archived projects will appear here and can be restored later."
                 : "Create your first project to get started with NEXA."}
             </p>
             {!searchQuery && activeFilter === "all" && (
-              <Link href="/u/projects">
-                <Button
-                  variant="filled"
-                  className={
-                    isDark
-                      ? "!bg-white !text-neutral-900 hover:!bg-white/90"
-                      : "!bg-neutral-900 !text-white hover:!bg-neutral-800"
-                  }
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Project
-                </Button>
-              </Link>
+              <Button
+                onClick={() => openModal("project.create")}
+                variant="filled"
+                className={
+                  isDark
+                    ? "!bg-white !text-neutral-900 hover:!bg-white/90"
+                    : "!bg-neutral-900 !text-white hover:!bg-neutral-800"
+                }
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Create Project
+              </Button>
             )}
           </motion.div>
         ) : (

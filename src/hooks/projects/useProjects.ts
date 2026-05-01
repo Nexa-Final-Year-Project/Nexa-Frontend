@@ -13,6 +13,28 @@ import { useProjectStore } from "@/store/projects/projectStore";
 import type { Project } from "@/types/project";
 import toast from "@/lib/customToast";
 
+const getErrorMessage = (error: unknown) => {
+  if (typeof error === "string") return error;
+
+  if (error && typeof error === "object") {
+    const typedError = error as {
+      data?: { message?: string; error?: string };
+      message?: string;
+      error?: string;
+    };
+
+    return (
+      typedError.data?.message ||
+      typedError.data?.error ||
+      typedError.message ||
+      typedError.error ||
+      "Something went wrong"
+    );
+  }
+
+  return "Something went wrong";
+};
+
 export const useProjects = () => {
   const [createProjectApi] = useCreateProjectMutation();
   const [updateProjectApi] = useUpdateProjectMutation();
@@ -122,12 +144,27 @@ export const useProjects = () => {
   const sendProjectInvite = useCallback(
     async (projectId: string, memberEmail: string, role: string) => {
       try {
-        await sendInvite({ projectId, memberEmail, role }).unwrap();
+        const response = await sendInvite({ projectId, memberEmail, role }).unwrap();
+
+        if (response?.emailSent === false) {
+          toast.warning(
+            response.warning ||
+              response.message ||
+              "Invitation created, but email could not be sent."
+          );
+          if (response.inviteLink) {
+            console.info("Invite link:", response.inviteLink);
+          }
+          return response;
+        }
+
         toast.success("Invitation sent successfully");
+        return response;
       } catch (error) {
-        console.error("Failed to send invitation:", error);
-        toast.error("Failed to send invitation");
-        throw error;
+        const message = getErrorMessage(error);
+        console.error("Failed to send invitation:", message);
+        toast.error(message);
+        throw new Error(message);
       }
     },
     [sendInvite]
@@ -147,9 +184,10 @@ export const useProjects = () => {
       toast.success(response.message || "Invitation accepted successfully");
       return response;
     } catch (error) {
-      console.error("Failed to accept invitation:", error);
-      toast.error("Failed to accept invitation");
-      throw error;
+      const message = getErrorMessage(error);
+      console.error("Failed to accept invitation:", message);
+      toast.error(message);
+      throw new Error(message);
     }
   },
   [acceptInvite, addProject, fetchProjectById]

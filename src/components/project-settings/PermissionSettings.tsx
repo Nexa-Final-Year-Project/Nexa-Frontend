@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, Save } from "lucide-react";
 import {
@@ -9,47 +9,58 @@ import {
   TaskPermissions,
 } from "./permissions";
 
-export const PermissionsSettings = ({ tab }: { tab: string }) => {
-  const [permissions, setPermissions] = useState({
-    // Task permissions (most relevant)
-    createTasks: true,
-    editTasks: true,
-    deleteTasks: false,
-    assignTasks: true,
-    changeTaskStatus: true,
+type PermissionState = {
+  createTasks: boolean;
+  editTasks: boolean;
+  deleteTasks: boolean;
+  assignTasks: boolean;
+  changeTaskStatus: boolean;
+  editProjectDetails: boolean;
+  manageSprints: boolean;
+  inviteMembers: boolean;
+  removeMembers: boolean;
+  editMemberRoles: boolean;
+};
 
-    // Project permissions
-    editProjectDetails: false,
-    manageSprints: false,
+const DEFAULT_PERMISSIONS: PermissionState = {
+  createTasks: true,
+  editTasks: true,
+  deleteTasks: false,
+  assignTasks: true,
+  changeTaskStatus: true,
+  editProjectDetails: false,
+  manageSprints: false,
+  inviteMembers: false,
+  removeMembers: false,
+  editMemberRoles: false,
+};
 
-    // Member permissions
-    inviteMembers: false,
-    removeMembers: false,
-    editMemberRoles: false,
-  });
+export const PermissionsSettings = ({ tab, projectId }: { tab: string; projectId: string }) => {
+  const storageKey = `nexa-project-permissions:${projectId}`;
+  const [permissions, setPermissions] = useState<PermissionState>(DEFAULT_PERMISSIONS);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        setPermissions({ ...DEFAULT_PERMISSIONS, ...JSON.parse(stored) });
+      }
+    } catch {
+      setPermissions(DEFAULT_PERMISSIONS);
+    }
+  }, [storageKey]);
 
   const togglePermission = (key: keyof typeof permissions) => {
     setPermissions((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const resetPermissions = () => {
-    setPermissions({
-      createTasks: true,
-      editTasks: true,
-      deleteTasks: false,
-      assignTasks: true,
-      changeTaskStatus: true,
-      editProjectDetails: false,
-      manageSprints: false,
-      inviteMembers: false,
-      removeMembers: false,
-      editMemberRoles: false,
-    });
+    setPermissions(DEFAULT_PERMISSIONS);
+    localStorage.removeItem(storageKey);
   };
 
   const savePermissions = () => {
-    console.log("Saved permissions:", permissions);
-    // API call to persist changes
+    localStorage.setItem(storageKey, JSON.stringify(permissions));
   };
 
   return (

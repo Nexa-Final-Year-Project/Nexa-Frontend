@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import RecentProjectCard from "./RecentProjectCard";
 import { Project } from "@/types/project";
-import { ProjectModal } from "./ProjectModal";
 import {
   EllipsisVerticalIcon,
   FolderOpen,
@@ -17,12 +16,16 @@ import {
 import { DropdownMenuContent } from "../ui/dropdown-menu/dropdown-menu";
 import { usePathAppender } from "@/hooks/usePathAppender";
 import { useTheme } from "next-themes";
+import { useModalStore } from "@/store/modal/modalStore";
 
 const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
-  const [open, setOpen] = useState(false);
   const appendToPath = usePathAppender();
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const { openModal } = useModalStore();
+  const activeProjects = Array.isArray(projects)
+    ? projects.filter((project) => project.status !== "Archived")
+    : [];
 
   const handleViewAllProjects = () => {
     appendToPath("/p");
@@ -125,7 +128,7 @@ const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
             `}
             >
               <DropdownMenuItem
-                onClick={() => setOpen(true)}
+                onClick={() => openModal("project.create")}
                 className={`
                   flex items-center gap-2 px-3 py-2 rounded-lg
                   text-sm cursor-pointer
@@ -170,14 +173,13 @@ const RecentProjectList = ({ projects }: { projects: Project[] | any }) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <ProjectModal open={open} onOpenChange={setOpen} />
         </div>
       </div>
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
-        {Array.isArray(projects)
-          ? projects
+        {Array.isArray(activeProjects)
+          ? activeProjects
               .slice(0, 4)
               .map((project, index) => (
                 <RecentProjectCard

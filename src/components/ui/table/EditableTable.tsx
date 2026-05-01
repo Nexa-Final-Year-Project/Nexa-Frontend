@@ -30,7 +30,7 @@ function getNestedValue(obj: any, path: string): any {
   return path.split(".").reduce((acc, part) => acc?.[part], obj);
 }
 
-export function EditableTable<T extends { id: string | number }>({
+export function EditableTable<T extends { id?: string | number; _id?: string | number }>({
   columns,
   data,
   onChange,
@@ -72,9 +72,9 @@ export function EditableTable<T extends { id: string | number }>({
     <Table className="w-full table-auto min-w-[720px]">
       <TableHeader>
         <TableRow>
-          {columns.map((col) => (
+          {columns.map((col, columnIndex) => (
             <TableHead
-              key={String(col.accessor)}
+              key={`header-${columnIndex}-${String(col.accessor ?? col.header)}`}
               style={{ width: col.width || "auto" }}
               className="px-2 py-1 text-sm text-left"
             >
@@ -99,10 +99,10 @@ export function EditableTable<T extends { id: string | number }>({
           </TableRow>
         ) : (
           tableData.map((row, rowIndex) => (
-            <TableRow key={String(row.id)}>
-              {columns.map((col) => (
+            <TableRow key={String(row._id ?? row.id ?? rowIndex)}>
+              {columns.map((col, columnIndex) => (
                 <TableCell
-                  key={String(col.accessor)}
+                  key={`cell-${rowIndex}-${columnIndex}-${String(col.accessor ?? col.header)}`}
                   style={{ width: col.width || "auto" }}
                   className="px-2 py-1 text-sm align-middle whitespace-normal break-words"
                 >

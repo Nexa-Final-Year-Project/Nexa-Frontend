@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { Form } from "@/components/ui/form/Form";
 import type { FormField as FormFieldType } from "@/types/form";
 import {
@@ -8,7 +9,6 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar/avatar";
 import { ImageIcon, Upload, User as UserIcon } from "lucide-react";
-import { ImageUploader } from "@/components/ui/image/ImageUploader";
 import { useTheme } from "next-themes";
 
 interface UserGeneralSettingsProps {
@@ -24,6 +24,10 @@ export const UserGeneralSettings = ({
 }: UserGeneralSettingsProps) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(
+    user?.photoURL || null,
+  );
   const generalFields: FormFieldType[] = [
     {
       name: "name",
@@ -92,7 +96,10 @@ export const UserGeneralSettings = ({
                   isDark ? "border-white/[0.08]" : "border-neutral-300"
                 }`}
               >
-                <AvatarImage src={user?.photoURL} className="rounded-2xl" />
+                <AvatarImage
+                  src={avatarPreview || user?.photoURL}
+                  className="rounded-2xl"
+                />
                 <AvatarFallback
                   className={`text-3xl rounded-2xl font-semibold ${
                     isDark
@@ -105,9 +112,33 @@ export const UserGeneralSettings = ({
                   )}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+              <button
+                type="button"
+                onClick={() => avatarInputRef.current?.click()}
+                className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+              >
                 <Upload className="w-6 h-6 text-white/80" />
-              </div>
+              </button>
+              <input
+                ref={avatarInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (!file) return;
+
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    const url = typeof reader.result === "string" ? reader.result : null;
+                    setAvatarPreview(url);
+                    if (url) {
+                      void onSubmit({ photoURL: url });
+                    }
+                  };
+                  reader.readAsDataURL(file);
+                }}
+              />
             </div>
 
             {/* Upload Info */}
@@ -131,6 +162,8 @@ export const UserGeneralSettings = ({
 
               <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3">
                 <button
+                  type="button"
+                  onClick={() => avatarInputRef.current?.click()}
                   className={`
                   flex items-center gap-2 px-4 py-2.5 rounded-xl border
                   text-sm font-medium transition-all duration-200 cursor-pointer

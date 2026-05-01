@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -44,14 +45,28 @@ export const UserNotificationSettings = ({
 }: UserNotificationsSettingsProps) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const [currentNotifications, setCurrentNotifications] = useState(notifications);
+
+  useEffect(() => {
+    setCurrentNotifications(notifications);
+  }, [notifications]);
 
   const onToggle = (method: "email" | "push", type: string, value: boolean) => {
-    if (method === "email") {
-      notifications.email[type as keyof typeof notifications.email] = value;
-    }
-    if (method === "push") {
-      notifications.push[type as keyof typeof notifications.push] = value;
-    }
+    setCurrentNotifications((prev) => {
+      const next = {
+        email: { ...prev.email },
+        push: { ...prev.push },
+      };
+
+      if (method === "email") {
+        next.email[type as keyof typeof next.email] = value;
+      }
+      if (method === "push") {
+        next.push[type as keyof typeof next.push] = value;
+      }
+
+      return next;
+    });
   };
 
   return (
@@ -82,7 +97,7 @@ export const UserNotificationSettings = ({
         </p>
 
         <div className="space-y-3">
-          {Object.entries(notifications.email).map(([type, value]) => {
+          {Object.entries(currentNotifications.email).map(([type, value]) => {
             const info = notificationDescriptions[type];
             return (
               <div
@@ -173,7 +188,7 @@ export const UserNotificationSettings = ({
         </p>
 
         <div className="space-y-3">
-          {Object.entries(notifications.push).map(([type, value]) => {
+          {Object.entries(currentNotifications.push).map(([type, value]) => {
             const info = notificationDescriptions[type];
             return (
               <div

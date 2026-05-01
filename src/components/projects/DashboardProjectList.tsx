@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { Project } from "@/types/project";
 import { LucideLayoutDashboard, Star } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +15,6 @@ const DashboardProjectList = ({
   showAll?: boolean;
   showStarred?: boolean;
 }) => {
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const { starredProjectIds, toggleStar, isStarred } =
     useStarredProjectsStore();
 
@@ -28,18 +27,20 @@ const DashboardProjectList = ({
       : projects && Array.isArray((projects as any).data)
         ? (projects as any).data
         : [];
+  const activeProjectList = useMemo(
+    () => projectList.filter((project) => project.status !== "Archived"),
+    [projectList],
+  );
 
-  useEffect(() => {
+  const filteredProjects = useMemo(() => {
     if (showStarred) {
-      setFilteredProjects(
-        projectList.filter((project) =>
-          starredProjectIds.includes(project._id),
-        ),
+      return activeProjectList.filter((project) =>
+        starredProjectIds.includes(project._id),
       );
-    } else {
-      setFilteredProjects(projectList);
     }
-  }, [projectList, showStarred, starredProjectIds]);
+
+    return activeProjectList;
+  }, [activeProjectList, showStarred, starredProjectIds]);
 
   const path = usePathname();
   const currentPath = path.split("/").pop();
@@ -70,7 +71,7 @@ const DashboardProjectList = ({
   return (
     <div className="flex flex-col gap-3 w-full">
       {filteredProjects
-        .slice(0, showAll ? projectList.length : 4)
+      .slice(0, showAll ? activeProjectList.length : 4)
         .map((project) => {
           const starred = isStarred(project._id);
 

@@ -3,6 +3,7 @@
 import { Form } from "@/components/ui/form/Form";
 import type { FormField as FormFieldType } from "@/types/form";
 import { Switch } from "@/components/ui/switch";
+import { useRef, useState } from "react";
 import {
   Avatar,
   AvatarFallback,
@@ -21,6 +22,9 @@ export const GeneralSettings = ({
   onSubmit,
   initialValues,
 }: GeneralSettingsProps) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(project.avatar);
+
   const generalFields: FormFieldType[] = [
     {
       name: "name",
@@ -128,12 +132,15 @@ export const GeneralSettings = ({
             {/* Avatar Display */}
             <div className="relative group">
               <Avatar className="h-24 w-24 rounded-2xl border-2 border-white/[0.08] shadow-lg">
-                <AvatarImage src={project.avatar} className="rounded-2xl" />
+                <AvatarImage src={previewUrl} className="rounded-2xl" />
                 <AvatarFallback className="text-3xl rounded-2xl bg-gradient-to-br from-neutral-800 to-neutral-900 text-white/80 font-semibold">
                   {project.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+              <div
+                className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                onClick={() => fileInputRef.current?.click()}
+              >
                 <Upload className="w-6 h-6 text-white/80" />
               </div>
             </div>
@@ -151,6 +158,8 @@ export const GeneralSettings = ({
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full">
                 <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
                   className="
                   flex items-center gap-2 px-4 py-2.5 rounded-xl
                   bg-white/[0.06] border border-white/[0.08]
@@ -166,6 +175,21 @@ export const GeneralSettings = ({
                   JPG, PNG or GIF • Max 5MB
                 </span>
               </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    setPreviewUrl(typeof reader.result === "string" ? reader.result : undefined);
+                  };
+                  reader.readAsDataURL(file);
+                }}
+              />
             </div>
           </div>
         </div>

@@ -63,6 +63,10 @@ const faqs = [
 export default function ContactPage() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+  const apiBaseUrl = backendBaseUrl.endsWith("/api")
+    ? backendBaseUrl
+    : `${backendBaseUrl}/api`;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -84,12 +88,36 @@ export default function ContactPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch(`${apiBaseUrl}/email/support`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    toast.success("Message sent! We'll get back to you soon.");
-    setFormData({ name: "", email: "", company: "", subject: "", message: "" });
-    setIsSubmitting(false);
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to send support message.");
+      }
+
+      toast.success(result.message || "Message sent! We'll get back to you soon.");
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to send support message."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

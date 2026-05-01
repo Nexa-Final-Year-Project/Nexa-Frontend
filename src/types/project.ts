@@ -5,7 +5,10 @@ export type Project = {
   owner?: string;
   members?: ProjectMember[];
   starred?: boolean;
+  status?: "Active" | "Archived" | "Completed";
+  visibility?: "public" | "private";
   createdAt?: string;
+  updatedAt?: string;
 };
 
 export type ProjectMember = {

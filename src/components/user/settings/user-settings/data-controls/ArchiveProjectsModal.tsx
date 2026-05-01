@@ -17,6 +17,12 @@ export const ArchiveProjectsModal = ({
   onOpenChange: (open: boolean) => void;
 }) => {
   const { openModal } = useModalStore();
+  const archivedList = Array.isArray(archivedProjects)
+    ? archivedProjects
+    : archivedProjects
+    ? [archivedProjects as any]
+    : [];
+
   return (
     <Modal
       open={isOpen}
@@ -26,7 +32,7 @@ export const ArchiveProjectsModal = ({
       showFooter={false}
       hideTrigger
     >
-      {archivedProjects.map((project) => (
+      {archivedList.map((project) => (
         <div
           key={project.id}
           className="flex items-center justify-between p-4 rounded-lg border shadow-sm"

@@ -14,9 +14,10 @@ import { useProjects } from "@/hooks/projects/useProjects";
 
 interface DangerZoneSettingsProps {
   project: any;
+  onArchive: () => Promise<void>;
 }
 
-export const DangerZoneSettings = ({ project }: DangerZoneSettingsProps) => {
+export const DangerZoneSettings = ({ project, onArchive }: DangerZoneSettingsProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { deleteProject } = useProjects();
   const handleDeleteProject = async () => {
@@ -46,6 +47,7 @@ export const DangerZoneSettings = ({ project }: DangerZoneSettingsProps) => {
           <Button
             variant="outline"
             className="border-destructive text-destructive hover:bg-destructive hover:text-white"
+            onClick={onArchive}
           >
             <Archive className="w-4 h-4 mr-2" />
             Archive Project

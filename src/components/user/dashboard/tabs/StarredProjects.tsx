@@ -8,6 +8,7 @@ import React from "react";
 const StarredProjects = ({ projects }: { projects: Project[] }) => {
   const path = usePathname();
   const currentPath = path.split("/").pop();
+  const activeProjects = projects.filter((project) => project.status !== "Archived");
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
@@ -49,7 +50,7 @@ const StarredProjects = ({ projects }: { projects: Project[] }) => {
           <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
         </Link>
       </div>
-      <DashboardProjectList projects={projects} showStarred={true} />
+      <DashboardProjectList projects={activeProjects} showStarred={true} />
     </div>
   );
 };

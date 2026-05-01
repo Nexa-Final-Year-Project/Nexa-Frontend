@@ -50,6 +50,11 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
     visibility: project.visibility || "private",
   };
 
+  const handleArchiveProject = async () => {
+    await updateProject(project._id, { status: "Archived" } as any);
+    toast.success("Project archived successfully");
+  };
+
   const sectionCategories: Record<string, string> = {
     general: "Project",
     appearance: "Project",
@@ -91,17 +96,17 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
           </div>
         );
       case "permissions-tasks":
-        return <PermissionsSettings tab="tasks" />;
+        return <PermissionsSettings tab="tasks" projectId={project._id} />;
       case "permissions-project":
-        return <PermissionsSettings tab="project" />;
+        return <PermissionsSettings tab="project" projectId={project._id} />;
       case "permissions-access":
-        return <PermissionsSettings tab="access" />;
+        return <PermissionsSettings tab="access" projectId={project._id} />;
       case "integrations":
         return <IntegrationsSettings />;
       case "activity":
         return <ActivityLogsSettings />;
       case "danger":
-        return <DangerZoneSettings project={project} />;
+        return <DangerZoneSettings project={project} onArchive={handleArchiveProject} />;
       default:
         return (
           <GeneralSettings

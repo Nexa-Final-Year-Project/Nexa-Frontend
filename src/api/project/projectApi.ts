@@ -7,12 +7,14 @@ export const projectApi = baseApi.injectEndpoints({
         url: "/project",
         method: "GET",
       }),
+      providesTags: ["Projects"],
     }),
     getProjectById: builder.query({
       query: (id) => ({
         url: `/project/${id}`,
         method: "GET",
       }),
+      providesTags: (_result, _error, id) => [{ type: "Projects", id }],
     }),
     createProject: builder.mutation({
       query: (project) => ({
@@ -20,6 +22,7 @@ export const projectApi = baseApi.injectEndpoints({
         method: "POST",
         body: project,
       }),
+      invalidatesTags: ["Projects"],
     }),
     updateProject: builder.mutation({
       query: (project) => ({
@@ -27,12 +30,17 @@ export const projectApi = baseApi.injectEndpoints({
         method: "PUT",
         body: project,
       }),
+      invalidatesTags: (_result, _error, project) => [
+        "Projects",
+        { type: "Projects", id: project.id },
+      ],
     }),
     deleteProject: builder.mutation({
       query: (id) => ({
         url: `/project/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Projects"],
     }),
     inviteMember: builder.mutation({
       query: ({ projectId, memberEmail, role }) => ({
@@ -40,6 +48,9 @@ export const projectApi = baseApi.injectEndpoints({
         method: "POST",
         body: { email: memberEmail, role },
       }),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Projects", id: arg.projectId },
+      ],
     }),
   acceptInvite: builder.mutation({
   query: (token: string) => ({  // ✅ token is string, not object

@@ -11,6 +11,7 @@ import Link from "next/link";
 import React from "react";
 
 const MyProjects = ({ projects }: { projects: Project[] }) => {
+  const activeProjects = projects.filter((project) => project.status !== "Archived");
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
@@ -43,7 +44,7 @@ const MyProjects = ({ projects }: { projects: Project[] }) => {
         </Link>
       </div>
       <DashboardProjectList
-        projects={projects}
+        projects={activeProjects}
         showStarred={false}
         showAll={false}
       />

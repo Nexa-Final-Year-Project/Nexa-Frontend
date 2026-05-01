@@ -21,6 +21,7 @@ import { Project } from "@/types/project";
 import Logo from "../Logo";
 import RecentActivityPanel from "../search/panels/RecentActivityPanel";
 import StarredProjectsPanel from "../search/panels/StarredProjectsPanel";
+import ArchivedProjectsPanel from "../search/panels/ArchivedProjectsPanel";
 import Link from "next/link";
 
 const data = {
@@ -38,6 +39,13 @@ const data = {
       icon: Star,
       isActive: false,
       Component: StarredProjectsPanel,
+    },
+    {
+      title: "Archived",
+      url: "#",
+      icon: Frame,
+      isActive: false,
+      Component: ArchivedProjectsPanel,
     },
   ],
 };
@@ -64,9 +72,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     name: project.name,
     _id: project._id,
     description: project.description || "",
+    status: project.status,
     url: `/u/${user?.id}/p/${project?._id}`,
     icon: Frame,
   }));
+
+  const activeProjects = formattedProjects.filter(
+    (project) => project.status !== "Archived"
+  );
 
   return (
     <Sidebar
@@ -108,7 +121,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
 
         {/* Projects Section */}
-        <NavProjects projects={isLoading ? [] : formattedProjects} />
+        <NavProjects projects={isLoading ? [] : activeProjects} />
 
         {/* Bottom Quick Links */}
         <div

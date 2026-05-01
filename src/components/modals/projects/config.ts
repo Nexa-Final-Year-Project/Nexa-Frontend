@@ -7,6 +7,7 @@ import {
 } from "@/api/project/projectApi";
 import ArchiveProjectsModal from "@/components/user/settings/user-settings/data-controls/ArchiveProjectsModal";
 import { ProjectDangerZoneModal } from "@/components/projects/ProjectDangerZone";
+import { InviteMemberModal } from "@/components/project-settings/team/InviteMemberModal";
 
 export function useProjectConfigs(close: () => void) {
   const [createProject] = useCreateProjectMutation();
@@ -46,13 +47,32 @@ export function useProjectConfigs(close: () => void) {
         onOpenChange: close, // ✅ pass the function itself
       },
     }),
-
-    "project.archive": (archivedProjects: any[]) => ({
-      component: ArchiveProjectsModal, // directly pass the component
+    "project.archive": (project: any) => ({
+      title: "Archive Project",
+      description: `Move ${project.name} to archived projects? It will disappear from active lists until restored.`,
+      submitButtonText: "Archive Project",
+      onSubmit: async () => {
+        await updateProject({ id: project._id, status: "Archived" } as any);
+        close();
+      },
+    }),
+    "project.archived-list": (archivedProjects: any) => ({
+      component: ArchiveProjectsModal,
       props: {
         archivedProjects,
         onRestore: (id: string) => console.log("Restore", id),
         onDelete: (id: string) => console.log("Delete", id),
+        isOpen: true,
+        onOpenChange: close,
+      },
+    }),
+    "project.invite": (project: any) => ({
+      component: InviteMemberModal,
+      props: {
+        projectId: project._id,
+        projectName: project.name,
+        isOpen: true,
+        onOpenChange: close,
       },
     }),
   };

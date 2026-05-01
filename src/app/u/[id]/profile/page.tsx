@@ -27,8 +27,8 @@ const ProfilePage = () => {
   const isDark = theme === "dark";
 
   useEffect(() => {
-    fetchAllProjects();
-  }, []);
+    void fetchAllProjects();
+  }, [fetchAllProjects]);
 
   const getInitials = (name?: string) => {
     if (!name) return "?";

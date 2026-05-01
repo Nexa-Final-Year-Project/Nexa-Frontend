@@ -26,7 +26,7 @@ export const ArchivedProjectsSection = ({
         variant="outline"
         className="w-full sm:w-auto"
         onClick={() =>
-          openModal("project.archive", [
+          openModal("project.archived-list", [
             {
               id: "1",
               name: "Project Alpha",

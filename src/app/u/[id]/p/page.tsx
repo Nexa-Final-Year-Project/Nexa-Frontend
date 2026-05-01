@@ -18,73 +18,23 @@ import {
 } from "lucide-react";
 import { ReusableDropdownMenu } from "@/components/ui/dropdown/ReusableDropdownMenu";
 import { Button } from "@/components/ui/button";
-import CustomLink from "@/components/shared/customlink/CustomLink";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useModalStore } from "@/store/modal/modalStore";
+import { useStarredProjectsStore } from "@/store/starredProjects/starredProjectsStore";
 
-const items = (projectId: string) => {
-  return [
-    {
-      label: (
-        <span className="flex items-center gap-2">
-          <Edit2 className="w-4 h-4" />
-          Edit
-        </span>
-      ),
-      onClick: () => {
-        console.log("Edit action clicked");
-      },
-    },
-    {
-      label: (
-        <span className="flex items-center gap-2">
-          <Trash2 className="w-4 h-4" />
-          Delete
-        </span>
-      ),
-      onClick: () => {
-        console.log("Delete action clicked");
-      },
-    },
-    {
-      label: (
-        <CustomLink className="flex items-center gap-2" to={`/${projectId}`}>
-          <Eye className="w-4 h-4" />
-          View Details
-        </CustomLink>
-      ),
-      onClick: () => {
-        console.log("View Details action clicked");
-      },
-    },
-    {
-      label: (
-        <span className="flex items-center gap-2">
-          <LucideStar className="w-4 h-4" />
-          Star Project
-        </span>
-      ),
-      onClick: () => {
-        console.log("Star Project action clicked");
-      },
-    },
-    {
-      label: (
-        <span className="flex items-center gap-2">
-          <ArchiveRestore className="w-4 h-4" />
-          Archive Project
-        </span>
-      ),
-      onClick: () => {
-        console.log("Archive Project action clicked");
-      },
-    },
-  ];
+const formatProjectDate = (value?: string) => {
+  if (!value) return "—";
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? "—" : parsed.toLocaleDateString();
 };
 
-const columns = [
+const buildColumns = (
+  getItems: (project: Project) => any[],
+  isStarredProject: (projectId: string) => boolean
+) => [
   {
     header: "Name",
     editable: false,
@@ -92,9 +42,13 @@ const columns = [
     render: (row: Project) => (
       <div className="flex items-center gap-2">
         <LucideStar
-          className="w-4 h-4 "
-          color="gold"
-          fill={row.starred ? "gold" : "transparent"}
+          className={cn(
+            "w-4 h-4",
+            isStarredProject(row._id)
+              ? "text-amber-400"
+              : "text-neutral-300 dark:text-neutral-600"
+          )}
+          fill={isStarredProject(row._id) ? "currentColor" : "none"}
         />
         <span className="font-medium">{row.name}</span>
       </div>
@@ -114,9 +68,9 @@ const columns = [
     render: (row: Project) =>
       row.members && row.members.length > 0 ? (
         <div className="flex items-center space-x-2">
-          {row.members.slice(0, 4).map((member) => (
+          {row.members.slice(0, 4).map((member, index) => (
             <TeamMemberAvatar
-              key={member._id}
+              key={member._id || member.email || member.name || `member-${index}`}
               name={member.name}
               role={member.role}
               avatarUrl={member.avatar || "https://via.placeholder.com/150"}
@@ -133,19 +87,14 @@ const columns = [
     accessor: "createdAt",
     editable: false,
     width: "15%",
-    render: (row: Project) => (
-      <span>{new Date(row.createdAt).toLocaleDateString()}</span>
-    ),
+    render: (row: Project) => <span>{formatProjectDate(row.createdAt)}</span>,
   },
-  //createdAt
   {
     header: "Updated At",
     accessor: "updatedAt",
     editable: false,
     width: "15%",
-    render: (row: Project) => (
-      <span>{new Date(row.updatedAt).toLocaleDateString()}</span>
-    ),
+    render: (row: Project) => <span>{formatProjectDate(row.updatedAt || row.createdAt)}</span>,
   },
   {
     header: "Actions",
@@ -160,7 +109,7 @@ const columns = [
               <EllipsisVerticalIcon className="w-4 h-4" />
             </Button>
           }
-          items={items(row._id)}
+          items={getItems(row)}
         />
       </div>
     ),
@@ -173,10 +122,12 @@ export default function ProjectsPage() {
     order: "desc",
   });
   const [projectData, setProjectData] = useState(projects || []);
-  const [searchTerm, setSearchTerm] = useState("");
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const params = useParams();
+  const router = useRouter();
+  const { openModal } = useModalStore();
+  const { toggleStar, isStarred } = useStarredProjectsStore();
 
   const handleTableChange = (updatedProjects: Project[]) => {
     setProjectData(updatedProjects);
@@ -187,7 +138,57 @@ export default function ProjectsPage() {
     if (projects) {
       setProjectData(projects);
     }
-  }, [projects?.length]);
+  }, [projects]);
+
+  const getItems = (project: Project) => [
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Edit2 className="w-4 h-4" />
+          Edit
+        </span>
+      ),
+      onClick: () => openModal("project.edit", project),
+    },
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Trash2 className="w-4 h-4" />
+          Delete
+        </span>
+      ),
+      onClick: () => openModal("project.delete", project),
+    },
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <Eye className="w-4 h-4" />
+          View Details
+        </span>
+      ),
+      onClick: () => router.push(`/u/${params.id}/p/${project._id}`),
+    },
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <LucideStar className="w-4 h-4" />
+          {project.starred ? "Unstar Project" : "Star Project"}
+        </span>
+      ),
+      onClick: () => toggleStar(project._id),
+    },
+    {
+      label: (
+        <span className="flex items-center gap-2">
+          <ArchiveRestore className="w-4 h-4" />
+          Archive Project
+        </span>
+      ),
+      onClick: () => openModal("project.archive", project),
+    },
+  ];
+
+  const columns = buildColumns(getItems, isStarred);
 
   return (
     <div
@@ -258,6 +259,7 @@ export default function ProjectsPage() {
 
           {/* Create Project Button */}
           <Button
+            onClick={() => openModal("project.create")}
             className="
               flex items-center gap-2
               px-5 py-2.5 h-auto

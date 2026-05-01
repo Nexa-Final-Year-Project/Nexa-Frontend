@@ -26,7 +26,7 @@ interface ModalProps {
   formFields?: FormField[];
   initialValues?: Record<string, unknown>;
   submitButtonText?: string;
-  onSubmit?: (values: Record<string, unknown>) => void;
+  onSubmit?: (values: Record<string, unknown>) => void | Promise<void>;
   showHeader?: boolean;
   showFooter?: boolean;
   footerContent?: ReactNode;
@@ -97,9 +97,13 @@ export function Modal({
             <Form
               key={open ? "form-open" : "form-closed"}
               fields={formFields}
-              onSubmit={(values) => {
-                onSubmit(values);
-                onOpenChange?.(false); // Close after submit
+              onSubmit={async (values) => {
+                try {
+                  await Promise.resolve(onSubmit(values));
+                  onOpenChange?.(false); // Close only after a successful submit
+                } catch (error) {
+                  return false;
+                }
               }}
               initialValues={initialValues}
               submitButtonText={submitButtonText}

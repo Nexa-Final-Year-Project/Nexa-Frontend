@@ -2,10 +2,11 @@
 
 import {
   Folder,
-  Forward,
   MoreHorizontal,
   Trash2,
   Plus,
+  UserPlus,
+  Archive,
   type LucideIcon,
 } from "lucide-react";
 
@@ -112,9 +113,17 @@ export function NavProjects({
                         <span>View Project</span>
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="rounded-lg text-neutral-600 dark:text-white/70 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.04] cursor-pointer">
-                      <Forward className="w-4 h-4 text-neutral-400 dark:text-white/40" />
-                      <span>Share Project</span>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        openModal("project.invite", {
+                          _id: item._id,
+                          name: item.name,
+                        })
+                      }
+                      className="rounded-lg text-neutral-600 dark:text-white/70 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.04] cursor-pointer"
+                    >
+                      <UserPlus className="w-4 h-4 text-neutral-400 dark:text-white/40" />
+                      <span>Invite Member</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-neutral-200 dark:bg-white/[0.06] my-1" />
                     <DropdownMenuItem
@@ -128,6 +137,18 @@ export function NavProjects({
                     >
                       <Trash2 className="w-4 h-4" />
                       <span>Delete Project</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        openModal("project.archive", {
+                          _id: item._id,
+                          name: item.name,
+                        })
+                      }
+                      className="rounded-lg text-neutral-600 dark:text-white/70 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.04] cursor-pointer"
+                    >
+                      <Archive className="w-4 h-4 text-neutral-400 dark:text-white/40" />
+                      <span>Archive Project</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
