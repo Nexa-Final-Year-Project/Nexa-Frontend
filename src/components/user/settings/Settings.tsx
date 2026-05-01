@@ -96,10 +96,15 @@ const UserSettings = ({ user }: UserSettingsProps) => {
     await handleUpdateUser({ theme: nextTheme });
   };
 
-  const handleNotificationChange = async (updatedNotifications: typeof notifications) => {
+  const handleNotificationChange = async (
+    updatedNotifications: typeof notifications,
+  ) => {
     setNotifications(updatedNotifications);
     // Save to localStorage
-    localStorage.setItem("userNotifications", JSON.stringify(updatedNotifications));
+    localStorage.setItem(
+      "userNotifications",
+      JSON.stringify(updatedNotifications),
+    );
     // Save to user store
     try {
       await updateUser(user?.uid!, { notifications: updatedNotifications });

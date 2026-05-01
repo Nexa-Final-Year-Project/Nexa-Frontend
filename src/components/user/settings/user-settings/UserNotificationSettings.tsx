@@ -17,7 +17,9 @@ interface UserNotificationsSettingsProps {
     email: { marketing: boolean; product: boolean; security: boolean };
     push: { product: boolean; security: boolean };
   };
-  onNotificationsChange?: (notifications: UserNotificationsSettingsProps["notifications"]) => Promise<void>;
+  onNotificationsChange?: (
+    notifications: UserNotificationsSettingsProps["notifications"],
+  ) => Promise<void>;
 }
 
 const notificationDescriptions: Record<
@@ -54,7 +56,11 @@ export const UserNotificationSettings = ({
     setCurrentNotifications(notifications);
   }, [notifications]);
 
-  const onToggle = async (method: "email" | "push", type: string, value: boolean) => {
+  const onToggle = async (
+    method: "email" | "push",
+    type: string,
+    value: boolean,
+  ) => {
     const next = {
       email: { ...currentNotifications.email },
       push: { ...currentNotifications.push },
