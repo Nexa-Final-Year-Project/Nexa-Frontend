@@ -1,224 +1,299 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   integrationService,
   Integration,
   IntegrationPlatform,
+  ImportJob,
   PLATFORM_INFO,
 } from "@/services/integrationService";
 import IntegrationCard from "@/components/integrations/IntegrationCard";
-import IntegrationDataModal from "@/components/integrations/IntegrationDataModal";
+import ImportWizard from "@/components/integrations/ImportWizard";
+import { useProjects } from "@/hooks/projects/useProjects";
 import toast from "@/lib/customToast";
-
-/**
- * Integrations Page
- *
- * ⚠️ DEMO MODE: Mock third-party integration management
- *
- * This page demonstrates integration capabilities with:
- * - Jira, Slack, Asana, Trello, GitHub
- * - All connections are simulated for demonstration
- * - No real external API calls are made
- *
- * Perfect for academic evaluation and UI/UX demonstration
- */
 
 export default function IntegrationsPage() {
   const params = useParams();
+  const router = useRouter();
   const projectId = params?.projectId as string;
 
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [loading, setLoading] = useState(true);
-  const [connectingPlatform, setConnectingPlatform] =
-    useState<IntegrationPlatform | null>(null);
-  const [selectedPlatform, setSelectedPlatform] =
-    useState<IntegrationPlatform | null>(null);
-  const [showDataModal, setShowDataModal] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<IntegrationPlatform | null>(null);
+  const [showWizard, setShowWizard] = useState(false);
+  const [importHistory, setImportHistory] = useState<ImportJob[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const { fetchAllProjects } = useProjects();
 
   useEffect(() => {
     if (projectId) {
       loadIntegrations();
+      loadHistory();
     }
   }, [projectId]);
 
   const loadIntegrations = async () => {
     try {
       setLoading(true);
-      console.log("🔄 Loading integrations for project:", projectId);
       const data = await integrationService.getProjectIntegrations(projectId);
-      console.log("✅ Integrations loaded successfully:", data);
       setIntegrations(data);
     } catch (error: any) {
-      console.error("❌ Error loading integrations:", error);
-      toast.error(
-        `Failed to load integrations: ${error.message || "Unknown error"}`
-      );
+      toast.error(`Failed to load integrations: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleConnect = async (platform: IntegrationPlatform) => {
+  const loadHistory = async () => {
     try {
-      setConnectingPlatform(platform);
-
-      // Simulate OAuth flow with loading state
-      await integrationService.connectIntegration(projectId, platform);
-
-      // Success feedback
-      toast.success(
-        `✅ ${PLATFORM_INFO[platform].name} connected successfully!`
-      );
-
-      // Reload integrations
-      await loadIntegrations();
-    } catch (error) {
-      console.error(`Error connecting to ${platform}:`, error);
-      toast.error(`Failed to connect to ${PLATFORM_INFO[platform].name}`);
-    } finally {
-      setConnectingPlatform(null);
+      const jobs = await integrationService.getImportHistory();
+      setImportHistory(jobs);
+    } catch {
+      // Non-critical
     }
+  };
+
+  const handleImport = (platform: IntegrationPlatform) => {
+    setSelectedPlatform(platform);
+    setShowWizard(true);
   };
 
   const handleDisconnect = async (platform: IntegrationPlatform) => {
     try {
-      await integrationService.disconnectIntegration(projectId, platform);
+      await integrationService.disconnectPlatform(projectId, platform);
       toast.success(`${PLATFORM_INFO[platform].name} disconnected`);
       await loadIntegrations();
-    } catch (error) {
-      console.error(`Error disconnecting from ${platform}:`, error);
-      toast.error(`Failed to disconnect from ${PLATFORM_INFO[platform].name}`);
+    } catch (error: any) {
+      toast.error(`Failed to disconnect: ${error.message}`);
     }
   };
 
-  const handleViewData = (platform: IntegrationPlatform) => {
-    setSelectedPlatform(platform);
-    setShowDataModal(true);
+  const handleImportComplete = async (newProjectId?: string) => {
+    loadIntegrations();
+    loadHistory();
+    await fetchAllProjects();
+    if (newProjectId) {
+      router.push(`/projects/${newProjectId}`);
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    const map: Record<string, { bg: string; text: string; label: string }> = {
+      completed: { bg: "bg-emerald-500/15", text: "text-emerald-600 dark:text-emerald-400", label: "Completed" },
+      failed: { bg: "bg-red-500/15", text: "text-red-600 dark:text-red-400", label: "Failed" },
+      cancelled: { bg: "bg-neutral-500/15", text: "text-neutral-600 dark:text-neutral-400", label: "Cancelled" },
+      importing: { bg: "bg-blue-500/15", text: "text-blue-600 dark:text-blue-400", label: "In Progress" },
+      fetching: { bg: "bg-blue-500/15", text: "text-blue-600 dark:text-blue-400", label: "Fetching" },
+      pending: { bg: "bg-amber-500/15", text: "text-amber-600 dark:text-amber-400", label: "Pending" },
+    };
+    const s = map[status] || map.pending;
+    return (
+      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${s.bg} ${s.text}`}>
+        {s.label}
+      </span>
+    );
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      <div className="flex items-center justify-center py-20">
+        <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              🔗 Third-Party Integrations
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Connect your project with external tools and services
-            </p>
-          </div>
+        <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+          Import & Integrations
+        </h1>
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm">
+          Connect your existing tools and import projects, tasks, sprints, and team data into NEXA. Supports Jira, Trello, and ClickUp.
+        </p>
+      </div>
 
-          {/* Demo Mode Badge */}
-          <div className="flex items-center gap-2 px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg border border-yellow-300 dark:border-yellow-700">
-            <span className="text-xl">🧪</span>
-            <div className="text-sm">
-              <div className="font-semibold text-yellow-800 dark:text-yellow-200">
-                Demo Mode
+      {/* How it works */}
+      <div className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 border border-blue-200/50 dark:border-blue-500/15">
+        <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-3">How it works</h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[
+            { step: "1", title: "Connect", desc: "Enter your API credentials" },
+            { step: "2", title: "Select", desc: "Choose a project or board to import" },
+            { step: "3", title: "Configure", desc: "Pick what data to bring over" },
+            { step: "4", title: "Import", desc: "We handle the rest automatically" },
+          ].map((s) => (
+            <div key={s.step} className="flex items-start gap-3">
+              <div className="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                {s.step}
               </div>
-              <div className="text-yellow-700 dark:text-yellow-300 text-xs">
-                Mock integrations for demonstration
+              <div>
+                <div className="text-sm font-medium text-neutral-900 dark:text-white">{s.title}</div>
+                <div className="text-xs text-neutral-500 dark:text-neutral-400">{s.desc}</div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* Integration Framework Info */}
-      <div className="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">ℹ️</span>
-          <div>
-            <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1">
-              Integration Framework Ready
-            </h3>
-            <p className="text-sm text-blue-800 dark:text-blue-300">
-              This integration layer demonstrates the architecture for
-              connecting external tools. The framework is designed to be easily
-              upgraded with real OAuth flows and API integrations in production.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Integration Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Platform Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
         {integrations.map((integration) => (
           <IntegrationCard
             key={integration.platform}
             integration={integration}
-            platformInfo={PLATFORM_INFO[integration.platform]}
-            onConnect={() => handleConnect(integration.platform)}
-            onDisconnect={() => handleDisconnect(integration.platform)}
-            onViewData={() => handleViewData(integration.platform)}
-            isConnecting={connectingPlatform === integration.platform}
+            onImport={() => handleImport(integration.platform as IntegrationPlatform)}
+            onDisconnect={() => handleDisconnect(integration.platform as IntegrationPlatform)}
           />
         ))}
       </div>
 
-      {/* Integration Categories */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            📊 Project Management Tools
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            Sync tasks, sprints, and project data with popular PM platforms
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium">
-              Jira
-            </span>
-            <span className="px-3 py-1 bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300 rounded-full text-xs font-medium">
-              Asana
-            </span>
-            <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium">
-              Trello
-            </span>
-          </div>
-        </div>
+      {/* Import History */}
+      {importHistory.length > 0 && (
+        <div>
+          <button
+            onClick={() => setShowHistory(!showHistory)}
+            className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white mb-4 transition-colors"
+          >
+            <span className={`transition-transform ${showHistory ? "rotate-90" : ""}`}>&#9654;</span>
+            Import History ({importHistory.length})
+          </button>
 
-        <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            💻 Development & Communication
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            Connect code repositories and team communication tools
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium">
-              GitHub
-            </span>
-            <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium">
-              Slack
-            </span>
-          </div>
+          {showHistory && (
+            <div className="space-y-3">
+              {importHistory.map((job) => (
+                <div
+                  key={job._id}
+                  className="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-neutral-900/40 border border-neutral-200 dark:border-white/[0.06] shadow-sm dark:shadow-none"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">
+                      {PLATFORM_INFO[job.platform]?.icon || "?"}
+                    </span>
+                    <div>
+                      <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                        {job.externalProjectName || "Unknown"}
+                      </div>
+                      <div className="text-xs text-neutral-500 dark:text-white/40">
+                        {job.startedAt
+                          ? new Date(job.startedAt).toLocaleString()
+                          : "N/A"}
+                        {job.results && (
+                          <span className="ml-2">
+                            &bull; {job.results.tasksCreated} tasks, {job.results.sprintsCreated} sprints
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {getStatusBadge(job.status)}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Mapping Reference */}
+      <div className="mt-10 p-5 rounded-2xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.06]">
+        <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">
+          Data Mapping Reference
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <MappingColumn
+            platform="Jira"
+            icon="🔷"
+            mappings={[
+              ["Project", "NEXA Project"],
+              ["Sprint", "Sprint"],
+              ["Epic", "Epic"],
+              ["Story / Task / Bug", "Task"],
+              ["Issue Status", "Task Status"],
+              ["Issue Priority", "Task Priority"],
+              ["Assignee", "Team Member"],
+              ["Comments", "Comments"],
+            ]}
+          />
+          <MappingColumn
+            platform="Trello"
+            icon="📋"
+            mappings={[
+              ["Board", "NEXA Project"],
+              ["List", "Epic (grouping)"],
+              ["Card", "Task"],
+              ["Labels", "Priority / Type"],
+              ["List Name", "Task Status"],
+              ["Card Members", "Team Member"],
+              ["Checklists", "Task Description"],
+              ["Comments", "Comments"],
+            ]}
+          />
+          <MappingColumn
+            platform="ClickUp"
+            icon="⚡"
+            mappings={[
+              ["Space", "NEXA Project"],
+              ["Folder", "Phase"],
+              ["List", "Epic"],
+              ["Task", "Task"],
+              ["Status", "Task Status"],
+              ["Priority", "Task Priority"],
+              ["Assignees", "Team Member"],
+              ["Comments", "Comments"],
+            ]}
+          />
         </div>
       </div>
 
-      {/* Data Modal */}
-      {showDataModal && selectedPlatform && (
-        <IntegrationDataModal
+      {/* Import Wizard Modal */}
+      {showWizard && selectedPlatform && (
+        <ImportWizard
           projectId={projectId}
           platform={selectedPlatform}
-          platformInfo={PLATFORM_INFO[selectedPlatform]}
+          integration={
+            integrations.find((i) => i.platform === selectedPlatform) || {
+              platform: selectedPlatform,
+              status: "disconnected",
+            }
+          }
           onClose={() => {
-            setShowDataModal(false);
+            setShowWizard(false);
             setSelectedPlatform(null);
           }}
+          onComplete={handleImportComplete}
         />
       )}
+    </div>
+  );
+}
+
+function MappingColumn({
+  platform,
+  icon,
+  mappings,
+}: {
+  platform: string;
+  icon: string;
+  mappings: string[][];
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <span>{icon}</span>
+        <span className="text-sm font-medium text-neutral-900 dark:text-white">{platform}</span>
+      </div>
+      <div className="space-y-1.5">
+        {mappings.map(([from, to], idx) => (
+          <div key={idx} className="flex items-center gap-2 text-xs">
+            <span className="text-neutral-500 dark:text-neutral-400 flex-1">{from}</span>
+            <span className="text-neutral-300 dark:text-neutral-600">&rarr;</span>
+            <span className="text-neutral-700 dark:text-neutral-300 flex-1">{to}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

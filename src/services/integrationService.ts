@@ -1,45 +1,15 @@
-/**
- * Integration API Service
- *
- * ⚠️ MOCK INTEGRATION LAYER - FOR DEMONSTRATION ONLY
- *
- * This service handles communication with the mock integration backend.
- * All external API calls are simulated for academic demonstration.
- *
- * The architecture is designed to be easily upgraded to real OAuth
- * and API integrations in production.
- */
-
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 const API_ENDPOINT = API_BASE_URL.endsWith("/api")
   ? API_BASE_URL.replace("/api", "/api/integrations")
   : `${API_BASE_URL}/api/integrations`;
 
-// Debug logging
-if (typeof window !== "undefined") {
-  console.log("🔗 Integration Service Config:", {
-    BASE_URL: API_BASE_URL,
-    ENDPOINT: API_ENDPOINT,
-  });
-}
+export type IntegrationPlatform = "jira" | "trello" | "clickup";
 
-/**
- * Integration platform types
- */
-export type IntegrationPlatform =
-  | "jira"
-  | "slack"
-  | "asana"
-  | "trello"
-  | "github";
-
-/**
- * Integration status
- */
 export interface Integration {
+  _id?: string;
   platform: IntegrationPlatform;
-  status: "connected" | "disconnected";
+  status: "connected" | "disconnected" | "error";
   connectedAt?: string;
   config?: {
     workspace?: string;
@@ -50,34 +20,104 @@ export interface Integration {
     accountName?: string;
     accountEmail?: string;
     permissions?: string[];
+    lastValidatedAt?: string;
+    externalUserId?: string;
   };
-  _id?: string;
+  lastSyncAt?: string;
+  errorMessage?: string;
 }
 
-/**
- * Platform information for UI display
- */
-export const PLATFORM_INFO = {
+export interface ExternalProject {
+  id: string;
+  name: string;
+  description: string;
+  meta?: Record<string, any>;
+}
+
+export interface ImportConfig {
+  importTasks: boolean;
+  importSprints: boolean;
+  importMembers: boolean;
+  importComments: boolean;
+  createNewProject: boolean;
+  targetProjectId?: string;
+}
+
+export interface ImportProgress {
+  phase: string;
+  current: number;
+  total: number;
+  message: string;
+}
+
+export interface ImportResults {
+  projectCreated: boolean;
+  projectName?: string;
+  tasksCreated: number;
+  sprintsCreated: number;
+  membersCreated: number;
+  phasesCreated: number;
+  epicsCreated: number;
+  storiesCreated: number;
+  commentsCreated: number;
+  errors: Array<{
+    entity: string;
+    externalId: string;
+    title: string;
+    error: string;
+  }>;
+}
+
+export interface ImportJob {
+  _id: string;
+  platform: IntegrationPlatform;
+  status: "pending" | "fetching" | "mapping" | "importing" | "completed" | "failed" | "cancelled";
+  externalProjectName: string;
+  progress: ImportProgress;
+  results: ImportResults;
+  projectId?: string;
+  config: ImportConfig;
+  startedAt?: string;
+  completedAt?: string;
+  errorMessage?: string;
+}
+
+export interface JiraCredentials {
+  email: string;
+  apiToken: string;
+  siteUrl: string;
+}
+
+export interface TrelloCredentials {
+  apiKey: string;
+  token: string;
+}
+
+export interface ClickUpCredentials {
+  apiToken: string;
+}
+
+export type PlatformCredentials = JiraCredentials | TrelloCredentials | ClickUpCredentials;
+
+export const PLATFORM_INFO: Record<IntegrationPlatform, {
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  category: string;
+  authFields: string[];
+  helpUrl: string;
+  helpText: string;
+}> = {
   jira: {
     name: "Jira",
-    description: "Sync issues, sprints, and projects with Atlassian Jira",
+    description: "Import projects, sprints, and issues from Atlassian Jira Cloud",
     icon: "🔷",
     color: "blue",
     category: "Project Management",
-  },
-  slack: {
-    name: "Slack",
-    description: "Connect channels and receive notifications in Slack",
-    icon: "💬",
-    color: "purple",
-    category: "Communication",
-  },
-  asana: {
-    name: "Asana",
-    description: "Sync tasks and projects with Asana workspace",
-    icon: "⭕",
-    color: "pink",
-    category: "Project Management",
+    authFields: ["email", "apiToken", "siteUrl"],
+    helpUrl: "https://id.atlassian.com/manage-profile/security/api-tokens",
+    helpText: "Create an API token from your Atlassian account settings. Your site URL looks like: https://your-team.atlassian.net",
   },
   trello: {
     name: "Trello",
@@ -85,13 +125,19 @@ export const PLATFORM_INFO = {
     icon: "📋",
     color: "blue",
     category: "Project Management",
+    authFields: ["apiKey", "token"],
+    helpUrl: "https://trello.com/power-ups/admin",
+    helpText: "Get your API key from the Trello Power-Up Admin page, then generate a token by visiting the authorization URL.",
   },
-  github: {
-    name: "GitHub",
-    description: "Link repositories, issues, and pull requests",
-    icon: "🐙",
-    color: "gray",
-    category: "Development",
+  clickup: {
+    name: "ClickUp",
+    description: "Import spaces, folders, lists, and tasks from ClickUp",
+    icon: "⚡",
+    color: "purple",
+    category: "Project Management",
+    authFields: ["apiToken"],
+    helpUrl: "https://app.clickup.com/settings/apps",
+    helpText: "Find your personal API token in ClickUp Settings > Apps.",
   },
 };
 
@@ -104,159 +150,97 @@ class IntegrationService {
     };
   }
 
-  /**
-   * Get all integrations for a project
-   */
   async getProjectIntegrations(projectId: string): Promise<Integration[]> {
-    const url = `${API_ENDPOINT}/projects/${projectId}/integrations`;
-    console.log("🔗 Fetching integrations from:", url);
-    console.log("🔑 Auth token present:", !!localStorage.getItem("authToken"));
-
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: this.getHeaders(),
-      });
-
-      console.log("📡 Response status:", response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("❌ API Error:", {
-          status: response.status,
-          statusText: response.statusText,
-          body: errorText,
-        });
-        throw new Error(
-          `Failed to fetch integrations: ${response.status} ${response.statusText}`
-        );
-      }
-
-      const data = await response.json();
-      console.log("✅ Integrations loaded:", data.data?.length || 0);
-      return data.data;
-    } catch (error) {
-      console.error("❌ Error fetching integrations:", error);
-      throw error;
-    }
+    const response = await fetch(`${API_ENDPOINT}/project/${projectId}`, {
+      headers: this.getHeaders(),
+    });
+    if (!response.ok) throw new Error("Failed to fetch integrations");
+    const data = await response.json();
+    return data.data;
   }
 
-  /**
-   * Connect to a platform
-   *
-   * ⚠️ This simulates OAuth flow - no real external API calls
-   */
-  async connectIntegration(
+  async connectPlatform(
     projectId: string,
-    platform: IntegrationPlatform
+    platform: IntegrationPlatform,
+    credentials: PlatformCredentials
   ): Promise<Integration> {
-    try {
-      const response = await fetch(
-        `${API_ENDPOINT}/projects/${projectId}/integrations/${platform}/connect`,
-        {
-          method: "POST",
-          headers: this.getHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to connect to ${platform}`);
-      }
-
-      const data = await response.json();
-      return data.data;
-    } catch (error) {
-      console.error(`Error connecting to ${platform}:`, error);
-      throw error;
-    }
+    const response = await fetch(`${API_ENDPOINT}/connect`, {
+      method: "POST",
+      headers: this.getHeaders(),
+      body: JSON.stringify({ projectId, platform, credentials }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || "Failed to connect");
+    return data.data;
   }
 
-  /**
-   * Disconnect from a platform
-   */
-  async disconnectIntegration(
+  async disconnectPlatform(
     projectId: string,
     platform: IntegrationPlatform
   ): Promise<void> {
-    try {
-      const response = await fetch(
-        `${API_ENDPOINT}/projects/${projectId}/integrations/${platform}/disconnect`,
-        {
-          method: "POST",
-          headers: this.getHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to disconnect from ${platform}`);
-      }
-    } catch (error) {
-      console.error(`Error disconnecting from ${platform}:`, error);
-      throw error;
-    }
+    const response = await fetch(`${API_ENDPOINT}/disconnect`, {
+      method: "POST",
+      headers: this.getHeaders(),
+      body: JSON.stringify({ projectId, platform }),
+    });
+    if (!response.ok) throw new Error("Failed to disconnect");
   }
 
-  /**
-   * Get mock data from a connected platform
-   *
-   * ⚠️ Returns simulated data - not real API calls
-   */
-  async getIntegrationData(
+  async browseExternalProjects(
     projectId: string,
     platform: IntegrationPlatform
-  ): Promise<any> {
-    try {
-      const response = await fetch(
-        `${API_ENDPOINT}/projects/${projectId}/integrations/${platform}/data`,
-        {
-          method: "GET",
-          headers: this.getHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.message || "Failed to fetch integration data"
-        );
-      }
-
-      const data = await response.json();
-      return data.data;
-    } catch (error) {
-      console.error(`Error fetching data from ${platform}:`, error);
-      throw error;
-    }
+  ): Promise<ExternalProject[]> {
+    const response = await fetch(
+      `${API_ENDPOINT}/browse/${projectId}/${platform}`,
+      { headers: this.getHeaders() }
+    );
+    if (!response.ok) throw new Error("Failed to browse external projects");
+    const data = await response.json();
+    return data.data;
   }
 
-  /**
-   * Get specific integration details
-   */
-  async getIntegrationDetails(
-    projectId: string,
-    platform: IntegrationPlatform
-  ): Promise<Integration> {
-    try {
-      const response = await fetch(
-        `${API_ENDPOINT}/projects/${projectId}/integrations/${platform}`,
-        {
-          method: "GET",
-          headers: this.getHeaders(),
-        }
-      );
+  async startImport(params: {
+    projectId: string;
+    platform: IntegrationPlatform;
+    externalProjectId: string;
+    externalProjectName: string;
+    config: ImportConfig;
+  }): Promise<string> {
+    const response = await fetch(`${API_ENDPOINT}/import`, {
+      method: "POST",
+      headers: this.getHeaders(),
+      body: JSON.stringify(params),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || "Failed to start import");
+    return data.data.jobId;
+  }
 
-      if (!response.ok) {
-        throw new Error("Integration not found");
-      }
+  async getImportStatus(jobId: string): Promise<ImportJob> {
+    const response = await fetch(`${API_ENDPOINT}/import/${jobId}`, {
+      headers: this.getHeaders(),
+    });
+    if (!response.ok) throw new Error("Failed to fetch import status");
+    const data = await response.json();
+    return data.data;
+  }
 
-      const data = await response.json();
-      return data.data;
-    } catch (error) {
-      console.error("Error fetching integration details:", error);
-      throw error;
-    }
+  async getImportHistory(): Promise<ImportJob[]> {
+    const response = await fetch(`${API_ENDPOINT}/imports`, {
+      headers: this.getHeaders(),
+    });
+    if (!response.ok) throw new Error("Failed to fetch import history");
+    const data = await response.json();
+    return data.data;
+  }
+
+  async cancelImport(jobId: string): Promise<void> {
+    const response = await fetch(`${API_ENDPOINT}/import/${jobId}/cancel`, {
+      method: "POST",
+      headers: this.getHeaders(),
+    });
+    if (!response.ok) throw new Error("Failed to cancel import");
   }
 }
 
-// Export singleton instance
 export const integrationService = new IntegrationService();

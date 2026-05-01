@@ -40,6 +40,7 @@ export default function SectionSelector({ documentType, onSelectionChange }: Sec
   const [selectedSections, setSelectedSections] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [agentUnavailable, setAgentUnavailable] = useState(false);
   
   useEffect(() => {
     if (documentType) {
@@ -67,6 +68,14 @@ export default function SectionSelector({ documentType, onSelectionChange }: Sec
       
       const data = await response.json();
       
+      // Agent unavailable — degrade gracefully: proceed with all sections
+      if (data.success && (data.agentUnavailable || !data.structure)) {
+        setAgentUnavailable(true);
+        setStructure([]);
+        onSelectionChange([]); // empty = generate all sections
+        return;
+      }
+
       if (data.success && data.structure) {
         setStructure(data.structure.structure || []);
         
@@ -152,6 +161,19 @@ export default function SectionSelector({ documentType, onSelectionChange }: Sec
       </div>
     );
   }
+
+  if (agentUnavailable) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
+        <CheckCircle2 className="h-12 w-12 text-muted-foreground" />
+        <h3 className="text-lg font-medium">All Sections Will Be Generated</h3>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          The documentation agent is not reachable right now. Your document will be generated
+          with all standard sections included. Click <strong>Next</strong> to continue.
+        </p>
+      </div>
+    );
+  }
   
   if (structure.length === 0) {
     return (
@@ -176,7 +198,7 @@ export default function SectionSelector({ documentType, onSelectionChange }: Sec
         </Badge>
       </div>
       
-      <ScrollArea className="h-[500px] pr-4">
+      <ScrollArea className="h-[300px] sm:h-[500px] pr-4">
         <Accordion type="multiple" className="w-full" defaultValue={structure.map(s => s.section)}>
           {structure.map((section) => {
             const selectedCount = getSelectedCount(section);

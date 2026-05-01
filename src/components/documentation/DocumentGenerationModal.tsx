@@ -80,10 +80,8 @@ export default function DocumentGenerationModal({
   };
   
   const handleNextFromSections = () => {
-    if (selectedSections.length === 0) {
-      toast.error('Please select at least one section');
-      return;
-    }
+    // Empty selectedSections is allowed — it means "generate all sections"
+    // (the agent treats an empty array as no filter applied).
     setStep('config');
   };
 

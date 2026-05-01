@@ -32,6 +32,7 @@ import {
   Eye,
   Edit3,
   Clock,
+  ArrowLeft,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -234,21 +235,23 @@ export default function DocumentationPage() {
     }
   };
 
+  const showDocView = !!selectedDoc;
+
   return (
     <div className="h-full flex flex-col bg-background">
       {/* Header */}
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-6 py-4 border-b">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <FileText className="h-6 w-6" />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 sm:px-6 py-3 sm:py-4 border-b">
+        <div className="min-w-0">
+          <h1 className="text-lg sm:text-2xl font-bold flex items-center gap-2">
+            <FileText className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0" />
             Documentation
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">
             AI-powered professional documentation with real-time collaboration
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-shrink-0">
           <DocumentGenerationModal
             projectId={projectId}
             onGenerated={handleGenerated}
@@ -258,9 +261,17 @@ export default function DocumentationPage() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar - Document List */}
-        <div className="w-80 border-r flex flex-col bg-muted/30">
+        {/* On mobile: full-width, hidden when a doc is selected */}
+        {/* On lg+: always visible as a 320px sidebar */}
+        <div
+          className={cn(
+            'flex flex-col bg-muted/30 border-r',
+            'w-full lg:w-80 lg:flex-shrink-0',
+            showDocView ? 'hidden lg:flex' : 'flex'
+          )}
+        >
           {/* Search and Filters */}
-          <div className="p-4 space-y-3 border-b">
+          <div className="p-3 sm:p-4 space-y-3 border-b">
             <div className="relative">
               <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
               <Input
@@ -314,7 +325,7 @@ export default function DocumentationPage() {
 
           {/* Document List */}
           <ScrollArea className="flex-1">
-            <div className="p-4 space-y-2">
+            <div className="p-3 sm:p-4 space-y-2">
               {loading ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -369,79 +380,94 @@ export default function DocumentationPage() {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col">
+        {/* On mobile: full-width, hidden when no doc is selected */}
+        {/* On lg+: always visible as the flex-1 content area */}
+        <div
+          className={cn(
+            'flex-1 flex flex-col min-w-0',
+            showDocView ? 'flex' : 'hidden lg:flex'
+          )}
+        >
           {selectedDoc ? (
             <>
               {/* Document Header */}
-              <div className="px-6 py-4 border-b bg-muted/20">
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
-                  {/* Left: meta */}
-                  <div className="min-w-0 flex items-center gap-2 flex-wrap justify-center lg:justify-start">
-                    <Badge variant="outline" className="text-xs">
-                      {selectedDoc.documentType}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      v{selectedDoc.version}
-                    </span>
-                    {selectedDoc.generatedBy && (
-                      <span className="text-xs text-muted-foreground truncate">
-                        by {selectedDoc.generatedBy.name}
+              <div className="px-3 sm:px-6 py-3 sm:py-4 border-b bg-muted/20 space-y-3">
+                {/* Row 1: Back button (mobile) + Title + Meta */}
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="lg:hidden flex-shrink-0 gap-1.5 -ml-1"
+                    onClick={() => setSelectedDoc(null)}
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    <span className="text-xs">Back</span>
+                  </Button>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-base sm:text-xl font-bold truncate">
+                      {selectedDoc.title}
+                    </h2>
+                    <div className="flex items-center gap-2 flex-wrap mt-1">
+                      <Badge variant="outline" className="text-[10px] sm:text-xs">
+                        {selectedDoc.documentType}
+                      </Badge>
+                      <span className="text-[10px] sm:text-xs text-muted-foreground">
+                        v{selectedDoc.version}
                       </span>
-                    )}
+                      {selectedDoc.generatedBy && (
+                        <span className="text-[10px] sm:text-xs text-muted-foreground truncate">
+                          by {selectedDoc.generatedBy.name}
+                        </span>
+                      )}
+                    </div>
                   </div>
+                </div>
 
-                  {/* Center: title */}
-                  <div className="min-w-0 text-center">
-                    <h2 className="text-xl font-bold truncate">{selectedDoc.title}</h2>
-                  </div>
-
-                  {/* Right: actions */}
-                  <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-end">
+                {/* Row 2: Actions (scrollable on mobile) */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 -mb-1 scrollbar-thin">
                   {/* View Mode Toggle */}
-                  <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+                  <div className="flex items-center gap-1 bg-muted rounded-lg p-1 flex-shrink-0">
                     <Button
                       variant={viewMode === 'preview' ? 'default' : 'ghost'}
                       size="sm"
                       onClick={() => setViewMode('preview')}
-                      className="gap-2 h-8"
+                      className="gap-1.5 h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
                     >
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-3.5 w-3.5" />
                       Preview
                     </Button>
                     <Button
                       variant={viewMode === 'edit' ? 'default' : 'ghost'}
                       size="sm"
                       onClick={() => setViewMode('edit')}
-                      className="gap-2 h-8"
+                      className="gap-1.5 h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
                       disabled={selectedDoc.status !== 'completed'}
                     >
-                      <Edit3 className="h-4 w-4" />
+                      <Edit3 className="h-3.5 w-3.5" />
                       Edit
                     </Button>
                   </div>
 
-                  <Separator orientation="vertical" className="h-8" />
+                  <Separator orientation="vertical" className="h-6 sm:h-8 flex-shrink-0 hidden sm:block" />
 
-                  {/* Version History */}
                   <VersionHistoryPanel
                     documentId={selectedDoc._id}
                     currentVersion={selectedDoc.version}
                   />
 
-                  <Separator orientation="vertical" className="h-8" />
+                  <Separator orientation="vertical" className="h-6 sm:h-8 flex-shrink-0 hidden sm:block" />
 
-                  {/* Export Buttons */}
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleExport('pdf')}
                     disabled={!!exporting || selectedDoc.status !== 'completed'}
-                    className="gap-2"
+                    className="gap-1.5 flex-shrink-0 h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
                   >
                     {exporting === 'pdf' ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
                     ) : (
-                      <Download className="h-4 w-4" />
+                      <Download className="h-3.5 w-3.5" />
                     )}
                     PDF
                   </Button>
@@ -451,47 +477,46 @@ export default function DocumentationPage() {
                     size="sm"
                     onClick={() => handleExport('word')}
                     disabled={!!exporting || selectedDoc.status !== 'completed'}
-                    className="gap-2"
+                    className="gap-1.5 flex-shrink-0 h-7 sm:h-8 text-xs sm:text-sm px-2 sm:px-3"
                   >
                     {exporting === 'word' ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
                     ) : (
-                      <Download className="h-4 w-4" />
+                      <Download className="h-3.5 w-3.5" />
                     )}
                     Word
                   </Button>
 
-                  <Separator orientation="vertical" className="h-8" />
+                  <Separator orientation="vertical" className="h-6 sm:h-8 flex-shrink-0 hidden sm:block" />
 
-                  {/* Delete */}
                   <Button
                     variant="destructive"
                     size="sm"
                     onClick={() => handleDelete(selectedDoc._id)}
+                    className="flex-shrink-0 h-7 sm:h-8 px-2 sm:px-3"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3.5 w-3.5" />
                   </Button>
-                  </div>
                 </div>
               </div>
 
               {/* Document Content */}
               <div className="flex-1 overflow-hidden">
                 {selectedDoc.status === 'generating' ? (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                    <h3 className="text-lg font-medium mb-2">Generating Document...</h3>
-                    <p className="text-sm text-muted-foreground">
+                  <div className="flex flex-col items-center justify-center h-full p-6">
+                    <Loader2 className="h-10 w-10 sm:h-12 sm:w-12 animate-spin text-primary mb-4" />
+                    <h3 className="text-base sm:text-lg font-medium mb-2">Generating Document...</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground text-center">
                       AI is crafting your professional documentation
                     </p>
                   </div>
                 ) : selectedDoc.status === 'failed' ? (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <div className="bg-destructive/10 rounded-full p-4 mb-4">
-                      <Trash2 className="h-12 w-12 text-destructive" />
+                  <div className="flex flex-col items-center justify-center h-full p-6">
+                    <div className="bg-destructive/10 rounded-full p-3 sm:p-4 mb-4">
+                      <Trash2 className="h-8 w-8 sm:h-12 sm:w-12 text-destructive" />
                     </div>
-                    <h3 className="text-lg font-medium mb-2">Generation Failed</h3>
-                    <p className="text-sm text-muted-foreground max-w-md text-center">
+                    <h3 className="text-base sm:text-lg font-medium mb-2">Generation Failed</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground max-w-md text-center">
                       {selectedDoc.generationError || 'An error occurred during generation'}
                     </p>
                   </div>
@@ -504,9 +529,8 @@ export default function DocumentationPage() {
                     onSave={(content) => handleSaveRichText(selectedDoc._id, content)}
                   />
                 ) : (
-                  // Preview Mode - Show generated markdown
                   <ScrollArea className="h-full">
-                    <div className="mx-auto max-w-4xl p-8">
+                    <div className="mx-auto max-w-4xl px-4 py-6 sm:p-8">
                       <div className="prose prose-sm dark:prose-invert max-w-none">
                         <ReactMarkdown>
                           {selectedDoc.content.markdown || 
@@ -520,15 +544,14 @@ export default function DocumentationPage() {
               </div>
             </>
           ) : (
-            // No Document Selected
-            <div className="flex flex-col items-center justify-center h-full text-center p-12">
-              <div className="bg-primary/10 rounded-full p-6 mb-6">
-                <FileText className="h-16 w-16 text-primary" />
+            <div className="flex flex-col items-center justify-center h-full text-center p-6 sm:p-12">
+              <div className="bg-primary/10 rounded-full p-4 sm:p-6 mb-4 sm:mb-6">
+                <FileText className="h-10 w-10 sm:h-16 sm:w-16 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold mb-2">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2">
                 No Document Selected
               </h3>
-              <p className="text-muted-foreground max-w-md mb-6">
+              <p className="text-sm text-muted-foreground max-w-md mb-4 sm:mb-6">
                 Select a document from the sidebar or generate a new one to get started
               </p>
               <DocumentGenerationModal
