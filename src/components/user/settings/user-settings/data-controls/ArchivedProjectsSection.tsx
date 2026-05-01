@@ -6,10 +6,12 @@ import { Archive } from "lucide-react";
 
 interface ArchivedProjectsSectionProps {
   archivedProjectsCount: number;
+  archivedProjects?: { id: string; name: string; archivedAt: string }[];
 }
 
 export const ArchivedProjectsSection = ({
   archivedProjectsCount,
+  archivedProjects = [],
 }: ArchivedProjectsSectionProps) => {
   const { openModal } = useModalStore();
   return (
@@ -25,20 +27,7 @@ export const ArchivedProjectsSection = ({
       <Button
         variant="outline"
         className="w-full sm:w-auto"
-        onClick={() =>
-          openModal("project.archived-list", [
-            {
-              id: "1",
-              name: "Project Alpha",
-              archivedAt: "2024-01-15",
-            },
-            {
-              id: "2",
-              name: "Project Beta",
-              archivedAt: "2024-01-16",
-            },
-          ])
-        }
+        onClick={() => openModal("project.archived-list", archivedProjects)}
       >
         Manage Archived Projects ({archivedProjectsCount})
       </Button>

@@ -16,6 +16,7 @@ import {
 import { User } from "@/types/auth";
 import { useAuthStore } from "@/store/auth/authStore";
 import DangerZoneSettings from "./user-settings/DangerZoneSettings";
+import { useProjects } from "@/hooks/projects/useProjects";
 
 interface UserSettingsProps {
   user: User | null;
@@ -27,14 +28,72 @@ const UserSettings = ({ user }: UserSettingsProps) => {
   const [activeSection, setActiveSection] = useState("general");
   const [activeCategory, setActiveCategory] = useState("Profile");
   const { updateUser } = useAuthStore();
+  const { projects, fetchAllProjects } = useProjects();
+  const [selectedTheme, setSelectedTheme] = useState<
+    "light" | "dark" | "system"
+  >("system");
+  const [archivedProjects, setArchivedProjects] = useState<
+    { id: string; name: string; archivedAt: string }[]
+  >([]);
   const [notifications, setNotifications] = useState({
     email: { marketing: true, product: true, security: true },
     push: { product: false, security: true },
   });
 
+  // Keep selected theme card in sync with current theme/user preference.
+  useEffect(() => {
+    const preferredTheme = (user as any)?.theme || theme || "system";
+    setSelectedTheme(preferredTheme as "light" | "dark" | "system");
+  }, [user, theme]);
+
+  useEffect(() => {
+    void fetchAllProjects();
+  }, [fetchAllProjects]);
+
+  // Build current-user archived list only.
+  useEffect(() => {
+    const currentUserId = user?.uid || (user as any)?.id;
+    const currentUserEmail = user?.email;
+
+    const mine = (Array.isArray(projects) ? projects : []).filter(
+      (project: any) => {
+        const ownerId = project?.owner?._id || project?.owner;
+        const memberIds = Array.isArray(project?.members)
+          ? project.members.map(
+              (m: any) =>
+                m?.memberId?._id || m?.memberId || m?._id || m?.id || null,
+            )
+          : [];
+        const memberEmails = Array.isArray(project?.members)
+          ? project.members.map(
+              (m: any) => m?.memberId?.email || m?.email || null,
+            )
+          : [];
+
+        return (
+          ownerId === currentUserId ||
+          memberIds.includes(currentUserId) ||
+          memberEmails.includes(currentUserEmail)
+        );
+      },
+    );
+
+    const archived = mine
+      .filter((project: any) => project?.status === "Archived")
+      .map((project: any) => ({
+        id: project?._id,
+        name: project?.name || "Untitled Project",
+        archivedAt:
+          project?.updatedAt || project?.archivedAt || new Date().toISOString(),
+      }));
+
+    setArchivedProjects(archived);
+  }, [projects, user]);
+
   // Load notifications from localStorage on mount
   useEffect(() => {
-    const storedNotifications = localStorage.getItem("userNotifications");
+    const storageKey = `userNotifications:${user?.uid || user?.id || "guest"}`;
+    const storedNotifications = localStorage.getItem(storageKey);
     if (storedNotifications) {
       try {
         setNotifications(JSON.parse(storedNotifications));
@@ -44,7 +103,7 @@ const UserSettings = ({ user }: UserSettingsProps) => {
     } else if (user?.notifications) {
       setNotifications(user.notifications);
     }
-  }, [user?.notifications]);
+  }, [user]);
 
   if (!user) {
     return (
@@ -92,19 +151,39 @@ const UserSettings = ({ user }: UserSettingsProps) => {
   };
 
   const handleThemeChange = async (nextTheme: "light" | "dark" | "system") => {
+    setSelectedTheme(nextTheme);
     setTheme(nextTheme);
     await handleUpdateUser({ theme: nextTheme });
+  };
+
+  const handleAppearanceNotificationToggle = async (
+    key: string,
+    value: boolean,
+  ) => {
+    const next = {
+      ...notifications,
+      [key]:
+        key === "email"
+          ? {
+              marketing: value,
+              product: value,
+              security: value,
+            }
+          : {
+              product: value,
+              security: value,
+            },
+    } as typeof notifications;
+
+    await handleNotificationChange(next);
   };
 
   const handleNotificationChange = async (
     updatedNotifications: typeof notifications,
   ) => {
     setNotifications(updatedNotifications);
-    // Save to localStorage
-    localStorage.setItem(
-      "userNotifications",
-      JSON.stringify(updatedNotifications),
-    );
+    const storageKey = `userNotifications:${user?.uid || user?.id || "guest"}`;
+    localStorage.setItem(storageKey, JSON.stringify(updatedNotifications));
     // Save to user store
     try {
       await updateUser(user?.uid!, { notifications: updatedNotifications });
@@ -128,15 +207,18 @@ const UserSettings = ({ user }: UserSettingsProps) => {
         return (
           <UserPreferencesSettings
             preferences={{
-              theme: initialValues.theme,
-              notifications: initialValues.notifications,
+              theme: selectedTheme,
+              notifications: {
+                email:
+                  notifications.email.marketing ||
+                  notifications.email.product ||
+                  notifications.email.security,
+                push:
+                  notifications.push.product || notifications.push.security,
+              },
             }}
             onThemeChange={handleThemeChange}
-            onNotificationToggle={(key, value) =>
-              handleUpdateUser({
-                notifications: { ...initialValues.notifications, [key]: value },
-              })
-            }
+            onNotificationToggle={handleAppearanceNotificationToggle}
           />
         );
       case "security":
@@ -157,7 +239,28 @@ const UserSettings = ({ user }: UserSettingsProps) => {
           />
         );
       case "data-controls":
-        return <DataControlsSettings />;
+        return (
+          <DataControlsSettings
+            archivedProjects={archivedProjects}
+            onExportData={() => toast.success("Export started")}
+            onToggleAutoArchive={(value) => {
+              const key = `autoArchive:${user?.uid || user?.id || "guest"}`;
+              localStorage.setItem(key, JSON.stringify(value));
+              toast.success(`Auto archive ${value ? "enabled" : "disabled"}`);
+            }}
+            onChangeArchiveDuration={(value) => {
+              const key = `archiveDuration:${user?.uid || user?.id || "guest"}`;
+              localStorage.setItem(key, value);
+              toast.success("Archive duration updated");
+            }}
+            onClearCache={() => {
+              localStorage.removeItem(
+                `userNotifications:${user?.uid || user?.id || "guest"}`,
+              );
+              toast.success("Local cache cleared");
+            }}
+          />
+        );
       case "delete-account":
         return <DangerZoneSettings />;
       default:

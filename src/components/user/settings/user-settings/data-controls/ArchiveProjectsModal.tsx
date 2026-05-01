@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal/Modal";
-import { useModalStore } from "@/store/modal/modalStore";
 import React from "react";
 
 export const ArchiveProjectsModal = ({
@@ -16,7 +15,6 @@ export const ArchiveProjectsModal = ({
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }) => {
-  const { openModal } = useModalStore();
   const archivedList = Array.isArray(archivedProjects)
     ? archivedProjects
     : archivedProjects
@@ -32,40 +30,41 @@ export const ArchiveProjectsModal = ({
       showFooter={false}
       hideTrigger
     >
-      {archivedList.map((project) => (
-        <div
-          key={project.id}
-          className="flex items-center justify-between p-4 rounded-lg border shadow-sm"
-        >
-          <div>
-            <span className="font-medium">{project.name}</span>
-            <p className="text-xs text-gray-500">
-              Archived on {new Date(project.archivedAt).toLocaleDateString()}
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onRestore(project.id)}
-            >
-              Restore
-            </Button>
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() =>
-                openModal("project.delete", {
-                  id: project.id,
-                  name: project.name,
-                })
-              }
-            >
-              Delete
-            </Button>
-          </div>
+      {archivedList.length === 0 ? (
+        <div className="py-8 text-center text-sm text-neutral-500 dark:text-white/50">
+          No archived projects for this account.
         </div>
-      ))}
+      ) : (
+        archivedList.map((project) => (
+          <div
+            key={project.id}
+            className="flex items-center justify-between p-4 rounded-lg border shadow-sm"
+          >
+            <div>
+              <span className="font-medium">{project.name}</span>
+              <p className="text-xs text-gray-500">
+                Archived on {new Date(project.archivedAt).toLocaleDateString()}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onRestore(project.id)}
+              >
+                Restore
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => onDelete(project.id)}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        ))
+      )}
     </Modal>
   );
 };

@@ -19,7 +19,6 @@ interface DataControlsSettingsProps {
   onToggleAutoArchive: (value: boolean) => void;
   onChangeArchiveDuration: (value: "30" | "60" | "90") => void;
   onClearCache: () => void;
-  onOpenArchivedProjectsModal: () => void;
 }
 
 export const DataControlsSettings = ({
@@ -27,22 +26,11 @@ export const DataControlsSettings = ({
   storageLimit = "0",
   autoArchive = false,
   archiveDuration = "30",
-  archivedProjects = [
-    {
-      id: "1",
-      name: "Project Alpha",
-      archivedAt: new Date().toISOString(),
-    },
-    {
-      id: "2",
-      name: "Project Beta",
-      archivedAt: new Date().toISOString(),
-    },
-  ],
-  onExportData,
-  onToggleAutoArchive,
-  onChangeArchiveDuration,
-  onClearCache,
+  archivedProjects = [],
+  onExportData = () => {},
+  onToggleAutoArchive = () => {},
+  onChangeArchiveDuration = () => {},
+  onClearCache = () => {},
 }: DataControlsSettingsProps) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -114,6 +102,7 @@ export const DataControlsSettings = ({
       >
         <ArchivedProjectsSection
           archivedProjectsCount={archivedProjects.length}
+          archivedProjects={archivedProjects}
         />
       </div>
 

@@ -19,9 +19,10 @@ import { ActivityLog } from "@/types/activityLogs";
 
 interface ActivityLogsProps {
   logs?: ActivityLog[]; // optional
+  maxItems?: number;
 }
 
-const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
+const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs, maxItems }) => {
   const { activityLogs, fetchAllActivityLogs, isLoading, error } =
     useActivityLogs();
   const { user } = useAuthStore();
@@ -30,7 +31,8 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
   // only fetch if logs not passed
   useEffect(() => {
     if (!logs) {
-      fetchAllActivityLogs(user ? { userId: user.id } : {});
+      const userId = (user as any)?.uid || (user as any)?.id;
+      fetchAllActivityLogs(userId ? { userId } : {});
     }
   }, [fetchAllActivityLogs, user, logs]);
 
@@ -44,11 +46,12 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs }) => {
   const data = logs || activityLogs;
 
   const sortedLogs = useMemo(() => {
-    return [...data].sort(
+    const sorted = [...data].sort(
       (a, b) =>
         new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     );
-  }, [data]);
+    return typeof maxItems === "number" ? sorted.slice(0, maxItems) : sorted;
+  }, [data, maxItems]);
 
   if (isLoading && !logs)
     return (

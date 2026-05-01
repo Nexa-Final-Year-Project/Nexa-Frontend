@@ -1,8 +1,6 @@
 "use client";
 import ActivityLogs from "@/components/activityLogs/ActivityLogs";
 import DashboardProjectList from "@/components/projects/DashboardProjectList";
-import { Card } from "@/components/ui/card/Card";
-import { ImageUploader } from "@/components/ui/image/ImageUploader";
 import { useProjects } from "@/hooks/projects/useProjects";
 import { useAuthStore } from "@/store/auth/authStore";
 import { useTheme } from "next-themes";
@@ -239,12 +237,15 @@ const ProfilePage = () => {
                     Recent Activity
                   </h3>
                 </div>
-                <button className="text-sm text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1">
+                <Link
+                  href="/activity"
+                  className="relative z-10 text-sm text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1 cursor-pointer"
+                >
                   View all
                   <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
+                </Link>
               </div>
-              <ActivityLogs />
+              <ActivityLogs maxItems={6} />
             </div>
 
             {/* Projects Card */}

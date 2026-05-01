@@ -60,8 +60,14 @@ export function useProjectConfigs(close: () => void) {
       component: ArchiveProjectsModal,
       props: {
         archivedProjects,
-        onRestore: (id: string) => console.log("Restore", id),
-        onDelete: (id: string) => console.log("Delete", id),
+        onRestore: async (id: string) => {
+          await updateProject({ id, status: "Active" } as any);
+          close();
+        },
+        onDelete: async (id: string) => {
+          await deleteProject(id as any);
+          close();
+        },
         isOpen: true,
         onOpenChange: close,
       },
