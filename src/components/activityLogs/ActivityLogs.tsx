@@ -48,7 +48,7 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs, maxItems }) => {
   const sortedLogs = useMemo(() => {
     const sorted = [...data].sort(
       (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
     );
     return typeof maxItems === "number" ? sorted.slice(0, maxItems) : sorted;
   }, [data, maxItems]);
@@ -95,7 +95,7 @@ const ActivityLogs: React.FC<ActivityLogsProps> = ({ logs, maxItems }) => {
           const isExpanded = expandedLogs[log._id];
           const changes = getChangedFields(log.details);
           const { actionText, actionIcon, actionColor } = getActionDetails(
-            log.action
+            log.action,
           );
           const entityIcon = getEntityIcon(log.entityType);
 

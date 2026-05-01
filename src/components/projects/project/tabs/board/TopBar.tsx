@@ -84,7 +84,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             <div className="flex -space-x-2">
               {members.slice(0, 4).map((member, index) => (
                 <div
-                  key={`${member?._id || index}-${member?.memberId?._id || 'unknown'}`}
+                  key={`${member?._id || index}-${member?.memberId?._id || "unknown"}`}
                   className="relative group/avatar"
                 >
                   <div

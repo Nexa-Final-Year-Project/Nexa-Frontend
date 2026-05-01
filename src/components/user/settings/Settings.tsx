@@ -213,8 +213,7 @@ const UserSettings = ({ user }: UserSettingsProps) => {
                   notifications.email.marketing ||
                   notifications.email.product ||
                   notifications.email.security,
-                push:
-                  notifications.push.product || notifications.push.security,
+                push: notifications.push.product || notifications.push.security,
               },
             }}
             onThemeChange={handleThemeChange}
