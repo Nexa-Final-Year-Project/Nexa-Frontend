@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }));
 
   const activeProjects = formattedProjects.filter(
-    (project) => project.status !== "Archived"
+    (project) => project.status !== "Archived",
   );
 
   return (

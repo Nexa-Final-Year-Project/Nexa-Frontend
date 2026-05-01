@@ -23,7 +23,9 @@ export const GeneralSettings = ({
   initialValues,
 }: GeneralSettingsProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | undefined>(project.avatar);
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(
+    project.avatar,
+  );
 
   const generalFields: FormFieldType[] = [
     {
@@ -185,7 +187,11 @@ export const GeneralSettings = ({
                   if (!file) return;
                   const reader = new FileReader();
                   reader.onload = () => {
-                    setPreviewUrl(typeof reader.result === "string" ? reader.result : undefined);
+                    setPreviewUrl(
+                      typeof reader.result === "string"
+                        ? reader.result
+                        : undefined,
+                    );
                   };
                   reader.readAsDataURL(file);
                 }}

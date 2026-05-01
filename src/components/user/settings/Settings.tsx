@@ -73,9 +73,7 @@ const UserSettings = ({ user }: UserSettingsProps) => {
     }
   };
 
-  const handleThemeChange = async (
-    nextTheme: "light" | "dark" | "system"
-  ) => {
+  const handleThemeChange = async (nextTheme: "light" | "dark" | "system") => {
     setTheme(nextTheme);
     await handleUpdateUser({ theme: nextTheme });
   };

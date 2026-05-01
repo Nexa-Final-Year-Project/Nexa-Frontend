@@ -20,8 +20,8 @@ export const ArchiveProjectsModal = ({
   const archivedList = Array.isArray(archivedProjects)
     ? archivedProjects
     : archivedProjects
-    ? [archivedProjects as any]
-    : [];
+      ? [archivedProjects as any]
+      : [];
 
   return (
     <Modal

@@ -106,7 +106,12 @@ const ProjectSettings = ({ project, members }: ProjectSettingsProps) => {
       case "activity":
         return <ActivityLogsSettings />;
       case "danger":
-        return <DangerZoneSettings project={project} onArchive={handleArchiveProject} />;
+        return (
+          <DangerZoneSettings
+            project={project}
+            onArchive={handleArchiveProject}
+          />
+        );
       default:
         return (
           <GeneralSettings

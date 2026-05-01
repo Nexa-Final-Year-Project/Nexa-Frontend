@@ -78,7 +78,7 @@ export const useProjects = () => {
         throw error;
       }
     },
-    [fetchProjectById]
+    [fetchProjectById],
   );
 
   const createProject = useCallback(
@@ -104,7 +104,7 @@ export const useProjects = () => {
         setLoading(false);
       }
     },
-    [createProjectApi, addProject, updateProject, removeProject]
+    [createProjectApi, addProject, updateProject, removeProject],
   );
 
   const updateProjectById = useCallback(
@@ -124,7 +124,7 @@ export const useProjects = () => {
         throw error;
       }
     },
-    [projects, updateProjectApi, updateProject]
+    [projects, updateProjectApi, updateProject],
   );
   const deleteProject = useCallback(
     async (projectId: string) => {
@@ -138,19 +138,23 @@ export const useProjects = () => {
         throw error;
       }
     },
-    [deleteProjectApi, removeProject]
+    [deleteProjectApi, removeProject],
   );
 
   const sendProjectInvite = useCallback(
     async (projectId: string, memberEmail: string, role: string) => {
       try {
-        const response = await sendInvite({ projectId, memberEmail, role }).unwrap();
+        const response = await sendInvite({
+          projectId,
+          memberEmail,
+          role,
+        }).unwrap();
 
         if (response?.emailSent === false) {
           toast.warning(
             response.warning ||
               response.message ||
-              "Invitation created, but email could not be sent."
+              "Invitation created, but email could not be sent.",
           );
           if (response.inviteLink) {
             console.info("Invite link:", response.inviteLink);
@@ -167,31 +171,31 @@ export const useProjects = () => {
         throw new Error(message);
       }
     },
-    [sendInvite]
+    [sendInvite],
   );
 
- const acceptProjectInvite = useCallback(
-  async (token: string) => {
-    try {
-      console.log("Accepting invite with token:", token);
-      
-      // ✅ Pass token directly, not as object
-      const response = await acceptInvite(token).unwrap();
-      
-      console.log("Invite acceptance response:", response);
-      
-      // Handle response...
-      toast.success(response.message || "Invitation accepted successfully");
-      return response;
-    } catch (error) {
-      const message = getErrorMessage(error);
-      console.error("Failed to accept invitation:", message);
-      toast.error(message);
-      throw new Error(message);
-    }
-  },
-  [acceptInvite, addProject, fetchProjectById]
-);
+  const acceptProjectInvite = useCallback(
+    async (token: string) => {
+      try {
+        console.log("Accepting invite with token:", token);
+
+        // ✅ Pass token directly, not as object
+        const response = await acceptInvite(token).unwrap();
+
+        console.log("Invite acceptance response:", response);
+
+        // Handle response...
+        toast.success(response.message || "Invitation accepted successfully");
+        return response;
+      } catch (error) {
+        const message = getErrorMessage(error);
+        console.error("Failed to accept invitation:", message);
+        toast.error(message);
+        throw new Error(message);
+      }
+    },
+    [acceptInvite, addProject, fetchProjectById],
+  );
 
   return {
     projects,

@@ -30,12 +30,9 @@ function getNestedValue(obj: any, path: string): any {
   return path.split(".").reduce((acc, part) => acc?.[part], obj);
 }
 
-export function EditableTable<T extends { id?: string | number; _id?: string | number }>({
-  columns,
-  data,
-  onChange,
-  loading = false,
-}: EditableTableProps<T>) {
+export function EditableTable<
+  T extends { id?: string | number; _id?: string | number },
+>({ columns, data, onChange, loading = false }: EditableTableProps<T>) {
   const [tableData, setTableData] = React.useState<T[]>(data);
 
   React.useEffect(() => {

@@ -71,7 +71,7 @@ const DashboardProjectList = ({
   return (
     <div className="flex flex-col gap-3 w-full">
       {filteredProjects
-      .slice(0, showAll ? activeProjectList.length : 4)
+        .slice(0, showAll ? activeProjectList.length : 4)
         .map((project) => {
           const starred = isStarred(project._id);
 

@@ -33,7 +33,7 @@ const formatProjectDate = (value?: string) => {
 
 const buildColumns = (
   getItems: (project: Project) => any[],
-  isStarredProject: (projectId: string) => boolean
+  isStarredProject: (projectId: string) => boolean,
 ) => [
   {
     header: "Name",
@@ -46,7 +46,7 @@ const buildColumns = (
             "w-4 h-4",
             isStarredProject(row._id)
               ? "text-amber-400"
-              : "text-neutral-300 dark:text-neutral-600"
+              : "text-neutral-300 dark:text-neutral-600",
           )}
           fill={isStarredProject(row._id) ? "currentColor" : "none"}
         />
@@ -70,7 +70,9 @@ const buildColumns = (
         <div className="flex items-center space-x-2">
           {row.members.slice(0, 4).map((member, index) => (
             <TeamMemberAvatar
-              key={member._id || member.email || member.name || `member-${index}`}
+              key={
+                member._id || member.email || member.name || `member-${index}`
+              }
               name={member.name}
               role={member.role}
               avatarUrl={member.avatar || "https://via.placeholder.com/150"}
@@ -94,7 +96,9 @@ const buildColumns = (
     accessor: "updatedAt",
     editable: false,
     width: "15%",
-    render: (row: Project) => <span>{formatProjectDate(row.updatedAt || row.createdAt)}</span>,
+    render: (row: Project) => (
+      <span>{formatProjectDate(row.updatedAt || row.createdAt)}</span>
+    ),
   },
   {
     header: "Actions",
@@ -194,7 +198,7 @@ export default function ProjectsPage() {
     <div
       className={cn(
         "relative p-6",
-        isDark ? "bg-transparent" : "bg-neutral-50"
+        isDark ? "bg-transparent" : "bg-neutral-50",
       )}
     >
       {/* Background ambient effects */}
@@ -216,13 +220,13 @@ export default function ProjectsPage() {
                 "p-2.5 rounded-xl border transition-all",
                 isDark
                   ? "bg-white/[0.04] border-white/[0.06] hover:bg-white/[0.06]"
-                  : "bg-white border-neutral-200 hover:bg-neutral-50 shadow-sm"
+                  : "bg-white border-neutral-200 hover:bg-neutral-50 shadow-sm",
               )}
             >
               <ArrowLeft
                 className={cn(
                   "w-5 h-5",
-                  isDark ? "text-white/60" : "text-neutral-500"
+                  isDark ? "text-white/60" : "text-neutral-500",
                 )}
               />
             </Link>
@@ -232,7 +236,7 @@ export default function ProjectsPage() {
                 "w-12 h-12 rounded-xl border flex items-center justify-center",
                 isDark
                   ? "bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
-                  : "bg-gradient-to-br from-emerald-50 to-cyan-50 border-emerald-200"
+                  : "bg-gradient-to-br from-emerald-50 to-cyan-50 border-emerald-200",
               )}
             >
               <FolderKanban className="w-6 h-6 text-emerald-500" />
@@ -241,7 +245,7 @@ export default function ProjectsPage() {
               <h1
                 className={cn(
                   "text-2xl font-bold tracking-tight",
-                  isDark ? "text-white" : "text-neutral-900"
+                  isDark ? "text-white" : "text-neutral-900",
                 )}
               >
                 Projects
@@ -249,7 +253,7 @@ export default function ProjectsPage() {
               <p
                 className={cn(
                   "text-sm mt-0.5",
-                  isDark ? "text-white/40" : "text-neutral-500"
+                  isDark ? "text-white/40" : "text-neutral-500",
                 )}
               >
                 Manage and organize all your projects
@@ -282,13 +286,13 @@ export default function ProjectsPage() {
           <div
             className={cn(
               "absolute inset-0 bg-gradient-to-r from-transparent to-transparent",
-              isDark ? "via-white/[0.08]" : "via-neutral-200"
+              isDark ? "via-white/[0.08]" : "via-neutral-200",
             )}
           />
           <div
             className={cn(
               "absolute left-0 w-20 h-px bg-gradient-to-r to-transparent",
-              isDark ? "from-emerald-500/50" : "from-emerald-400"
+              isDark ? "from-emerald-500/50" : "from-emerald-400",
             )}
           />
         </div>
@@ -300,7 +304,7 @@ export default function ProjectsPage() {
           "rounded-2xl overflow-hidden backdrop-blur-sm border",
           isDark
             ? "bg-neutral-900/30 border-white/[0.06]"
-            : "bg-white border-neutral-200 shadow-sm"
+            : "bg-white border-neutral-200 shadow-sm",
         )}
       >
         <EditableTable

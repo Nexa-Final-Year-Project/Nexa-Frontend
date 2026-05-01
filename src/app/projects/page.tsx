@@ -67,7 +67,7 @@ export default function ProjectsPage() {
       result = result.filter(
         (p) =>
           p.name.toLowerCase().includes(query) ||
-          p.description?.toLowerCase().includes(query)
+          p.description?.toLowerCase().includes(query),
       );
     }
 
@@ -78,7 +78,7 @@ export default function ProjectsPage() {
         break;
       case "starred":
         result = result.filter(
-          (p) => p.status !== "Archived" && starredProjectIds.includes(p._id)
+          (p) => p.status !== "Archived" && starredProjectIds.includes(p._id),
         );
         break;
       case "recent":
@@ -88,7 +88,7 @@ export default function ProjectsPage() {
           .sort(
             (a, b) =>
               new Date(b.createdAt || 0).getTime() -
-              new Date(a.createdAt || 0).getTime()
+              new Date(a.createdAt || 0).getTime(),
           )
           .slice(0, 6);
         break;
@@ -96,7 +96,7 @@ export default function ProjectsPage() {
         result = result.filter(
           (p) =>
             p.status !== "Archived" &&
-            (p.owner === user?.id || p.owner === (user as any)?._id)
+            (p.owner === user?.id || p.owner === (user as any)?._id),
         );
         break;
       default:
@@ -163,7 +163,7 @@ export default function ProjectsPage() {
           "fixed inset-0 -z-20",
           isDark
             ? "bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950"
-            : "bg-gradient-to-b from-white via-neutral-50 to-white"
+            : "bg-gradient-to-b from-white via-neutral-50 to-white",
         )}
       />
       {isDark && (
@@ -182,7 +182,7 @@ export default function ProjectsPage() {
           "sticky top-0 z-50 backdrop-blur-md border-b",
           isDark
             ? "bg-neutral-900/80 border-white/5"
-            : "bg-white/80 border-neutral-200"
+            : "bg-white/80 border-neutral-200",
         )}
       >
         <div className="mx-auto max-w-7xl px-4 py-4">
@@ -206,7 +206,7 @@ export default function ProjectsPage() {
                     "w-12 h-12 rounded-2xl border flex items-center justify-center",
                     isDark
                       ? "bg-gradient-to-br from-white/10 to-white/5 border-white/10"
-                      : "bg-gradient-to-br from-neutral-100 to-neutral-50 border-neutral-200"
+                      : "bg-gradient-to-br from-neutral-100 to-neutral-50 border-neutral-200",
                   )}
                 >
                   <Folder
@@ -221,7 +221,7 @@ export default function ProjectsPage() {
                   <h1
                     className={cn(
                       "text-3xl md:text-4xl font-bold",
-                      isDark ? "text-white" : "text-neutral-900"
+                      isDark ? "text-white" : "text-neutral-900",
                     )}
                   >
                     Projects
@@ -239,7 +239,7 @@ export default function ProjectsPage() {
                 "font-medium transition-all",
                 isDark
                   ? "border-white/10 text-white hover:bg-white/[0.04] hover:border-white/20"
-                  : "border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300"
+                  : "border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300",
               )}
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -268,7 +268,7 @@ export default function ProjectsPage() {
                   "w-full pl-11 pr-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2",
                   isDark
                     ? "bg-neutral-900/60 border-white/10 text-white placeholder-neutral-500 focus:border-white/20 focus:ring-white/10"
-                    : "bg-white border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-neutral-300 focus:ring-neutral-200/50"
+                    : "bg-white border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-neutral-300 focus:ring-neutral-200/50",
                 )}
               />
             </div>
@@ -282,8 +282,8 @@ export default function ProjectsPage() {
                       ? "bg-white/10 border-white/20 text-white"
                       : "bg-neutral-900 border-neutral-800 text-white"
                     : isDark
-                    ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
-                    : "bg-white border-neutral-200 text-neutral-400 hover:text-neutral-900 hover:border-neutral-300"
+                      ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
+                      : "bg-white border-neutral-200 text-neutral-400 hover:text-neutral-900 hover:border-neutral-300",
                 )}
               >
                 <Grid3X3 className="w-5 h-5" />
@@ -297,8 +297,8 @@ export default function ProjectsPage() {
                       ? "bg-white/10 border-white/20 text-white"
                       : "bg-neutral-900 border-neutral-800 text-white"
                     : isDark
-                    ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
-                    : "bg-white border-neutral-200 text-neutral-400 hover:text-neutral-900 hover:border-neutral-300"
+                      ? "bg-neutral-900/40 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
+                      : "bg-white border-neutral-200 text-neutral-400 hover:text-neutral-900 hover:border-neutral-300",
                 )}
               >
                 <List className="w-5 h-5" />
@@ -319,8 +319,8 @@ export default function ProjectsPage() {
                       ? "bg-white/10 border-white/20 text-white"
                       : "bg-neutral-900 border-neutral-800 text-white"
                     : isDark
-                    ? "bg-neutral-900/40 border-white/5 text-neutral-400 hover:text-white hover:border-white/10"
-                    : "bg-white border-neutral-200 text-neutral-500 hover:text-neutral-900 hover:border-neutral-300"
+                      ? "bg-neutral-900/40 border-white/5 text-neutral-400 hover:text-white hover:border-white/10"
+                      : "bg-white border-neutral-200 text-neutral-500 hover:text-neutral-900 hover:border-neutral-300",
                 )}
               >
                 <filter.icon className="w-4 h-4" />
@@ -341,7 +341,7 @@ export default function ProjectsPage() {
             <Loader2
               className={cn(
                 "w-10 h-10 animate-spin mb-4",
-                isDark ? "text-white/60" : "text-neutral-400"
+                isDark ? "text-white/60" : "text-neutral-400",
               )}
             />
             <p className="text-neutral-500">Loading projects...</p>
@@ -360,13 +360,13 @@ export default function ProjectsPage() {
               "flex flex-col items-center justify-center py-20 px-4 rounded-2xl border",
               isDark
                 ? "bg-neutral-900/30 border-white/5"
-                : "bg-neutral-50 border-neutral-200"
+                : "bg-neutral-50 border-neutral-200",
             )}
           >
             <div
               className={cn(
                 "w-20 h-20 rounded-2xl flex items-center justify-center mb-6",
-                isDark ? "bg-white/5" : "bg-neutral-100"
+                isDark ? "bg-white/5" : "bg-neutral-100",
               )}
             >
               {activeFilter === "starred" ? (
@@ -384,25 +384,25 @@ export default function ProjectsPage() {
             <h3
               className={cn(
                 "text-xl font-semibold mb-2",
-                isDark ? "text-white/80" : "text-neutral-700"
+                isDark ? "text-white/80" : "text-neutral-700",
               )}
             >
               {searchQuery
                 ? "No projects found"
                 : activeFilter === "starred"
-                ? "No starred projects"
-                : activeFilter === "archived"
-                ? "No archived projects"
-                : "No projects yet"}
+                  ? "No starred projects"
+                  : activeFilter === "archived"
+                    ? "No archived projects"
+                    : "No projects yet"}
             </h3>
             <p className="text-neutral-500 text-center max-w-md mb-6">
               {searchQuery
                 ? `No projects match "${searchQuery}". Try a different search.`
                 : activeFilter === "starred"
-                ? "Star your favorite projects to quickly access them here."
-                : activeFilter === "archived"
-                ? "Archived projects will appear here and can be restored later."
-                : "Create your first project to get started with NEXA."}
+                  ? "Star your favorite projects to quickly access them here."
+                  : activeFilter === "archived"
+                    ? "Archived projects will appear here and can be restored later."
+                    : "Create your first project to get started with NEXA."}
             </p>
             {!searchQuery && activeFilter === "all" && (
               <Button
@@ -444,7 +444,7 @@ export default function ProjectsPage() {
                         "group relative overflow-hidden rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-xl border",
                         isDark
                           ? "bg-neutral-900/50 border-white/[0.06] hover:bg-neutral-900/70 hover:border-white/[0.1] hover:shadow-black/20"
-                          : "bg-white border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 hover:shadow-neutral-200/50"
+                          : "bg-white border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 hover:shadow-neutral-200/50",
                       )}
                     >
                       {/* Top gradient accent */}
@@ -471,8 +471,8 @@ export default function ProjectsPage() {
                               starred
                                 ? "bg-amber-500/15 text-amber-400"
                                 : isDark
-                                ? "bg-transparent text-white/30 hover:text-amber-400 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
-                                : "bg-transparent text-neutral-300 hover:text-amber-500 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
+                                  ? "bg-transparent text-white/30 hover:text-amber-400 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100"
+                                  : "bg-transparent text-neutral-300 hover:text-amber-500 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100",
                             )}
                           >
                             <Star
@@ -485,7 +485,7 @@ export default function ProjectsPage() {
                               "w-9 h-9 rounded-xl flex items-center justify-center bg-transparent opacity-0 group-hover:opacity-100 transition-all duration-200",
                               isDark
                                 ? "text-white/30 hover:text-white hover:bg-white/5"
-                                : "text-neutral-300 hover:text-neutral-600 hover:bg-neutral-100"
+                                : "text-neutral-300 hover:text-neutral-600 hover:bg-neutral-100",
                             )}
                           >
                             <ArrowUpRight className="w-4 h-4" />
@@ -497,7 +497,7 @@ export default function ProjectsPage() {
                       <h3
                         className={cn(
                           "text-lg font-semibold mb-2 line-clamp-1",
-                          isDark ? "text-white" : "text-neutral-900"
+                          isDark ? "text-white" : "text-neutral-900",
                         )}
                       >
                         {project.name}
@@ -510,7 +510,7 @@ export default function ProjectsPage() {
                       <div
                         className={cn(
                           "flex items-center justify-between pt-4 border-t",
-                          isDark ? "border-white/5" : "border-neutral-100"
+                          isDark ? "border-white/5" : "border-neutral-100",
                         )}
                       >
                         <div className="flex items-center gap-2 text-xs text-neutral-500">
@@ -553,7 +553,7 @@ export default function ProjectsPage() {
                         "group flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all duration-200",
                         isDark
                           ? "bg-neutral-900/50 border-white/[0.06] hover:bg-neutral-900/70 hover:border-white/[0.1]"
-                          : "bg-white border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300"
+                          : "bg-white border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300",
                       )}
                     >
                       {/* Star */}
@@ -564,8 +564,8 @@ export default function ProjectsPage() {
                           starred
                             ? "bg-amber-500/20 text-amber-400"
                             : isDark
-                            ? "bg-white/[0.04] text-white/30 hover:text-amber-400 hover:bg-amber-500/10"
-                            : "bg-neutral-100 text-neutral-300 hover:text-amber-500 hover:bg-amber-500/10"
+                              ? "bg-white/[0.04] text-white/30 hover:text-amber-400 hover:bg-amber-500/10"
+                              : "bg-neutral-100 text-neutral-300 hover:text-amber-500 hover:bg-amber-500/10",
                         )}
                       >
                         <Star
@@ -588,7 +588,7 @@ export default function ProjectsPage() {
                         <h3
                           className={cn(
                             "font-medium truncate",
-                            isDark ? "text-white" : "text-neutral-900"
+                            isDark ? "text-white" : "text-neutral-900",
                           )}
                         >
                           {project.name}
@@ -620,7 +620,7 @@ export default function ProjectsPage() {
                           "w-5 h-5 transition-colors",
                           isDark
                             ? "text-white/30 group-hover:text-white/60"
-                            : "text-neutral-300 group-hover:text-neutral-500"
+                            : "text-neutral-300 group-hover:text-neutral-500",
                         )}
                       />
                     </motion.div>
@@ -641,7 +641,7 @@ export default function ProjectsPage() {
               "mt-12 p-6 rounded-2xl border",
               isDark
                 ? "bg-neutral-900/30 border-white/5"
-                : "bg-neutral-50 border-neutral-200"
+                : "bg-neutral-50 border-neutral-200",
             )}
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -662,7 +662,7 @@ export default function ProjectsPage() {
                   icon: Users,
                   value: projects.reduce(
                     (acc, p) => acc + (p.members?.length || 0),
-                    0
+                    0,
                   ),
                   label: "Total Members",
                   color: "text-emerald-500",
@@ -672,7 +672,7 @@ export default function ProjectsPage() {
                   value: projects.filter(
                     (p) =>
                       new Date(p.createdAt || 0) >
-                      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+                      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
                   ).length,
                   label: "This Month",
                   color: "text-cyan-500",
@@ -683,7 +683,7 @@ export default function ProjectsPage() {
                   <div
                     className={cn(
                       "text-2xl font-bold",
-                      isDark ? "text-white" : "text-neutral-900"
+                      isDark ? "text-white" : "text-neutral-900",
                     )}
                   >
                     {stat.value}

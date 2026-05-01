@@ -14,7 +14,7 @@ export const baseApi = createApi({
       headers.set("Content-Type", "application/json");
       headers.set(
         "Authorization",
-        `Bearer ${localStorage.getItem("authToken")}`
+        `Bearer ${localStorage.getItem("authToken")}`,
       );
       return headers;
     },

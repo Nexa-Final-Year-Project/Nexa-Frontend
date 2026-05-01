@@ -35,9 +35,16 @@ const DEFAULT_PERMISSIONS: PermissionState = {
   editMemberRoles: false,
 };
 
-export const PermissionsSettings = ({ tab, projectId }: { tab: string; projectId: string }) => {
+export const PermissionsSettings = ({
+  tab,
+  projectId,
+}: {
+  tab: string;
+  projectId: string;
+}) => {
   const storageKey = `nexa-project-permissions:${projectId}`;
-  const [permissions, setPermissions] = useState<PermissionState>(DEFAULT_PERMISSIONS);
+  const [permissions, setPermissions] =
+    useState<PermissionState>(DEFAULT_PERMISSIONS);
 
   useEffect(() => {
     try {

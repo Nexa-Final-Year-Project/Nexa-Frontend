@@ -16,12 +16,14 @@ const ArchivedProjectsPanel = ({ trigger }: { trigger: React.ReactNode }) => {
   const projectList: Project[] = Array.isArray(projects)
     ? projects
     : projects && Array.isArray((projects as any).projects)
-    ? (projects as any).projects
-    : projects && Array.isArray((projects as any).data)
-    ? (projects as any).data
-    : [];
+      ? (projects as any).projects
+      : projects && Array.isArray((projects as any).data)
+        ? (projects as any).data
+        : [];
 
-  const archivedProjects = projectList.filter((project) => project.status === "Archived");
+  const archivedProjects = projectList.filter(
+    (project) => project.status === "Archived",
+  );
 
   const handleRestore = async (projectId: string) => {
     await updateProject(projectId, { status: "Active" } as any);
@@ -72,7 +74,10 @@ const ArchivedProjectsPanel = ({ trigger }: { trigger: React.ReactNode }) => {
                     transition={{ delay: index * 0.05 }}
                     className="group flex items-center gap-3 p-2.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all duration-200"
                   >
-                    <Link href={`/u/${user?.uid}/p/${project._id}`} className="flex items-center gap-3 flex-1 min-w-0">
+                    <Link
+                      href={`/u/${user?.uid}/p/${project._id}`}
+                      className="flex items-center gap-3 flex-1 min-w-0"
+                    >
                       <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
                         <FolderKanban className="w-5 h-5 text-orange-500 dark:text-orange-400" />
                       </div>

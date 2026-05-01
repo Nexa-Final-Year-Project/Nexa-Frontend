@@ -17,7 +17,10 @@ interface DangerZoneSettingsProps {
   onArchive: () => Promise<void>;
 }
 
-export const DangerZoneSettings = ({ project, onArchive }: DangerZoneSettingsProps) => {
+export const DangerZoneSettings = ({
+  project,
+  onArchive,
+}: DangerZoneSettingsProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { deleteProject } = useProjects();
   const handleDeleteProject = async () => {

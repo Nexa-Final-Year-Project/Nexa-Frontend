@@ -130,7 +130,8 @@ export const UserGeneralSettings = ({
 
                   const reader = new FileReader();
                   reader.onload = () => {
-                    const url = typeof reader.result === "string" ? reader.result : null;
+                    const url =
+                      typeof reader.result === "string" ? reader.result : null;
                     setAvatarPreview(url);
                     if (url) {
                       void onSubmit({ photoURL: url });

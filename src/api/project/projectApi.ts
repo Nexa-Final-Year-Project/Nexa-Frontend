@@ -26,7 +26,7 @@ export const projectApi = baseApi.injectEndpoints({
     }),
     updateProject: builder.mutation({
       query: (project) => ({
-        url: `/project/${project.id}`, 
+        url: `/project/${project.id}`,
         method: "PUT",
         body: project,
       }),
@@ -52,13 +52,14 @@ export const projectApi = baseApi.injectEndpoints({
         { type: "Projects", id: arg.projectId },
       ],
     }),
-  acceptInvite: builder.mutation({
-  query: (token: string) => ({  // ✅ token is string, not object
-    url: `/project/accept-invite`,
-    method: "POST",
-    body: { token }, // ✅ This creates { token: "eyJhbGci..." }
-  }),
-}),
+    acceptInvite: builder.mutation({
+      query: (token: string) => ({
+        // ✅ token is string, not object
+        url: `/project/accept-invite`,
+        method: "POST",
+        body: { token }, // ✅ This creates { token: "eyJhbGci..." }
+      }),
+    }),
     // Add a GET endpoint for email links
     acceptInviteGet: builder.query({
       query: (token) => ({

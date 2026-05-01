@@ -45,7 +45,8 @@ export const UserNotificationSettings = ({
 }: UserNotificationsSettingsProps) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const [currentNotifications, setCurrentNotifications] = useState(notifications);
+  const [currentNotifications, setCurrentNotifications] =
+    useState(notifications);
 
   useEffect(() => {
     setCurrentNotifications(notifications);
@@ -118,8 +119,8 @@ export const UserNotificationSettings = ({
                           ? "bg-blue-500/20 text-blue-400"
                           : "bg-blue-100 text-blue-600"
                         : isDark
-                        ? "bg-white/[0.06] text-white/40"
-                        : "bg-neutral-200 text-neutral-500"
+                          ? "bg-white/[0.06] text-white/40"
+                          : "bg-neutral-200 text-neutral-500"
                     }
                   `}
                   >
@@ -209,8 +210,8 @@ export const UserNotificationSettings = ({
                           ? "bg-emerald-500/20 text-emerald-400"
                           : "bg-emerald-100 text-emerald-600"
                         : isDark
-                        ? "bg-white/[0.06] text-white/40"
-                        : "bg-neutral-200 text-neutral-500"
+                          ? "bg-white/[0.06] text-white/40"
+                          : "bg-neutral-200 text-neutral-500"
                     }
                   `}
                   >

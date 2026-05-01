@@ -63,7 +63,8 @@ const faqs = [
 export default function ContactPage() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+  const backendBaseUrl =
+    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
   const apiBaseUrl = backendBaseUrl.endsWith("/api")
     ? backendBaseUrl
     : `${backendBaseUrl}/api`;
@@ -103,7 +104,9 @@ export default function ContactPage() {
         throw new Error(result.message || "Failed to send support message.");
       }
 
-      toast.success(result.message || "Message sent! We'll get back to you soon.");
+      toast.success(
+        result.message || "Message sent! We'll get back to you soon.",
+      );
       setFormData({
         name: "",
         email: "",
@@ -113,7 +116,9 @@ export default function ContactPage() {
       });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to send support message."
+        error instanceof Error
+          ? error.message
+          : "Failed to send support message.",
       );
     } finally {
       setIsSubmitting(false);
