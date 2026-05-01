@@ -17,6 +17,7 @@ interface UserNotificationsSettingsProps {
     email: { marketing: boolean; product: boolean; security: boolean };
     push: { product: boolean; security: boolean };
   };
+  onNotificationsChange?: (notifications: UserNotificationsSettingsProps["notifications"]) => Promise<void>;
 }
 
 const notificationDescriptions: Record<
@@ -42,6 +43,7 @@ const notificationDescriptions: Record<
 
 export const UserNotificationSettings = ({
   notifications,
+  onNotificationsChange,
 }: UserNotificationsSettingsProps) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -52,22 +54,24 @@ export const UserNotificationSettings = ({
     setCurrentNotifications(notifications);
   }, [notifications]);
 
-  const onToggle = (method: "email" | "push", type: string, value: boolean) => {
-    setCurrentNotifications((prev) => {
-      const next = {
-        email: { ...prev.email },
-        push: { ...prev.push },
-      };
+  const onToggle = async (method: "email" | "push", type: string, value: boolean) => {
+    const next = {
+      email: { ...currentNotifications.email },
+      push: { ...currentNotifications.push },
+    };
 
-      if (method === "email") {
-        next.email[type as keyof typeof next.email] = value;
-      }
-      if (method === "push") {
-        next.push[type as keyof typeof next.push] = value;
-      }
+    if (method === "email") {
+      next.email[type as keyof typeof next.email] = value;
+    }
+    if (method === "push") {
+      next.push[type as keyof typeof next.push] = value;
+    }
 
-      return next;
-    });
+    setCurrentNotifications(next);
+    // Call the callback if provided
+    if (onNotificationsChange) {
+      await onNotificationsChange(next);
+    }
   };
 
   return (

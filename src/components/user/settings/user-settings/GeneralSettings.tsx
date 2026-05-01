@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Form } from "@/components/ui/form/Form";
 import type { FormField as FormFieldType } from "@/types/form";
 import {
@@ -25,9 +25,18 @@ export const UserGeneralSettings = ({
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(
-    user?.photoURL || null,
-  );
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+
+  // Load avatar from user object or localStorage on mount
+  useEffect(() => {
+    const storedAvatar = localStorage.getItem("userAvatarPreview");
+    if (user?.photoURL) {
+      setAvatarPreview(user.photoURL);
+      localStorage.setItem("userAvatarPreview", user.photoURL);
+    } else if (storedAvatar) {
+      setAvatarPreview(storedAvatar);
+    }
+  }, [user?.photoURL]);
   const generalFields: FormFieldType[] = [
     {
       name: "name",
@@ -132,8 +141,10 @@ export const UserGeneralSettings = ({
                   reader.onload = () => {
                     const url =
                       typeof reader.result === "string" ? reader.result : null;
-                    setAvatarPreview(url);
                     if (url) {
+                      setAvatarPreview(url);
+                      // Save to localStorage for persistence across tab switches
+                      localStorage.setItem("userAvatarPreview", url);
                       void onSubmit({ photoURL: url });
                     }
                   };

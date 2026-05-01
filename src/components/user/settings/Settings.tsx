@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { ChevronRight, Settings } from "lucide-react";
 import toast from "@/lib/customToast";
@@ -27,6 +27,24 @@ const UserSettings = ({ user }: UserSettingsProps) => {
   const [activeSection, setActiveSection] = useState("general");
   const [activeCategory, setActiveCategory] = useState("Profile");
   const { updateUser } = useAuthStore();
+  const [notifications, setNotifications] = useState({
+    email: { marketing: true, product: true, security: true },
+    push: { product: false, security: true },
+  });
+
+  // Load notifications from localStorage on mount
+  useEffect(() => {
+    const storedNotifications = localStorage.getItem("userNotifications");
+    if (storedNotifications) {
+      try {
+        setNotifications(JSON.parse(storedNotifications));
+      } catch (e) {
+        // Use defaults if parsing fails
+      }
+    } else if (user?.notifications) {
+      setNotifications(user.notifications);
+    }
+  }, [user?.notifications]);
 
   if (!user) {
     return (
@@ -78,6 +96,19 @@ const UserSettings = ({ user }: UserSettingsProps) => {
     await handleUpdateUser({ theme: nextTheme });
   };
 
+  const handleNotificationChange = async (updatedNotifications: typeof notifications) => {
+    setNotifications(updatedNotifications);
+    // Save to localStorage
+    localStorage.setItem("userNotifications", JSON.stringify(updatedNotifications));
+    // Save to user store
+    try {
+      await updateUser(user?.uid!, { notifications: updatedNotifications });
+      toast.success("Notifications updated!");
+    } catch (error) {
+      toast.error("Failed to update notifications");
+    }
+  };
+
   const renderActiveSection = () => {
     switch (activeSection) {
       case "general":
@@ -116,10 +147,8 @@ const UserSettings = ({ user }: UserSettingsProps) => {
       case "notifications":
         return (
           <NotificationSettings
-            notifications={{
-              email: { marketing: true, product: true, security: true },
-              push: { product: false, security: true },
-            }}
+            notifications={notifications}
+            onNotificationsChange={handleNotificationChange}
           />
         );
       case "data-controls":
