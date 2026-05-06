@@ -37,7 +37,7 @@ function AlertDialogOverlay({
       data-slot="alert-dialog-overlay"
       className={cn(
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/70 backdrop-blur-md",
-        className
+        className,
       )}
       {...props}
     />
@@ -64,7 +64,7 @@ function AlertDialogContent({
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
           "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
           "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
-          className
+          className,
         )}
         {...props}
       />
@@ -94,7 +94,7 @@ function AlertDialogFooter({
       data-slot="alert-dialog-footer"
       className={cn(
         "flex flex-col-reverse gap-3 sm:flex-row sm:justify-end pt-4 border-t border-white/[0.06]",
-        className
+        className,
       )}
       {...props}
     />
@@ -108,7 +108,10 @@ function AlertDialogTitle({
   return (
     <AlertDialogPrimitive.Title
       data-slot="alert-dialog-title"
-      className={cn("text-lg font-semibold tracking-tight text-white", className)}
+      className={cn(
+        "text-lg font-semibold tracking-tight text-white",
+        className,
+      )}
       {...props}
     />
   );
@@ -136,7 +139,7 @@ function AlertDialogAction({
       className={cn(
         buttonVariants(),
         "rounded-xl border border-white/10 bg-white text-neutral-900 hover:bg-neutral-100 shadow-none",
-        className
+        className,
       )}
       {...props}
     />
@@ -152,7 +155,7 @@ function AlertDialogCancel({
       className={cn(
         buttonVariants({ variant: "outline" }),
         "rounded-xl border-white/10 bg-transparent text-neutral-300 hover:bg-white/5 hover:text-white",
-        className
+        className,
       )}
       {...props}
     />

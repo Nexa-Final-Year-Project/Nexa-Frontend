@@ -20,8 +20,8 @@ import ProfileDropdown from "@/components/user/profile/ProfileDropdown";
 import { InviteNotificationBell } from "@/components/ui/navbar/InviteNotificationBell";
 import { useAuthStore } from "@/store/auth/authStore";
 import { useModalStore } from "@/store/modal/modalStore";
-import { io, Socket } from 'socket.io-client';
-import { toast } from 'sonner';
+import { io, Socket } from "socket.io-client";
+import { toast } from "sonner";
 import { useAddNotification } from "@/store/notifications/notificationStore";
 
 export default function UserLayout({
@@ -40,36 +40,43 @@ export default function UserLayout({
   useEffect(() => {
     if (!user) return;
 
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
-    const socketUrl = backendUrl.replace('/api', '');
+    const backendUrl =
+      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+    const socketUrl = backendUrl.replace("/api", "");
 
     const socket = io(socketUrl, {
-      transports: ['websocket', 'polling'],
+      transports: ["websocket", "polling"],
       auth: {
-        token: typeof window !== 'undefined' ? localStorage.getItem('authToken') : null,
+        token:
+          typeof window !== "undefined"
+            ? localStorage.getItem("authToken")
+            : null,
       },
     });
 
     socketRef.current = socket;
 
-    socket.on('connect', () => {
-      console.log('🔌 Notification socket connected:', socket.id);
-      socket.emit('join-user', { userId: user._id || user.id, userName: user.name });
+    socket.on("connect", () => {
+      console.log("🔌 Notification socket connected:", socket.id);
+      socket.emit("join-user", {
+        userId: user._id || user.id,
+        userName: user.name,
+      });
     });
 
-    socket.on('joined-user', ({ userId: joinedId }) => {
-      console.log('🔔 Joined user room:', joinedId);
+    socket.on("joined-user", ({ userId: joinedId }) => {
+      console.log("🔔 Joined user room:", joinedId);
     });
 
-    socket.on('notification', ({ notif }) => {
-      console.log('🔔 Real-time notification received:', notif);
+    socket.on("notification", ({ notif }) => {
+      console.log("🔔 Real-time notification received:", notif);
       if (notif) {
         addNotification({
           _id: notif._id || `tmp-${Date.now()}`,
           user: notif.user,
           userId: notif.userId,
-          type: notif.type || 'project',
-          content: notif.content || notif.message || 'Notification received',
+          type: notif.type || "project",
+          content: notif.content || notif.message || "Notification received",
           title: notif.title,
           message: notif.message,
           read: notif.read ?? false,
@@ -82,11 +89,11 @@ export default function UserLayout({
           senderName: notif.senderName,
         });
       }
-      toast(`${notif?.content || notif?.message || 'Notification received'}`);
+      toast(`${notif?.content || notif?.message || "Notification received"}`);
     });
 
-    socket.on('disconnect', () => {
-      console.log('❌ Notification socket disconnected');
+    socket.on("disconnect", () => {
+      console.log("❌ Notification socket disconnected");
     });
 
     return () => {

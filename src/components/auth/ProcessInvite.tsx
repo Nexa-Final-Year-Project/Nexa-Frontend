@@ -28,7 +28,9 @@ const ProcessInvite = ({ token }: { token?: string }) => {
       } catch (e) {
         console.error("Could not save invite token:", e);
       }
-      router.push(`/login?next=${encodeURIComponent(`/invite?token=${token}`)}`);
+      router.push(
+        `/login?next=${encodeURIComponent(`/invite?token=${token}`)}`,
+      );
       setNext(`/invite?token=${token}`);
       return;
     }

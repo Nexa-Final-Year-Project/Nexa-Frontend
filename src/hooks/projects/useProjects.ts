@@ -143,7 +143,12 @@ export const useProjects = () => {
   );
 
   const sendProjectInvite = useCallback(
-    async (projectId: string, memberEmail: string, role: string, confirmed: boolean = false) => {
+    async (
+      projectId: string,
+      memberEmail: string,
+      role: string,
+      confirmed: boolean = false,
+    ) => {
       try {
         const response = await sendInvite({
           projectId,
@@ -158,10 +163,18 @@ export const useProjects = () => {
         }
 
         if (response?.emailSent === false) {
-          const warn = response.warning || response.message || "Invitation created, but email could not be sent.";
+          const warn =
+            response.warning ||
+            response.message ||
+            "Invitation created, but email could not be sent.";
           toast.warning(warn);
           // If backend returned invite link, copy to clipboard and inform user
-          const link = response.inviteLink || response.inviteRecord?.inviteLink || response.inviteRecord?.token ? `${window.location.origin}/invite?token=${response.inviteRecord?.token || ''}` : null;
+          const link =
+            response.inviteLink ||
+            response.inviteRecord?.inviteLink ||
+            response.inviteRecord?.token
+              ? `${window.location.origin}/invite?token=${response.inviteRecord?.token || ""}`
+              : null;
           if (response.inviteLink) {
             try {
               await navigator.clipboard.writeText(response.inviteLink);
@@ -218,7 +231,7 @@ export const useProjects = () => {
   // Auto-sync RTK Query polling data with Zustand store
   const { data: rtkProjectsData } = useGetProjectsQuery(
     {},
-    { skip: false, refetchOnMountOrArgChange: true }
+    { skip: false, refetchOnMountOrArgChange: true },
   );
 
   useEffect(() => {

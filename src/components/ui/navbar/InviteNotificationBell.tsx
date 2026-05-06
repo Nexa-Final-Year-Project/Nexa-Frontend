@@ -125,7 +125,7 @@ export const InviteNotificationBell = () => {
                           onClick={() =>
                             handleAcceptInvite(
                               invite.token,
-                              invite.projectId?.name || "Project"
+                              invite.projectId?.name || "Project",
                             )
                           }
                           disabled={isAccepting === invite.token}

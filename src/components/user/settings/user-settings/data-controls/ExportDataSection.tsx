@@ -18,12 +18,12 @@ export const ExportDataSection = ({ onExportData }: ExportDataSectionProps) => {
     setIsExporting(true);
     try {
       const response = await triggerExport().unwrap();
-      
+
       // Create a blob from the JSON data
       const blob = new Blob([JSON.stringify(response, null, 2)], {
         type: "application/json",
       });
-      
+
       // Create a download link
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -33,7 +33,7 @@ export const ExportDataSection = ({ onExportData }: ExportDataSectionProps) => {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       toast.success("Data exported successfully!");
       onExportData?.();
     } catch (error) {
@@ -54,8 +54,8 @@ export const ExportDataSection = ({ onExportData }: ExportDataSectionProps) => {
           Download a copy of your account data for backup or records.
         </p>
       </div>
-      <Button 
-        onClick={handleExportData} 
+      <Button
+        onClick={handleExportData}
         className="w-full sm:w-auto"
         disabled={isExporting}
       >

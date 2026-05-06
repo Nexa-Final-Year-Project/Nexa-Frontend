@@ -35,7 +35,12 @@ export const InviteMemberModal = ({
   const handleInvite = async (values: { email: string; role?: string }) => {
     const role = values.role || "Member";
     try {
-      const response = await sendProjectInvite(projectId, values.email, role, false);
+      const response = await sendProjectInvite(
+        projectId,
+        values.email,
+        role,
+        false,
+      );
 
       // If already a member
       if (response?.alreadyMember) {
@@ -72,7 +77,7 @@ export const InviteMemberModal = ({
         projectId,
         pendingInvite.email,
         pendingInvite.role,
-        true
+        true,
       );
 
       // If email couldn't be sent but invite link returned, copy to clipboard and notify
@@ -81,7 +86,7 @@ export const InviteMemberModal = ({
           await navigator.clipboard.writeText(response.inviteLink);
           // show a lightweight inline confirm (toasts handled in hook)
         } catch (e) {
-          console.info('Invite link (copy failed):', response.inviteLink);
+          console.info("Invite link (copy failed):", response.inviteLink);
         }
       }
 
@@ -145,30 +150,48 @@ export const InviteMemberModal = ({
         initialValues={{ role: "Member" }}
       />
 
-      <AlertDialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+      <AlertDialog
+        open={isConfirmDialogOpen}
+        onOpenChange={setIsConfirmDialogOpen}
+      >
         <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Confirm Invitation</AlertDialogTitle>
-              <AlertDialogDescription className="space-y-3">
-                <span className="block text-sm">Invite to project: <strong>{projectName}</strong></span>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Invitation</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-3">
+              <span className="block text-sm">
+                Invite to project: <strong>{projectName}</strong>
+              </span>
 
-                <span className="block text-sm">Email: <strong>{pendingInvite?.email}</strong></span>
-                <span className="block text-sm">Role: <strong>{pendingInvite?.role}</strong></span>
+              <span className="block text-sm">
+                Email: <strong>{pendingInvite?.email}</strong>
+              </span>
+              <span className="block text-sm">
+                Role: <strong>{pendingInvite?.role}</strong>
+              </span>
 
-                {pendingInvite?.emailExists ? (
-                  <>
-                    <span className="block text-sm">This email is registered on Nexa.</span>
-                    {pendingInvite?.existingUser?.name && (
-                      <span className="block text-sm">Name: {pendingInvite?.existingUser?.name}</span>
-                    )}
-                  </>
-                ) : (
-                  <span className="block text-sm">This email is not registered. The person will receive an invite link and can create an account to accept.</span>
-                )}
+              {pendingInvite?.emailExists ? (
+                <>
+                  <span className="block text-sm">
+                    This email is registered on Nexa.
+                  </span>
+                  {pendingInvite?.existingUser?.name && (
+                    <span className="block text-sm">
+                      Name: {pendingInvite?.existingUser?.name}
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span className="block text-sm">
+                  This email is not registered. The person will receive an
+                  invite link and can create an account to accept.
+                </span>
+              )}
 
-                <span className="block text-sm">Proceed to send the invitation?</span>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
+              <span className="block text-sm">
+                Proceed to send the invitation?
+              </span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
           <div className="flex justify-end gap-3">
             <AlertDialogCancel className="rounded-xl border border-white/10 bg-transparent text-neutral-300 hover:bg-white/5 hover:text-white">
               No, cancel

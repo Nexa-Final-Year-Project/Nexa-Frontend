@@ -61,7 +61,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   useEffect(() => {
     if (user?.id) {
       fetchAllProjects().catch((err) => {
-        console.error('Failed to fetch projects for sidebar:', err);
+        console.error("Failed to fetch projects for sidebar:", err);
       });
     }
   }, [user?.id, fetchAllProjects]);
