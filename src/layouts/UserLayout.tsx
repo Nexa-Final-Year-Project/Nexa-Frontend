@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import {
   Command,
@@ -17,8 +17,12 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import ProfileDropdown from "@/components/user/profile/ProfileDropdown";
+import { InviteNotificationBell } from "@/components/ui/navbar/InviteNotificationBell";
 import { useAuthStore } from "@/store/auth/authStore";
 import { useModalStore } from "@/store/modal/modalStore";
+import { io, Socket } from 'socket.io-client';
+import { toast } from 'sonner';
+import { useAddNotification } from "@/store/notifications/notificationStore";
 
 export default function UserLayout({
   children,
@@ -29,6 +33,69 @@ export default function UserLayout({
   const isDark = theme === "dark";
   const { user } = useAuthStore();
   const { openModal } = useModalStore();
+  const addNotification = useAddNotification();
+
+  const socketRef = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+    const socketUrl = backendUrl.replace('/api', '');
+
+    const socket = io(socketUrl, {
+      transports: ['websocket', 'polling'],
+      auth: {
+        token: typeof window !== 'undefined' ? localStorage.getItem('authToken') : null,
+      },
+    });
+
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      console.log('🔌 Notification socket connected:', socket.id);
+      socket.emit('join-user', { userId: user._id || user.id, userName: user.name });
+    });
+
+    socket.on('joined-user', ({ userId: joinedId }) => {
+      console.log('🔔 Joined user room:', joinedId);
+    });
+
+    socket.on('notification', ({ notif }) => {
+      console.log('🔔 Real-time notification received:', notif);
+      if (notif) {
+        addNotification({
+          _id: notif._id || `tmp-${Date.now()}`,
+          user: notif.user,
+          userId: notif.userId,
+          type: notif.type || 'project',
+          content: notif.content || notif.message || 'Notification received',
+          title: notif.title,
+          message: notif.message,
+          read: notif.read ?? false,
+          createdAt: notif.createdAt || new Date().toISOString(),
+          updatedAt: notif.updatedAt,
+          relatedId: notif.relatedId,
+          relatedType: notif.relatedType,
+          actionUrl: notif.actionUrl,
+          avatarUrl: notif.avatarUrl,
+          senderName: notif.senderName,
+        });
+      }
+      toast(`${notif?.content || notif?.message || 'Notification received'}`);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('❌ Notification socket disconnected');
+    });
+
+    return () => {
+      try {
+        socket.disconnect();
+      } catch (e) {}
+      socketRef.current = null;
+    };
+  }, [user]);
 
   return (
     <SidebarProvider>
@@ -198,6 +265,7 @@ export default function UserLayout({
 
             {/* Right section - Profile */}
             <div className="flex items-center gap-3 pr-2 md:pr-4">
+              <InviteNotificationBell />
               <ProfileDropdown user={user} />
             </div>
           </div>

@@ -8,6 +8,8 @@ export const projectApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Projects"],
+      // Poll every 15 seconds for real-time updates
+      pollingInterval: 15000,
     }),
     getProjectById: builder.query({
       query: (id) => ({
@@ -43,10 +45,10 @@ export const projectApi = baseApi.injectEndpoints({
       invalidatesTags: ["Projects"],
     }),
     inviteMember: builder.mutation({
-      query: ({ projectId, memberEmail, role }) => ({
+      query: ({ projectId, memberEmail, role, confirmed }) => ({
         url: `/project/${projectId}/invite`,
         method: "POST",
-        body: { email: memberEmail, role },
+        body: { email: memberEmail, role, confirmed },
       }),
       invalidatesTags: (_result, _error, arg) => [
         { type: "Projects", id: arg.projectId },
@@ -67,6 +69,13 @@ export const projectApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getPendingInvites: builder.query({
+      query: () => ({
+        url: "/project/pending-invites",
+        method: "GET",
+      }),
+      providesTags: ["PendingInvites"],
+    }),
   }),
 });
 
@@ -81,4 +90,5 @@ export const {
   useAcceptInviteMutation,
   useAcceptInviteGetQuery,
   useLazyAcceptInviteGetQuery,
+  useGetPendingInvitesQuery,
 } = projectApi;

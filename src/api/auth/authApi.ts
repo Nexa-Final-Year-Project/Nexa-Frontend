@@ -38,6 +38,24 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
+    deleteAccount: builder.mutation({
+      query: () => ({
+        url: "/auth/delete-account",
+        method: "DELETE",
+      }),
+    }),
+    resetData: builder.mutation({
+      query: () => ({
+        url: "/auth/reset-data",
+        method: "POST",
+      }),
+    }),
+    exportData: builder.query({
+      query: () => ({
+        url: "/auth/export-data",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -48,4 +66,7 @@ export const {
   useLazyGoogleLoginQuery,
   useGetCurrentUserQuery,
   useLogoutUserMutation,
+  useDeleteAccountMutation,
+  useResetDataMutation,
+  useLazyExportDataQuery,
 } = authApi;

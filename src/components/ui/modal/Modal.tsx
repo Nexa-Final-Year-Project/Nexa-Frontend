@@ -99,7 +99,9 @@ export function Modal({
               fields={formFields}
               onSubmit={async (values) => {
                 try {
-                  await Promise.resolve(onSubmit(values));
+                  const result = await Promise.resolve(onSubmit(values));
+                  // If handler returned false explicitly, don't close the modal
+                  if (result === false) return false;
                   onOpenChange?.(false); // Close only after a successful submit
                 } catch (error) {
                   return false;

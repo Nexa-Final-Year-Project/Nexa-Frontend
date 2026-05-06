@@ -7,7 +7,7 @@ const HOST = rawBaseUrl.endsWith("/api") ? rawBaseUrl : `${rawBaseUrl}/api`;
 
 export const baseApi = createApi({
   reducerPath: "hmsApi",
-  tagTypes: ["Projects"],
+  tagTypes: ["Projects", "PendingInvites"],
   baseQuery: fetchBaseQuery({
     baseUrl: HOST,
     prepareHeaders: (headers) => {

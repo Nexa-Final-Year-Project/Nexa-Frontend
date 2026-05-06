@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Clock, Frame, Star, Keyboard, HelpCircle } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
 import { NavMain } from "@/components/ui/navbar/nav-main";
 import { NavProjects } from "@/components/ui/navbar/nav-projects";
@@ -51,10 +52,19 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { projects, isLoading } = useProjects();
+  const { projects, isLoading, fetchAllProjects } = useProjects();
   const { user } = useAuthStore();
   const { theme } = useTheme();
   const isDark = theme === "dark";
+
+  // Fetch projects on mount and when user changes
+  useEffect(() => {
+    if (user?.id) {
+      fetchAllProjects().catch((err) => {
+        console.error('Failed to fetch projects for sidebar:', err);
+      });
+    }
+  }, [user?.id, fetchAllProjects]);
 
   let projectList: Project[] = [];
   if (Array.isArray(projects)) {

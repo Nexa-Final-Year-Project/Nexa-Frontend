@@ -1,5 +1,5 @@
 // hooks/useProjects.ts
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import {
   useCreateProjectMutation,
   useUpdateProjectMutation,
@@ -8,6 +8,7 @@ import {
   useDeleteProjectMutation,
   useInviteMemberMutation,
   useAcceptInviteMutation,
+  useGetProjectsQuery,
 } from "@/api/project/projectApi";
 import { useProjectStore } from "@/store/projects/projectStore";
 import type { Project } from "@/types/project";
@@ -142,22 +143,39 @@ export const useProjects = () => {
   );
 
   const sendProjectInvite = useCallback(
-    async (projectId: string, memberEmail: string, role: string) => {
+    async (projectId: string, memberEmail: string, role: string, confirmed: boolean = false) => {
       try {
         const response = await sendInvite({
           projectId,
           memberEmail,
           role,
+          confirmed,
         }).unwrap();
 
+        // If email doesn't exist and not confirmed, ask for confirmation
+        if (response?.requiresConfirmation && !confirmed) {
+          return response; // Let the InviteMemberModal show the confirmation dialog
+        }
+
         if (response?.emailSent === false) {
-          toast.warning(
-            response.warning ||
-              response.message ||
-              "Invitation created, but email could not be sent.",
-          );
+          const warn = response.warning || response.message || "Invitation created, but email could not be sent.";
+          toast.warning(warn);
+          // If backend returned invite link, copy to clipboard and inform user
+          const link = response.inviteLink || response.inviteRecord?.inviteLink || response.inviteRecord?.token ? `${window.location.origin}/invite?token=${response.inviteRecord?.token || ''}` : null;
           if (response.inviteLink) {
-            console.info("Invite link:", response.inviteLink);
+            try {
+              await navigator.clipboard.writeText(response.inviteLink);
+              toast.info("Invite link copied to clipboard");
+            } catch (e) {
+              console.info("Invite link:", response.inviteLink);
+            }
+          } else if (link) {
+            try {
+              await navigator.clipboard.writeText(link);
+              toast.info("Invite link copied to clipboard");
+            } catch (e) {
+              console.info("Invite link:", link);
+            }
           }
           return response;
         }
@@ -196,6 +214,21 @@ export const useProjects = () => {
     },
     [acceptInvite, addProject, fetchProjectById],
   );
+
+  // Auto-sync RTK Query polling data with Zustand store
+  const { data: rtkProjectsData } = useGetProjectsQuery(
+    {},
+    { skip: false, refetchOnMountOrArgChange: true }
+  );
+
+  useEffect(() => {
+    if (rtkProjectsData) {
+      const projectsData = rtkProjectsData.data || rtkProjectsData;
+      if (Array.isArray(projectsData)) {
+        setProjects(projectsData);
+      }
+    }
+  }, [rtkProjectsData, setProjects]);
 
   return {
     projects,

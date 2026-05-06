@@ -55,9 +55,9 @@ function AlertDialogContent({
         data-slot="alert-dialog-content"
         className={cn(
           // Base styles
-          "fixed top-1/2 left-1/2 z-50 grid max-h-[calc(100%-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto p-6 duration-300 sm:max-w-md",
+          "fixed top-1/2 left-1/2 z-50 grid max-h-[calc(100%-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto p-6 duration-300 sm:max-w-md",
           // Dark glassmorphism
-          "bg-neutral-900/90 backdrop-blur-xl border border-white/[0.08] rounded-2xl shadow-2xl shadow-black/50",
+          "bg-neutral-950/95 backdrop-blur-xl border border-white/[0.08] rounded-3xl shadow-2xl shadow-black/50",
           // Animations
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
@@ -108,7 +108,7 @@ function AlertDialogTitle({
   return (
     <AlertDialogPrimitive.Title
       data-slot="alert-dialog-title"
-      className={cn("text-xl font-semibold text-white", className)}
+      className={cn("text-lg font-semibold tracking-tight text-white", className)}
       {...props}
     />
   );
@@ -135,7 +135,7 @@ function AlertDialogAction({
     <AlertDialogPrimitive.Action
       className={cn(
         buttonVariants(),
-        "bg-violet-600 hover:bg-violet-500 text-white",
+        "rounded-xl border border-white/10 bg-white text-neutral-900 hover:bg-neutral-100 shadow-none",
         className
       )}
       {...props}
@@ -151,7 +151,7 @@ function AlertDialogCancel({
     <AlertDialogPrimitive.Cancel
       className={cn(
         buttonVariants({ variant: "outline" }),
-        "border-white/10 text-neutral-300 hover:bg-white/5 hover:text-white",
+        "rounded-xl border-white/10 bg-transparent text-neutral-300 hover:bg-white/5 hover:text-white",
         className
       )}
       {...props}
