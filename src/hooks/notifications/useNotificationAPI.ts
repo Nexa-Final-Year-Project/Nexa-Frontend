@@ -7,7 +7,7 @@ export const useNotificationAPI = create(() => ({
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/notifications`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/notifications`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -26,7 +26,7 @@ export const useNotificationAPI = create(() => ({
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/notifications/${notificationId}/read`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/notifications/${notificationId}/read`,
         {},
         {
           headers: {
@@ -46,7 +46,7 @@ export const useNotificationAPI = create(() => ({
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/notifications/read-all`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/notifications/read-all`,
         {},
         {
           headers: {
@@ -66,7 +66,7 @@ export const useNotificationAPI = create(() => ({
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/notifications/${notificationId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/notifications/${notificationId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

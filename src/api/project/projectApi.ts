@@ -8,8 +8,8 @@ export const projectApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Projects"],
-      // Poll every 15 seconds for real-time updates
-      pollingInterval: 15000,
+      // Poll every 2 minutes; cache invalidation via tags handles immediate updates.
+      pollingInterval: 120000,
     }),
     getProjectById: builder.query({
       query: (id) => ({

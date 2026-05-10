@@ -20,12 +20,21 @@ interface FairnessReportItem {
   overloadFlag: boolean;
 }
 
+interface ProjectMemberRef {
+  _id?: string;
+  name?: string;
+  email?: string;
+  role?: string;
+  avatar?: string | null;
+}
+
 interface MemberPerformanceProps {
   memberWorkloadSummary?: MemberWorkload[];
   fairnessReport?: FairnessReportItem[];
   selectedTasks?: Array<{
     assignedTo: string;
     assignedMemberDetails?: {
+      projectMemberId?: string;
       name: string;
       reliabilityScore: number;
       avatar?: string | null;
@@ -38,6 +47,7 @@ interface MemberPerformanceProps {
       effectiveHours: number;
     }>;
   };
+  members?: ProjectMemberRef[];
 }
 
 const MemberPerformancePanel: React.FC<MemberPerformanceProps> = ({
@@ -45,6 +55,7 @@ const MemberPerformancePanel: React.FC<MemberPerformanceProps> = ({
   fairnessReport = [],
   selectedTasks = [],
   capacity,
+  members = [],
 }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -96,6 +107,23 @@ const MemberPerformancePanel: React.FC<MemberPerformanceProps> = ({
   }
 
   const avgCapacityPerMember = stats.totalCapacity / stats.membersCount;
+
+  const getMemberName = (memberId: string): string => {
+    // First: look up from selectedTasks assignedMemberDetails
+    const taskMatch = selectedTasks.find(
+      (t) =>
+        t.assignedTo === memberId ||
+        t.assignedMemberDetails?.projectMemberId === memberId
+    );
+    if (taskMatch?.assignedMemberDetails?.name) {
+      return taskMatch.assignedMemberDetails.name;
+    }
+    // Second: look up from project members prop
+    const memberMatch = members.find((m) => m._id === memberId);
+    if (memberMatch?.name) return memberMatch.name;
+    // Fallback: show a shortened ID
+    return `Member ${memberId.slice(-6)}`;
+  };
 
   return (
     <div className="space-y-4">
@@ -294,7 +322,7 @@ const MemberPerformancePanel: React.FC<MemberPerformanceProps> = ({
                       isDark ? "text-white" : "text-neutral-900"
                     }`}
                   >
-                    Member {member.memberId.slice(0, 8)}
+                    {getMemberName(member.memberId)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">

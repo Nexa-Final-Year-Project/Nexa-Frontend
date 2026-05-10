@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import {
   format,
@@ -147,40 +147,104 @@ export default function SprintDetailModal({
   );
   const [isRefreshingBlockers, setIsRefreshingBlockers] = useState(false);
   const [localBlockerData, setLocalBlockerData] = useState<any>(null);
+  const autoScanCalledRef = useRef(false);
+
+  // Auto-trigger blocker scan when modal opens and no snapshot exists yet
+  useEffect(() => {
+    if (!open || !sprint?._id) return;
+    if (sprint.blockerSnapshot || localBlockerData) return;
+    if (autoScanCalledRef.current) return;
+
+    const currentMember = members.find((m: any) => {
+      const email = m.email ?? m.memberId?.email;
+      const userId = m.memberId?._id?.toString() ?? m.memberId?.toString();
+      return (
+        email === user?.email ||
+        userId === (user as any)?._id?.toString()
+      );
+    });
+    const isPM = (currentMember as any)?.role === "Project-Manager";
+    if (!isPM) return;
+
+    autoScanCalledRef.current = true;
+    setIsRefreshingBlockers(true);
+
+    const token = localStorage.getItem("authToken");
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/sprint/${sprint._id}/blockers/refresh`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` }, timeout: 120000 }
+      )
+      .then((res) => {
+        if (res.data.success) setLocalBlockerData(res.data.blocker);
+      })
+      .catch((err) => {
+        console.error("Auto blocker scan failed:", err);
+      })
+      .finally(() => {
+        setIsRefreshingBlockers(false);
+      });
+  }, [open, sprint?._id, sprint?.blockerSnapshot]);
+
+  // Reset auto-scan flag when a different sprint is opened
+  useEffect(() => {
+    autoScanCalledRef.current = false;
+    setLocalBlockerData(null);
+  }, [sprint?._id]);
 
   if (!open || !sprint) return null;
 
-  // Check if current user is a Project Manager
-  const currentUserMember = members.find((m) => m.email === user?.email);
-  const isProjectManager = currentUserMember?.role === "Project-Manager";
+  // Check if current user is a Project Manager.
+  // The members array may come in two shapes depending on whether the backend
+  // populates the nested memberId or flattens it, so we check both.
+  const currentUserMember = members.find((m: any) => {
+    const email = m.email ?? m.memberId?.email;
+    const userId = m.memberId?._id?.toString() ?? m.memberId?.toString();
+    return (
+      email === user?.email ||
+      userId === (user as any)?._id?.toString()
+    );
+  });
+  const isProjectManager = (currentUserMember as any)?.role === "Project-Manager";
 
   // Handle manual blocker refresh
   const handleRefreshBlockers = async () => {
     if (!sprint._id || !isProjectManager) return;
     
     setIsRefreshingBlockers(true);
+    toast("Blocker scan started", {
+      description:
+        "The blocker agent may take up to 90 s on a cold start — please wait…",
+    });
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/sprint/${sprint._id}/blockers/refresh`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/sprint/${sprint._id}/blockers/refresh`,
         {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          // Match the backend's 120 s socket timeout
+          timeout: 120000,
         }
       );
 
       if (response.data.success) {
         setLocalBlockerData(response.data.blocker);
-        toast.success("Blocker scan refreshed successfully", {
+        toast.success("Blocker scan complete", {
           description: "Latest blocker analysis is now available",
         });
       }
     } catch (error: any) {
       console.error("Failed to refresh blocker scan:", error);
-      toast.error("Failed to refresh blocker scan", {
-        description: error.response?.data?.message || "Please try again later",
+      toast.error("Blocker scan failed", {
+        description:
+          error.response?.data?.message ||
+          (error.code === "ECONNABORTED"
+            ? "The blocker agent timed out — it may still be starting up. Try again in a moment."
+            : "Please try again later"),
       });
     } finally {
       setIsRefreshingBlockers(false);
@@ -737,11 +801,36 @@ export default function SprintDetailModal({
                   className="ml-2"
                 />
               </div>
-              <p className="text-xs text-neutral-400">
-                {typeof blockerCount === "number"
-                  ? `${blockerCount} blocker(s) detected`
-                  : "Waiting for blocker snapshot…"}
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-neutral-400">
+                  {typeof blockerCount === "number"
+                    ? `${blockerCount} blocker(s) detected`
+                    : isRefreshingBlockers
+                    ? "Running blocker scan…"
+                    : isProjectManager
+                    ? "No scan yet — click Run Scan below"
+                    : "No blocker scan available yet"}
+                </p>
+                {isProjectManager && (
+                  <Button
+                    onClick={handleRefreshBlockers}
+                    disabled={isRefreshingBlockers}
+                    size="sm"
+                    className={`ml-3 transition-all duration-200 text-xs py-1 px-2 h-auto ${
+                      isDark
+                        ? "border border-neutral-600/50 bg-neutral-800/30 text-neutral-300 hover:bg-neutral-700/50 hover:border-neutral-500"
+                        : "border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-100 hover:border-neutral-400"
+                    }`}
+                  >
+                    <RefreshCw
+                      className={`w-3 h-3 mr-1 ${
+                        isRefreshingBlockers ? "animate-spin" : ""
+                      }`}
+                    />
+                    {isRefreshingBlockers ? "Scanning…" : "Run Scan"}
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -1432,6 +1521,7 @@ export default function SprintDetailModal({
                       fairnessReport={sprint.fairnessReport}
                       selectedTasks={sprint.selectedTasks}
                       capacity={sprint.capacity}
+                      members={members}
                     />
                   </div>
                 )}

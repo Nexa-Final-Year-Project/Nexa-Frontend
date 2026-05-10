@@ -47,7 +47,7 @@ export default function BlockerHistoryChart({
       try {
         const token = localStorage.getItem("authToken");
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/sprint/${sprintId}/blockers/history`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/sprint/${sprintId}/blockers/history`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -60,7 +60,13 @@ export default function BlockerHistoryChart({
         }
       } catch (err: any) {
         console.error("Failed to fetch blocker history:", err);
-        setError("Failed to load blocker history");
+        // Treat auth/access errors as empty rather than hard error
+        const status = err?.response?.status;
+        if (status === 404 || status === 403) {
+          setHistory([]);
+        } else {
+          setError("Unable to load blocker history");
+        }
       } finally {
         setLoading(false);
       }
@@ -96,7 +102,7 @@ export default function BlockerHistoryChart({
         } ${className}`}
       >
         <p className="text-sm text-neutral-500 text-center">
-          {error || "No blocker history available yet"}
+          {error ?? "No scan history yet — history builds after each blocker scan"}
         </p>
       </div>
     );

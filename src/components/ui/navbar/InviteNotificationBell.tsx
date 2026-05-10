@@ -14,9 +14,10 @@ import toast from "@/lib/customToast";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const InviteNotificationBell = () => {
-  // Poll every 10 seconds for real-time updates
+  // Fetch once on mount; refetch when the bell opens (see useEffect below).
+  // Background polling at 5-minute intervals is enough for invite notifications.
   const { data, isLoading, refetch } = useGetPendingInvitesQuery(undefined, {
-    pollingInterval: 10000, // Poll every 10 seconds
+    pollingInterval: 300000, // 5 minutes
   });
   const { acceptProjectInvite } = useProjects();
   const [open, setOpen] = useState(false);
