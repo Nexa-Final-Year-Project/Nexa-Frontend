@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nexa (Frontend)
 
-## Getting Started
+A TypeScript + Next.js frontend for NEXA — an AI-driven project management suite optimized for Agile teams. The app provides project/task management UI, sprints, team collaboration, realtime updates, and rich-text editing.
 
-First, run the development server:
+## Features
+- Modern landing + dashboard UI built with Next.js (App Router)
+- Componentized UI: projects, tasks, sprints, teams, notifications
+- Rich-text editing (TipTap) and markdown rendering
+- Realtime updates via socket.io-client
+- Integrations: Firebase, Stripe (optional)
+- Theming and keyboard shortcuts, global state with Redux/Zustand
 
+## Quick start
+
+1. Clone and install
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Nexa-Final-Year-Project/Nexa-Frontend.git
+cd Nexa-Frontend
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a .env.local (or export in your environment). Required (at minimum):
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000    # or NEXT_PUBLIC_BACKEND_URL
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+If you enable Firebase/Stripe or other integrations, add their respective public environment variables (Firebase config, Stripe publishable key, etc.). The middleware checks a cookie named `token` for authentication and posts to `${NEXT_PUBLIC_API_URL}/api/auth/verify-token` for verification.
 
-## Learn More
+3. Run development server
+```bash
+npm run dev
+# Open http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Build & start (production)
+```bash
+npm run build
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure (high level)
+- src/app — Next.js App Router routes and root layout (layout.tsx, page.tsx, middleware.ts)
+- src/components — feature-based UI components (tasks, projects, teams, shared UI)
+- src/services — API calls and service wrappers
+- src/store — application state (Redux/Zustand)
+- src/hooks, src/lib, src/theme — utilities and shared code
+- public — static assets
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Common commands
+- npm run dev — start dev server
+- npm run build — build production artifacts
+- npm start — run production server
+- npm run lint — run ESLint
+- npm run clean — lint fix and reinstall (project cleanup)
 
-## Deploy on Vercel
+## Troubleshooting
+- Authentication redirects to /login: ensure NEXT_PUBLIC_API_URL points to your backend and the `token` cookie is present and valid.
+- Missing Firebase or Stripe features: confirm the required env vars are set and the corresponding services are enabled in your Firebase/Stripe dashboard.
+- CSS or Tailwind issues: verify Tailwind/PostCSS config (tailwind.config.mjs, postcss.config.mjs) and rebuild with `npm run build`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
+Contributions are welcome. Open issues or PRs for bug fixes, component improvements, or new integrations. Please follow existing code patterns (components organized by feature, use the Providers in src/app/layout.tsx).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+Add your project's license here.
+
+## Contact
+For questions about this repository, open an issue or contact the maintainers via the repo.
