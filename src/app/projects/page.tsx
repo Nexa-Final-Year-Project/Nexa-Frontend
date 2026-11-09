@@ -71,7 +71,7 @@ export default function ProjectsPage() {
       );
     }
 
-    // Apply category filter
+    // Apply category filter on the data 
     switch (activeFilter) {
       case "archived":
         result = result.filter((p) => p.status === "Archived");
